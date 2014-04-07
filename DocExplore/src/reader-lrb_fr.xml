@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Ressources françaises</comment>
+	
+	<entry key="waitLabel">Veuillez patienter</entry>
+	<entry key="loadingLabel">Chargement de la collection...</entry>
+	<entry key="imagesLabel">Chargement des images...</entry>
+	<entry key="confirmLabel">Confirmation</entry>
+	<entry key="readLabel">Voulez-vous lire &lt;i>%s&lt;/i>?</entry>
+	<entry key="yesLabel">Oui</entry>
+	<entry key="noLabel">Non</entry>
+	
+	<entry key="helpShelf1">Glisser votre doigt pour choisir un livre</entry>
+	<entry key="helpShelf2">Toucher un livre pour l'ouvrir</entry>
+	<entry key="helpBook1">Glisser votre doigt pour tourner les pages</entry>
+	<entry key="helpBook2">Toucher une zone en surbrillance pour en savoir plus</entry>
+	<entry key="helpRoi1">Glisser votre doigt sur la partie droite pour défiler</entry>
+	<entry key="helpRoi2">Toucher la partie gauche pour revenir au livre</entry>
+</properties>

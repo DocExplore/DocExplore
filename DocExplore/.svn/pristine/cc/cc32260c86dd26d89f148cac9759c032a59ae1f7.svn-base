@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project DocExplore">
+	<target name="clean">
+        <delete dir="build"/>
+    </target>
+	
+    <target name="create_run_jar">
+        <jar destfile="build/DocExplore.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="org.interreg.docexplore.DocExplore"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="C:/sci/workspace/DocExplore/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/imgscalr-lib-4.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/mysql-connector-java-5.1.13-bin.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/gdx-backend-lwjgl-natives.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/gdx-backend-lwjgl.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/gdx-natives.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/gdx.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/javapng-2.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/commons-io-2.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/jai_codec.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/jai_core.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/core-renderer.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/JNativeFileDialog.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/jna-3.4.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/platform-3.4.0.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExplore/jar/commons-compress-1.8.jar"/>
+        	<fileset dir="C:/sci/workspace/DocExploreFactory/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExploreFactory/jars/commons-io-2.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/sci/workspace/DocExploreFactory/jars/commons-compress-1.8.jar"/>
+        </jar>
+    </target>
+</project>

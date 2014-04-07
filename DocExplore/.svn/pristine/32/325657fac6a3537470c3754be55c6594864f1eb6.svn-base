@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>English resources</comment>
+	
+	<entry key="recordInputLabel">Input</entry>
+	<entry key="recordOutputLabel">Output</entry>
+	<entry key="recordStoppedLabel">Stopped</entry>
+	<entry key="recordPlayingLabel">Playing</entry>
+	<entry key="recordRecordingLabel">Recording</entry>
+	
+	<entry key="dialogDockingLabel">Pin/Unpin</entry>
+	<entry key="dialogCloseLabel">Close</entry>
+	<entry key="dialogWaitLabel">Please wait</entry>
+	
+	<entry key="bgcolorPropertyName">Color</entry>
+	<entry key="bgcolorPropertyChooseName">Choose color</entry>
+	<entry key="bgcolorPropertyTransName">Opacity</entry>
+	<entry key="bgimagePropertyName">Image</entry>
+	<entry key="bgimagePropertyBrowseName">Browse...</entry>
+	
+	<entry key="errorGenericTitle">Error</entry>
+	<entry key="errorGenericMessage">An error has occurred!</entry>
+	<entry key="errorDetailsLabel">Details</entry>
+	
+	<entry key="fileOpen">Open</entry>
+	<entry key="fileSave">Save</entry>
+</properties>

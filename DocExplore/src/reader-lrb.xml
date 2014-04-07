@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>English resources</comment>
+	
+	<entry key="waitLabel">Please wait</entry>
+	<entry key="loadingLabel">Loading collection...</entry>
+	<entry key="imagesLabel">Loading images...</entry>
+	<entry key="confirmLabel">Confirm</entry>
+	<entry key="readLabel">Do you wish to read &lt;i>%s&lt;/i>?</entry>
+	<entry key="yesLabel">Yes</entry>
+	<entry key="noLabel">No</entry>
+	
+	<entry key="helpShelf1">Slide your finger to select a book</entry>
+	<entry key="helpShelf2">Tap on a book to open it</entry>
+	<entry key="helpBook1">Slide your finger to turn the pages</entry>
+	<entry key="helpBook2">Tap on a highlighted area to get more information</entry>
+	<entry key="helpRoi1">Slide your finger on the right side to scroll up and down</entry>
+	<entry key="helpRoi2">Tap anywhere on the left side to return to the book</entry>
+</properties>

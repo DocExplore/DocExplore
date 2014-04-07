@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Ressources en français</comment>
+	
+	<entry key="addBook">Ajout de livre</entry>
+	<entry key="addMetaData">Ajout d'annotation</entry>
+	<entry key="addPage">Ajout de page</entry>
+	<entry key="addPages">Ajout de pages</entry>
+	<entry key="addRegion">Ajout de région</entry>
+	<entry key="deleteBook">Suppression de livre</entry>
+	<entry key="deleteBooks">Suppression de livres</entry>
+	<entry key="deleteMetaData">Suppression d'annotation</entry>
+	<entry key="deletePage">Suppression de page</entry>
+	<entry key="deletePages">Suppression de pages</entry>
+	<entry key="deleteRegion">Suppression de région</entry>
+	<entry key="movePages">Déplacement de pages</entry>
+	<entry key="cropPage">Retaillage de page</entry>
+</properties>

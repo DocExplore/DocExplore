@@ -1,0 +1,2363 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:m="http://schemas.microsoft.com/office/2004/12/omml"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 12">
+<meta name=Originator content="Microsoft Word 12">
+<link rel=File-List href="MMT%20documentation_files/filelist.xml">
+<link rel=Edit-Time-Data href="MMT%20documentation_files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Alex</o:Author>
+  <o:LastAuthor>Alex</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>127</o:TotalTime>
+  <o:Created>2012-01-30T13:20:00Z</o:Created>
+  <o:LastSaved>2012-01-30T13:20:00Z</o:LastSaved>
+  <o:Pages>10</o:Pages>
+  <o:Words>2059</o:Words>
+  <o:Characters>11329</o:Characters>
+  <o:Company>Microsoft</o:Company>
+  <o:Lines>94</o:Lines>
+  <o:Paragraphs>26</o:Paragraphs>
+  <o:CharactersWithSpaces>13362</o:CharactersWithSpaces>
+  <o:Version>12.00</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]-->
+<link rel=dataStoreItem href="MMT%20documentation_files/item0001.xml"
+target="MMT%20documentation_files/props0002.xml">
+<link rel=themeData href="MMT%20documentation_files/themedata.thmx">
+<link rel=colorSchemeMapping
+href="MMT%20documentation_files/colorschememapping.xml">
+<!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:TrackMoves>false</w:TrackMoves>
+  <w:TrackFormatting/>
+  <w:HyphenationZone>21</w:HyphenationZone>
+  <w:PunctuationKerning/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:DoNotPromoteQF/>
+  <w:LidThemeOther>FR</w:LidThemeOther>
+  <w:LidThemeAsian>X-NONE</w:LidThemeAsian>
+  <w:LidThemeComplexScript>X-NONE</w:LidThemeComplexScript>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:SplitPgBreakAndParaMark/>
+   <w:DontVertAlignCellWithSp/>
+   <w:DontBreakConstrainedForcedTables/>
+   <w:DontVertAlignInTxbx/>
+   <w:Word11KerningPairs/>
+   <w:CachedColBalance/>
+  </w:Compatibility>
+  <m:mathPr>
+   <m:mathFont m:val="Cambria Math"/>
+   <m:brkBin m:val="before"/>
+   <m:brkBinSub m:val="&#45;-"/>
+   <m:smallFrac m:val="off"/>
+   <m:dispDef/>
+   <m:lMargin m:val="0"/>
+   <m:rMargin m:val="0"/>
+   <m:defJc m:val="centerGroup"/>
+   <m:wrapIndent m:val="1440"/>
+   <m:intLim m:val="subSup"/>
+   <m:naryLim m:val="undOvr"/>
+  </m:mathPr></w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" DefUnhideWhenUsed="true"
+  DefSemiHidden="true" DefQFormat="false" DefPriority="99"
+  LatentStyleCount="267">
+  <w:LsdException Locked="false" Priority="0" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Normal"/>
+  <w:LsdException Locked="false" Priority="9" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="heading 1"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 2"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 3"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 4"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 5"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 6"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 7"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 8"/>
+  <w:LsdException Locked="false" Priority="9" QFormat="true" Name="heading 9"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 1"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 2"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 3"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 4"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 5"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 6"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 7"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 8"/>
+  <w:LsdException Locked="false" Priority="39" Name="toc 9"/>
+  <w:LsdException Locked="false" Priority="35" QFormat="true" Name="caption"/>
+  <w:LsdException Locked="false" Priority="10" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Title"/>
+  <w:LsdException Locked="false" Priority="1" Name="Default Paragraph Font"/>
+  <w:LsdException Locked="false" Priority="11" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Subtitle"/>
+  <w:LsdException Locked="false" Priority="22" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Strong"/>
+  <w:LsdException Locked="false" Priority="20" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Emphasis"/>
+  <w:LsdException Locked="false" Priority="59" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Table Grid"/>
+  <w:LsdException Locked="false" UnhideWhenUsed="false" Name="Placeholder Text"/>
+  <w:LsdException Locked="false" Priority="1" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="No Spacing"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 1"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 1"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 1"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 1"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 1"/>
+  <w:LsdException Locked="false" UnhideWhenUsed="false" Name="Revision"/>
+  <w:LsdException Locked="false" Priority="34" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="List Paragraph"/>
+  <w:LsdException Locked="false" Priority="29" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Quote"/>
+  <w:LsdException Locked="false" Priority="30" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Intense Quote"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 1"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 1"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 1"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 1"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 1"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 1"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 1"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 2"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 2"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 2"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 2"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 2"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 2"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 2"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 2"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 2"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 2"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 3"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 3"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 3"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 3"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 3"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 3"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 3"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 3"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 3"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 3"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 4"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 4"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 4"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 4"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 4"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 4"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 4"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 4"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 4"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 4"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 5"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 5"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 5"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 5"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 5"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 5"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 5"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 5"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 5"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 5"/>
+  <w:LsdException Locked="false" Priority="60" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Shading Accent 6"/>
+  <w:LsdException Locked="false" Priority="61" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light List Accent 6"/>
+  <w:LsdException Locked="false" Priority="62" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Light Grid Accent 6"/>
+  <w:LsdException Locked="false" Priority="63" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="64" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Shading 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="65" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="66" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium List 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="67" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 1 Accent 6"/>
+  <w:LsdException Locked="false" Priority="68" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 2 Accent 6"/>
+  <w:LsdException Locked="false" Priority="69" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Medium Grid 3 Accent 6"/>
+  <w:LsdException Locked="false" Priority="70" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Dark List Accent 6"/>
+  <w:LsdException Locked="false" Priority="71" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Shading Accent 6"/>
+  <w:LsdException Locked="false" Priority="72" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful List Accent 6"/>
+  <w:LsdException Locked="false" Priority="73" SemiHidden="false"
+   UnhideWhenUsed="false" Name="Colorful Grid Accent 6"/>
+  <w:LsdException Locked="false" Priority="19" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Subtle Emphasis"/>
+  <w:LsdException Locked="false" Priority="21" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Intense Emphasis"/>
+  <w:LsdException Locked="false" Priority="31" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Subtle Reference"/>
+  <w:LsdException Locked="false" Priority="32" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Intense Reference"/>
+  <w:LsdException Locked="false" Priority="33" SemiHidden="false"
+   UnhideWhenUsed="false" QFormat="true" Name="Book Title"/>
+  <w:LsdException Locked="false" Priority="37" Name="Bibliography"/>
+  <w:LsdException Locked="false" Priority="39" QFormat="true" Name="TOC Heading"/>
+ </w:LatentStyles>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:2;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:0 268435456 0 0 -2147483648 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-pitch:variable;
+	mso-font-signature:-536870145 1107305727 0 0 415 0;}
+@font-face
+	{font-family:Cambria;
+	panose-1:2 4 5 3 5 4 6 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-pitch:variable;
+	mso-font-signature:-536870145 1073743103 0 0 415 0;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:-520092929 1073786111 9 0 415 0;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:-520081665 -1073717157 41 0 66047 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:10.0pt;
+	margin-left:0cm;
+	line-height:115%;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-fareast-font-family:Calibri;
+	mso-fareast-theme-font:minor-latin;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;
+	mso-fareast-language:EN-US;}
+h1
+	{mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-link:"Heading 1 Char";
+	mso-style-next:Normal;
+	margin-top:24.0pt;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:0cm;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	mso-pagination:widow-orphan lines-together;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:14.0pt;
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
+	mso-ascii-theme-font:major-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:major-fareast;
+	mso-hansi-font-family:Cambria;
+	mso-hansi-theme-font:major-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:major-bidi;
+	color:#365F91;
+	mso-themecolor:accent1;
+	mso-themeshade:191;
+	mso-font-kerning:0pt;
+	mso-fareast-language:EN-US;}
+h2
+	{mso-style-priority:9;
+	mso-style-qformat:yes;
+	mso-style-link:"Heading 2 Char";
+	mso-style-next:Normal;
+	margin-top:10.0pt;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:0cm;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	mso-pagination:widow-orphan lines-together;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:13.0pt;
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
+	mso-ascii-theme-font:major-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:major-fareast;
+	mso-hansi-font-family:Cambria;
+	mso-hansi-theme-font:major-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:major-bidi;
+	color:#4F81BD;
+	mso-themecolor:accent1;
+	mso-fareast-language:EN-US;}
+h3
+	{mso-style-priority:9;
+	mso-style-qformat:yes;
+	mso-style-link:"Heading 3 Char";
+	mso-style-next:Normal;
+	margin-top:10.0pt;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:0cm;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	mso-pagination:widow-orphan lines-together;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	font-size:11.0pt;
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
+	mso-ascii-theme-font:major-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:major-fareast;
+	mso-hansi-font-family:Cambria;
+	mso-hansi-theme-font:major-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:major-bidi;
+	color:#4F81BD;
+	mso-themecolor:accent1;
+	mso-fareast-language:EN-US;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{mso-style-update:auto;
+	mso-style-priority:39;
+	mso-style-next:Normal;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:0cm;
+	line-height:115%;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-fareast-font-family:Calibri;
+	mso-fareast-theme-font:minor-latin;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;
+	mso-fareast-language:EN-US;}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{mso-style-update:auto;
+	mso-style-priority:39;
+	mso-style-next:Normal;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:11.0pt;
+	line-height:115%;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-fareast-font-family:Calibri;
+	mso-fareast-theme-font:minor-latin;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;
+	mso-fareast-language:EN-US;}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{mso-style-update:auto;
+	mso-style-priority:39;
+	mso-style-next:Normal;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:5.0pt;
+	margin-left:22.0pt;
+	line-height:115%;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-fareast-font-family:Calibri;
+	mso-fareast-theme-font:minor-latin;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;
+	mso-fareast-language:EN-US;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	mso-themecolor:hyperlink;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-noshow:yes;
+	mso-style-priority:99;
+	color:purple;
+	mso-themecolor:followedhyperlink;
+	text-decoration:underline;
+	text-underline:single;}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-link:"Balloon Text Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";
+	mso-fareast-font-family:Calibri;
+	mso-fareast-theme-font:minor-latin;
+	mso-fareast-language:EN-US;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{mso-style-priority:34;
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:10.0pt;
+	margin-left:36.0pt;
+	mso-add-space:auto;
+	line-height:115%;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-fareast-font-family:Calibri;
+	mso-fareast-theme-font:minor-latin;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;
+	mso-fareast-language:EN-US;}
+p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+	{mso-style-priority:34;
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-type:export-only;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:36.0pt;
+	margin-bottom:.0001pt;
+	mso-add-space:auto;
+	line-height:115%;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-fareast-font-family:Calibri;
+	mso-fareast-theme-font:minor-latin;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;
+	mso-fareast-language:EN-US;}
+p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+	{mso-style-priority:34;
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-type:export-only;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:36.0pt;
+	margin-bottom:.0001pt;
+	mso-add-space:auto;
+	line-height:115%;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-fareast-font-family:Calibri;
+	mso-fareast-theme-font:minor-latin;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;
+	mso-fareast-language:EN-US;}
+p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+	{mso-style-priority:34;
+	mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-type:export-only;
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:10.0pt;
+	margin-left:36.0pt;
+	mso-add-space:auto;
+	line-height:115%;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-fareast-font-family:Calibri;
+	mso-fareast-theme-font:minor-latin;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;
+	mso-fareast-language:EN-US;}
+p.MsoTocHeading, li.MsoTocHeading, div.MsoTocHeading
+	{mso-style-noshow:yes;
+	mso-style-priority:39;
+	mso-style-qformat:yes;
+	mso-style-parent:"Heading 1";
+	mso-style-next:Normal;
+	margin-top:24.0pt;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:0cm;
+	margin-bottom:.0001pt;
+	line-height:115%;
+	mso-pagination:widow-orphan lines-together;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
+	mso-ascii-theme-font:major-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:major-fareast;
+	mso-hansi-font-family:Cambria;
+	mso-hansi-theme-font:major-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:major-bidi;
+	color:#365F91;
+	mso-themecolor:accent1;
+	mso-themeshade:191;
+	mso-ansi-language:EN-US;
+	mso-fareast-language:EN-US;
+	font-weight:bold;}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:"Balloon Text";
+	mso-ansi-font-size:8.0pt;
+	mso-bidi-font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";
+	mso-ascii-font-family:Tahoma;
+	mso-hansi-font-family:Tahoma;
+	mso-bidi-font-family:Tahoma;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:"Heading 2";
+	mso-ansi-font-size:13.0pt;
+	mso-bidi-font-size:13.0pt;
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
+	mso-ascii-theme-font:major-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:major-fareast;
+	mso-hansi-font-family:Cambria;
+	mso-hansi-theme-font:major-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:major-bidi;
+	color:#4F81BD;
+	mso-themecolor:accent1;
+	font-weight:bold;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:"Heading 3";
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
+	mso-ascii-theme-font:major-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:major-fareast;
+	mso-hansi-font-family:Cambria;
+	mso-hansi-theme-font:major-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:major-bidi;
+	color:#4F81BD;
+	mso-themecolor:accent1;
+	font-weight:bold;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-priority:9;
+	mso-style-unhide:no;
+	mso-style-locked:yes;
+	mso-style-link:"Heading 1";
+	mso-ansi-font-size:14.0pt;
+	mso-bidi-font-size:14.0pt;
+	font-family:"Cambria","serif";
+	mso-ascii-font-family:Cambria;
+	mso-ascii-theme-font:major-latin;
+	mso-fareast-font-family:"Times New Roman";
+	mso-fareast-theme-font:major-fareast;
+	mso-hansi-font-family:Cambria;
+	mso-hansi-theme-font:major-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:major-bidi;
+	color:#365F91;
+	mso-themecolor:accent1;
+	mso-themeshade:191;
+	font-weight:bold;}
+span.SpellE
+	{mso-style-name:"";
+	mso-spl-e:yes;}
+span.GramE
+	{mso-style-name:"";
+	mso-gram-e:yes;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	mso-default-props:yes;
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-fareast-font-family:Calibri;
+	mso-fareast-theme-font:minor-latin;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;
+	mso-fareast-language:EN-US;}
+.MsoPapDefault
+	{mso-style-type:export-only;
+	margin-bottom:10.0pt;
+	line-height:115%;}
+@page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:70.85pt 70.85pt 70.85pt 70.85pt;
+	mso-header-margin:35.4pt;
+	mso-footer-margin:35.4pt;
+	mso-paper-source:0;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:29847111;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1055852172 67895297 67895299 67895301 67895297 67895299 67895301 67895297 67895299 67895301;}
+@list l0:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	font-family:Symbol;}
+ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-priority:99;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin-top:0cm;
+	mso-para-margin-right:0cm;
+	mso-para-margin-bottom:10.0pt;
+	mso-para-margin-left:0cm;
+	line-height:115%;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	mso-ascii-font-family:Calibri;
+	mso-ascii-theme-font:minor-latin;
+	mso-hansi-font-family:Calibri;
+	mso-hansi-theme-font:minor-latin;
+	mso-bidi-font-family:"Times New Roman";
+	mso-bidi-theme-font:minor-bidi;
+	mso-fareast-language:EN-US;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="4098"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+  <o:rules v:ext="edit">
+   <o:r id="V:Rule14" type="connector" idref="#_x0000_s1059"/>
+   <o:r id="V:Rule15" type="connector" idref="#_x0000_s1027"/>
+   <o:r id="V:Rule16" type="connector" idref="#_x0000_s1048"/>
+   <o:r id="V:Rule17" type="connector" idref="#_x0000_s1038"/>
+   <o:r id="V:Rule18" type="connector" idref="#_x0000_s1039"/>
+   <o:r id="V:Rule19" type="connector" idref="#_x0000_s1058"/>
+   <o:r id="V:Rule20" type="connector" idref="#_x0000_s1040"/>
+   <o:r id="V:Rule21" type="connector" idref="#_x0000_s1028"/>
+   <o:r id="V:Rule23" type="connector" idref="#_x0000_s1060"/>
+   <o:r id="V:Rule25" type="connector" idref="#_x0000_s1029"/>
+   <o:r id="V:Rule26" type="connector" idref="#_x0000_s1026"/>
+   <o:r id="V:Rule28" type="connector" idref="#_x0000_s1066"/>
+   <o:r id="V:Rule30" type="connector" idref="#_x0000_s1067"/>
+   <o:r id="V:Rule32" type="connector" idref="#_x0000_s1068"/>
+   <o:r id="V:Rule34" type="connector" idref="#_x0000_s1074"/>
+   <o:r id="V:Rule36" type="connector" idref="#_x0000_s1075"/>
+   <o:r id="V:Rule37" type="connector" idref="#_x0000_s1079"/>
+   <o:r id="V:Rule38" type="connector" idref="#_x0000_s1078"/>
+  </o:rules>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=FR link=blue vlink=purple style='tab-interval:35.4pt'>
+
+<div class=WordSection1>
+
+<h1 align=center style='text-align:center'><a name="_Toc315695389"></a><span
+class=SpellE><span style='mso-bookmark:_Toc315695389'><span lang=EN-US
+style='mso-ansi-language:EN-US'>DocExplore</span></span></span><span
+style='mso-bookmark:_Toc315695389'><span lang=EN-US style='mso-ansi-language:
+EN-US'> MMT documentation</span></span><span lang=EN-US style='mso-ansi-language:
+EN-US'><o:p></o:p></span></h1>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoToc2 style='tab-stops:right dotted 453.1pt'><!--[if supportFields]><span
+lang=EN-US style='mso-ansi-language:EN-US'><span style='mso-element:field-begin'></span><span
+style='mso-spacerun:yes'> </span>TOC \o &quot;2-3&quot; \h \z \u <span
+style='mso-element:field-separator'></span></span><![endif]--><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696495"><span
+lang=EN-US style='mso-ansi-language:EN-US'>Menu bar and tool bar</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696495 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>1</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003400390035000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc3 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696496"><span
+lang=EN-US style='mso-ansi-language:EN-US'>File Menu</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696496 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>1</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003400390036000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc3 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696497"><span
+lang=EN-US style='mso-ansi-language:EN-US'>Tools Menu</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696497 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>2</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003400390037000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc3 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696498"><span
+lang=EN-US style='mso-ansi-language:EN-US'>Collection View</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>.. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696498 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>2</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003400390038000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc3 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696499"><span
+lang=EN-US style='mso-ansi-language:EN-US'>Search View</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>.. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696499 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>3</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003400390039000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc3 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696500"><span
+lang=EN-US style='mso-ansi-language:EN-US'>Navigation Buttons</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696500 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>4</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003500300030000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc3 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696501"><span
+lang=EN-US style='mso-ansi-language:EN-US'>Display Buttons</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696501 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>4</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003500300031000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc3 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696502"><span
+lang=EN-US style='mso-ansi-language:EN-US'>ROI Buttons</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696502 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>4</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003500300032000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc2 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696503"><span
+lang=EN-US style='mso-ansi-language:EN-US'>Book View</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>.. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696503 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>5</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003500300033000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc2 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696504"><span
+lang=EN-US style='mso-ansi-language:EN-US'>Page View</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>.. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696504 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>6</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003500300034000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc2 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696505"><span
+lang=EN-US style='mso-ansi-language:EN-US'>Annotation List</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696505 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>8</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003500300035000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc3 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696506"><span
+lang=EN-US style='mso-ansi-language:EN-US'>Annotation editing</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696506 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>8</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003500300036000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc3 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696507"><span
+lang=EN-US style='mso-ansi-language:EN-US'>Filter options</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696507 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>9</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003500300037000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoToc2 style='tab-stops:right dotted 453.1pt'><span
+class=MsoHyperlink><span style='mso-no-proof:yes'><a href="#_Toc315696508"><span
+lang=EN-US style='mso-ansi-language:EN-US'>Import/Export</span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-tab-count:1 dotted'>. </span></span><!--[if supportFields]><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'><span style='mso-element:field-begin'></span></span><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'> PAGEREF _Toc315696508 \h </span><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-separator'></span></span><![endif]--><span
+style='color:windowtext;display:none;mso-hide:screen;text-decoration:none;
+text-underline:none'>9</span><span style='color:windowtext;display:none;
+mso-hide:screen;text-decoration:none;text-underline:none'><!--[if gte mso 9]><xml>
+ <w:data>08D0C9EA79F9BACE118C8200AA004BA90B02000000080000000E0000005F0054006F0063003300310035003600390036003500300038000000</w:data>
+</xml><![endif]--></span><!--[if supportFields]><span style='color:windowtext;
+display:none;mso-hide:screen;text-decoration:none;text-underline:none'><span
+style='mso-element:field-end'></span></span><![endif]--></a></span></span><span
+style='mso-fareast-font-family:"Times New Roman";mso-fareast-theme-font:minor-fareast;
+mso-fareast-language:FR;mso-no-proof:yes'><o:p></o:p></span></p>
+
+<p class=MsoNormal><!--[if supportFields]><span lang=EN-US style='mso-ansi-language:
+EN-US'><span style='mso-element:field-end'></span></span><![endif]--><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h2><a name="_Toc315696495"></a><a name="_Toc315695390"><span style='mso-bookmark:
+_Toc315696495'><span lang=EN-US style='mso-ansi-language:EN-US'>Menu bar and
+tool bar</span></span></a><span lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></h2>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><!--[if gte vml 1]><v:shapetype id="_x0000_t202"
+ coordsize="21600,21600" o:spt="202" path="m,l,21600r21600,l21600,xe">
+ <v:stroke joinstyle="miter"/>
+ <v:path gradientshapeok="t" o:connecttype="rect"/>
+</v:shapetype><v:shape id="_x0000_s1043" type="#_x0000_t202" style='position:absolute;
+ margin-left:337.9pt;margin-top:94.95pt;width:69pt;height:22.5pt;z-index:17'
+ stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1043'/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;position:
+absolute;z-index:17;margin-left:451px;margin-top:127px;width:96px;height:34px'>
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=96 height=34 bgcolor=white style='vertical-align:top;background:
+  white'><![endif]><![if !mso]><span style='position:absolute;mso-ignore:vglayout;
+  z-index:17'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1043" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal>ROI <span class=GramE>buttons</span></p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+ </tr>
+</table>
+
+</span><![endif]><a name="_top"></a><!--[if gte vml 1]><v:shape id="_x0000_s1042"
+ type="#_x0000_t202" style='position:absolute;margin-left:235.15pt;
+ margin-top:117.45pt;width:86.25pt;height:22.5pt;z-index:16' stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1042'/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;position:
+absolute;z-index:16;margin-left:314px;margin-top:157px;width:119px;height:34px'>
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=119 height=34 bgcolor=white style='vertical-align:top;background:
+  white'><![endif]><![if !mso]><span style='position:absolute;mso-ignore:vglayout;
+  z-index:16'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1042" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal>Display buttons</p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+ </tr>
+</table>
+
+</span><![endif]><!--[if gte vml 1]><v:shape id="_x0000_s1041" type="#_x0000_t202"
+ style='position:absolute;margin-left:127.15pt;margin-top:94.95pt;width:101.25pt;
+ height:22.5pt;z-index:15' stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1041'/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;position:
+absolute;z-index:15;margin-left:170px;margin-top:127px;width:139px;height:34px'>
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=139 height=34 bgcolor=white style='vertical-align:top;background:
+  white'><![endif]><![if !mso]><span style='position:absolute;mso-ignore:vglayout;
+  z-index:15'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1041" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal>Navigation buttons</p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+ </tr>
+</table>
+
+</span><![endif]><!--[if gte vml 1]><v:shapetype id="_x0000_t32" coordsize="21600,21600"
+ o:spt="32" o:oned="t" path="m,l21600,21600e" filled="f">
+ <v:path arrowok="t" fillok="f" o:connecttype="none"/>
+ <o:lock v:ext="edit" shapetype="t"/>
+</v:shapetype><v:shape id="_x0000_s1040" type="#_x0000_t32" style='position:absolute;
+ margin-left:372.4pt;margin-top:58.95pt;width:0;height:36pt;z-index:14'
+ o:connectortype="straight"/><![endif]--><![if !vml]><span style='mso-ignore:
+vglayout;position:absolute;z-index:14;margin-left:496px;margin-top:78px;
+width:2px;height:50px'><img width=2 height=50
+src="MMT%20documentation_files/image001.gif" v:shapes="_x0000_s1040"></span><![endif]><!--[if gte vml 1]><v:shape
+ id="_x0000_s1039" type="#_x0000_t32" style='position:absolute;margin-left:276.4pt;
+ margin-top:58.95pt;width:0;height:75.75pt;z-index:13' o:connectortype="straight"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:13;margin-left:368px;
+margin-top:78px;width:2px;height:103px'><img width=2 height=103
+src="MMT%20documentation_files/image002.gif" v:shapes="_x0000_s1039"></span><![endif]><!--[if gte vml 1]><v:shape
+ id="_x0000_s1038" type="#_x0000_t32" style='position:absolute;margin-left:176.65pt;
+ margin-top:58.95pt;width:0;height:36pt;z-index:12' o:connectortype="straight"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:12;margin-left:235px;
+margin-top:78px;width:2px;height:50px'><img width=2 height=50
+src="MMT%20documentation_files/image001.gif" v:shapes="_x0000_s1038"></span><![endif]><!--[if gte vml 1]><v:oval
+ id="_x0000_s1037" style='position:absolute;margin-left:325.15pt;margin-top:28.95pt;
+ width:93pt;height:30pt;z-index:11' filled="f"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:11;margin-left:433px;
+margin-top:38px;width:126px;height:42px'><img width=126 height=42
+src="MMT%20documentation_files/image003.gif" v:shapes="_x0000_s1037"></span><![endif]><!--[if gte vml 1]><v:oval
+ id="_x0000_s1036" style='position:absolute;margin-left:228.4pt;margin-top:28.95pt;
+ width:93pt;height:30pt;z-index:10' filled="f"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:10;margin-left:304px;
+margin-top:38px;width:126px;height:42px'><img width=126 height=42
+src="MMT%20documentation_files/image003.gif" v:shapes="_x0000_s1036"></span><![endif]><!--[if gte vml 1]><v:oval
+ id="_x0000_s1035" style='position:absolute;margin-left:131.65pt;margin-top:28.95pt;
+ width:93pt;height:30pt;z-index:9' filled="f"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:9;margin-left:175px;
+margin-top:38px;width:126px;height:42px'><img width=126 height=42
+src="MMT%20documentation_files/image003.gif" v:shapes="_x0000_s1035"></span><![endif]><!--[if gte vml 1]><v:shape
+ id="_x0000_s1034" type="#_x0000_t202" style='position:absolute;margin-left:74.65pt;
+ margin-top:146.7pt;width:84.75pt;height:22.5pt;z-index:8' stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1034'/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;position:
+absolute;z-index:8;margin-left:100px;margin-top:196px;width:117px;height:34px'>
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=117 height=34 bgcolor=white style='vertical-align:top;background:
+  white'><![endif]><![if !mso]><span style='position:absolute;mso-ignore:vglayout;
+  z-index:8'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1034" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal><span class=SpellE>Search</span> <span class=SpellE>view</span></p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+ </tr>
+</table>
+
+</span><![endif]><!--[if gte vml 1]><v:shape id="_x0000_s1032" type="#_x0000_t202"
+ style='position:absolute;margin-left:-14.6pt;margin-top:146.7pt;width:84.75pt;
+ height:22.5pt;z-index:6' stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1032'/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;position:
+absolute;z-index:6;margin-left:-19px;margin-top:196px;width:117px;height:34px'>
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=117 height=34 bgcolor=white style='vertical-align:top;background:
+  white'><![endif]><![if !mso]><span style='position:absolute;mso-ignore:vglayout;
+  z-index:6'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1032" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal>Collection <span class=SpellE>view</span></p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+ </tr>
+</table>
+
+</span><![endif]><!--[if gte vml 1]><v:shape id="_x0000_s1028" type="#_x0000_t32"
+ style='position:absolute;margin-left:94.9pt;margin-top:62.7pt;width:21pt;
+ height:87.75pt;z-index:3' o:connectortype="straight"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:3;margin-left:126px;
+margin-top:83px;width:30px;height:119px'><img width=30 height=119
+src="MMT%20documentation_files/image004.gif" v:shapes="_x0000_s1028"></span><![endif]><!--[if gte vml 1]><v:shape
+ id="_x0000_s1029" type="#_x0000_t32" style='position:absolute;margin-left:51.4pt;
+ margin-top:13.95pt;width:13.5pt;height:87.75pt;z-index:4' o:connectortype="straight"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:4;margin-left:68px;
+margin-top:18px;width:20px;height:119px'><img width=20 height=119
+src="MMT%20documentation_files/image005.gif" v:shapes="_x0000_s1029"></span><![endif]><!--[if gte vml 1]><v:shape
+ id="_x0000_s1033" type="#_x0000_t202" style='position:absolute;margin-left:33.4pt;
+ margin-top:101.7pt;width:67.5pt;height:22.5pt;z-index:7' stroked="f"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:7;margin-left:45px;
+margin-top:136px;width:94px;height:34px'>
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=94 height=34 bgcolor=white style='vertical-align:top;background:
+  white'><![endif]><![if !mso]><span style='position:absolute;mso-ignore:vglayout;
+  z-index:7'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1033" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal>Tools menu</p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+ </tr>
+</table>
+
+</span><![endif]><!--[if gte vml 1]><v:shape id="_x0000_s1027" type="#_x0000_t32"
+ style='position:absolute;margin-left:32.65pt;margin-top:58.95pt;width:0;
+ height:87.75pt;z-index:2' o:connectortype="straight"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:2;margin-left:43px;
+margin-top:78px;width:2px;height:119px'><img width=2 height=119
+src="MMT%20documentation_files/image006.gif" v:shapes="_x0000_s1027"></span><![endif]><!--[if gte vml 1]><v:shape
+ id="_x0000_s1031" type="#_x0000_t202" style='position:absolute;margin-left:-26.6pt;
+ margin-top:101.7pt;width:59.25pt;height:22.5pt;z-index:5' stroked="f"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:5;margin-left:-35px;
+margin-top:136px;width:83px;height:34px'>
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=83 height=34 bgcolor=white style='vertical-align:top;background:
+  white'><![endif]><![if !mso]><span style='position:absolute;mso-ignore:vglayout;
+  z-index:5'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1031" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal>File menu</p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+ </tr>
+</table>
+
+</span><![endif]><!--[if gte vml 1]><v:shape id="_x0000_s1026" type="#_x0000_t32"
+ style='position:absolute;margin-left:2.65pt;margin-top:13.95pt;width:8.25pt;
+ height:96pt;flip:x;z-index:1' o:connectortype="straight"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:1;margin-left:3px;
+margin-top:18px;width:13px;height:130px'><img width=13 height=130
+src="MMT%20documentation_files/image007.gif" v:shapes="_x0000_s1026"></span><![endif]><span
+style='mso-fareast-language:FR;mso-no-proof:yes'><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1032" type="#_x0000_t75" style='width:420pt;
+ height:72.75pt;visibility:visible;mso-wrap-style:square'>
+ <v:imagedata src="MMT%20documentation_files/image008.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img width=560 height=97
+src="MMT%20documentation_files/image009.jpg" v:shapes="_x0000_i1032"><![endif]></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="_Toc315696496"></a><a name="_Toc315695391"><span style='mso-bookmark:
+_Toc315696496'><span lang=EN-US style='mso-ansi-language:EN-US'>File Menu</span></span></a><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></h3>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Connect to: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>Displays a list of the different types of
+connections that can be made. A list of recently established connections is
+displayed underneath, if any have been made.<o:p></o:p></span></p>
+
+<p class=MsoNormal><i style='mso-bidi-font-style:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Note: This item is disabled if the MMT is
+already connected. You must <span class=GramE><b style='mso-bidi-font-weight:
+normal'>Disconnect</b></span> first before establishing a new connection.<o:p></o:p></span></i></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Import/Export with: </span></b><span
+lang=EN-US style='mso-ansi-language:EN-US'>Displays a list of the different
+connection types with which <a href="#_Import/Export">imports and exports</a>
+can be made. A list of recently established connections is displayed
+underneath, if any have been made.<o:p></o:p></span></p>
+
+<p class=MsoNormal><i style='mso-bidi-font-style:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Note: This item is disabled if the MMT is not
+connected. You must <span class=GramE><b style='mso-bidi-font-weight:normal'>Connect</b></span>
+first before importing and exporting.<o:p></o:p></span></i></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Disconnect: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>Disconnects the MMT from the current
+connection.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Memory: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>Displays a panel monitoring the software’s
+memory usage.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Quit: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>Exits the MMT.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="_Toc315696497"></a><a name="_Toc315695392"><span style='mso-bookmark:
+_Toc315696497'><span lang=EN-US style='mso-ansi-language:EN-US'>Tools Menu</span></span></a><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></h3>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Authoring: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>Displays the authoring tool.<b
+style='mso-bidi-font-weight:normal'><o:p></o:p></b></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="_Toc315696498"></a><a name="_Toc315695393"></a><a
+name="_Collection_View"></a><span style='mso-bookmark:_Toc315696498'><span
+style='mso-bookmark:_Toc315695393'><span lang=EN-US style='mso-ansi-language:
+EN-US'>Collection View</span></span></span><span lang=EN-US style='mso-ansi-language:
+EN-US'><o:p></o:p></span></h3>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>This view
+displays a list of all the digital books available through the current MMT
+connection. If no connection is established, the list will be empty.
+Left-clicking on a book will select it. Multiple books can be selected by
+holding the <i style='mso-bidi-font-style:normal'>shift</i> and/or <i
+style='mso-bidi-font-style:normal'>control</i> keys when left-clicking.
+Right-clicking in this display will pop up a menu offering various items
+depending on the current selection:<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Add a book: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>Will display a dialog which will guide the user
+through the steps of selecting images from the computer and importing them as a
+digital book into the collection.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Delete selected books:</span></b><span
+lang=EN-US style='mso-ansi-language:EN-US'> The user will be prompted to
+confirm that he wishes to remove all the selected books from the collection.
+All pages, regions and <a href="#_Annotation_List">annotations</a> within the
+book will be lost.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Process all pages in the selected book:</span></b><span
+lang=EN-US style='mso-ansi-language:EN-US'> Displays the image processing
+window and loads it with the pages of this book. Image processing allows applying
+a variety of filters and effects to an image.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Export all pages in the selected book: </span></b><span
+lang=EN-US style='mso-ansi-language:EN-US'>Displays the image exporting window
+and loads it with the pages of this book. Exporting allows saving images from
+pages or regions to be saved outside the MMT, along with related textual
+annotations.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Create presentation of the selected book: </span></b><span
+lang=EN-US style='mso-ansi-language:EN-US'>Displays the authoring tool and
+loads it with the pages of this book.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Double-clicking
+on a book will open the <a href="#_Book_View">book view</a> in a new tab.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="_Toc315696499"></a><a name="_Toc315695394"><span style='mso-bookmark:
+_Toc315696499'><span lang=EN-US style='mso-ansi-language:EN-US'>Search View</span></span></a><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></h3>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>The search
+view allows performing a textual search over the entire <a
+href="#_Collection_View">collection</a>, displaying the results that correspond
+to the selected criteria.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>A set of
+checkboxes at the top of the view indicate the type of results the user is
+interested in among books, pages and ROIs.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>The user
+can choose whether the search results should match any or all of the criteria
+that follows, by checking either <span class=GramE><i style='mso-bidi-font-style:
+normal'>Matching</i></span><i style='mso-bidi-font-style:normal'> all of the
+criteria below </i>or <i style='mso-bidi-font-style:normal'>Matching any of the
+criteria below</i>.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>A list of
+any number of criterion lines is displayed below with a minimum of one. A new
+line can be created by clicking the <i style='mso-bidi-font-style:normal'>plus</i>
+button on the left side of the lowest criterion. An existing line can be
+removed with the <i style='mso-bidi-font-style:normal'>cross</i> button on left
+side, although there must remain at least one line.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>A criterion
+line consists of a text entry zone followed by a list of annotation types. This
+criterion will match any annotations of the selected type that contain the specified
+text.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>The
+following setup:<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-fareast-language:FR;mso-no-proof:yes'><!--[if gte vml 1]><v:shape
+ id="Picture_x0020_5" o:spid="_x0000_i1031" type="#_x0000_t75" style='width:354pt;
+ height:201.75pt;visibility:visible;mso-wrap-style:square'>
+ <v:imagedata src="MMT%20documentation_files/image010.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=472 height=269
+src="MMT%20documentation_files/image011.jpg" v:shapes="Picture_x0020_5"><![endif]></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Can be
+formulated as:<o:p></o:p></span></p>
+
+<p class=MsoNormal><i style='mso-bidi-font-style:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Search for any pages or ROIs that are either
+associated to a </span></i><span lang=EN-US style='mso-ansi-language:EN-US'>Comment<i
+style='mso-bidi-font-style:normal'> annotation containing the word </i>drawing<i
+style='mso-bidi-font-style:normal'> or associated to the </i>illustration<i
+style='mso-bidi-font-style:normal'> tag.</i><o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>The <i
+style='mso-bidi-font-style:normal'>Clear</i> button removes all criteria except
+one.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>The <i
+style='mso-bidi-font-style:normal'>Search</i> button begins the search and
+displays the results in the result panel below:<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><!--[if gte vml 1]><v:shape id="_x0000_s1078" type="#_x0000_t32"
+ style='position:absolute;margin-left:63.4pt;margin-top:40.9pt;width:9.75pt;
+ height:56.25pt;flip:x y;z-index:36' o:connectortype="straight"/><v:shape id="_x0000_s1079"
+ type="#_x0000_t32" style='position:absolute;margin-left:121.9pt;margin-top:40.9pt;
+ width:89.25pt;height:1in;flip:y;z-index:37' o:connectortype="straight"/><v:shape
+ id="_x0000_s1080" type="#_x0000_t202" style='position:absolute;margin-left:.4pt;
+ margin-top:18.4pt;width:145.5pt;height:22.5pt;z-index:38' stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1080'>
+  <![if !mso]>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div>
+    <p class=MsoNormal><span class=SpellE>Title</span> of <span class=SpellE>matching</span>
+    document</p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  <![endif]></v:textbox>
+</v:shape><v:shape id="_x0000_s1081" type="#_x0000_t202" style='position:absolute;
+ margin-left:158.5pt;margin-top:18.4pt;width:145.5pt;height:22.5pt;z-index:39'
+ stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1081'>
+  <![if !mso]>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div>
+    <p class=MsoNormal><span class=SpellE>Excerpt</span> of <span class=SpellE>matching</span>
+    <span class=SpellE>text</span></p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  <![endif]></v:textbox>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=1 height=25></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=408 height=129 src="MMT%20documentation_files/image012.gif"
+  v:shapes="_x0000_s1078 _x0000_s1079 _x0000_s1080 _x0000_s1081"></td>
+ </tr>
+</table>
+
+</span><![endif]><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<br style='mso-ignore:vglayout' clear=ALL>
+
+<p class=MsoNormal><!--[if gte vml 1]><v:shape id="_x0000_s1048" type="#_x0000_t32"
+ style='position:absolute;margin-left:40.15pt;margin-top:126.3pt;width:0;
+ height:32.25pt;z-index:18' o:connectortype="straight"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:18;margin-left:53px;
+margin-top:167px;width:2px;height:45px'><img width=2 height=45
+src="MMT%20documentation_files/image013.gif" v:shapes="_x0000_s1048"></span><![endif]><span
+style='mso-fareast-language:FR;mso-no-proof:yes'><!--[if gte vml 1]><v:shape
+ id="Picture_x0020_8" o:spid="_x0000_i1030" type="#_x0000_t75" style='width:378pt;
+ height:140.25pt;visibility:visible;mso-wrap-style:square'>
+ <v:imagedata src="MMT%20documentation_files/image014.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=504 height=187
+src="MMT%20documentation_files/image015.jpg" v:shapes="Picture_x0020_8"><![endif]></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
+
+<p class=MsoNormal><!--[if gte vml 1]><v:shape id="_x0000_s1049" type="#_x0000_t202"
+ style='position:absolute;margin-left:.4pt;margin-top:6.3pt;width:145.5pt;
+ height:22.5pt;z-index:19' stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1049'/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=1 height=8></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td width=198 height=34 bgcolor=white style='vertical-align:top;background:
+  white'><![endif]><![if !mso]><span style='position:absolute;mso-ignore:vglayout;
+  z-index:19'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1049" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal>Relevance of the <span class=SpellE>result</span></p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+ </tr>
+</table>
+
+</span><![endif]><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<br style='mso-ignore:vglayout' clear=ALL>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Any title
+(displayed in blue) can be clicked and will open the corresponding document in
+a new tab.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="_Toc315696500"></a><a name="_Toc315695395"><span style='mso-bookmark:
+_Toc315696500'><span lang=EN-US style='mso-ansi-language:EN-US'>Navigation
+Buttons</span></span></a><span lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></h3>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>These
+buttons allow navigation through the pages of a book.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Left button:</span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'> Moves the current tab to the previous page if
+it is not a book or the first page of a book.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Up button: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>Changes the current tab to the containing book
+if it is a page or a ROI.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Right button: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>Moves the current tab to the next page if it is
+not a book. It the current document is a <span class=GramE>book,</span> will
+move to the first page.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="_Toc315696501"></a><a name="_Toc315695396"></a><a
+name="_Display_Buttons"></a><span style='mso-bookmark:_Toc315696501'><span
+style='mso-bookmark:_Toc315695396'><span lang=EN-US style='mso-ansi-language:
+EN-US'>Display Buttons</span></span></span><span lang=EN-US style='mso-ansi-language:
+EN-US'><o:p></o:p></span></h3>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>These
+buttons help adjusting the <a href="#_Page_View">display of a page</a> in the
+current tab. They are disabled if the current document is a book.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Zoom in:</span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'> Zooms in to the current page<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Zoom out:</span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'> Zooms out of the current page<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Fit: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>Sets the zoom to view the entire page while
+making it as large as the display area permits.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="_Toc315696502"></a><a name="_Toc315695397"></a><a
+name="_ROI_Buttons"></a><span style='mso-bookmark:_Toc315696502'><span
+style='mso-bookmark:_Toc315695397'><span lang=EN-US style='mso-ansi-language:
+EN-US'>ROI Buttons</span></span></span><span lang=EN-US style='mso-ansi-language:
+EN-US'><o:p></o:p></span></h3>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>These
+buttons allow the creation and deletion of <a href="#_Page_View">ROIs on a page</a>.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Free shape ROI: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>Clicking this button enters the <span
+class=SpellE><i style='mso-bidi-font-style:normal'>freeshape</i></span><i
+style='mso-bidi-font-style:normal'> creation mode</i>. This mode will remain
+active until this button is pressed again. While in the <span class=SpellE><i
+style='mso-bidi-font-style:normal'>freeshape</i></span><i style='mso-bidi-font-style:
+normal'> creation mode</i> the cursor will become a crosshair when hovered
+above the image. By clicking on the image, the user may define a polygonal ROI
+outline. The ROI is created when the outline is closed by clicking on the first
+point. Once a ROI is created, a new outline may be defined as described above.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Rectangle ROI: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>Clicking this button enters the <i
+style='mso-bidi-font-style:normal'>rectangle creation mode</i>. This mode is
+identical to the <span class=SpellE><i style='mso-bidi-font-style:normal'>freeshape</i></span><i
+style='mso-bidi-font-style:normal'> creation mode</i> except in the method of
+specifying an outline: the user needs only to successively click in two
+opposite corners of a rectangle on the image to define a ROI.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Delete ROI: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>If a ROI is selected, this button allows deleting
+it from the containing page. All associated <a href="#_Annotation_List">annotations</a>
+will be lost.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h2><a name="_Toc315696503"></a><a name="_Toc315695398"></a><a name="_Book_View"></a><span
+style='mso-bookmark:_Toc315696503'><span style='mso-bookmark:_Toc315695398'><span
+lang=EN-US style='mso-ansi-language:EN-US'>Book View</span></span></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></h2>
+
+<p class=MsoNormal><!--[if gte vml 1]><v:shape id="_x0000_s1058" type="#_x0000_t32"
+ style='position:absolute;margin-left:205.15pt;margin-top:41.7pt;width:36.75pt;
+ height:70.5pt;flip:x y;z-index:20' o:connectortype="straight"/><v:shape id="_x0000_s1059"
+ type="#_x0000_t32" style='position:absolute;margin-left:284.65pt;margin-top:27.45pt;
+ width:0;height:84.75pt;flip:y;z-index:21' o:connectortype="straight"/><v:shape
+ id="_x0000_s1060" type="#_x0000_t32" style='position:absolute;margin-left:352.9pt;
+ margin-top:47.7pt;width:14.25pt;height:69pt;flip:y;z-index:22'
+ o:connectortype="straight"/><v:shape id="_x0000_s1062" type="#_x0000_t202"
+ style='position:absolute;margin-left:108.4pt;margin-top:19.15pt;width:111pt;
+ height:22.5pt;z-index:23' stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1062'>
+  <![if !mso]>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div>
+    <p class=MsoNormal><span class=SpellE>Lock</span>/<span class=SpellE>Unlock</span>
+    <span class=SpellE>button</span></p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  <![endif]></v:textbox>
+</v:shape><v:shape id="_x0000_s1063" type="#_x0000_t202" style='position:absolute;
+ margin-left:232.9pt;margin-top:19.15pt;width:99.75pt;height:22.5pt;z-index:24'
+ stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1063'>
+  <![if !mso]>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div>
+    <p class=MsoNormal><span class=SpellE>Add</span> pages <span class=SpellE>button</span></p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  <![endif]></v:textbox>
+</v:shape><v:shape id="_x0000_s1064" type="#_x0000_t202" style='position:absolute;
+ margin-left:332.65pt;margin-top:27.45pt;width:64.5pt;height:22.5pt;z-index:25'
+ stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1064'>
+  <![if !mso]>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div>
+    <p class=MsoNormal>Go to <span class=SpellE>field</span></p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  <![endif]></v:textbox>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=145 height=26></td>
+ </tr>
+ <tr>
+  <td></td>
+  <td><img width=389 height=133 src="MMT%20documentation_files/image016.gif"
+  v:shapes="_x0000_s1058 _x0000_s1059 _x0000_s1060 _x0000_s1062 _x0000_s1063 _x0000_s1064"></td>
+ </tr>
+</table>
+
+</span><![endif]><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<br style='mso-ignore:vglayout' clear=ALL>
+
+<p class=MsoNormal><span style='mso-fareast-language:FR;mso-no-proof:yes'><!--[if gte vml 1]><v:shape
+ id="Picture_x0020_13" o:spid="_x0000_i1029" type="#_x0000_t75" style='width:453.75pt;
+ height:337.5pt;visibility:visible;mso-wrap-style:square'>
+ <v:imagedata src="MMT%20documentation_files/image017.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=605 height=450
+src="MMT%20documentation_files/image018.jpg" v:shapes="Picture_x0020_13"><![endif]></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>The book
+view allows interacting with a digital book of the <a href="#_Collection_View">current
+collection</a>. The top bar displays the title of the current book and several
+options:<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Lock/Unlock button: </span></b><span
+lang=EN-US style='mso-ansi-language:EN-US'>A book can be in a locked or
+unlocked state. When locked, it will not allow changing the structure of its
+pages (number and order) in order to prevent the loss of synchronization with
+an identical book in a different collection (if the books lose their
+synchronization, it will no longer be possible to perform <a
+href="#_Import/Export">merge operations</a> of one towards the other). The lock
+reflects the current state of the book. When first viewed, all books are in the
+locked state.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Add pages button: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>If the book is unlocked, will display a dialog
+inviting the user to choose images from his computer that will be appended to
+the current book.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Go to field: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>This field allows for instant navigation to a
+page of the book. It can accept two types of input:<o:p></o:p></span></p>
+
+<p class=MsoListParagraphCxSpFirst style='text-indent:-18.0pt;mso-list:l0 level1 lfo1'><![if !supportLists]><span
+lang=EN-US style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol;mso-ansi-language:EN-US'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN-US style='mso-ansi-language:EN-US'>A
+page number: by typing a page number and hitting enter, a new tab will open at
+the specified page.<o:p></o:p></span></p>
+
+<p class=MsoListParagraphCxSpLast style='text-indent:-18.0pt;mso-list:l0 level1 lfo1'><![if !supportLists]><span
+lang=EN-US style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol;mso-ansi-language:EN-US'><span style='mso-list:Ignore'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span lang=EN-US style='mso-ansi-language:EN-US'>A
+location code: by typing a six-digit location code, a new tab will open at the
+page specified by the code while a blinking marker will indicate a specific
+position within the image. Obtaining a location code is done in the <a
+href="#_Page_View">Page View</a>.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>The lower
+part of the view displays miniatures of all the individual pages of the current
+book. A page can be selected by left-clicking on it. Multiple pages can be
+selected by left-clicking while holding the <i style='mso-bidi-font-style:normal'>shift</i>
+and/or <i style='mso-bidi-font-style:normal'>control</i> keys. Right-clicking
+will display a popup menu whose items will depend on the current selection of
+pages:<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Delete selected pages: </span></b><span
+lang=EN-US style='mso-ansi-language:EN-US'>Deletes the selected pages from the
+book. All ROIs and <a href="#_Annotation_List">annotations</a> associated with
+this page will be lost.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Process selected pages: </span></b><span
+lang=EN-US style='mso-ansi-language:EN-US'>Displays the image processing window
+and loads it with the selected pages. Image processing allows applying a
+variety of filters and effects to an image.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Export selected pages: </span></b><span
+lang=EN-US style='mso-ansi-language:EN-US'>Displays the image exporting window
+and loads it with the selected pages. Exporting allows saving images from pages
+or regions to be saved outside the MMT, along with related textual annotations.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Left-clicking
+on a page and holding down the mouse button while moving the cursor allows
+changing the order of the pages. A visual indicator shows the position the
+selected page will assume if the user releases the mouse button. Changing the
+page ordering is only available if the book is unlocked.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h2><a name="_Toc315696504"></a><a name="_Toc315695399"></a><a name="_Page_View"></a><span
+style='mso-bookmark:_Toc315696504'><span style='mso-bookmark:_Toc315695399'><span
+lang=EN-US style='mso-ansi-language:EN-US'>Page View</span></span></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></h2>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span style='mso-fareast-language:FR;mso-no-proof:yes'><!--[if gte vml 1]><v:shape
+ id="_x0000_i1028" type="#_x0000_t75" style='width:345pt;height:543pt;
+ visibility:visible;mso-wrap-style:square'>
+ <v:imagedata src="MMT%20documentation_files/image019.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=460 height=724
+src="MMT%20documentation_files/image020.jpg" v:shapes="_x0000_i1028"><![endif]></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>The page
+view displays a digitized page and the ROIs it contains. A ROI can be selected
+by clicking inside its boundaries. A boundary can be changed by dragging one of
+the summits over the display. <span class=GramE>Hovering</span> the mouse over
+a summit will highlight it. The <a href="#_Display_Buttons">view parameters</a>
+and <a href="#_ROI_Buttons">ROI tools</a> are located in the toolbar.
+Right-clicking on a page will pop up a <i style='mso-bidi-font-style:normal'>Get
+location code</i> option. If selected, it will display a seven digit code that
+stores the page being viewed and the location that was clicked. This code can
+be used in the <i style='mso-bidi-font-style:normal'>Go to field</i> of the <a
+href="#_Book_View">Book view</a>.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h2><a name="_Toc315696505"></a><a name="_Toc315695400"></a><a
+name="_Annotation_List"></a><span style='mso-bookmark:_Toc315696505'><span
+style='mso-bookmark:_Toc315695400'><span lang=EN-US style='mso-ansi-language:
+EN-US'>Annotation List</span></span></span><span lang=EN-US style='mso-ansi-language:
+EN-US'><o:p></o:p></span></h2>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><!--[if gte vml 1]><v:shape id="_x0000_s1069" type="#_x0000_t202"
+ style='position:absolute;margin-left:381.4pt;margin-top:185.45pt;width:111pt;
+ height:41.25pt;z-index:29' stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1069'/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;position:
+absolute;z-index:29;margin-left:509px;margin-top:247px;width:152px;height:59px'>
+
+<table cellpadding=0 cellspacing=0>
+ <tr>
+  <td width=152 height=59 bgcolor=white style='vertical-align:top;background:
+  white'><![endif]><![if !mso]><span style='position:absolute;mso-ignore:vglayout;
+  z-index:29'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1069" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal><span class=SpellE>Delete</span> annotation <span
+    class=SpellE>button</span></p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+ </tr>
+</table>
+
+</span><![endif]><!--[if gte vml 1]><v:shape id="_x0000_s1068" type="#_x0000_t32"
+ style='position:absolute;margin-left:82.15pt;margin-top:256.7pt;width:54pt;
+ height:38.25pt;z-index:28' o:connectortype="straight"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:28;margin-left:109px;
+margin-top:341px;width:74px;height:53px'><img width=74 height=53
+src="MMT%20documentation_files/image021.gif" v:shapes="_x0000_s1068"></span><![endif]><!--[if gte vml 1]><v:shape
+ id="_x0000_s1067" type="#_x0000_t32" style='position:absolute;margin-left:37.15pt;
+ margin-top:256.7pt;width:4.5pt;height:38.25pt;flip:x;z-index:27'
+ o:connectortype="straight"/><![endif]--><![if !vml]><span style='mso-ignore:
+vglayout;position:absolute;z-index:27;margin-left:49px;margin-top:341px;
+width:8px;height:53px'><img width=8 height=53
+src="MMT%20documentation_files/image022.gif" v:shapes="_x0000_s1067"></span><![endif]><!--[if gte vml 1]><v:shape
+ id="_x0000_s1066" type="#_x0000_t32" style='position:absolute;margin-left:341.65pt;
+ margin-top:166.7pt;width:57pt;height:18.75pt;z-index:26' o:connectortype="straight"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:26;margin-left:455px;
+margin-top:221px;width:78px;height:27px'><img width=78 height=27
+src="MMT%20documentation_files/image023.gif" v:shapes="_x0000_s1066"></span><![endif]><span
+style='mso-fareast-language:FR;mso-no-proof:yes'><!--[if gte vml 1]><v:shape
+ id="Picture_x0020_1" o:spid="_x0000_i1027" type="#_x0000_t75" style='width:364.5pt;
+ height:273pt;visibility:visible;mso-wrap-style:square'>
+ <v:imagedata src="MMT%20documentation_files/image024.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=486 height=364
+src="MMT%20documentation_files/image025.jpg" v:shapes="Picture_x0020_1"><![endif]></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
+
+<p class=MsoNormal><!--[if gte vml 1]><v:shape id="_x0000_s1072" type="#_x0000_t202"
+ style='position:absolute;margin-left:-18.35pt;margin-top:9.9pt;width:111pt;
+ height:34.5pt;z-index:30' stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1072'/>
+</v:shape><v:shape id="_x0000_s1073" type="#_x0000_t202" style='position:absolute;
+ margin-left:120.4pt;margin-top:9.9pt;width:130.5pt;height:39pt;z-index:31'
+ stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1073'/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;position:
+relative;z-index:30;left:-24px;top:13px;width:363px;height:69px'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=0 height=0></td>
+  <td width=152></td>
+  <td width=33></td>
+  <td width=178></td>
+ </tr>
+ <tr>
+  <td height=50></td>
+  <td width=152 height=50 bgcolor=white style='vertical-align:top;background:
+  white'><![endif]><![if !mso]><span style='position:absolute;mso-ignore:vglayout;
+  z-index:30'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1072" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal><span class=SpellE>Add</span> annotation <span
+    class=SpellE>button</span></p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+  <td></td>
+  <td rowspan=2 width=178 height=56 bgcolor=white style='vertical-align:top;
+  background:white'><![endif]><![if !mso]><span style='position:absolute;
+  mso-ignore:vglayout;z-index:31'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1073" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal>Show/<span class=SpellE>Hide</span> <span class=SpellE>filter</span>
+    <span style='mso-spacerun:yes'> </span>options</p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+ </tr>
+ <tr>
+  <td height=6></td>
+ </tr>
+</table>
+
+</span><![endif]><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<br style='mso-ignore:vglayout' clear=ALL>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>When a
+document is being viewed (a book, a page or a ROI), the right part of the
+display will show a list of annotations that are currently associated. An annotation
+can be <a href="#_Annotation_editing">edited</a> by clicking on it. The list
+item will expand to present an editor suitable for the type of annotation that
+was selected. Each annotation has a delete button on the right side to remove
+it definitely from the current document. The <i style='mso-bidi-font-style:
+normal'>plus </i>button at the bottom of the list allows adding a new
+annotation entry to the list. The adjacent button displays or conceals <a
+href="#_Filter_options">filter</a> options. A filter can be used to restrict
+the items that are displayed in the list based on various criteria. If a filter
+is enabled, the items that are no longer displayed have not been deleted, they
+are only hidden.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="_Toc315696506"></a><a name="_Toc315695401"></a><a
+name="_Annotation_editing"></a><span style='mso-bookmark:_Toc315696506'><span
+style='mso-bookmark:_Toc315695401'><span lang=EN-US style='mso-ansi-language:
+EN-US'>Annotation editing</span></span></span><span lang=EN-US
+style='mso-ansi-language:EN-US'><o:p></o:p></span></h3>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>There are
+four types of annotations: transcriptions, images, free text and tags. Each
+type has a specific editor providing the specific fields. Transcriptions,
+images and free text annotations all share a tag area where a list of comma
+separated tags can be specified.<span style='mso-spacerun:yes'>  </span>These
+are associated with the annotation being edited, not the current document. A <i
+style='mso-bidi-font-style:normal'>tags</i> type annotation should be used to
+directly tag the document.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>All editors
+will display <i style='mso-bidi-font-style:normal'>Apply</i> and <i
+style='mso-bidi-font-style:normal'>Cancel</i> buttons at the bottom. Clicking <i
+style='mso-bidi-font-style:normal'>Apply</i> will save the changes made since
+the editor was opened whereas <i style='mso-bidi-font-style:normal'>Cancel</i>
+will discard them.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h3><a name="_Toc315696507"></a><a name="_Toc315695402"></a><a
+name="_Filter_options"></a><span style='mso-bookmark:_Toc315696507'><span
+style='mso-bookmark:_Toc315695402'><span lang=EN-US style='mso-ansi-language:
+EN-US'>Filter options</span></span></span><span lang=EN-US style='mso-ansi-language:
+EN-US'><o:p></o:p></span></h3>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span style='mso-fareast-language:FR;mso-no-proof:yes'><!--[if gte vml 1]><v:shape
+ id="Picture_x0020_4" o:spid="_x0000_i1026" type="#_x0000_t75" style='width:417.75pt;
+ height:129.75pt;visibility:visible;mso-wrap-style:square'>
+ <v:imagedata src="MMT%20documentation_files/image026.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=557 height=173
+src="MMT%20documentation_files/image027.jpg" v:shapes="Picture_x0020_4"><![endif]></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>The filter
+can restrict the annotations displayed in the annotation list following certain
+criteria. The following parameters are available:<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Use filter: </span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'>Check this box to activate the filter. If
+unchecked, the filter will not be applied regardless of the state of the other
+parameters.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Value type:</span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'> Allows selecting only text or images for
+display.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Key type:</span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'> Allows selecting a single key to be displayed.
+The drop down box displays the list of all keys that have been defined.<o:p></o:p></span></p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><span lang=EN-US
+style='mso-ansi-language:EN-US'>Contents:</span></b><span lang=EN-US
+style='mso-ansi-language:EN-US'> In the case of textual metadata, this
+parameter restricts the display to annotations which contain the text typed
+here.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<h2><a name="_Toc315696508"></a><a name="_Toc315695403"></a><a
+name="_Import/Export"></a><span style='mso-bookmark:_Toc315696508'><span
+style='mso-bookmark:_Toc315695403'><span lang=EN-US style='mso-ansi-language:
+EN-US'>Import/Export</span></span></span><span lang=EN-US style='mso-ansi-language:
+EN-US'><o:p></o:p></span></h2>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><!--[if gte vml 1]><v:shape id="_x0000_s1075" type="#_x0000_t32"
+ style='position:absolute;margin-left:350.65pt;margin-top:86.8pt;width:17.25pt;
+ height:60pt;z-index:33' o:connectortype="straight"/><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:absolute;z-index:33;margin-left:467px;
+margin-top:115px;width:25px;height:82px'><img width=25 height=82
+src="MMT%20documentation_files/image028.gif" v:shapes="_x0000_s1075"></span><![endif]><!--[if gte vml 1]><v:shape
+ id="_x0000_s1074" type="#_x0000_t32" style='position:absolute;margin-left:60.4pt;
+ margin-top:97.3pt;width:19.5pt;height:49.5pt;flip:x;z-index:32'
+ o:connectortype="straight"/><![endif]--><![if !vml]><span style='mso-ignore:
+vglayout;position:absolute;z-index:32;margin-left:80px;margin-top:129px;
+width:28px;height:68px'><img width=28 height=68
+src="MMT%20documentation_files/image029.gif" v:shapes="_x0000_s1074"></span><![endif]><span
+style='mso-fareast-language:FR;mso-no-proof:yes'><!--[if gte vml 1]><v:shape
+ id="Picture_x0020_7" o:spid="_x0000_i1025" type="#_x0000_t75" style='width:453pt;
+ height:122.25pt;visibility:visible;mso-wrap-style:square'>
+ <v:imagedata src="MMT%20documentation_files/image030.png" o:title=""/>
+</v:shape><![endif]--><![if !vml]><img border=0 width=604 height=163
+src="MMT%20documentation_files/image031.jpg" v:shapes="Picture_x0020_7"><![endif]></span><span
+lang=EN-US style='mso-ansi-language:EN-US'><o:p></o:p></span></p>
+
+<p class=MsoNormal><!--[if gte vml 1]><v:shape id="_x0000_s1076" type="#_x0000_t202"
+ style='position:absolute;margin-left:8.65pt;margin-top:12.2pt;width:111pt;
+ height:24.75pt;z-index:34' stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1076'/>
+</v:shape><v:shape id="_x0000_s1077" type="#_x0000_t202" style='position:absolute;
+ margin-left:306.4pt;margin-top:12.2pt;width:111pt;height:24.75pt;z-index:35'
+ stroked="f">
+ <v:textbox style='mso-next-textbox:#_x0000_s1077'/>
+</v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=12 height=16></td>
+  <td width=152></td>
+  <td width=245></td>
+  <td width=152></td>
+ </tr>
+ <tr>
+  <td height=37></td>
+  <td width=152 height=37 bgcolor=white style='vertical-align:top;background:
+  white'><![endif]><![if !mso]><span style='position:absolute;mso-ignore:vglayout;
+  z-index:34'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1076" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal>Local collection</p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+  <td></td>
+  <td width=152 height=37 bgcolor=white style='vertical-align:top;background:
+  white'><![endif]><![if !mso]><span style='position:absolute;mso-ignore:vglayout;
+  z-index:35'>
+  <table cellpadding=0 cellspacing=0 width="100%">
+   <tr>
+    <td><![endif]>
+    <div v:shape="_x0000_s1077" style='padding:3.6pt 7.2pt 3.6pt 7.2pt'
+    class=shape>
+    <p class=MsoNormal>Target collection</p>
+    </div>
+    <![if !mso]></td>
+   </tr>
+  </table>
+  </span><![endif]><![if !mso & !vml]>&nbsp;<![endif]><![if !vml]></td>
+ </tr>
+</table>
+
+</span><![endif]><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+<br style='mso-ignore:vglayout' clear=ALL>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>The export
+dialog allows transferring books between collections. A transfer can either be
+an addition (if the transferred book is not contained in the destination
+collection) or a merging (if the book exists in both collections).<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>Although
+transfers can be done in both directions (incoming and outgoing), keep in mind
+that the <a href="#_Collection_View">collection to which the software is
+connected</a> is located in the left panel.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'>To transfer
+a book, select it in the containing collection. If the book is to be simply added
+to the destination collection, make sure no books are selected in the opposite
+panel. If however you would like to merge this book with another book (merging
+means synchronizing ROIs and annotations), select the target book in the
+opposite panel. Then hit the appropriate button depending on the direction of
+the transfer (<i style='mso-bidi-font-style:normal'>Import</i> or <i
+style='mso-bidi-font-style:normal'>Export</i>) and a confirmation dialog will
+popup. If a merging operation is selected but the page count of the two books
+differs, the operation will fail. If the page counts are identical but the page
+order differs, the merging will succeed but might produce erroneous results. To
+prevent books from differing in structure, make sure they are <a
+href="#_Book_View">locked</a>.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span lang=EN-US style='mso-ansi-language:EN-US'><o:p>&nbsp;</o:p></span></p>
+
+</div>
+
+</body>
+
+</html>

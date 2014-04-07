@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>English resources</comment>
+	
+	<entry key="frameTitle">DocExplore Manuscript Management Tool</entry>
+
+	<entry key="generalOkLabel">OK</entry>
+	<entry key="generalCancelLabel">Cancel</entry>
+	<entry key="generalCloseLabel">Close</entry>
+	<entry key="generalBrowseLabel">Browse</entry>
+	
+	<entry key="generalMenuFile">File</entry>
+	<entry key="generalMenuFileQuit">Back to menu</entry>
+	<entry key="generalMenuFileManage">Gérer la collection...</entry>
+	<entry key="generalMenuFileMemory">Memory</entry>
+	<entry key="generalMenuFileConnect">Connect to</entry>
+	<entry key="generalMenuFileImport">Import/Export with</entry>
+	<entry key="generalMenuFileConnectMySQL">MySQL...</entry>
+	<entry key="generalMenuFileConnectFile">a file...</entry>
+	<entry key="generalMenuFileDisconnect">Disconnect</entry>
+	<entry key="generalMenuEdit">Edit</entry>
+	<entry key="generalMenuEditUndo">Undo</entry>
+	<entry key="generalMenuEditRedo">Redo</entry>
+	<entry key="generalMenuEditViewHistory">View history</entry>
+	<entry key="generalHistory">History</entry>
+	<entry key="generalMenuEditCopy">Copy</entry>
+	<entry key="generalMenuEditPaste">Paste</entry>
+	<entry key="generalMenuTools">Tools</entry>
+	<entry key="generalCloseTab">Close this window</entry>
+	<entry key="generalNoLinkStatus">No connection established</entry>
+	<entry key="generalMenuLoad">Open</entry>
+	<entry key="generalMenuSave">Save</entry>
+	<entry key="generalMenuSaveAs">Save as...</entry>
+	<entry key="generalMenuExport">Export...</entry>
+	<entry key="generalMenuHelp">Help</entry>
+	<entry key="generalMenuHelpContents">Help contents...</entry>
+	<entry key="generalMenuHelpWebsite">Website...</entry>
+	<entry key="generalMenuHelpAbout">About...</entry>
+	<entry key="generalMenuNew">New</entry>
+	<entry key="generalMenuOpen">Open</entry>
+	
+	<entry key="manageCollectionLabel">Collection</entry>
+	
+	<entry key="importTitle">Import/Export</entry>
+	<entry key="importChooseLabel">Select the books to import from </entry>
+	<entry key="importChooseHelpLabel">Use Ctrl and Shift keys for multiple items</entry>
+	<entry key="importImportFromLabel">Import from</entry>
+	<entry key="importExportToLabel">Export to</entry>
+	<entry key="importAddMessage">Add &lt;i>%b&lt;/i></entry>
+	<entry key="importMergeMessage">Merge &lt;i>%b1&lt;/i>&lt;br>with &lt;i>%b2&lt;/i></entry>
+	<entry key="importActionMessage">What would like to do?</entry>
+	<entry key="importPageNumberErrorMessage">The two books have a different number of pages</entry>
+	<entry key="importTransferMessage">Transfering...</entry>
+	
+	<entry key="imageToolbarPreviousHistoric">Previous page</entry>
+	<entry key="imageToolbarNextHistoric">Next page</entry>
+	<entry key="imageToolbarUp">Show book</entry>
+	<entry key="imageToolbarZoomIn">Zoom In</entry>
+	<entry key="imageToolbarZoomOut">Zoom Out</entry>
+	<entry key="imageToolbarAddFreeRoi">Add a free region of interest</entry>
+	<entry key="imageToolbarAddRectRoi">Add a rectangle region of interest</entry>
+	<entry key="imageToolbarDelRoi">Delete a Region Of Interest</entry>
+	<entry key="imageToolbarCrop">Crop page</entry>
+	<entry key="imageToolbarPreviousPage">Previous Page</entry>
+	<entry key="imageToolbarUpPage">Go to Book</entry>
+	<entry key="imageToolbarNextPage">Next Page</entry>
+	<entry key="imageToolbarScroll">Scroll</entry>
+	<entry key="imageToolbarSelect">Select</entry>
+	<entry key="imageToolbarFit">Fit in frame</entry>
+	<entry key="imageGotoLabel">Go to</entry>
+	<entry key="imageLocateLabel">Get location code</entry>
+	<entry key="imageLockTooltip">Lock/Unlock page configuration</entry>
+	<entry key="imageUnlockMessage">You are about to unlock this book which will allow you to change the page configuration.
+									Changing the configuration might render merging operations impossible with books from other sources 
+									which have not undergone the same changes.
+									Are you sure you wish to continue?</entry>
+	<entry key="imageAnalysis">Select an image area for analysis</entry>
+	<entry key="imageDelUnlockMessage">You must unlock this book in order to change the page configuration.</entry>
+	
+	<entry key="structureName">Links</entry>
+	<entry key="structureLinkLabel">Link</entry>
+	<entry key="structureUriLabel">URI</entry>
+	<entry key="structureUriOpen">Open</entry>
+	<entry key="structureCommentLabel">Comment</entry>
+	<entry key="structureDefaultUri">Paste URI here.</entry>
+	<entry key="structureDefaultComment">Enter comment here.</entry>
+	
+	<entry key="tagTagLabel">Tags</entry>
+	<entry key="tagAddTagLabel">Add</entry>
+	<entry key="tagTagTooltip">This field contains keywords separated by a comma. 
+		Use the list on the left to add an already referenced keyword.</entry>
+	
+	<entry key="transcriptName">Transcriptions</entry>
+	<entry key="transcriptAvailableLabel">Annotations</entry>
+	<entry key="transcriptEditorLabel">Transcription</entry>
+	<entry key="transcriptEditorAuthorLabel">Author</entry>
+	<entry key="transcriptEditorContentLabel">Content</entry>
+	<entry key="transcriptEditorApplyButton">Apply</entry>
+	<entry key="transcriptDefaultAuthor">New Author</entry>
+	<entry key="transcriptDefaultContent">Enter transcription here.</entry>
+	<entry key="transcriptDisplayLabel">Transcription by </entry>
+	
+	<entry key="annotateName">Annotations</entry>
+	<entry key="annotateFieldLabel">Field</entry>
+	<entry key="annotateTypeLabel">Type</entry>
+	<entry key="annotateAnnotationLabel">Annotation</entry>
+	<entry key="annotateTypeText">Text</entry>
+	<entry key="annotateTypeImage">Image</entry>
+	<entry key="annotateBrowseLabel">Browse</entry>
+	<entry key="annotateApplyLabel">Apply</entry>
+	<entry key="annotateNoDisplayLabel">Nothing to display</entry>
+	<entry key="annotateImageErrorMsg">Couldn't open image</entry>
+	<entry key="annotateInternalSourceLabel">Internal source</entry>
+	<entry key="annotateKeyLabel">Name</entry>
+	<entry key="annotateDefaultField">New field</entry>
+	<entry key="annotateAskTypeLabel">Select the type of annotation you would like to create</entry>
+	<entry key="annotateFreeTextLabel">Free text</entry>
+	<entry key="annotateAskKeyLabel">Specify a name for your annotation</entry>
+	<entry key="annotateFilterLabel">Filter</entry>
+	<entry key="annotateFilterTooltip">Show/Hide filter options</entry>
+	<entry key="annotateAddTooltip">Add an annotation</entry>
+	<entry key="annotateRefreshTooltip">Apply filter</entry>
+	<entry key="annotateUseFilterLabel">Use filter</entry>
+	<entry key="annotateValueTypeLabel">Value type</entry>
+	<entry key="annotateKeyTypeLabel">Key type</entry>
+	<entry key="annotateAnyKeyLabel">Any key</entry>
+	<entry key="annotateAnyValueLabel">Any value</entry>
+	<entry key="annotateContentLabel">Contents</entry>
+	<entry key="annotateSaveMessage">Some changes to '%key' might not have been saved. Would you like to save them now?</entry>
+	
+	<entry key="manageAddBookLabel">Add a book</entry>
+	<entry key="manageAddEmptyBookLabel">Create an empty book</entry>
+	<entry key="manageAddFolderBookLabel">Create a book from image files in a folder</entry>
+	<entry key="manageAddCustomBookLabel">Create a book from custom image files</entry>
+	<entry key="managePreviousLabel">Previous</entry>
+	<entry key="manageNextLabel">Next</entry>
+	<entry key="manageCancelLabel">Cancel</entry>
+	<entry key="manageInputMetadataMsg">Fill in book information here. Hit 'next' to complete creation.</entry>
+	<entry key="manageSelectFolderMsg">Please select the folder to import the images from.</entry>
+	<entry key="manageSelectFilesMsg">Select the images to import</entry>
+	<entry key="manageImportTypeMsg">Please choose how you would like to add a new book.</entry>
+	<entry key="manageDataTitleLabel">Title</entry>
+	<entry key="manageDataAuthorLabel">Author</entry>
+	<entry key="manageDataYearLabel">Year</entry>
+	<entry key="manageDataLanguageLabel">Language</entry>
+	<entry key="manageDataCountryLabel">Country</entry>
+	<entry key="manageDataGenreLabel">Genre</entry>
+	<entry key="manageFolderLabel">Folder</entry>
+	<entry key="manageProcessBookLabel">Process all pages in the selected book</entry>
+	<entry key="manageProcessPageLabel">Process selected pages...</entry>
+	<entry key="manageExportBookLabel">Export book</entry>
+	<entry key="manageImportBookLabel">Import book</entry>
+	<entry key="manageExportPageLabel">Export selected pages...</entry>
+	<entry key="manageDeleteBookLabel">Delete selected books</entry>
+	<entry key="manageDeletePageLabel">Delete selected pages</entry>
+	<entry key="manageDeleteBookMsg">Are you sure you want to delete the following books?</entry>
+	<entry key="manageDeletePageMsg">Are you sure you want to delete these pages?</entry>
+	<entry key="manageSelectFolderLabel">Choose a folder</entry>
+	<entry key="manageSelectFilesLabel">Files</entry>
+	<entry key="manageSelectAllLabel">Select all</entry>
+	<entry key="manageSelectRecognizedLabel">Select recognized formats</entry>
+	<entry key="manageSelectNoneLabel">Select none</entry>
+	<entry key="manageInputTitleLabel">Give a title to the book</entry>
+	<entry key="manageAppendPagesLabel">Append pages to the book</entry>
+	<entry key="manageImportPagesLabel">Importing...</entry>
+	<entry key="manageLoadingLabel">Loading page...</entry>
+	<entry key="manageCreatePresentation">Create presentation of the selected book</entry>
+	<entry key="manageFailedMessage">The following files could not be imported:</entry>
+	<entry key="manageRenameLabel">Rename the selected book</entry>
+	<entry key="manageMergeMessage">&lt;html>Would you like to merge the imported book with &lt;i>%name&lt;/i>?&lt;/html></entry>
+	<entry key="manageMergeLabel">Merge</entry>
+	<entry key="manageExistsMessage">&lt;html>A book with the title &lt;i>%name&lt;/i> already exists.&lt;br/>Please specify a different title:&lt;/html></entry>
+	<entry key="manageRenameExistsMessage">A book with this title already exists.</entry>
+	
+	<entry key="searchTypeLabel">Search only among:</entry>
+	<entry key="searchBooksLabel">Books</entry>
+	<entry key="searchPagesLabel">Pages</entry>
+	<entry key="searchRoisLabel">ROIs</entry>
+	<entry key="searchMetaDataLabel">Meta data</entry>
+	<entry key="searchMethodAllLabel">Matching all of the criteria below</entry>
+	<entry key="searchMethodAnyLabel">Matching any of the criteria below</entry>
+	<entry key="searchLabel">Search</entry>
+	<entry key="searchPanelLabel">Show/hide search panel</entry>
+	<entry key="clearLabel">Clear</entry>
+	<entry key="resultsLabel">Results</entry>
+	<entry key="searchingMsg">Searching...</entry>
+	<entry key="noResultsMsg">No results to display</entry>
+	<entry key="noDescriptionMsg">No description available</entry>
+	<entry key="advancedLabel">Advanced</entry>
+	<entry key="searcByTag">Search by tag...</entry>
+	<entry key="searcByMD">Search by annotation name...</entry>
+	<entry key="searchKeyLabel">Select the name of the annotation to search</entry>
+	<entry key="searchTagLabel">Select the name of the tag to search</entry>
+	
+	<entry key="processTitleLabel">Image processing</entry>
+	<entry key="imageProcessFunctionCrop">Crop</entry>
+	<entry key="imageProcessFunctionContrast">Contrast Adjustment</entry>
+	<entry key="processPreviewLabel">Preview</entry>
+	<entry key="processProcessLabel">Process</entry>
+	<entry key="processAllLabel">All images</entry>
+	<entry key="processCurrentLabel">Current image</entry>
+	<entry key="processInFilesLabel">In files...</entry>
+	<entry key="processInFileLabel">In file...</entry>
+	<entry key="processInMetadataLabel">Into meta data...</entry>
+	<entry key="processFieldNameTitle">Field name</entry>
+	<entry key="processFieldNameLabel">Choose a field or type in a new one : </entry>
+	
+	<entry key="uriCopyLabel">Copy URI</entry>
+	<entry key="uriPasteLabel">Paste URI</entry>
+	
+	<entry key="databaseTitle">Connection to a database</entry>
+	<entry key="databaseUrlLabel">URL</entry>
+	<entry key="databaseDatabaseLabel">Database name</entry>
+	<entry key="databaseUserLabel">User</entry>
+	<entry key="databasePasswordLabel">Password</entry>
+	
+	<entry key="exportTitleLabel">Image export</entry>
+	<entry key="exportExportLabel">Export</entry>
+	<entry key="exportAreaLabel">Targeted area</entry>
+	<entry key="exportAreaPageLabel">Entire page</entry>
+	<entry key="exportAreaRoiLabel">Regions of interest</entry>
+	<entry key="exportContentLabel">Targeted content</entry>
+	<entry key="exportContentPageLabel">Page image</entry>
+	<entry key="exportContentAnnotationLabel">Annotation image</entry>
+	<entry key="exportLabelLabel">Labels</entry>
+	<entry key="exportLabelNoneLabel">No labels</entry>
+	<entry key="exportLabelFileLabel">Label file named   </entry>
+	<entry key="exportAllRoisLabel">All regions on the page</entry>
+	<entry key="exportTaggedRoisLabel">Only regions tagged with</entry>
+	<entry key="exportAnyTagLabel">Any of the following tags</entry>
+	<entry key="exportAllTagsLabel">All of the following tags</entry>
+	<entry key="exportAnnotationFieldNameLabel">With the field name   </entry>
+	<entry key="exportAnnotationTagLabel">Tagged with</entry>
+	<entry key="exportTranscriptionLabelsLabel">From transcriptions with</entry>
+	<entry key="exportAnnotationFieldLabelsLabel">From annotation with the field name   </entry>
+	<entry key="exportAnnotationTagLabelsLabel">From annotation tagged with</entry>
+	<entry key="exportGeneralLabel">General</entry>
+	<entry key="exportFolderLabel">Export folder</entry>
+	<entry key="exportFormatLabel">Image format</entry>
+	<entry key="exportFillLabel">Fill background with</entry>
+	<entry key="exportFillWhiteLabel">White</entry>
+	<entry key="exportFillBlackLabel">Black</entry>
+	<entry key="exportExportingLabel">Exporting...</entry>
+	
+	<entry key="authoringLabel">Browse presentations</entry>
+	<entry key="authoringNameMessage">Please give a name to the presentation</entry>
+	<entry key="authoringInitLabel">Initialization...</entry>
+	
+	<entry key="pluginAnalysisLabel">Tasks</entry>
+	<entry key="pluginNoAnalysisToolMessage">No analysis tools are available.</entry>
+	<entry key="pluginAnalysisToolMessage">Which tool would you like to use?</entry>
+	<entry key="pluginAnalysisTaskMessage">Which task would you like to perform?</entry>
+	<entry key="pluginResultLabel">Results</entry>
+	<entry key="pluginInputLabel">Input</entry>
+	<entry key="pluginParametersLabel">Parameters</entry>
+	<entry key="pluginTasksLabel">Tasks</entry>
+	<entry key="pluginAnalysisInputFirstMessage">While viewing a page, use the</entry>
+	<entry key="pluginAnalysisInputSecondMessage">tool to define an input.</entry>
+	<entry key="pluginAutoOpenLabel">Open this window after defining an input.</entry>
+	<entry key="pluginParameterFirstMessage">Type in parameters in a 'key=value' form </entry>
+	<entry key="pluginParameterSecondMessage">separated by commas or a new line.</entry>
+	
+	<entry key="pluginTaskPluginLabel">Plugin</entry>
+	<entry key="pluginTaskTaskLabel">Task</entry>
+	<entry key="pluginTaskStatusLabel">Status</entry>
+	<entry key="pluginTaskTimeLabel">Time</entry>
+	<entry key="pluginTaskPendingLabel">Pending</entry>
+	<entry key="pluginTaskRunningLabel">Running</entry>
+	<entry key="pluginTaskCanceledLabel">Canceled</entry>
+	<entry key="pluginTaskCompletedLabel">Completed</entry>
+	
+	<entry key="statusSquareMessage">Click and drag the mouse from one corner of the region to the opposite corner.</entry>
+	<entry key="statusFreeMessage">Click on each summit of the region, then click on the first summit to close the shape.</entry>
+	<entry key="statusBeaconMessage">Location of the given code.</entry>
+	<entry key="statusAnalysisMessage">Click on one corner of the region, then on the opposite corner to define an input.</entry>
+	
+	<entry key="cleanLinkLabel">Clean up...</entry>
+	<entry key="cleanLinkNoConnection">You are not currently connected to a collection.</entry>
+	<entry key="cleanLinkTasksRunning">There are tasks currently running that could interfere.
+Please wait until all tasks have completed.</entry>
+	<entry key="cleanLinkWarning">You are about to remove from your collection all annotations that are no longer associated to any document.
+It will not be possible to undo this operation and it might take several minutes to complete.
+Do you wish to continue?</entry>
+
+    <entry key="keyMergeMessage">All occurrences of the name &lt;i>%from&lt;/i> will become &lt;i>%to&lt;/i>.</entry>
+    <entry key="keyMergeLabel">Merge</entry>
+    <entry key="keyDeleteLabel">Delete</entry>
+    <entry key="keyUsedMessage">This name is still in use and can't be deleted.</entry>
+    <entry key="keySelectMessage">Select an annotation name to merge with &lt;i>%from&lt;/i>.</entry>
+    <entry key="keyManagerLabel">Annotation name manager</entry>
+    <entry key="keyReservedMessage">This annotation name is reserved by the system and can't be merged or deleted.</entry>
+    <entry key="keyCountLabel">Occurrences</entry>
+    <entry key="keyEmptyMessage">The name can't be empty.</entry>
+    <entry key="keyUsedMessage">This name is already in use.</entry>
+    <entry key="keyNameReservedMessage">This name is reserved by the system.</entry>
+    
+    <entry key="tagMergeMessage">All occurrences of the tag &lt;i>%from&lt;/i> will become &lt;i>%to&lt;/i>.</entry>
+    <entry key="tagSelectMessage">Select a tag to merge with &lt;i>%from&lt;/i>.</entry>
+    <entry key="tagManagerLabel">Tag manager</entry>
+    <entry key="tagDeleteMessage">All occurrences of the tag &lt;i>%from&lt;/i> will be removed.</entry>
+    <entry key="tagEmptyMessage">The tag can't be empty.</entry>
+    <entry key="tagUsedMessage">This tag already exists.</entry>
+</properties>

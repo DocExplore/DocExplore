@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>English resources</comment>
+	
+	<entry key="mmtLabel">Outil de gestion de manuscrits</entry>
+	<entry key="atLabel">Outil d'édition</entry>
+	<entry key="readerLabel">Feuilleteur</entry>
+	<entry key="confLabel">Configuration</entry>
+	<entry key="mmtMessage">Cet outil vous permet de modifier, d'annoter et de rechercher dans votre collection numérique.</entry>
+	<entry key="atMessage">Cet outil vous permet de créer et d'éditer des présentations numériques.</entry>
+	<entry key="readerMessage">Cet outil vous permet de visualiser et d'interagir avec des présentations numériques.</entry>
+	<entry key="confMessage">Vous permet de définir les réglages par défaut de la suite logicielle DocExplore.</entry>
+	<entry key="exitLabel">Quitter</entry>
+	<entry key="homeLabel">Espace de travail</entry>
+	<entry key="chooseHomeMessage">&lt;html>DocExplore n'a pas trouvé d'espace de de travail. &lt;u>Ceci est normal si vous exécutez DocExplore pour la première fois&lt;/u>.&lt;br/>
+L'espace de travail est utilisé pour stocker les données que vous créez.&lt;br/>
+Il est recommandé d'utiliser le répertoire proposé ci-dessous, mais vous pouvez le changer si nécessaire.&lt;br/>&lt;br/>
+Appuyez sur OK pour valider l'espace de travail, ou annulez pour le spécifier ultérieurement.&lt;/html></entry>
+	<entry key="browseLabel">Parcourir</entry>
+	<entry key="homeErrorMessage">Impossible de créer l'espace de travail</entry>
+	<entry key="errorLabel">Erreur</entry>
+	<entry key="switchHomeLabel">Changer d'espace de travail...</entry>
+	<entry key="switchHomeMessage">&lt;html>Spécifiez l'emplacement de l'espace de travail.&lt;br/>
+L'espace de travail est utilisé pour stocker les données que vous créez.&lt;/html></entry>
+    <entry key="restartLabel">Redémarrage</entry>
+    <entry key="restartMessage">Vous devez redémarrer DocExplore pour valider les changements.</entry>
+    <entry key="quitLabel">Quitter</entry>
+	
+	<entry key="cfgGeneralLabel">Général</entry>
+	<entry key="cfgServerLabel">Feuilleteur</entry>
+	<entry key="cfgACLabel">Connection automatique</entry>
+	<entry key="cfgUseACLabel">Utiliser la connection automatique</entry>
+	<entry key="cfgTypeLabel">Type</entry>
+	<entry key="cfgFileLabel">Fichier</entry>
+	<entry key="cfgMysqlLabel">MySQL</entry>
+	<entry key="cfgPathLabel">Chemin</entry>
+	<entry key="cfgHostLabel">Hôte</entry>
+	<entry key="cfgDBLabel">Base</entry>
+	<entry key="cfgUserLabel">Utilisateur</entry>
+	<entry key="cfgPasswordLabel">Mot de passe</entry>
+	<entry key="cfgRecentLabel">Récent</entry>
+	<entry key="cfgCurrentLabel">Courant</entry>
+	<entry key="cfgDisplayLabel">Affichage</entry>
+	<entry key="cfgHelpLabel">Afficher de l'aide</entry>
+	<entry key="cfgFullscreenLabel">Plein écran</entry>
+	<entry key="cfgUseCursorLabel">Utiliser le curseur natif</entry>
+	<entry key="cfgWidthLabel">Largeur</entry>
+	<entry key="cfgHeightLabel">Hauteur</entry>
+	<entry key="cfgLanguageLabel">Langue</entry>
+	<entry key="cfgEnglishLabel">Anglais</entry>
+	<entry key="cfgFrenchLabel">Français</entry>
+	<entry key="cfgPluginsLabel">Plugins</entry>
+	<entry key="cfgUseLabel">Actif</entry>
+	<entry key="cfgRemoveLabel">Supprimer</entry>
+	<entry key="cfgJarFileLabel">Fichier jar</entry>
+	<entry key="cfgMainClassLabel">Classe</entry>
+	<entry key="cfgBrowseLabel">Parcourir</entry>
+	<entry key="cfgAddPluginLabel">Ajouter un plugin</entry>
+	<entry key="cfgOkLabel">OK</entry>
+	<entry key="cfgCancelLabel">Annuler</entry>
+	<entry key="cfgBooksLabel">Livres</entry>
+	<entry key="cfgBookInfoLabel">Détails du livre</entry>
+	<entry key="cfgTitleLabel">Titre</entry>
+	<entry key="cfgDescriptionLabel">Description</entry>
+	<entry key="cfgDeleteRestoreLabel">Supprimer/Rétablir</entry>
+	<entry key="cfgExportLabel">Exporter</entry>
+	<entry key="cfgImportLabel">Importer</entry>
+	<entry key="cfgReplacePluginMessage">Un plugin du même nom exist déjà. Voulez-vous le remplacer?</entry>
+	<entry key="cfgSafeModeLabel">Mode sans échec</entry>
+	<entry key="cfgAddPluginMessage">&lt;html>Pour ajouter un plugin, placez les fichiers dans le dossier plugin.&lt;br/>Cliquez sur Rafraîchir pour mettre à jour la liste des plugins.&lt;br/>&lt;br/>&lt;b>Dossier plugin: &lt;/b>%pdir&lt;/html></entry>
+	<entry key="cfgRefreshPluginsLabel">Rafraîchir</entry>
+	<entry key="cfgMissingFileLabel">fichier manquant</entry>
+	<entry key="cfgOptionsLabel">Options du feuillteur</entry>
+    <entry key="cfgTimeoutLabel">Compteur d'inactivité (en secondes, 300 par défaut, 0 pour désactiver)</entry>
+</properties>
