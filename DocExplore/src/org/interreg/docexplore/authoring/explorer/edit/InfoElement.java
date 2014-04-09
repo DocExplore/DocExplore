@@ -26,7 +26,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -59,8 +58,8 @@ public abstract class InfoElement extends JPanel
 		toolbar.setBackground(Color.gray);
 		//toolbar.setOpaque(false);
 
-		try {toolbar.add(new JLabel(""+BookImporter.getRank(md)));}
-		catch (Exception e) {e.printStackTrace();}
+//		try {toolbar.add(new JLabel(""+BookImporter.getRank(md)));}
+//		catch (Exception e) {e.printStackTrace();}
 		toolbar.add(new JButton(new AbstractAction("", ImageUtils.getIcon("up-mono-24x24.png"))
 		{
 			public void actionPerformed(ActionEvent e)

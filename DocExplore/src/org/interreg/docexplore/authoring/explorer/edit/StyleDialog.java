@@ -78,14 +78,14 @@ public class StyleDialog extends JDialog
 	
 	JPopupMenu menu;
 	
-	boolean sendEvents = true;
+	boolean sendEvents = true, sizeEditing = false;
 	public StyleDialog(Style [] styles)
 	{
 		super((Frame)null, XMLResourceBundle.getBundledString("styleEdit"), true);
 		setLayout(new BorderLayout());
 		
 		preview = new JLabel("", SwingConstants.CENTER);
-		preview.setPreferredSize(new Dimension(300, 100));
+		preview.setPreferredSize(new Dimension(300, 200));
 		preview.setOpaque(true);
 		preview.setBackground(Color.black);
 		JPanel previewPanel = new JPanel(new BorderLayout());
@@ -97,16 +97,17 @@ public class StyleDialog extends JDialog
 		name = new JTextField(40);
 		name.getDocument().addDocumentListener(new DocumentListener()
 		{
-			@Override public void removeUpdate(DocumentEvent e) {synchronizeStyle();}
-			@Override public void insertUpdate(DocumentEvent e) {synchronizeStyle();}
-			@Override public void changedUpdate(DocumentEvent e) {synchronizeStyle();}
+			@Override public void removeUpdate(DocumentEvent e) {synchronizeStyle((Style)styleList.getSelectedValue());}
+			@Override public void insertUpdate(DocumentEvent e) {synchronizeStyle((Style)styleList.getSelectedValue());}
+			@Override public void changedUpdate(DocumentEvent e) {synchronizeStyle((Style)styleList.getSelectedValue());}
 		});
 		namePanel.add(name);
 		
-		bold = new JToggleButton(new AbstractAction("<html><b>B</b></html>") {@Override public void actionPerformed(ActionEvent e) {synchronizeStyle();}});
-		italic = new JToggleButton(new AbstractAction("<html><i>I</i></html>") {@Override public void actionPerformed(ActionEvent e) {synchronizeStyle();}});
-		underline = new JToggleButton(new AbstractAction("<html><u>U</u></html>") {@Override public void actionPerformed(ActionEvent e) {synchronizeStyle();}});
-		centered = new JToggleButton(new AbstractAction("", ImageUtils.getIcon("align-center-12x12.png")) {@Override public void actionPerformed(ActionEvent e) {synchronizeStyle();}});
+		bold = new JToggleButton(new AbstractAction("<html><b>B</b></html>") {@Override public void actionPerformed(ActionEvent e) {synchronizeStyle((Style)styleList.getSelectedValue());}});
+		italic = new JToggleButton(new AbstractAction("<html><i>I</i></html>") {@Override public void actionPerformed(ActionEvent e) {synchronizeStyle((Style)styleList.getSelectedValue());}});
+		underline = new JToggleButton(new AbstractAction("<html><u>U</u></html>") {@Override public void actionPerformed(ActionEvent e) {synchronizeStyle((Style)styleList.getSelectedValue());}});
+		centered = new JToggleButton(new AbstractAction("", ImageUtils.getIcon("align-center-12x12.png")) 
+			{@Override public void actionPerformed(ActionEvent e) {synchronizeStyle((Style)styleList.getSelectedValue());}});
 		this.colorPanel = new JPanel();
 		colorPanel.setBackground(Color.black);
 		colorPanel.setPreferredSize(new Dimension(15, 15));
@@ -114,7 +115,8 @@ public class StyleDialog extends JDialog
 		this.colorChooser = new JColorChooser();
 		final JDialog colorDialog = JColorChooser.createDialog(StyleDialog.this, 
 			XMLResourceBundle.getBundledString("bgcolorPropertyName"), true, colorChooser, 
-			new ActionListener() {public void actionPerformed(ActionEvent e) {colorPanel.setBackground(colorChooser.getColor()); synchronizeStyle();}}, 
+			new ActionListener() {public void actionPerformed(ActionEvent e) 
+				{colorPanel.setBackground(colorChooser.getColor()); synchronizeStyle((Style)styleList.getSelectedValue());}}, 
 			new ActionListener() {public void actionPerformed(ActionEvent e) {}});
 		colorPanel.addMouseListener(new MouseAdapter()
 		{
@@ -130,11 +132,20 @@ public class StyleDialog extends JDialog
 		JPanel fontPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		fontPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("styleFont")));
 		this.fontBox = new JComboBox(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
-		fontBox.addItemListener(new ItemListener() {public void itemStateChanged(ItemEvent e) {if (e.getStateChange() != ItemEvent.SELECTED) return; synchronizeStyle();}});
+		fontBox.addItemListener(new ItemListener() {public void itemStateChanged(ItemEvent e) 
+			{if (e.getStateChange() != ItemEvent.SELECTED) return; synchronizeStyle((Style)styleList.getSelectedValue());}});
 		fontPanel.add(fontBox);
 		this.sizeBox = new JComboBox(new Object []  {"8", "12", "16", "24", "32", "48", "72", "144"});
-		sizeBox.addItemListener(new ItemListener() {public void itemStateChanged(ItemEvent e) {if (e.getStateChange() != ItemEvent.SELECTED) return; synchronizeStyle();}});
 		sizeBox.setEditable(true);
+		((JTextField)sizeBox.getEditor().getEditorComponent()).getDocument().addDocumentListener(new DocumentListener()
+		{
+			@Override public void removeUpdate(DocumentEvent e) {sizeEditing = true; synchronizeStyle((Style)styleList.getSelectedValue(), true);}
+			@Override public void insertUpdate(DocumentEvent e) {sizeEditing = true; synchronizeStyle((Style)styleList.getSelectedValue(), true);}
+			@Override public void changedUpdate(DocumentEvent e) {sizeEditing = true; synchronizeStyle((Style)styleList.getSelectedValue(), true);}
+		});
+		sizeBox.addItemListener(new ItemListener() {public void itemStateChanged(ItemEvent e) {if (e.getStateChange() != ItemEvent.SELECTED) return; 
+			synchronizeStyle((Style)styleList.getSelectedValue()); sizeEditing = false;}});
+		
 		//sizeBox.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {public void keyTyped(KeyEvent e) {System.out.println("!");synchronizeStyle();}});
 		fontPanel.add(sizeBox);
 		fontPanel.add(bold);
@@ -285,18 +296,24 @@ public class StyleDialog extends JDialog
 		return styles[0];
 	}
 	
-	void synchronizeStyle()
+	void synchronizeStyle(Style style) {synchronizeStyle(style, false);}
+	void synchronizeStyle(Style style, boolean fromSizeEditor)
 	{
+		if (!fromSizeEditor && sizeEditing)
+			return;
 		if (!sendEvents)
 			return;
-		Style style = (Style)styleList.getSelectedValue();
 		if (style == null)
 			return;
 		style.name = name.getText();
 		style.color = colorPanel.getBackground();
 		style.font = (String)fontBox.getSelectedItem();
-		try {style.size = Integer.parseInt(sizeBox.getSelectedItem().toString());}
-		catch (Exception e) {e.printStackTrace(); style.size = 16;}
+		if (!sizeEditing)
+			try {style.size = Integer.parseInt(sizeBox.getSelectedItem().toString());}
+			catch (Exception e) {style.size = 16;}
+		else try {style.size = Integer.parseInt(((JTextField)sizeBox.getEditor().getEditorComponent()).getText());}
+			catch (Exception e) {style.size = 16;}
+		
 		style.bold = bold.isSelected();
 		style.italic = italic.isSelected();
 		style.underline = underline.isSelected();

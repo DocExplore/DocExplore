@@ -366,7 +366,7 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 				screen.addMouseListener(new MouseAdapter() {@Override public void mouseReleased(MouseEvent e) {splash.setVisible(false);}});
 				splash.setUndecorated(true);
 				screen.setText("<html>DocExplore 2009-2014"
-					//+"<br/>Any resemblance to real persons, living or dead, is purely coincidental."
+					+"<br/>Released under the CeCILL v2.1 license"
 					+"</html>");
 				splash.pack();
 				splash.setAlwaysOnTop(true);

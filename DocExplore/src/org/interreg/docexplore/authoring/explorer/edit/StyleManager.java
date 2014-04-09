@@ -49,9 +49,11 @@ public class StyleManager implements StyleDialog.Listener
 		return new Style []
 		{
 			new Style("Body", Color.white, "Times New Roman", 16, false, false, false, false),
-			new Style("Subtitle", Color.white, "Times New Roman", 32, false, true, false, false),
-			new Style("Title", Color.white, "Times New Roman", 48, true, false, false, false),
-			new Style("Title 2", Color.white, "Arial", 48, true, false, false, false),
+			new Style("Emphasis 1", Color.white, "Times New Roman", 16, true, false, false, false),
+			new Style("Emphasis 2", Color.white, "Arial", 16, true, true, false, false),
+			new Style("Title 1", Color.white, "Times New Roman", 48, true, false, false, false),
+			new Style("Title 2", Color.white, "Arial", 40, true, false, false, false),
+			new Style("Title 3", Color.white, "Times New Roman", 32, false, true, false, false),
 			new Style("Caption", Color.white, "Times New Roman", 14, false, true, true, false)
 		};
 	}
