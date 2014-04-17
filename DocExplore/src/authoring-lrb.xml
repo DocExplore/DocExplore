@@ -34,10 +34,10 @@ Would you like to keep it in the editor?</entry>
 	<entry key="moveAnnotation">Move comment</entry>
 	
 	<entry key="viewHelpToggle">Show help</entry>
-	<entry key="helpBookMsg">This panel displays the slides of your presentation. You can drag books, pages and images from the right side &amp;rarr;</entry>
-	<entry key="helpPageMsg">This is a slide of your presentation. You can create and modify regions of interest with the top toolbar and by clicking on them. You can also drop supported media on a region from the right side &amp;rarr;</entry>
-	<entry key="helpRegionMsg">You have selected a region of interest and the elements it contains are displayed in the right panel &amp;rarr;&lt;br/>You can add, remove, edit and reorder the elements using the icons on their right and the toolbar at the bottom.</entry>
-	<entry key="helpCollectionMsg">This is your digital collection.&lt;br/>&amp;larr; Drag items to the left to include them in your presentation.</entry>
+	<entry key="helpBookMsg">This panel displays the pages of your presentation. To add pages, you can:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Click on the &amp;oplus; sign in the toolbar to browse for images&amp;uarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag books and pages from the right side &amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag images directly from your file explorer into this panel</entry>
+	<entry key="helpPageMsg">This is a slide of your presentation. You can:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Create and modify regions of interest with the toolbar above&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Add regions and annotations by dragging them from the right&amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag supported files on a region from your file explorer</entry>
+	<entry key="helpRegionMsg">You have selected a region of interest and the elements it contains are displayed in the right panel &amp;rarr;&lt;br/>You can add, remove, edit and reorder the elements using the toolbars.</entry>
+	<entry key="helpCollectionMsg">This is your digital collection from the management tool.&lt;br/>&amp;larr; Drag items to the left to include them in your presentation.</entry>
 	<entry key="helpLocalMsg">This is your local storage. Double click on a drive to browse contents.</entry>
 	<entry key="helpFolderMsg">Right click on a file to preview contents.&lt;br/>&amp;larr; Drag files to the left to include them in your presentation.</entry>
 	

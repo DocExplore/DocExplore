@@ -187,7 +187,7 @@ public class PageEditor extends PageViewer implements ViewMouseListener.DropTarg
 			return;
 		Rectangle visible = scrollPane.getViewport().getViewRect();
 		BufferedImage help = ExplorerView.helpRenderer.getImage(
-			"<html><center><div style=\"font-family: Arial; font-size: 24; font-weight: bold; color: rgb(128, 128, 128)\">"+msg+"</div></center></html>", 
+			"<html><div style=\"font-family: Arial; font-size: 24; font-weight: bold; color: rgb(128, 128, 128)\">"+msg+"</div></html>", 
 			visible.width, ExplorerView.background);
 		g.drawImage(help, visible.x, visible.y+visible.height-help.getHeight(), null);
 	}

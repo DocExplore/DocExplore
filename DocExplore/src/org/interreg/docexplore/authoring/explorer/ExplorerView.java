@@ -125,7 +125,7 @@ public abstract class ExplorerView extends JPanel
 		{
 			Rectangle visible = explorer.scrollPane.getViewport().getViewRect();
 			BufferedImage help = helpRenderer.getImage(
-				"<html><center><div style=\"font-family: Arial; font-size: 24; font-weight: bold; color: rgb(128, 128, 128)\">"+msg+"</div></center></html>", 
+				"<html><div style=\"font-family: Arial; font-size: 24; font-weight: bold; color: rgb(128, 128, 128)\">"+msg+"</div></html>", 
 				visible.width, background);
 			g.drawImage(help, visible.x, visible.y+visible.height-help.getHeight(), null);
 		}

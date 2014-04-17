@@ -121,8 +121,8 @@ public class BookEditorView extends BookView
 				{
 					explorer.tool.historyManager.doAction(new WrappedAction(deletePagesAction)
 					{
-						public void doAction() throws Exception {super.doAction(); explorer.reset();}
-						public void undoAction() throws Exception {super.undoAction(); explorer.reset();}
+						public void doAction() throws Exception {super.doAction(); explorer.explore("docex://"+curBook.getId());}
+						public void undoAction() throws Exception {super.undoAction(); explorer.explore("docex://"+curBook.getId());}
 					});
 				}
 				catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
@@ -143,7 +143,7 @@ public class BookEditorView extends BookView
 		});
 		
 		removePage.setToolTipText(XMLResourceBundle.getBundledString("generalToolbarRemovePage"));
-		removePage.setToolTipText(XMLResourceBundle.getBundledString("generalToolbarAddPages"));
+		addPage.setToolTipText(XMLResourceBundle.getBundledString("generalToolbarAddPages"));
 		explorer.addListener(new Listener() {@Override public void exploringChanged(Object explored)
 		{
 			if (explored instanceof Book)
@@ -306,8 +306,8 @@ public class BookEditorView extends BookView
 			{
 				explorer.tool.historyManager.doAction(new WrappedAction(action)
 				{
-					public void doAction() throws Exception {super.doAction(); explorer.reset();}
-					public void undoAction() throws Exception {super.undoAction(); explorer.reset();}
+					public void doAction() throws Exception {super.doAction(); explorer.explore("docex://"+curBook.getId());}
+					public void undoAction() throws Exception {super.undoAction(); explorer.explore("docex://"+curBook.getId());}
 				});
 			}
 			catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
@@ -361,9 +361,9 @@ public class BookEditorView extends BookView
 					if (action.pages.isEmpty()) 
 						return; 
 					super.doAction(); 
-					explorer.reset();
+					explorer.explore("docex://"+curBook.getId());
 				}
-				public void undoAction() throws Exception {super.undoAction(); explorer.reset();}
+				public void undoAction() throws Exception {super.undoAction(); explorer.explore("docex://"+curBook.getId());}
 			});
 			action.pages.addAll(pages);
 		}

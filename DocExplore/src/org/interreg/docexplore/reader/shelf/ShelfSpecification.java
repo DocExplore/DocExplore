@@ -62,7 +62,7 @@ public class ShelfSpecification
 					//"margin:"+(int)(image.getWidth()/16)+"px;" +
 					//"text-align:middle
 					"\"><center><br/>" +
-					"<div style=\"font-size:"+(int)(image.getWidth()/16)+"px\">"+title+"</div><br/>" +
+					"<div style=\"font-size:"+(int)(image.getWidth()/12)+"px\">"+title+"</div><br/>" +
 					"<div style=\"font-size:"+(int)(image.getWidth()/18)+"px\">"+desc+"</div>" +
 					"</center></font></xhtml>";
 //				Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(

@@ -96,11 +96,11 @@ public class HistoryManager
 			cacheId = (cacheId+1)%(limit+1);
 		}
 		while (newCacheDir.exists());
-		newCacheDir.mkdirs();
+		newCacheDir.mkdir();
 		return newCacheDir;
 	}
 	static void deleteCacheDir(File file)
-	{
+	{new Exception(file.getAbsolutePath()).printStackTrace();
 		if (!file.getName().startsWith("cache"))
 			return;
 		delete(file);

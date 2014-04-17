@@ -72,7 +72,6 @@ public class Texture implements Bindable
 		GL11 gl = Gdx.gl11;
 		gl.glBindTexture(GL11.GL_TEXTURE_2D, id);
 		gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, width, height, hasAlpha ? GL11.GL_RGBA : GL12.GL_BGR, GL11.GL_UNSIGNED_BYTE, data);
-		//org.lwjgl.util.glu.GLU.gluBuild2DMipmaps(target, components, width, height, format, type, data)
 		inited = true;
 	}
 	

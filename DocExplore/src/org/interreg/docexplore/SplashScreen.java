@@ -31,7 +31,7 @@ public class SplashScreen extends JPanel
 {
 	private static final long serialVersionUID = -4494494801280290970L;
 	
-	public final static String versionString = "2.0";
+	public final static String versionString = "2.0.2";
 
 	JLabel status;
 	

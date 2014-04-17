@@ -85,6 +85,8 @@ public class Style
 		StyledDocument doc = comp.getStyledDocument();
 		SimpleAttributeSet attrs = new SimpleAttributeSet();
 		StyleConstants.setAlignment(attrs, centered ? StyleConstants.ALIGN_CENTER : StyleConstants.ALIGN_LEFT);
+		if (underline)
+			StyleConstants.setUnderline(attrs, true);
 		doc.setParagraphAttributes(0, doc.getLength(), attrs, false);
 	}
 	public String apply(String text)
@@ -96,7 +98,7 @@ public class Style
 			"color:#"+toHex(color)+"; " +
 			"font-family:"+font +"; " +
 			"\">"+(centered ? "<center>" : "")+(bold ? "<b>" : "")+(italic ? "<i>" : "")+(underline ? "<u>" : "")+text+
-			(centered ? "</center>" : "")+(bold ? "</b>" : "")+(italic ? "</i>" : "")+(underline ? "</u>" : "")+"</div></html>";
+			(underline ? "</u>" : "")+(italic ? "</i>" : "")+(bold ? "</b>" : "")+(centered ? "</center>" : "")+"</div></html>";
 	}
 	
 	public String toString() {return apply(name);}

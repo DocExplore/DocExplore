@@ -34,9 +34,9 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="moveAnnotation">Déplacement de commentaire</entry>
 	
 	<entry key="viewHelpToggle">Afficher l'aide</entry>
-	<entry key="helpBookMsg">Ce panneau affiche les pages de votre présentation. Vous pouvez y glisser des livres, des pages et des images depuis le panneau de droite &amp;rarr;</entry>
-	<entry key="helpPageMsg">Ceci est une page de votre présentation. Vous pouvez créer des régions d'intérêt à l'aide de la barre d'outils supérieure et les modifier en cliquant dessus. Vous pouvez aussi y déposer des éléments depuis le panneau de droite &amp;rarr;</entry>
-	<entry key="helpRegionMsg">Vous avez sélectionné une région d'intérêt et les éléments qu'elle contient sont affichés dans le panneau de droite &amp;rarr;&lt;br/>Vous pouvez ajouter, supprimer, modifier et réordonner ces éléments en utilisant les icônes sur leur droite et la barre d'outils inférieure.</entry>
+	<entry key="helpBookMsg">Ce panneau affiche les pages de votre présentation. Pour en ajouter vous pouvez:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Cliquer sur l'icône &amp;oplus; dans la barre d'outils pour importer des images&amp;uarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser livres et pages depuis la droite &amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser directement des images depuis votre navigateur de fichiers</entry>
+    <entry key="helpPageMsg">Ceci est une page de votre présentation. Vous pouvez:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Créer et modifier des régions d'intérêt à l'aide de la barre d'outils supérieure&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Ajouter des régions et des annotations en les glissant depuis la droite&amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser des fichiers sur une région depuis votre navigateur de fichiers</entry>
+	<entry key="helpRegionMsg">Vous avez sélectionné une région d'intérêt et les éléments qu'elle contient sont affichés dans le panneau de droite &amp;rarr;&lt;br/>Vous pouvez ajouter, supprimer, modifier et réordonner ces éléments en utilisant les barres d'outils.</entry>
 	<entry key="helpCollectionMsg">Ceci est votre collection numérique.&lt;br/>&amp;larr; Glissez des éléments vers la gauche pour les inclure dans votre présentation.</entry>
 	<entry key="helpLocalMsg">Ceci est le stockage local de votre ordinateur. Double-cliquez sur un lecteur pour parcourir son contenu.</entry>
 	<entry key="helpFolderMsg">Faites un clic droit sur un fichier pour prévisualiser son contenu.&lt;br/>&amp;larr; Glissez des fichiers vers la gauche pour les inclure dans votre présentation.</entry>
@@ -48,6 +48,7 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="generalToolbarEdit">Modifier le livre sélectionné...</entry>
 	<entry key="generalToolbarRemove">Supprimer les livres sélectionnés...</entry>
 	<entry key="generalToolbarRemovePage">Supprimer les pages sélectionnées...</entry>
+	<entry key="generalToolbarAddPages">Ajouter des pages...</entry>
 	<entry key="generalAddAnnotation">Ajouter</entry>
 	
 	<entry key="imageToolbarZoomIn">Zoom Avant</entry>
