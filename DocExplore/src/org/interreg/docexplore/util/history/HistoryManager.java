@@ -100,7 +100,7 @@ public class HistoryManager
 		return newCacheDir;
 	}
 	static void deleteCacheDir(File file)
-	{new Exception(file.getAbsolutePath()).printStackTrace();
+	{
 		if (!file.getName().startsWith("cache"))
 			return;
 		delete(file);

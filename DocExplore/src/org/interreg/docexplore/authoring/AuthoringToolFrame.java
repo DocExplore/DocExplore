@@ -325,7 +325,9 @@ public class AuthoringToolFrame extends JFrame
 	{
 		if (!menu.requestSave())
 			return;
-		//FS2Utils.deleteRoot(defaultFile);
+		if (mdEditor != null)
+			try {mdEditor.setDocument(null);}
+			catch (Exception e) {e.printStackTrace();}
 		try {FileUtils.deleteDirectory(defaultFile);}
 		catch (Exception e) {e.printStackTrace();}
 		startup.shutdown();
