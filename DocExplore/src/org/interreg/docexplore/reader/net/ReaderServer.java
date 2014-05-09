@@ -27,6 +27,11 @@ import org.interreg.docexplore.Startup.PluginConfig;
 import org.interreg.docexplore.reader.ReaderApp;
 import org.interreg.docexplore.reader.plugin.ServerPlugin;
 
+/**
+ * The "server" side reader component that handles requests for resources
+ * @author Alexander Burnett
+ *
+ */
 public class ReaderServer
 {
 	Startup startup;
@@ -69,6 +74,7 @@ public class ReaderServer
 			{
 				try
 				{
+					//continually waits for new connections and start a ServerTask when a connection is made
 					while (running)
 					{
 						Connection client = null;

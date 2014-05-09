@@ -17,6 +17,11 @@ package org.interreg.docexplore.reader.net;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * Interface for a connection between a server and a client. Implemented by LocalConnection and SocketConnection for local and remote configurations, respectively.
+ * @author Alexander Burnett
+ *
+ */
 public interface Connection
 {
 	public InputStream getInputStream() throws Exception;

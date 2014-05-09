@@ -20,6 +20,11 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * An incoming resource on the client side that accumulates packets as they arrive.
+ * @author Alexander Burnett
+ *
+ */
 public abstract class StreamedResource extends InputStream
 {
 	public final ReaderClient client;
@@ -69,6 +74,11 @@ public abstract class StreamedResource extends InputStream
 		}.start();
 	}
 	
+	/**
+	 * Executed in its own thread to make sense of the received data. The stream is canceled if an exception is thrown.
+	 * @param stream
+	 * @throws Exception
+	 */
 	public abstract void handle(InputStream stream) throws Exception;
 	
 	public void release()
@@ -91,7 +101,7 @@ public abstract class StreamedResource extends InputStream
 			error.printStackTrace();
 	}
 	
-	public synchronized void addBuffer(byte [] buffer, long index)
+	synchronized void addBuffer(byte [] buffer, long index)
 	{
 		if (lastIndex >= 0 && index > lastIndex)
 			throw new RuntimeException("Stream overflow!");
@@ -150,6 +160,12 @@ public abstract class StreamedResource extends InputStream
 	
 	public ResourceRequest request() {return new ResourceRequest(uri);}
 	
+	/**
+	 * Allocator for implemented resource types.
+	 * @author Alexander Burnett
+	 *
+	 * @param <T>
+	 */
 	public static interface Allocator<T extends StreamedResource>
 	{
 		public T allocate(ReaderClient client, String uri, File file);

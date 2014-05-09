@@ -34,6 +34,11 @@ import org.interreg.docexplore.Startup.PluginConfig;
 import org.interreg.docexplore.reader.ReaderApp;
 import org.interreg.docexplore.reader.plugin.ClientPlugin;
 
+/**
+ * Client side of the reader app.
+ * @author Alexander Burnett
+ *
+ */
 public class ReaderClient
 {
 	Startup startup;
@@ -69,11 +74,22 @@ public class ReaderClient
 		}
 	}
 	
+	/**
+	 * Makes an association between a StreamedResource implementation and an allocator.
+	 * @param clazz
+	 * @param allocator
+	 */
 	public <T extends StreamedResource> void registerStreamType(Class<T> clazz, StreamedResource.Allocator<T> allocator)
 	{
 		streamTypes.put(clazz, allocator);
 	}
 	
+	/**
+	 * Initiates a request for a resource to the server. An allocator for the StreamedResource implementation must be registered prior to calls to this method.
+	 * @param clazz class of the {@link StreamedResource} implementation
+	 * @param uri
+	 * @return Returns a {@link StreamedResource} that will have begun streaming or null if no allocator was registered.
+	 */
 	@SuppressWarnings("unchecked")
 	public <T extends StreamedResource> T getResource(Class<T> clazz, String uri)
 	{
@@ -83,6 +99,12 @@ public class ReaderClient
 		return getResource((StreamedResource.Allocator<T>)allocator, uri);
 	}
 	
+	/**
+	 * Initiates a request for a resource to the server by allocating the resource and sending a resource request.
+	 * @param allocator
+	 * @param uri
+	 * @return
+	 */
 	private <T extends StreamedResource> T getResource(StreamedResource.Allocator<T> allocator, String uri)
 	{
 		try
@@ -107,12 +129,11 @@ public class ReaderClient
 		}
 	}
 	
-	public void submitRequest(Request request)
-	{
-		synchronized (resources) {outputQueue.add(request);}
-	}
-	
-	public void cancelResource(String uri)
+	/**
+	 * Cancels an ongoing resource stream by sending a {@link ResourceCancelRequest} to the server.
+	 * @param uri
+	 */
+	void cancelResource(String uri)
 	{
 		//new Exception().printStackTrace();
 		StreamedResource resource = null;

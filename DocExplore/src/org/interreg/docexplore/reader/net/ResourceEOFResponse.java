@@ -14,6 +14,11 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.reader.net;
 
+/**
+ * Signifies the end of a resource stream.
+ * @author Alexander Burnett
+ *
+ */
 public class ResourceEOFResponse implements Response
 {
 	private static final long serialVersionUID = -4948507619156874704L;

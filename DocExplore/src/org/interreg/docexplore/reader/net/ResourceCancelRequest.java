@@ -14,6 +14,11 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.reader.net;
 
+/**
+ * Request made by client to cancel an ongoing ResourceRequest response.
+ * @author Alexander Burnett
+ *
+ */
 public class ResourceCancelRequest implements Request
 {
 	private static final long serialVersionUID = 5846264353218769392L;

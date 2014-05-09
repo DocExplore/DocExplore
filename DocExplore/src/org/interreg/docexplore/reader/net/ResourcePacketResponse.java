@@ -14,6 +14,11 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.reader.net;
 
+/**
+ * Single packet response for a resource request.
+ * @author Alexander Burnett
+ *
+ */
 public class ResourcePacketResponse implements Response
 {
 	private static final long serialVersionUID = -7199762616807066561L;

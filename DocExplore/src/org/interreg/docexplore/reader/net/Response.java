@@ -16,6 +16,11 @@ package org.interreg.docexplore.reader.net;
 
 import java.io.Serializable;
 
+/**
+ * Interface for responses sent to clients
+ * @author Alexander Burnett
+ *
+ */
 public interface Response extends Serializable
 {
 	public void run(ReaderClient client) throws Exception;

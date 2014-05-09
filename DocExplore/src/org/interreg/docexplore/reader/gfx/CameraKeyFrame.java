@@ -20,6 +20,7 @@ import org.interreg.docexplore.reader.book.BookModel;
 import org.interreg.docexplore.reader.book.BookPageStack;
 import org.interreg.docexplore.reader.book.ROISpecification;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
 
@@ -65,6 +66,12 @@ public class CameraKeyFrame
 	}
 	
 	float [] tl = {0, 0, 0}, br = {0, 0, 0}, middle = {0, 0, 0};
+	/**
+	 * Configures this frame to properly view a given region.
+	 * @param model
+	 * @param region
+	 * @param left Left page
+	 */
 	public void setup(BookModel model, ROISpecification region, boolean left)
 	{
 		BookPageStack stack = left ? model.leftStack : model.rightStack;
@@ -78,18 +85,21 @@ public class CameraKeyFrame
 		tl[1] += ym; br[1] -= ym;
 		
 		float fov = (float)(.1*Math.PI);
-		float aspect = 1;//Gdx.graphics.getWidth()/Gdx.graphics.getHeight();
-		float viewDistForX = (float)(aspect*(br[0]-tl[0])/Math.sin(fov));
-		float viewDistForY = (float)(aspect*(tl[1]-br[1])/Math.sin(fov));
-		float viewDist = Math.max(viewDistForX, viewDistForY);
-		float midx = (br[0]+tl[0])/2, midy = (tl[1]+br[1])/2, midz = (tl[2]+br[2])/2;
-		float right = (float)(.5*Math.sin(fov)*viewDist);
+		float aspect = Gdx.graphics.getWidth()*1f/Gdx.graphics.getHeight();
+		float viewDistForX = (float)(1.78/aspect*(br[0]-tl[0])/(Math.tan(fov)));
+		float viewDistForY = (float)((tl[1]-br[1])/(2*Math.tan(.5f*fov)));
 		
-		if (viewDist < .5f)
-			viewDist = .5f;
+		float viewDist = 1.2f*Math.max(viewDistForX, viewDistForY);
 		
-		setup(midx+right, midy, midz+viewDist, 
-			midx+right, midy, midz, 
+		float eyex = (float)((br[0]+tl[0])/2+aspect/1.78*viewDist*Math.tan(.5f*fov));
+		float midy = (tl[1]+br[1])/2, midz = (tl[2]+br[2])/2;
+		float right = (float)(.5*Math.sin(.5f*fov)*viewDist);
+		
+//		if (viewDist < .5f)
+//			viewDist = .5f;
+		
+		setup(eyex, midy, midz+viewDist, 
+			eyex, midy, midz, 
 			0, 1, 1, fov);
 	}
 	
@@ -100,6 +110,11 @@ public class CameraKeyFrame
 		v.z += amount*(f[2]-v.z);
 	}
 	
+	/**
+	 * Attracts a camera to this key frame.
+	 * @param camera
+	 * @param amount 0 will not affect the camera, 1 will set it to this key frame.
+	 */
 	public void attract(PerspectiveCamera camera, float amount)
 	{
 		attract(camera.position, pos, amount);

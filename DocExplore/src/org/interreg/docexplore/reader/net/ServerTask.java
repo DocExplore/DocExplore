@@ -27,6 +27,11 @@ import java.util.concurrent.TimeUnit;
 
 import org.interreg.docexplore.util.Pair;
 
+/**
+ * Handles the requests of a given client connection
+ * @author Alexander Burnett
+ *
+ */
 public class ServerTask
 {
 	public static interface ResponseSender
@@ -52,7 +57,7 @@ public class ServerTask
 		this.in = this.out = 0;
 		this.requests = new HashSet<Request>();
 		
-		//input thread
+		//input thread for treating incoming requests
 		new Thread()
 		{
 			public void run()
@@ -119,7 +124,7 @@ public class ServerTask
 			}
 		}.start();
 		
-		//output thread
+		//output thread for sending responses
 		new Thread()
 		{
 			public void run()

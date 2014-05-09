@@ -21,6 +21,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 
+/**
+ * An xml file resource. On stream completion builds a DOM document.
+ * @author Alexander Burnett
+ *
+ */
 public class StreamedXML extends StreamedResource
 {
 	public Document doc;

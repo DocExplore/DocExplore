@@ -26,6 +26,11 @@ import org.interreg.docexplore.reader.ReaderApp;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 
+/**
+ * Simple widget layer for the UI.
+ * @author Alexander Burnett
+ *
+ */
 public class GuiLayer implements ReaderApp.Module, InputManager.Listener
 {
 	ReaderApp app;

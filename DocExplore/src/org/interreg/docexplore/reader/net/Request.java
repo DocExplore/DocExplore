@@ -15,7 +15,11 @@ The fact that you are presently reading this means that you have had knowledge o
 package org.interreg.docexplore.reader.net;
 import java.io.Serializable;
 
-
+/**
+ * Interface for requests made by clients
+ * @author Alexander Burnett
+ *
+ */
 public interface Request extends Serializable
 {
 	public void run(ServerTask task) throws Exception;

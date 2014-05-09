@@ -23,6 +23,11 @@ import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.Startup;
 import org.interreg.docexplore.reader.net.ReaderServer;
 
+/**
+ * Executable for the standalone server app
+ * @author Alexander Burnett
+ *
+ */
 public class ServerApp
 {
 	ReaderServer server = null;

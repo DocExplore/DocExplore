@@ -14,9 +14,19 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.reader.net;
 
+/**
+ * Interface for a server listening for connections. Implemented by LocalServer and SocketServer for local and remote configurations, respectively.
+ * @author Alexander Burnett
+ *
+ */
 public interface ConnectionServer
 {
 	public void setSoTimeout(int time) throws Exception;
 	public String getLocalSocketAddress();
+	/**
+	 * Waits for an incoming connection.
+	 * @return
+	 * @throws Exception If there is a timeout or network error.
+	 */
 	public Connection accept() throws Exception;
 }

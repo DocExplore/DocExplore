@@ -27,7 +27,11 @@ import org.lwjgl.input.Keyboard;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 
-
+/**
+ * Top level class for updating and rendering a book
+ * @author Alexander Burnett
+ *
+ */
 public class BookEngine implements ReaderApp.Module
 {
 	public static interface Component

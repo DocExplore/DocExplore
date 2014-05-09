@@ -20,6 +20,12 @@ import java.util.Arrays;
 
 import org.interreg.docexplore.reader.net.ServerTask.ResponseSender;
 
+/**
+ * Request for resources (files). If the request is valid, will stream back the resource in a series of ResourcePacketResponse responses.
+ * Sends a StreamErrorResponse otherwise.
+ * @author Alexander Burnett
+ *
+ */
 public class ResourceRequest implements Request, ResponseSender
 {
 	private static final long serialVersionUID = -7956446480093821884L;
