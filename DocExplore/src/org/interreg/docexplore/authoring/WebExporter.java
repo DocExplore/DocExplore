@@ -53,7 +53,7 @@ public class WebExporter extends PresentationExporter
 		
 		exportDir.mkdirs();
 		Book book = link.getBook(link.getLink().getAllBookIds().get(0));
-		doExport(book, exportDir, options, 0);
+		doExport(book, exportDir, options, 0, "JPG");
 		
 		copyResource("org/interreg/docexplore/reader/web/index.html", exportDir);
 		copyResource("org/interreg/docexplore/reader/web/back.png", exportDir);

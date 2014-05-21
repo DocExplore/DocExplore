@@ -29,19 +29,42 @@ public class Shape
 {
 	public float [][] points;
 	public float minx, miny, maxx, maxy;
+	static float lim = .001f;
+	public float [][][] innerTriangulation, outerTriangulation;
 	
 	public Shape(float [][] points)
 	{
-		this.points = points;
+		this.points = Arrays.copyOf(points, points.length);
+		
+		if (isClockwise(points))
+			reverse(this.points);
+		
 		minx = maxx = points[0][0];
 		miny = maxy = points[0][1];
-		
 		for (int i=1;i<points.length;i++)
 		{
+			if (points[i][0] < lim) points[i][0] = lim;
+			else if (points[i][0] > 1-lim) points[i][0] = 1-lim;
+			if (points[i][1] < lim) points[i][1] = lim;
+			else if (points[i][1] > 1-lim) points[i][1] = 1-lim;
+			
 			if (points[i][0] < minx) minx = points[i][0];
 			else if (points[i][0] > maxx) maxx = points[i][0];
 			if (points[i][1] < miny) miny = points[i][1];
 			else if (points[i][1] > maxy) maxy = points[i][1];
+		}
+		
+		innerTriangulation = triangulate(this.points, true);
+		outerTriangulation = triangulate(this.points, false);
+	}
+	
+	private static void reverse(float [][] points)
+	{
+		for (int i=0;i<points.length/2;i++)
+		{
+			float [] tmp = points[i];
+			points[i] = points[points.length-1-i];
+			points[points.length-1-i] = tmp;
 		}
 	}
 	
@@ -71,7 +94,7 @@ public class Shape
 		return nInters%2 == 1;
 	}
 	
-	public boolean intersects(int i1, int i2, int j1, int j2)
+	public static boolean intersects(float [][] points, int i1, int i2, int j1, int j2)
 	{
 		if (i1 == i2 || j1 == j2)
 			throw new RuntimeException("!!!");
@@ -95,20 +118,45 @@ public class Shape
 		return kp > 0 && kp < 1;
 	}
 	
-	public float [][][] triangulate()
+	public static float [][][] triangulate(float [][] outline, boolean inside)
 	{
+		float [][] points;
+		
+		if (!inside)
+		{
+			points = Arrays.copyOf(outline, outline.length+4);
+			points[points.length-4] = new float [] {0, 0};
+			points[points.length-3] = new float [] {1, 0};
+			points[points.length-2] = new float [] {1, 1};
+			points[points.length-1] = new float [] {0, 1};
+		}
+		else
+		{
+			points = Arrays.copyOf(outline, outline.length);
+			reverse(points);
+		}
+		
 		int [][] lines = new int [points.length][];
 		
-		for (int i=0;i<points.length-1;i++)
+		for (int i=0;i<outline.length-1;i++)
 			addLine(lines, i, i+1);
-		addLine(lines, 0, points.length-1);
+		addLine(lines, 0, outline.length-1);
+		if (!inside)
+		{
+			addLine(lines, points.length-4, points.length-3);
+			addLine(lines, points.length-3, points.length-2);
+			addLine(lines, points.length-2, points.length-1);
+			addLine(lines, points.length-4, points.length-1);
+		}
 		
 		for (int i=0;i<points.length-1;i++)
-			for (int j=i+2;j<points.length;j++)
+			for (int j=i+1;j<points.length;j++)
 			{
-				float xm = .5f*(points[i][0]+points[j][0]), ym = .5f*(points[i][1]+points[j][1]);
-				if (!contains(xm, ym))
-					continue;
+				int ip = (i+outline.length-1)%outline.length, in = (i+1)%outline.length;
+				if (!isIn(points[j][0]-points[i][0], points[j][1]-points[i][1],
+					points[i][0]-points[ip][0], points[i][1]-points[ip][1],
+					points[in][0]-points[i][0], points[in][1]-points[i][1]))
+						continue;
 				
 				boolean intersects = false;
 				
@@ -119,7 +167,7 @@ public class Shape
 						{
 							int l = lines[k][li];
 							if (k != i && k != j && l != i && l != j)
-								intersects = intersects(i, j, k, l);
+								intersects = intersects(points, i, j, k, l);
 						}
 					}
 				if (!intersects)
@@ -134,11 +182,11 @@ public class Shape
 					{
 						int [] ks = trianglesFor(lines, i, lines[i][j]);
 						for (int k=0;k<ks.length;k++)
-							triangles.add(buildTriangle(i, lines[i][j], ks[k]));
+							triangles.add(buildTriangle(points, i, lines[i][j], ks[k]));
 					}
 		return triangles.toArray(new float [][][] {});
 	}
-	private int [] trianglesFor(int [][] lines, int i, int j)
+	private static int [] trianglesFor(int [][] lines, int i, int j)
 	{
 		int [] res = new int [0];
 		for (int k=0;k<lines[i].length;k++)
@@ -151,7 +199,7 @@ public class Shape
 				}
 		return res;
 	}
-	private float [][] buildTriangle(int i, int j, int k)
+	private static float [][] buildTriangle(float [][] points, int i, int j, int k)
 	{
 		return new float [][]
 		{
@@ -160,7 +208,7 @@ public class Shape
 			{points[k][0], points[k][1]},
 		};
 	}
-	private void addLine(int [][] lines, int i, int j)
+	private static void addLine(int [][] lines, int i, int j)
 	{
 		if (lines[i] == null)
 			lines[i] = new int [1];
@@ -173,34 +221,76 @@ public class Shape
 		lines[j][lines[j].length-1] = i;
 	}
 	
+	//checks if u extends "to the left" of v
+	private static boolean isLeft(float ux, float uy, float vx, float vy) {return ux*vy-uy*vx > 0;}
+	//checks if u extends "inside" of <v1, v2>
+	private static boolean isIn(float ux, float uy, float vx1, float vy1, float vx2, float vy2)
+	{
+		boolean intersection = isLeft(vx2, vy2, vx1, vy1);
+		if (intersection)
+			return isLeft(ux, uy, vx1, vy1) && isLeft(ux, uy, vx2, vy2);
+		else return isLeft(ux, uy, vx1, vy1) || isLeft(ux, uy, vx2, vy2);
+	}
+	public static boolean isClockwise(float [][] points)
+	{
+		int mini = 0;
+		for (int i=1;i<points.length;i++)
+			if (points[i][0] < points[mini][0] || (points[i][0] == points[mini][0] && points[i][1] < points[mini][1]))
+				mini = i;
+		int ip = (mini+points.length-1)%points.length, in = (mini+1)%points.length;
+		return !isLeft(points[mini][0]-points[ip][0], points[mini][1]-points[ip][1],
+			points[in][0]-points[mini][0], points[in][1]-points[mini][1]);
+	}
+	
+//	public static Mesh toMesh(List<float [][][]> triangles)
+//	{
+//		int nVertices = 0;
+//		for (float [][][] triangle : triangles)
+//			nVertices += 3*triangle.length;
+//		Mesh mesh = new Mesh(true, nVertices, nVertices, new VertexAttributes(new VertexAttribute(VertexAttributes.Usage.Position, 3, "p")));
+//		FloatBuffer data = mesh.getVerticesBuffer();
+//		data.clear();
+//		int vcnt = 0;
+//		for (float [][][] triangle : triangles)
+//			for (int i=0;i<triangle.length;i++)
+//				for (int j=0;j<3;j++)
+//				{
+//					//data.put(vcnt)
+//				}
+//	}
+	
+	@SuppressWarnings("serial")
 	public static void main(String [] args)
 	{
-		final Shape shape = new Shape(new float [][]
+		final int w = 640, h = 480;
+		float [][] outline = new float [][]
 		{
-				{74, 41},
-				{183, 178},
-				{69, 294},
-				{335, 182},
-				{281, 333},
-				{200, 281},
-				{192, 433},
-				{417, 355},
-				{436, 449},
-				{613, 354},
-				{614, 207},
-				{446, 212},
-				{528, 77},
-				{616, 65},
-				{555, 21},
-				{365, 52},
-				{418, 84},
-				{325, 125},
-				{320, 171},
-				{296, 37},
-				{204, 76},
-				{151, 6}
-		});
-		final float [][][] triangles = shape.triangulate();
+			{74f/w, 41f/h},
+			{183f/w, 178f/h},
+			{69f/w, 294f/h},
+			{335f/w, 182f/h},
+			{281f/w, 333f/h},
+			{200f/w, 281f/h},
+			{192f/w, 433f/h},
+			{417f/w, 355f/h},
+			{436f/w, 449f/h},
+			{613f/w, 354f/h},
+			{614f/w, 207f/h},
+			{446f/w, 212f/h},
+			{528f/w, 77f/h},
+			{616f/w, 65f/h},
+			{555f/w, 21f/h},
+			{365f/w, 52f/h},
+			{418f/w, 84f/h},
+			{325f/w, 125f/h},
+			{320f/w, 171f/h},
+			{296f/w, 37f/h},
+			{204f/w, 76f/h},
+			{151f/w, 6f/h}
+		};
+		//reverse(outline);
+		final Shape shape = new Shape(outline);
+		final float [][][] triangles = shape.outerTriangulation;
 		System.out.println(triangles.length+" triangles");
 		
 		JFrame win = new JFrame("Test");
@@ -211,18 +301,17 @@ public class Shape
 			
 			g.setColor(new Color(255, 0, 0, 127));
 			for (int i=0;i<triangles.length;i++)
-			{
-				g.drawLine((int)triangles[i][0][0], (int)triangles[i][0][1], (int)triangles[i][1][0], (int)triangles[i][1][1]);
-				g.drawLine((int)triangles[i][1][0], (int)triangles[i][1][1], (int)triangles[i][2][0], (int)triangles[i][2][1]);
-				g.drawLine((int)triangles[i][2][0], (int)triangles[i][2][1], (int)triangles[i][0][0], (int)triangles[i][0][1]);
-			}
+				g.fillPolygon(
+					new int [] {(int)(w*triangles[i][0][0]), (int)(w*triangles[i][1][0]), (int)(w*triangles[i][2][0])}, 
+					new int [] {(int)(h*triangles[i][0][1]), (int)(h*triangles[i][1][1]), (int)(h*triangles[i][2][1])}, 
+					3);
 			
 			g.setColor(new Color(0, 0, 255, 127));
 			for (int i=0;i<shape.points.length;i++)
-				g.drawLine((int)shape.points[i][0], (int)shape.points[i][1], 
-					(int)shape.points[(i+1)%shape.points.length][0], (int)shape.points[(i+1)%shape.points.length][1]);
+				g.drawLine((int)(w*shape.points[i][0]), (int)(h*shape.points[i][1]), 
+					(int)(w*shape.points[(i+1)%shape.points.length][0]), (int)(h*shape.points[(i+1)%shape.points.length][1]));
 		}};
-		canvas.setPreferredSize(new Dimension(640, 480));
+		canvas.setPreferredSize(new Dimension(w, h));
 		canvas.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent e)

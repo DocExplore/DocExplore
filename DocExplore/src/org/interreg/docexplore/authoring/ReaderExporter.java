@@ -127,7 +127,7 @@ public class ReaderExporter extends PresentationExporter
 			indexOutput.write(xml.getBytes(Charset.forName("UTF-8")));
 			indexOutput.close();
 			
-			doExport(book, exportDir, options, bookNum);
+			doExport(book, exportDir, options, bookNum, "PNG");
 		}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 	}

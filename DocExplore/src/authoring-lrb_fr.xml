@@ -12,7 +12,7 @@
 	<entry key="generalMenuSaveAs">Enregistrer sous...</entry>
 	<entry key="generalMenuNew">Nouveau</entry>
 	<entry key="generalSaveMessage">Voulez-vous enregistrer la présentation actuelle?</entry>
-	<entry key="generalMenuExport">Exporter</entry>
+	<entry key="generalMenuExport">Ajouter au feuilleteur</entry>
 	<entry key="generalMenuWebExport">Export Web</entry>
 	<entry key="generalFilesLabel">Fichiers</entry>
 	<entry key="generalPresentationLabel">Présentation</entry>

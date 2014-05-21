@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collections;
@@ -49,6 +50,7 @@ import org.interreg.docexplore.util.ZipUtils;
 
 public class DocExploreTool
 {
+	private static String version = "?.?.?";
 	private static File homeDir = null, execDir = null, pluginDir = null;
 	static {initDirectories();}
 	
@@ -58,6 +60,10 @@ public class DocExploreTool
 	
 	public static File initDirectories()
 	{
+		try {readVersion();}
+		catch (Throwable e) {}
+		System.out.println("Version "+version);
+		
 		execDir = new File(".").getAbsoluteFile();
 		System.out.println("Executable dir: "+execDir.getAbsolutePath());
 		
@@ -111,6 +117,17 @@ public class DocExploreTool
 		
 		return file[0];
 	}
+	
+	private static void readVersion() throws Exception
+	{
+		InputStream in = ClassLoader.getSystemResourceAsStream("version.xml");
+		String xml = StringUtils.readStream(in);
+		in.close();
+		version = StringUtils.getTagContent(xml, "major").trim()+"."
+			+StringUtils.getTagContent(xml, "minor").trim()+"."
+			+StringUtils.getTagContent(xml, "build").trim();
+	}
+	public static String version() {return version;}
 	
 	@SuppressWarnings("serial")
 	protected static File askForHome(String text)

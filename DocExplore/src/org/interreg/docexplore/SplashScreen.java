@@ -31,8 +31,6 @@ public class SplashScreen extends JPanel
 {
 	private static final long serialVersionUID = -4494494801280290970L;
 	
-	public final static String versionString = "2.0.3";
-
 	JLabel status;
 	
 	@SuppressWarnings("serial")
@@ -52,7 +50,7 @@ public class SplashScreen extends JPanel
 				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g.setFont(Font.decode("Arial-italic-18"));
 				g.setColor(Color.black);
-				g.drawString("version "+versionString, 10, 20);
+				g.drawString("version "+DocExploreTool.version(), 10, 20);
 				
 			}}, 
 		BorderLayout.CENTER);

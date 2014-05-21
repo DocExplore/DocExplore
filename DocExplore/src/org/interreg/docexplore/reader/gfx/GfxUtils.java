@@ -14,6 +14,9 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.reader.gfx;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -110,5 +113,13 @@ public class GfxUtils
 		for (int i=0;i<image.getWidth();i++)
 			for (int j=0;j<image.getHeight();j++)
 				image.setRGB(i, j, col);
+	}
+	public static void clearMask(BufferedImage image)
+	{
+		int w = image.getWidth(), h = image.getHeight();
+		Graphics2D g = image.createGraphics();
+		g.setComposite(AlphaComposite.Src);
+		g.setColor(Color.black);
+		g.fillRect(0, 0, w, h);
 	}
 }

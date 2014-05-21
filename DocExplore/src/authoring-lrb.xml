@@ -12,7 +12,7 @@
 	<entry key="generalMenuSaveAs">Save as...</entry>
 	<entry key="generalMenuNew">New</entry>
 	<entry key="generalSaveMessage">Would you like to save the current presentation?</entry>
-	<entry key="generalMenuExport">Export</entry>
+	<entry key="generalMenuExport">Add to Reader</entry>
 	<entry key="generalMenuWebExport">Web export</entry>
 	<entry key="generalFilesLabel">Files</entry>
 	<entry key="generalPresentationLabel">Presentation</entry>

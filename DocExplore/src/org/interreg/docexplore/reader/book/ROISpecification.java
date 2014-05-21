@@ -14,6 +14,9 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.reader.book;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Vector;
@@ -87,15 +90,30 @@ public class ROISpecification
 		return new float [] {.5f*(shape.minx+shape.maxx), .5f*(shape.miny+shape.maxy)};
 	}
 	
-	public void drawROIMask(BufferedImage image, int inRGB, int outRGB)
+	public void drawReverseMask(BufferedImage image)
 	{
-		for (int i=0;i<image.getWidth();i++)
-			for (int j=0;j<image.getHeight();j++)
-		{
-			float x = i*1f/image.getWidth();
-			float y = j*1f/image.getHeight();
-			
-			image.setRGB(i, j, shape.contains(x, y) ? inRGB : outRGB);
-		}
+//		for (int i=0;i<image.getWidth();i++)
+//			for (int j=0;j<image.getHeight();j++)
+//		{
+//			float x = i*1f/image.getWidth();
+//			float y = j*1f/image.getHeight();
+//			
+//			image.setRGB(i, j, shape.contains(x, y) ? inRGB : outRGB);
+//		}
+		
+		int w = image.getWidth(), h = image.getHeight();
+		Graphics2D g = image.createGraphics();
+		g.setComposite(AlphaComposite.Clear);
+		g.setColor(Color.black);
+		g.fillRect(0, 0, w, h);
+		
+		g.setComposite(AlphaComposite.Src);
+		//g.setComposite(AlphaComposite.Clear);
+		float [][][] triangles = shape.outerTriangulation;
+		for (int i=0;i<triangles.length;i++)
+			g.fillPolygon(
+				new int [] {(int)(w*triangles[i][0][0]), (int)(w*triangles[i][1][0]), (int)(w*triangles[i][2][0])}, 
+				new int [] {(int)(h*triangles[i][0][1]), (int)(h*triangles[i][1][1]), (int)(h*triangles[i][2][1])}, 
+				3);
 	}
 }

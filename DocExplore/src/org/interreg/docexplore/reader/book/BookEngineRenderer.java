@@ -37,7 +37,7 @@ public class BookEngineRenderer
 	{
 		this.engine = engine;
 		
-		this.roiMaskBuffer = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+		this.roiMaskBuffer = new BufferedImage(1024, 1024, BufferedImage.TYPE_INT_ARGB);
 		this.leftRoiMask = new Texture(roiMaskBuffer.getWidth(), roiMaskBuffer.getHeight(), true, false);
 		this.rightRoiMask = new Texture(roiMaskBuffer.getWidth(), roiMaskBuffer.getHeight(), true, false);
 	}
@@ -52,9 +52,9 @@ public class BookEngineRenderer
 		{
 			boolean roiMode = engine.roiOverlay.active;
 			if (roiMode && spec.pages.get(leftPageIndex).regions.contains(engine.selectedRegion))
-				engine.selectedRegion.drawROIMask(roiMaskBuffer, 0x00000000, 0xff000000);
-			else if (roiMode) GfxUtils.clear(roiMaskBuffer, 0xff000000);
-			else spec.pages.get(leftPageIndex).drawROIMask(roiMaskBuffer, 0xffffffff, 0x00000000);
+				engine.selectedRegion.drawReverseMask(roiMaskBuffer);
+			else if (roiMode) GfxUtils.clearMask(roiMaskBuffer);
+			else spec.pages.get(leftPageIndex).drawMask(roiMaskBuffer);
 			leftRoiMask.setup(roiMaskBuffer);
 			engine.app.submitRenderTask(new Runnable() {public void run() {leftRoiMask.update();}});
 		}
@@ -70,9 +70,9 @@ public class BookEngineRenderer
 		{
 			boolean roiMode = engine.roiOverlay.active;
 			if (roiMode && engine.book.pages.get(rightPageIndex).regions.contains(engine.selectedRegion))
-				engine.selectedRegion.drawROIMask(roiMaskBuffer, 0x00000000, 0xff000000);
-			else if (roiMode) GfxUtils.clear(roiMaskBuffer, 0xff000000);
-			else engine.book.pages.get(rightPageIndex).drawROIMask(roiMaskBuffer, 0xffffffff, 0x00000000);
+				engine.selectedRegion.drawReverseMask(roiMaskBuffer);
+			else if (roiMode) GfxUtils.clearMask(roiMaskBuffer);
+			else engine.book.pages.get(rightPageIndex).drawMask(roiMaskBuffer);
 			rightRoiMask.setup(roiMaskBuffer);
 			engine.app.submitRenderTask(new Runnable() {public void run() {rightRoiMask.update();}});
 		}

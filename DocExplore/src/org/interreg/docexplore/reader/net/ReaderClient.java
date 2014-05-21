@@ -165,6 +165,11 @@ public class ReaderClient
 		synchronized (resources) {return resources.get(uri);}
 	}
 	
+	public void submitRequest(Request request)
+	{
+		synchronized (resources) {outputQueue.add(request);}
+	}
+	
 	public synchronized void stop()
 	{
 		this.running = false;

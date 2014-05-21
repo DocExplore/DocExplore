@@ -50,7 +50,7 @@ public abstract class PresentationExporter
 	
 	float [] progress = {0};
 	
-	protected void doExport(Book book, File exportDir, ExportOptions options, int bookNum) throws Exception
+	protected void doExport(Book book, File exportDir, ExportOptions options, int bookNum, String format) throws Exception
 	{
 		progress[0] = 0;
 		try
@@ -63,26 +63,25 @@ public abstract class PresentationExporter
 			BufferedImage cover = CoverManager.buildCoverImage(book);
 			if (cover != null)
 			{
-				ImageUtils.write(cover, "PNG", new File(bookDir, "cover.png"));
-				bookSpec.append(" cover=\"cover.png\"");
+				ImageUtils.write(cover, format, new File(bookDir, "cover."+format));
+				bookSpec.append(" cover=\"cover."+format+"\"");
 				cover = null;
 				
 				BufferedImage preview = CoverManager.buildPreviewCoverImage(book);
 				if (preview != null)
-					ImageUtils.write(preview, "PNG", new File(exportDir, "book"+bookNum+".png"));
+					ImageUtils.write(preview, format, new File(exportDir, "book"+bookNum+"."+format));
 				preview = null;
 			}
 			BufferedImage innerCover = CoverManager.buildInnerCoverImage(book);
 			if (innerCover != null)
 			{
-				ImageUtils.write(innerCover, "PNG", new File(bookDir, "innerCover.png"));
-				bookSpec.append(" innerCover=\"innerCover.png\"");
+				ImageUtils.write(innerCover, format, new File(bookDir, "innerCover."+format));
+				bookSpec.append(" innerCover=\"innerCover."+format+"\"");
 				innerCover = null;
 			}
 			bookSpec.append(">\n");
 			
 			int pageNum = 0;
-			String format = "png";
 			int lastPage = book.getLastPageNumber();
 			int imageNum = 0;
 			for (int i=1;i<=lastPage;i++)

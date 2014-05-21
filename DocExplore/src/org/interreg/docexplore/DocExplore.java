@@ -94,7 +94,7 @@ public class DocExplore extends DocExploreTool
 			return;
 		}
 		
-		final JFrame win = new JFrame("DocExplore "+SplashScreen.versionString);
+		final JFrame win = new JFrame("DocExplore "+version());
 		win.setLayout(new BorderLayout());
 		
 		JPanel panel = new JPanel(new LooseGridLayout(0, 2, 10, 10, true, false, SwingConstants.CENTER, SwingConstants.CENTER, true, false));
