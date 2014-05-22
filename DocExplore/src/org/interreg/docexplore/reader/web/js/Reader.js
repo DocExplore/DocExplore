@@ -32,10 +32,18 @@ Reader.init = function()
 	Reader.$roiArea.offset({left: $container.offset().left+.5*$container.width(), top: $container.offset().top});
 	Reader.$roiArea.css("height", Reader.height);
 	
-	Reader.renderer = new THREE.WebGLRenderer();
+	if (window.WebGLRenderingContext)
+        Reader.renderer = new THREE.WebGLRenderer();
+    else
+    {
+        Reader.renderer = new THREE.CanvasRenderer();
+        Reader.renderer.sortObjects = false;
+        Reader.renderer.sortElements = false;
+    }
 	Reader.renderer.setSize(Reader.width, Reader.height);
-	Reader.renderer.autoClear = false;
-	Reader.renderer.autoClearColor = false;
+	Reader.renderer.autoClear = true;
+    Reader.renderer.autoClearColor = true;
+    Reader.renderer.setClearColorHex(0xffffff);
 	$container.append(Reader.renderer.domElement);
 	
 	Camera.init(0, 0, 6);

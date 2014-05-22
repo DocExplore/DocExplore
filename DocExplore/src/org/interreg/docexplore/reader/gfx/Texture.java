@@ -16,6 +16,7 @@ package org.interreg.docexplore.reader.gfx;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
 import java.nio.ByteBuffer;
 
 import org.lwjgl.opengl.GL12;
@@ -71,7 +72,14 @@ public class Texture implements Bindable
 	{
 		GL11 gl = Gdx.gl11;
 		gl.glBindTexture(GL11.GL_TEXTURE_2D, id);
-		gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, width, height, hasAlpha ? GL11.GL_RGBA : GL12.GL_BGR, GL11.GL_UNSIGNED_BYTE, data);
+		if (!hasAlpha)
+		{
+			gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, width, height, GL12.GL_BGR, GL11.GL_UNSIGNED_BYTE, data);
+		}
+		else
+		{
+			gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, width, height, GL12.GL_BGRA, GL11.GL_UNSIGNED_BYTE, data);
+		}
 		inited = true;
 	}
 	
@@ -88,19 +96,31 @@ public class Texture implements Bindable
 		int [] ida = {id};
 		Gdx.gl11.glDeleteTextures(1, ida, 0);
 		nTextures--;
+		if (data != null)
+		{
+			BufferUtils.disposeUnsafeByteBuffer(data);
+			data = null;
+		}
 	}
 	
+	public boolean maskMode = false;
 	public ByteBuffer toRGBABuffer(BufferedImage image) {return toRGBABuffer(image, null);}
 	public ByteBuffer toRGBABuffer(BufferedImage image, ByteBuffer data)
 	{
 		int psize = hasAlpha ? 4 : 3;
 		if (data == null)
-			data = BufferUtils.newByteBuffer(psize*width*height);
+			data = BufferUtils.newUnsafeByteBuffer(psize*width*height);
 		
 		if (image.getType() == BufferedImage.TYPE_3BYTE_BGR && image.getWidth() == width && image.getHeight() == height)
 		{
 			data.position(0);
 			data.put(((DataBufferByte)image.getData().getDataBuffer()).getData());
+			data.position(0);
+		}
+		else if (image.getType() == BufferedImage.TYPE_INT_ARGB && maskMode && image.getWidth() == width && image.getHeight() == height)
+		{
+			data.position(0);
+			data.asIntBuffer().put(((DataBufferInt)image.getData().getDataBuffer()).getData());
 			data.position(0);
 		}
 		else
@@ -110,9 +130,9 @@ public class Texture implements Bindable
 				for (int j=0;j<h;j++)
 			{
 				int col = image.getRGB(i, j);
-				data.put(psize*(j*image.getWidth()+i), (byte)((col >> 16) & 0xff));
+				data.put(psize*(j*image.getWidth()+i), (byte)((col >> 0) & 0xff));
 				data.put(psize*(j*image.getWidth()+i)+1, (byte)((col >> 8) & 0xff));
-				data.put(psize*(j*image.getWidth()+i)+2, (byte)((col >> 0) & 0xff));
+				data.put(psize*(j*image.getWidth()+i)+2, (byte)((col >> 16) & 0xff));
 				if (hasAlpha)
 					data.put(psize*(j*image.getWidth()+i)+3, (byte)((col >> 24) & 0xff));
 			}
