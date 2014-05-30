@@ -13,24 +13,27 @@ Hand.grab = function(x, y)
 {
 	if (!Reader.zoomed)
 	{
-		var p = Camera.toWorldRay(x, y);
-		if (!Hand.active)
+		if (!Reader.ecoMode)
 		{
-			if (p.x < 0 && Reader.currentPage < 0)
-				return;
-			if (p.x > 0 && Reader.currentPage > Spec.pages.length-2)
-				return;
-			Hand.active = true;
-			if (p.x < 0)
-				Reader.requestPage = Reader.currentPage-2;
-			Reader.scene.add(Paper.mesh);
-			Reader.scene.add(Paper.backMesh);
-			//Reader.dbg.innerHTML += p[0]+"\n";
-			if (p.x < 0)
-				Hand.setToLeftPage();
-			else Hand.setToRightPage();
-		}
-		Hand.grabbedNode = Paper.closestNode(Camera.camera.position, p);
+    		var p = Camera.toWorldRay(x, y);
+    		if (!Hand.active)
+    		{
+    			if (p.x < 0 && Reader.currentPage < 0)
+    				return;
+    			if (p.x > 0 && Reader.currentPage > Spec.pages.length-2)
+    				return;
+    			Hand.active = true;
+    			if (p.x < 0)
+    				Reader.requestPage = Reader.currentPage-2;
+    			Reader.scene.add(Paper.mesh);
+    			Reader.scene.add(Paper.backMesh);
+    			//Reader.dbg.innerHTML += p[0]+"\n";
+    			if (p.x < 0)
+    				Hand.setToLeftPage();
+    			else Hand.setToRightPage();
+        	}
+    		Hand.grabbedNode = Paper.closestNode(Camera.camera.position, p);
+    	}
 	}
 	else
 	{

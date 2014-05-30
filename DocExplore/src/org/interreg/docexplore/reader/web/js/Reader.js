@@ -9,6 +9,7 @@ Reader.width = 0;
 Reader.height = 0;
 Reader.$roiArea = null;
 Reader.roiAlpha = 0;
+Readre.ecoMode = false;
 
 var Detector = {
 
@@ -69,12 +70,7 @@ Reader.init = function()
 {
 	var $container = $('#container');
 	Reader.width = $container.width();
-	//$container.height(Reader.width/2.5);
-	//$container.height($container.height()-70);
 	Reader.height = $container.height();
-//	$container.bind("touchstart", function(event) {Input.htmlMouseDown(event.pageX, event.pageY);});
-//	$container.bind("touchmove", function(event) {Input.htmlMouseMove(event.pageX, event.pageY);});
-//	$container.bind("touchend", function(event) {Input.htmlMouseUp(event.pageX, event.pageY);});
 	var elem = document.getElementById('container');
 	elem.addEventListener("touchstart", function(event) {event.preventDefault(); Input.htmlMouseDown(event.targetTouches[0].pageX, event.targetTouches[0].pageY);}, false);
 	elem.addEventListener("touchmove", function(event) {event.preventDefault(); Input.htmlMouseMove(event.targetTouches[0].pageX, event.targetTouches[0].pageY);}, false);
@@ -94,6 +90,7 @@ Reader.init = function()
         Reader.renderer = new THREE.CanvasRenderer();
         Reader.renderer.sortObjects = false;
         Reader.renderer.sortElements = false;
+        Reader.ecoMode = true;
     }
 	Reader.renderer.setSize(Reader.width, Reader.height);
 	Reader.renderer.autoClear = true;
