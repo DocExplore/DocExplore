@@ -34,12 +34,9 @@ public class PluginManager implements HostInterface
 	{
 		for (PluginConfig config : startup.plugins) try
 		{
-			Plugin plugin = null;
-			if ((plugin = plugin(config.clazz.newInstance())) != null)
-			{
-				plugin.setHost(config.jarFile, config.dependencies);
+			Plugin plugin = plugin(config);
+			if (plugin != null)
 				System.out.println("Loaded plugin '"+plugin.getName()+"' ("+plugin.getClass().getSimpleName()+")");
-			}
 		}
 		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
 		
@@ -54,8 +51,13 @@ public class PluginManager implements HostInterface
 			catch (Exception e) {e.printStackTrace();}
 	}
 	
-	public Plugin plugin(Object pluginObject)
+	public Plugin plugin(PluginConfig config) throws Exception
 	{
+		if (!Plugin.class.isAssignableFrom(config.clazz))
+			return null;
+		Plugin pluginObject = (Plugin)config.clazz.newInstance();
+		pluginObject.setHost(config.jarFile, config.dependencies);
+		
 		if (pluginObject instanceof MetaDataPlugin)
 		{
 			metaDataPlugins.add((MetaDataPlugin)pluginObject);

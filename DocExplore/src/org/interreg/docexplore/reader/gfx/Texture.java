@@ -52,13 +52,16 @@ public class Texture implements Bindable
 		gl.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 		//gl.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, null);
 		org.lwjgl.opengl.GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, hasAlpha ? GL11.GL_RGBA : GL11.GL_RGB, width, height, 0, 
-			hasAlpha ? GL11.GL_RGBA : GL12.GL_BGR, GL11.GL_UNSIGNED_BYTE, (ByteBuffer)null);
+			hasAlpha ? GL11.GL_RGBA : GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, (ByteBuffer)null);
 		
 		nTextures++;
 	}
 	public Texture(BufferedImage image, boolean repeat)
 	{
-		this(image.getWidth(), image.getHeight(), image.getType() != BufferedImage.TYPE_3BYTE_BGR, repeat);
+		this(image.getWidth(), image.getHeight(), 
+			image.getType() == BufferedImage.TYPE_4BYTE_ABGR || image.getType() == BufferedImage.TYPE_INT_ARGB || image.getType() == BufferedImage.TYPE_CUSTOM, 
+			//image.getType() != BufferedImage.TYPE_3BYTE_BGR,
+			repeat);
 		setup(image);
 		update();
 	}
@@ -72,14 +75,7 @@ public class Texture implements Bindable
 	{
 		GL11 gl = Gdx.gl11;
 		gl.glBindTexture(GL11.GL_TEXTURE_2D, id);
-		if (!hasAlpha)
-		{
-			gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, width, height, GL12.GL_BGR, GL11.GL_UNSIGNED_BYTE, data);
-		}
-		else
-		{
-			gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, width, height, GL12.GL_BGRA, GL11.GL_UNSIGNED_BYTE, data);
-		}
+		gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, width, height, dataType, GL11.GL_UNSIGNED_BYTE, data);
 		inited = true;
 	}
 	
@@ -103,7 +99,7 @@ public class Texture implements Bindable
 		}
 	}
 	
-	public boolean maskMode = false;
+	int dataType = BufferedImage.TYPE_3BYTE_BGR;
 	public ByteBuffer toRGBABuffer(BufferedImage image) {return toRGBABuffer(image, null);}
 	public ByteBuffer toRGBABuffer(BufferedImage image, ByteBuffer data)
 	{
@@ -111,20 +107,25 @@ public class Texture implements Bindable
 		if (data == null)
 			data = BufferUtils.newUnsafeByteBuffer(psize*width*height);
 		
+		data.position(0);
 		if (image.getType() == BufferedImage.TYPE_3BYTE_BGR && image.getWidth() == width && image.getHeight() == height)
 		{
-			data.position(0);
+			dataType = GL11.GL_RGB;
 			data.put(((DataBufferByte)image.getData().getDataBuffer()).getData());
-			data.position(0);
 		}
-		else if (image.getType() == BufferedImage.TYPE_INT_ARGB && maskMode && image.getWidth() == width && image.getHeight() == height)
+		else if (image.getType() == BufferedImage.TYPE_INT_ARGB && image.getWidth() == width && image.getHeight() == height)
 		{
-			data.position(0);
+			dataType = GL12.GL_BGRA;
 			data.asIntBuffer().put(((DataBufferInt)image.getData().getDataBuffer()).getData());
-			data.position(0);
+		}
+		else if (image.getType() == BufferedImage.TYPE_4BYTE_ABGR && image.getWidth() == width && image.getHeight() == height)
+		{
+			dataType = GL11.GL_RGBA;
+			data.put(((DataBufferByte)image.getData().getDataBuffer()).getData());
 		}
 		else
 		{
+			dataType = hasAlpha ? GL12.GL_BGRA : GL12.GL_BGR;
 			int w = Math.min(width, image.getWidth()), h = Math.min(height, image.getHeight());
 			for (int i=0;i<w;i++)
 				for (int j=0;j<h;j++)
@@ -137,8 +138,29 @@ public class Texture implements Bindable
 					data.put(psize*(j*image.getWidth()+i)+3, (byte)((col >> 24) & 0xff));
 			}
 		}
+		data.position(0);
 		return data;
 	}
 	
-
+	String getTypeName(int type)
+	{
+		switch (type)
+		{
+			case BufferedImage.TYPE_3BYTE_BGR: return "TYPE_3BYTE_BGR";
+			case BufferedImage.TYPE_4BYTE_ABGR: return "TYPE_4BYTE_ABGR";
+			case BufferedImage.TYPE_4BYTE_ABGR_PRE: return "TYPE_4BYTE_ABGR_PRE";
+			case BufferedImage.TYPE_BYTE_BINARY: return "TYPE_BYTE_BINARY";
+			case BufferedImage.TYPE_BYTE_GRAY: return "TYPE_BYTE_GRAY";
+			case BufferedImage.TYPE_BYTE_INDEXED: return "TYPE_BYTE_INDEXED";
+			case BufferedImage.TYPE_CUSTOM: return "TYPE_CUSTOM";
+			case BufferedImage.TYPE_INT_ARGB: return "TYPE_INT_ARGB";
+			case BufferedImage.TYPE_INT_ARGB_PRE: return "TYPE_INT_ARGB_PRE";
+			case BufferedImage.TYPE_INT_BGR: return "TYPE_INT_BGR";
+			case BufferedImage.TYPE_INT_RGB: return "TYPE_INT_RGB";
+			case BufferedImage.TYPE_USHORT_555_RGB: return "TYPE_USHORT_555_RGB";
+			case BufferedImage.TYPE_USHORT_565_RGB: return "TYPE_USHORT_565_RGB";
+			case BufferedImage.TYPE_USHORT_GRAY: return "TYPE_USHORT_GRAY";
+		}
+		return "Unknown";
+	}
 }

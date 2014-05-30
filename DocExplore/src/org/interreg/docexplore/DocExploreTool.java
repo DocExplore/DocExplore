@@ -38,6 +38,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+import org.apache.commons.io.FileUtils;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.FileDialogs;
 import org.interreg.docexplore.gui.LooseGridLayout;
@@ -69,14 +70,15 @@ public class DocExploreTool
 		
 		pluginDir = new File(System.getProperty("user.home")+File.separator+"DocExplorePlugins");
 		if (!pluginDir.exists())
+			initPlugins();
+		else
 		{
-			pluginDir.mkdirs();
-			File pluginArchive = new File(execDir, "plugins.zip");
-			if (pluginArchive.exists())
-			{
-				try {ZipUtils.unzip(pluginArchive, pluginDir);}
-				catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
-			}
+			File infoFile = new File(pluginDir, ".info");
+			String info = null;
+			if (infoFile.exists()) try {info = StringUtils.readFile(infoFile);}
+			catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
+			if (info == null || !info.equals(version))
+				initPlugins();
 		}
 		System.out.println("Plugins dir: "+pluginDir.getAbsolutePath());
 		
@@ -116,6 +118,25 @@ public class DocExploreTool
 		}
 		
 		return file[0];
+	}
+	
+	private static void initPlugins()
+	{
+		pluginDir.mkdirs();
+		
+		File depDir = new File(pluginDir, "dependencies");
+		if (depDir.exists()) try {FileUtils.deleteDirectory(depDir);}
+		catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
+		
+		File pluginArchive = new File(execDir, "plugins.zip");
+		if (pluginArchive.exists()) try {ZipUtils.unzip(pluginArchive, pluginDir);}
+		catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
+		
+		File infoFile = new File(pluginDir, ".info");
+		try {StringUtils.writeFile(infoFile, version);}
+		catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
+		
+		System.out.println("Plugins directory inited for "+version);
 	}
 	
 	private static void readVersion() throws Exception

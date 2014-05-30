@@ -40,8 +40,6 @@ public class BookEngineRenderer
 		this.roiMaskBuffer = new BufferedImage(1024, 1024, BufferedImage.TYPE_INT_ARGB);
 		this.leftRoiMask = new Texture(roiMaskBuffer.getWidth(), roiMaskBuffer.getHeight(), true, false);
 		this.rightRoiMask = new Texture(roiMaskBuffer.getWidth(), roiMaskBuffer.getHeight(), true, false);
-		leftRoiMask.maskMode = true;
-		rightRoiMask.maskMode = true;
 	}
 	
 	public void setupLeftRoiMask()

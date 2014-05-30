@@ -45,6 +45,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.Startup;
 import org.interreg.docexplore.Startup.PluginConfig;
+import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.XMLResourceBundle;
 import org.interreg.docexplore.reader.book.BookEngine;
 import org.interreg.docexplore.reader.book.BookSpecification;
@@ -181,7 +182,8 @@ public class ReaderApp extends DocExploreTool implements ApplicationListener
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			ErrorHandler.defaultHandler.submit(e, false);
+			System.exit(0);
 		}
 	}
 	
