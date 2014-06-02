@@ -110,7 +110,7 @@ public class Texture implements Bindable
 		data.position(0);
 		if (image.getType() == BufferedImage.TYPE_3BYTE_BGR && image.getWidth() == width && image.getHeight() == height)
 		{
-			dataType = GL11.GL_RGB;
+			dataType = GL12.GL_BGR;
 			data.put(((DataBufferByte)image.getData().getDataBuffer()).getData());
 		}
 		else if (image.getType() == BufferedImage.TYPE_INT_ARGB && image.getWidth() == width && image.getHeight() == height)
