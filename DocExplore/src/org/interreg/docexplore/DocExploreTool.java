@@ -82,8 +82,6 @@ public class DocExploreTool
 		}
 		System.out.println("Plugins dir: "+pluginDir.getAbsolutePath());
 		
-		System.setProperty("file.encoding", "UTF-8");
-		
 		System.out.println("OS: "+System.getProperty("os.name"));
 		System.out.println("Arch: "+System.getProperty("os.arch"));
 		System.out.println("Java: "+System.getProperty("java.version"));
