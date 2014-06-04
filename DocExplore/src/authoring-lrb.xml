@@ -32,6 +32,7 @@
     <entry key="generalRecoveryMessage">A presentation has been recovered from a previous session.
 Would you like to keep it in the editor?</entry>
 	<entry key="moveAnnotation">Move comment</entry>
+	<entry key="generalCopyPaste">Copy/Paste</entry>
 	
 	<entry key="viewHelpToggle">Show help</entry>
 	<entry key="helpBookMsg">This panel displays the pages of your presentation. To add pages, you can:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Click on the &amp;oplus; sign in the toolbar to browse for images&amp;uarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag books and pages from the right side &amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag images directly from your file explorer into this panel</entry>
@@ -124,4 +125,9 @@ might visibly reduce their quality, especially when zooming in.&lt;/html></entry
 	<entry key="coverBack">Back cover</entry>
 	<entry key="coverFrontInner">Front inner cover</entry>
 	<entry key="coverBackInner">Back inner cover</entry>
+	
+	<entry key="fixChars">Fix special characters</entry>
+	<entry key="fixCharsMsg">The presentation was created in</entry>
+	<entry key="fixCharsWin">Windows</entry>
+	<entry key="fixCharsMac">Mac OSX</entry>
 </properties>

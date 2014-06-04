@@ -47,6 +47,7 @@ import org.interreg.docexplore.internationalization.XMLResourceBundle;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 import org.interreg.docexplore.util.ImageUtils;
+import org.interreg.docexplore.util.StringUtils;
 import org.interreg.docexplore.util.ZipUtils;
 import org.interreg.docexplore.util.history.HistoryManager;
 
@@ -136,6 +137,21 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 			authoringTool.historyDialog.setVisible(true);
 		}});
 		edit.add(viewHistory);
+		
+		edit.addSeparator();
+		
+		edit.add(new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("fixChars")) {public void actionPerformed(ActionEvent arg0)
+		{
+			Object res = JOptionPane.showInputDialog(tool, XMLResourceBundle.getBundledString("fixCharsMsg"), XMLResourceBundle.getBundledString("fixChars"), 
+				JOptionPane.QUESTION_MESSAGE, null, new Object [] {XMLResourceBundle.getBundledString("fixCharsWin"), XMLResourceBundle.getBundledString("fixCharsMac")}, 
+				XMLResourceBundle.getBundledString("fixCharsWin"));
+			if (res == null)
+				return;
+			try {convertPresentation(tool.defaultFile, res.equals(XMLResourceBundle.getBundledString("fixCharsWin")) ? "ISO-8859-1" : "x-MacRoman");}
+			catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
+			try {tool.editor.reset();}
+			catch (Exception e) {e.printStackTrace();}
+		}}));
 		
 		//TODO: remove!
 //		edit.add(new JMenuItem(new AbstractAction("hack!")
@@ -594,5 +610,27 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 			in.close();
 		}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
+	}
+	
+	private void convertPresentation(File root, String from) throws Exception
+	{
+		for (File child : root.listFiles())
+			if (child.getName().startsWith("book"))
+		{
+			File index = new File(child, "index.xml");
+			StringUtils.writeFile(index, StringUtils.readFile(index, from), "UTF-8");
+		}
+		
+		File mdDir = new File(root, "metadata");
+		for (File child : mdDir.listFiles())
+			if (child.getName().startsWith("metadata"))
+		{
+			File index = new File(child, "index.xml");
+			if (index.exists() && StringUtils.readFile(index).contains("<Type>txt</Type>"))
+			{
+				File value = new File(child, "value");
+				StringUtils.writeFile(value, StringUtils.readFile(value, from), "UTF-8");
+			}
+		}
 	}
 }

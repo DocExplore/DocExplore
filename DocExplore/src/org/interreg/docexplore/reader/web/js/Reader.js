@@ -9,7 +9,7 @@ Reader.width = 0;
 Reader.height = 0;
 Reader.$roiArea = null;
 Reader.roiAlpha = 0;
-Readre.ecoMode = false;
+Reader.ecoMode = false;
 
 var Detector = {
 

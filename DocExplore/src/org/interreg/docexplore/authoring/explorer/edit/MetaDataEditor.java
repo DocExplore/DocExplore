@@ -19,11 +19,11 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -62,6 +62,7 @@ public class MetaDataEditor extends JPanel
 	public AnnotatedObject document;
 	JPanel elementPanel;
 	JScrollPane scrollPane;
+	JButton paste;
 	
 	int monitoredRank = -1;
 	
@@ -149,6 +150,41 @@ public class MetaDataEditor extends JPanel
 		previewButtons.add(preview);
 		toolbar.add(previewButtons);
 		
+		JPanel copyButtons = new JPanel(new WrapLayout(FlowLayout.LEFT));
+		copyButtons.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("generalCopyPaste")));
+		JButton copy = new JButton(ImageUtils.getIcon("copy-24x24.png"));
+		paste = new JButton(ImageUtils.getIcon("paste-24x24.png"));
+		copy.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
+		{
+			if (document == null)
+				return;
+			try
+			{
+				pageEditor.view.explorer.tool.clipboard.copyMetaData(document);
+				paste.setEnabled(true);
+			}
+			catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
+		}});
+		paste.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
+		{
+			if (document == null || !pageEditor.view.explorer.tool.clipboard.canPaste())
+				return;
+			try
+			{
+				List<MetaData> annotations = pageEditor.view.explorer.tool.clipboard.pasteMetaData(document);
+				if (!annotations.isEmpty())
+				{
+					pageEditor.view.explorer.metaDataImported((Region)document, annotations);
+					reload();
+				}
+			}
+			catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
+		}});
+		paste.setEnabled(false);
+		copyButtons.add(copy);
+		copyButtons.add(paste);
+		toolbar.add(copyButtons);
+		
 		this.elementPanel = new JPanel(new LooseGridLayout(0, 1, 5, 5, false, false, SwingConstants.CENTER, SwingConstants.BOTTOM, false, false));
 		elementPanel.setOpaque(true);
 		elementPanel.setBackground(Color.black);
@@ -165,28 +201,31 @@ public class MetaDataEditor extends JPanel
 		add(toolbar, BorderLayout.SOUTH);
 	}
 	
-	void addFiles(File [] files) throws Exception
+	void metaDataImported(List<MetaData> annotations) throws Exception
 	{
-		List<MetaData> annotations = new LinkedList<MetaData>();
-		for (File file : files)
-			if (!file.isDirectory())
-		{
-			MetaData md = pageEditor.view.importFile((Region)document, file);
-			if (md == null)
-				continue;
-			annotations.add(md);
-		}
 		if (!annotations.isEmpty())
 		{
 			pageEditor.view.explorer.metaDataImported((Region)document, annotations);
 			reload();
 		}
 	}
+	void addFiles(File [] files) throws Exception
+	{
+		List<MetaData> annotations = MetaDataUtils.importFiles(pageEditor.view.explorer.tool, (Region)document, files);
+		metaDataImported(annotations);
+	}
+//	void copyAnnotations(Region region) throws Exception
+//	{
+//		List<MetaData> annotations = MetaDataUtils.copyMetaData((Region)document, region);
+//		metaDataImported(annotations);
+//	}
 	
 	public void reload() throws Exception {setDocument(document);}
 	
 	public void setDocument(AnnotatedObject document) throws Exception
 	{
+		paste.setEnabled(pageEditor.view.explorer.tool.clipboard.canPaste());
+		
 		if (this.document != document)
 			monitoredRank = -1;
 		this.document = document;

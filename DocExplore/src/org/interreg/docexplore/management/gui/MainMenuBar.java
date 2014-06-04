@@ -17,19 +17,13 @@ package org.interreg.docexplore.management.gui;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Frame;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JDialog;
 import javax.swing.JMenu;
@@ -52,13 +46,8 @@ import org.interreg.docexplore.management.manage.TagManager;
 import org.interreg.docexplore.management.merge.ExportImportComponent;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
-import org.interreg.docexplore.manuscript.MetaData;
-import org.interreg.docexplore.manuscript.MetaDataKey;
-import org.interreg.docexplore.manuscript.Page;
-import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
-import org.interreg.docexplore.util.StringUtils;
 import org.interreg.docexplore.util.history.HistoryManager;
 
 @SuppressWarnings("serial")

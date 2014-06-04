@@ -85,6 +85,7 @@ public class AuthoringToolFrame extends JFrame
 	//public FilterPanel filter;
 	public ImportOptions importOptions;
 	public StyleManager styleManager;
+	public MetaDataClipboard clipboard;
 	
 	public final List<MetaDataPlugin> plugins;
 	public static final String defaultTitle = "Untitled";
@@ -94,7 +95,7 @@ public class AuthoringToolFrame extends JFrame
 	public AuthoringToolFrame(final DocExploreDataLink link, final Startup startup) throws Exception
 	{
 		super("Authoring Tool");
-		
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.startup = startup;
 		this.displayHelp = startup.showHelp;
 		
@@ -124,7 +125,7 @@ public class AuthoringToolFrame extends JFrame
 		//filter = new FilterPanel(link);
 		this.importOptions = new ImportOptions(this);
 		startup.screen.setText("Initializing styles");
-		styleManager = new StyleManager(this);
+		this.styleManager = new StyleManager(this);
 		
 		startup.screen.setText("Creating explorer data link");
 		this.linkExplorer = new DataLinkExplorer(this, link, null);
@@ -236,6 +237,8 @@ public class AuthoringToolFrame extends JFrame
 		getContentPane().setLayout(new BorderLayout());
 		add(titlePanel, BorderLayout.NORTH);
 		add(splitPane, BorderLayout.CENTER);
+		
+		this.clipboard = new MetaDataClipboard(this, new File(DocExploreTool.getHomeDir(), ".at-clipboard"));
 		
 		startup.screen.setText("Initializing exporter");
 		this.readerExporter = new ReaderExporter(this);

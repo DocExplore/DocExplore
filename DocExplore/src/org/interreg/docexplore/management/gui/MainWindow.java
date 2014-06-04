@@ -107,6 +107,7 @@ public class MainWindow extends JFrame
 	public MainWindow(Startup startup, PluginManager pluginManager) throws FileNotFoundException, IOException, ClassNotFoundException
 	{
 		super(XMLResourceBundle.getBundledString("frameTitle"));
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.listeners = new LinkedList<MainWindowListener>();
 		this.link = new DocExploreDataLink();
 		this.service = Executors.newFixedThreadPool(4);
@@ -425,7 +426,7 @@ public class MainWindow extends JFrame
 		for (int i=0;i<comps.length;i++)
 			if (comps[i] instanceof DocumentPanel)
 				((DocumentPanel)comps[i]).annotationPanel.contractAllAnnotations();
-		setVisible(false);
 		processWindowEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		setVisible(false);
 	}
 }

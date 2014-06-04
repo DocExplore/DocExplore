@@ -32,6 +32,7 @@
     <entry key="generalRecoveryMessage">Une présentation a été récupérée d'une session antérieure.
 Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="moveAnnotation">Déplacement de commentaire</entry>
+	<entry key="generalCopyPaste">Copier/Coller</entry>
 	
 	<entry key="viewHelpToggle">Afficher l'aide</entry>
 	<entry key="helpBookMsg">Ce panneau affiche les pages de votre présentation. Pour en ajouter vous pouvez:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Cliquer sur l'icône &amp;oplus; dans la barre d'outils pour importer des images&amp;uarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser livres et pages depuis la droite &amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser directement des images depuis votre navigateur de fichiers</entry>
@@ -124,4 +125,9 @@ une baisse de qualité visible, notamment en utilisant la fonction zoom.&lt;/htm
     <entry key="coverBack">Couverture arrière</entry>
     <entry key="coverFrontInner">Couverture avant intérieure</entry>
     <entry key="coverBackInner">Couverture arrière intérieure</entry>
+    
+    <entry key="fixChars">Réparer les caractères spéciaux</entry>
+    <entry key="fixCharsMsg">La présentation a été créée sous</entry>
+    <entry key="fixCharsWin">Windows</entry>
+    <entry key="fixCharsMac">Mac OSX</entry>
 </properties>

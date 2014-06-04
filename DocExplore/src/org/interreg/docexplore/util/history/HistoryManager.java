@@ -55,7 +55,7 @@ public class HistoryManager
 		this.cacheDir = cacheDir;
 		if (!cacheDir.exists())
 			cacheDir.mkdirs();
-		for (File subDir : cacheDir.listFiles())
+		else for (File subDir : cacheDir.listFiles())
 			if (subDir.isDirectory())
 				deleteCacheDir(subDir);
 		
