@@ -111,10 +111,10 @@ une baisse de qualité visible, notamment en utilisant la fonction zoom.&lt;/htm
     <entry key="importAnnotations">Annotations</entry>
     <entry key="importRegions">Régions</entry>
     <entry key="importPages">Pages</entry>
-    <entry key="importRegionTags">Ignorer les régions qui ne sont pas taggées avec un des mot-clés suivants :</entry>
-    <entry key="importRegionAnnotations">Ignorer les régions sans annotations</entry>
-    <entry key="importPageTags">Ignorer les pages qui ne sont pas taggées avec un des mot-clés suivants :</entry>
-    <entry key="importPageRegions">Ignorer les pages sans régions</entry>
+    <entry key="importRegionTags">Importer uniquement les régions qui sont taggées avec au moins l'un des mot-clés suivants :</entry>
+    <entry key="importRegionAnnotations">Ne pas importer les régions sans annotations</entry>
+    <entry key="importPageTags">Importer uniquement les pages qui sont taggées avec au moins l'un des mot-clés suivants :</entry>
+    <entry key="importPageRegions">Ne pas importer les pages sans régions</entry>
     <entry key="importTextStyle">et le contenu textuel doit utiliser le style </entry>
     <entry key="importAnnotationFilter">&lt;html>Les annotations nommées &lt;b>%name&lt;/b> doivent être &lt;/html></entry>
     <entry key="importImported">Importées</entry>
@@ -125,6 +125,8 @@ une baisse de qualité visible, notamment en utilisant la fonction zoom.&lt;/htm
     <entry key="coverBack">Couverture arrière</entry>
     <entry key="coverFrontInner">Couverture avant intérieure</entry>
     <entry key="coverBackInner">Couverture arrière intérieure</entry>
+    <entry key="coverDiscard">Effacer</entry>
+    <entry key="coverBrowse">Parcourir...</entry>
     
     <entry key="fixChars">Réparer les caractères spéciaux</entry>
     <entry key="fixCharsMsg">La présentation a été créée sous</entry>

@@ -77,6 +77,7 @@ public class ExportOptions extends JPanel
 			public void changedUpdate(DocumentEvent e) {}
 		});
 		resizePanel.add(resizeField);
+		resizePanel.add(new JLabel("pixels"));
 		add(resizePanel, BorderLayout.CENTER);
 		add(new JLabel(XMLResourceBundle.getBundledString("exportSizeMessage")), BorderLayout.SOUTH);
 		

@@ -35,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import org.imgscalr.Scalr;
+import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.authoring.explorer.BookView;
 import org.interreg.docexplore.authoring.explorer.ExplorerView;
 import org.interreg.docexplore.authoring.explorer.ViewItem.Data;
@@ -131,7 +132,7 @@ public class CoverManager extends JPanel
 			}};
 			
 			JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			final JButton discard = new JButton(new AbstractAction("Discard") {public void actionPerformed(ActionEvent e)
+			final JButton discard = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("coverDiscard")) {public void actionPerformed(ActionEvent e)
 			{
 				try
 				{
@@ -145,7 +146,20 @@ public class CoverManager extends JPanel
 				
 				canvas.repaint();
 			}});
-//			buttonPanel.add(browse);
+			final JButton browse = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("coverBrowse")) {public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					File file = DocExploreTool.getFileDialogs().openFile(DocExploreTool.getImagesCategory());
+					if (file == null)
+						return;
+					setImage(new FileImageSource(file));
+				}
+				catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
+				
+				canvas.repaint();
+			}});
+			buttonPanel.add(browse);
 			buttonPanel.add(discard);
 			add(buttonPanel, BorderLayout.NORTH);
 			

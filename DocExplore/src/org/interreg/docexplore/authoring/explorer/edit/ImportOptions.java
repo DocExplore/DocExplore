@@ -348,8 +348,6 @@ public class ImportOptions implements BookImporter.PresentationFilter
 
 	public boolean keepPage(Page page) throws DataLinkException
 	{
-		if (importPanel.emptyPageBox == null)
-			return true;
 		if (importPanel.emptyPageBox.isSelected())
 		{
 			boolean found = false;
@@ -380,8 +378,6 @@ public class ImportOptions implements BookImporter.PresentationFilter
 
 	public boolean keepRegion(Region region) throws DataLinkException
 	{
-		if (importPanel.emptyRegionBox == null)
-			return true;
 		if (importPanel.emptyRegionBox.isSelected())
 		{
 			boolean found = false;

@@ -111,9 +111,9 @@ might visibly reduce their quality, especially when zooming in.&lt;/html></entry
 	<entry key="importAnnotations">Annotations</entry>
 	<entry key="importRegions">Regions</entry>
 	<entry key="importPages">Pages</entry>
-	<entry key="importRegionTags">Discard regions that are not tagged with one of the following tags:</entry>
+	<entry key="importRegionTags">Only import regions that are tagged with at least one of the following tags:</entry>
 	<entry key="importRegionAnnotations">Discard regions with no annotations</entry>
-	<entry key="importPageTags">Discard pages that are not tagged with one of the following tags:</entry>
+	<entry key="importPageTags">Only import pages that are tagged with at least one of the following tags:</entry>
 	<entry key="importPageRegions">Discard pages with no regions</entry>
 	<entry key="importTextStyle">and text content should be styled as</entry>
 	<entry key="importAnnotationFilter">&lt;html>Annotations named &lt;b>%name&lt;/b> should be &lt;/html></entry>
@@ -125,6 +125,8 @@ might visibly reduce their quality, especially when zooming in.&lt;/html></entry
 	<entry key="coverBack">Back cover</entry>
 	<entry key="coverFrontInner">Front inner cover</entry>
 	<entry key="coverBackInner">Back inner cover</entry>
+	<entry key="coverDiscard">Discard</entry>
+	<entry key="coverBrowse">Browse...</entry>
 	
 	<entry key="fixChars">Fix special characters</entry>
 	<entry key="fixCharsMsg">The presentation was created in</entry>
