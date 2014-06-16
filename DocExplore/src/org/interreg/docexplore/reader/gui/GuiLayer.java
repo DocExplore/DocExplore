@@ -108,24 +108,27 @@ public class GuiLayer implements ReaderApp.Module, InputManager.Listener
 		widget.held(x-widget.getX(), y-widget.getY());
 		return true;
 	}
+	Widget grabbed = null;
 	public boolean grabbed(int x, int y, int pointer, int button)
 	{
-		Widget widget = widgetAt(x, y);
-		if (widget == null)
+		grabbed = widgetAt(x, y);
+		if (grabbed == null)
 			return false;
 		//widget.held(x-widget.getX(), y-widget.getY());
 		return true;
 	}
 	public boolean dragged(int fx, int fy, int tx, int ty, int pointer, int button)
 	{
-		Widget widget = widgetAt(fx, fy);
-		if (widget == null)
+		if (grabbed == null)
 			return false;
-		widget.dragged(tx-widget.getX(), ty-widget.getY());
+		grabbed.dragged(tx-grabbed.getX(), ty-grabbed.getY());
 		return true;
 	}
 	public boolean dropped(int fx, int fy, int tx, int ty, int pointer, int button)
 	{
+		if (grabbed != null)
+			grabbed.dropped(tx-grabbed.getX(), ty-grabbed.getY());
+		grabbed = null;
 		return false;
 //		Widget widget = widgetAt(tx, ty);
 //		if (widget == null)

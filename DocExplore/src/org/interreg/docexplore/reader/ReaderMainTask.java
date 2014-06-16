@@ -23,10 +23,12 @@ import org.interreg.docexplore.reader.book.BookSpecificationParser;
 import org.interreg.docexplore.reader.gui.Button;
 import org.interreg.docexplore.reader.gui.Dialog;
 import org.interreg.docexplore.reader.gui.GuiEvent;
-import org.interreg.docexplore.reader.gui.Widget;
 import org.interreg.docexplore.reader.gui.GuiEvent.Source;
 import org.interreg.docexplore.reader.gui.GuiLayer;
+import org.interreg.docexplore.reader.gui.IntervalField;
 import org.interreg.docexplore.reader.gui.Label;
+import org.interreg.docexplore.reader.gui.Slider;
+import org.interreg.docexplore.reader.gui.Widget;
 import org.interreg.docexplore.reader.net.StreamedXML;
 import org.interreg.docexplore.reader.shelf.ShelfSpecification;
 import org.interreg.docexplore.reader.shelf.ShelfSpecificationParser;
@@ -42,9 +44,11 @@ public class ReaderMainTask extends Thread
 	Dialog dialog;
 	public Button back, zoom, zoomin, zoomout, reload, left, right;
 	public Button open;
+	public Slider slider;
+	public IntervalField pageField;
 	public Label logos, title, helpShelf, helpBook, helpRoi;
 	
-	public ReaderMainTask(ReaderApp app) throws Exception
+	public ReaderMainTask(final ReaderApp app) throws Exception
 	{
 		this.app = app;
 		this.dialog = new Dialog(app);
@@ -74,6 +78,13 @@ public class ReaderMainTask extends Thread
 		title.w = titlew*Gdx.graphics.getWidth();
 		title.setPosition(Gdx.graphics.getWidth()/2-title.w/2, Gdx.graphics.getHeight()-title.h);
 		this.open = new Button(app, "open.png");
+		this.pageField = new IntervalField(.075f*Gdx.graphics.getWidth(), .0175f*Gdx.graphics.getWidth(), 1, 1);
+		this.slider = new Slider(.2f*Gdx.graphics.getWidth(), .03f*Gdx.graphics.getWidth(), 0) {public void valChanged()
+		{
+			if (!app.bookEngine.active)
+				return;
+			pageField.setPageInterval((int)(val*app.bookEngine.book.pages.size()), app.bookEngine.book.pages.size());
+		}};
 		
 		if (app.startup.showHelp)
 		{
@@ -126,6 +137,8 @@ public class ReaderMainTask extends Thread
 		app.gui.addWidget(left);
 		app.gui.addWidget(right);
 		app.gui.addWidget(logos);
+		app.gui.addWidget(slider);
+		app.gui.addWidget(pageField);
 		app.gui.addWidget(title);
 		app.gui.addWidget(open);
 		app.gui.addWidget(dialog);
@@ -334,6 +347,12 @@ public class ReaderMainTask extends Thread
 		right.activate(true);
 		logos.activate(false);
 		title.activate(true);
+		slider.activate(true);
+		slider.setPosition(0, Gdx.graphics.getHeight()-slider.h);
+		slider.setDestPosition(Gdx.graphics.getWidth()-slider.w, Gdx.graphics.getHeight()-slider.h);
+		pageField.activate(true);
+		pageField.setPosition(0, Gdx.graphics.getHeight()-pageField.h);
+		pageField.setDestPosition(Gdx.graphics.getWidth()-slider.w-pageField.w, Gdx.graphics.getHeight()-pageField.h-.5f*(slider.h-pageField.h));
 		left.setDestPosition(0, 0);
 		right.setDestPosition(Gdx.graphics.getWidth()-right.w, 0);
 		title.setDestPosition(Gdx.graphics.getWidth()/2-title.w/2, Gdx.graphics.getHeight()-title.h);
@@ -342,7 +361,7 @@ public class ReaderMainTask extends Thread
 		
 		while (true)
 		{
-			Pair<Source, Object> clicked = GuiEvent.waitForEvent(back, zoom, app.bookEngine.roiOverlay, left, right);
+			Pair<Source, Object> clicked = GuiEvent.waitForEvent(back, zoom, app.bookEngine.roiOverlay, left, right, slider);
 			if (clicked.first == back)
 			{
 //				dialog.set("Confirm", "Do you wish to return to the library?", "Yes", "No");
@@ -354,12 +373,18 @@ public class ReaderMainTask extends Thread
 //				if (button == 0)
 					break;
 			}
+			else if (clicked.first == slider)
+			{
+				app.bookEngine.setLeftPage(2*((int)(slider.val*book.pages.size())/2)-1);
+			}
 			else if (clicked.first == zoom)
 			{
 				title.activate(false);
 				back.activate(false);
 				left.activate(false);
 				right.activate(false);
+				slider.activate(false);
+				pageField.activate(false);
 				zoom.setDestColor(GuiLayer.defaultHighlightColor);
 				zoom.setDestPosition((Gdx.graphics.getWidth()-zoom.w)/2, zoom.y);
 				//zoomout.setPosition(zoom.destx-margin-zoomout.w, zoom.y);
@@ -392,6 +417,8 @@ public class ReaderMainTask extends Thread
 				title.activate(true);
 				left.activate(true);
 				right.activate(true);
+				slider.activate(true);
+				pageField.activate(true);
 				zoom.setDestColor(GuiLayer.defaultColor);
 				zoomout.setDestPosition(zoom.destx, zoom.desty);
 				zoomin.setDestPosition(zoom.destx, zoom.desty);
@@ -407,6 +434,8 @@ public class ReaderMainTask extends Thread
 				zoom.activate(false);
 				left.activate(false);
 				right.activate(false);
+				slider.activate(false);
+				pageField.activate(false);
 				if (app.startup.showHelp)
 				{
 					helpBook.activate(false);
@@ -426,6 +455,8 @@ public class ReaderMainTask extends Thread
 				right.activate(true);
 				back.activate(true);
 				zoom.activate(true);
+				slider.activate(true);
+				pageField.activate(true);
 				if (app.startup.showHelp)
 				{
 					helpBook.activate(true);
@@ -445,6 +476,10 @@ public class ReaderMainTask extends Thread
 		zoom.activate(false);
 		left.activate(false);
 		right.activate(false);
+		slider.activate(false);
+		slider.setDestPosition(0, Gdx.graphics.getHeight()-slider.h);
+		pageField.activate(false);
+		pageField.setDestPosition(0, Gdx.graphics.getHeight()-pageField.h);
 		if (app.startup.showHelp)
 			helpBook.activate(false);
 	}

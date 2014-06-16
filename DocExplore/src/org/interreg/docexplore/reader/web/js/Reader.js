@@ -98,11 +98,12 @@ Reader.init = function()
     Reader.renderer.setClearColorHex(0xffffff);
 	$container.append(Reader.renderer.domElement);
 	
-	Camera.init(0, 0, 6);
-	Reader.scene = new THREE.Scene();
-	
-	var pageHeight = Spec.pageHeight;
-	var pageWidth = pageHeight*Spec.aspect;
+	var distFactor = 2*Spec.aspect*Reader.height/Reader.width;
+    Camera.init(0, 0, 5*Math.max(1, distFactor));
+    Reader.scene = new THREE.Scene();
+    
+    var pageHeight = Spec.pageHeight;
+    var pageWidth = pageHeight*Spec.aspect;
 	
 	var leftPageGeom = new THREE.Geometry();
 	leftPageGeom.vertices.push(new THREE.Vector3(-pageWidth,  -.5*pageHeight, 0));
@@ -164,6 +165,8 @@ Reader.init = function()
 	Paper.init(pageWidth, pageHeight);
 	Input.listeners.push(Reader);
 	
+	document.getElementById('slider').max=Spec.pages.length;
+	
 	Reader.trace("init OK");
 }
 
@@ -213,6 +216,8 @@ Reader.render = function()
 			Reader.currentPage = -1;
 		if (Reader.currentPage > Spec.pages.length-1)
 			Reader.currentPage = Spec.pages.length-1;
+		document.getElementById('slider').value=Reader.currentPage+1;
+        document.getElementById('sliderVal').value=formatVal(Reader.currentPage+1);
 		Reader.leftPageIndex = Reader.currentPage;
 		Reader.rightPageIndex = Reader.currentPage+1+(Hand.active ? 2 : 0);
 		if (Reader.leftPageIndex < 0)
@@ -315,6 +320,7 @@ Reader.setSelectedRegion = function(region)
 			$('#back').css('display', 'inline');
 			$('#prev').css('display', 'none');
 			$('#next').css('display', 'none');
+			$('#sliderDiv').css('display', 'none');
 		}
 		else
 		{
@@ -324,6 +330,7 @@ Reader.setSelectedRegion = function(region)
 			$('#back').css('display', 'none');
 			$('#prev').css('display', 'inline');
 			$('#next').css('display', 'inline');
+			$('#sliderDiv').css('display', 'inline');
 		}
 	}
 }
@@ -350,6 +357,7 @@ Reader.zoom = function()
 		$('#zoomin').css('display', 'none');
 		$('#zoomout').css('display', 'none');
 		$('#back').css('display', 'none');
+		$('#sliderDiv').css('display', 'inline');
 		$('#prev').css('display', 'inline');
 		$('#next').css('display', 'inline');
 		$('#zoom').css('display', 'inline');
@@ -362,6 +370,7 @@ Reader.zoom = function()
 		$('#zoomin').css('display', 'inline');
 		$('#zoomout').css('display', 'inline');
 		$('#back').css('display', 'inline');
+		$('#sliderDiv').css('display', 'none');
 		$('#prev').css('display', 'none');
 		$('#next').css('display', 'none');
 		$('#zoom').css('display', 'none');

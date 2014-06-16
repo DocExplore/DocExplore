@@ -5,7 +5,7 @@
 		<title>DocExplore</title>
 	</head>
 	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script src="js/three.js"></script>
 	<script src="js/Math3D.js"></script>
 	<script src="js/Input.js"></script>
@@ -49,8 +49,26 @@
 		
 		</table>
 		
-		<div style="position: fixed; right: 5px; bottom: 0px">
+		<div style="position: fixed; left: 5px; bottom: 0px">
             <i>Powered by <a href="http://www.docexplore.eu">DocExplore</a>, an <a href="http://www.interreg4a-manche.eu/index.php?lang=en">Interreg IV A</a> project</i>
+        </div>
+        <script>
+            formatVal = function(num)
+            {
+                num = 2*Math.floor(num/2);
+                if (num == 0)
+                    return 1;
+                if (num == Spec.pages.length)
+                    return Spec.pages.length;
+                return num+"-"+(num+1);
+            }
+        </script>
+        <div id="sliderDiv" style="position: fixed; right: 5px; bottom: 5px">
+            Page
+            <input id="sliderVal" type="text" disabled="true" value="1" size="4" style="vertical-align: baseline"/>
+            <input id="slider" type="range" value="0" min="0" max="100" data-show-value="true" data-popup-enabled="true" data-hightlight="true" style="vertical-align: bottom"
+                onChange="document.getElementById('sliderVal').value=formatVal(document.getElementById('slider').value); Reader.requestPage=2*Math.floor(document.getElementById('slider').value/2)-1;"
+                onInput="document.getElementById('sliderVal').value=formatVal(document.getElementById('slider').value);"/>
         </div>
 		
 	</body>

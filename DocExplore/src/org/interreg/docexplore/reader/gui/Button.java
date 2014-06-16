@@ -37,18 +37,11 @@ public class Button extends Widget implements GuiEvent.Source
 {
 	ReaderApp app;
 	Texture texture;
-	public float x = -1, y = -1, w = 0, h = 0;
-	public float destx = -1, desty = -1;
-	List<ActionListener> listeners;
-	float [] color, destColor;
 	public boolean holdable = false, held = false;
 	
 	public Button(ReaderApp app, String name) throws Exception
 	{
 		this.app = app;
-		this.listeners = new LinkedList<ActionListener>();
-		this.color = new float [] {GuiLayer.defaultColor[0], GuiLayer.defaultColor[1], GuiLayer.defaultColor[2]};
-		this.destColor = new float [] {GuiLayer.defaultColor[0], GuiLayer.defaultColor[1], GuiLayer.defaultColor[2]};
 		final BufferedImage image = ImageUtils.read(Thread.currentThread().getContextClassLoader().getResource(Button.class.getPackage().getName().replace('.', '/')+"/"+name));
 		this.w = image.getWidth()*.66f;
 		this.h = image.getHeight()*.66f;
@@ -59,15 +52,6 @@ public class Button extends Widget implements GuiEvent.Source
 		g.drawRoundRect(2, 2, image.getWidth()-4, image.getHeight()-4, 20, 20);
 		app.submitRenderTaskAndWait(new Runnable() {public void run() {texture = new Texture(image, false);}});
 	}
-	
-	public void addActionListener(ActionListener listener) {listeners.add(listener);}
-	public void removeActionListener(ActionListener listener) {listeners.remove(listener);}
-	
-	public void setColor(float r, float g, float b) {color[0] = r; color[0] = g; color[0] = b;}
-	public void setColor(float [] to) {color[0] = to[0]; color[0] = to[1]; color[0] = to[2]; destColor[0] = to[0]; destColor[1] = to[1]; destColor[2] = to[2];}
-	public void setDestColor(float [] to) {destColor[0] = to[0]; destColor[1] = to[1]; destColor[2] = to[2];}
-	public void setPosition(float x, float y) {this.x = x; this.y = y; this.destx = x; this.desty = y;}
-	public void setDestPosition(float x, float y) {this.destx = x; this.desty = y;}
 	
 	public void doClick() {clicked(x+.5f*w, y+.5f*h);}
 	public void clicked(float x, float y)
@@ -90,6 +74,15 @@ public class Button extends Widget implements GuiEvent.Source
 		held = false;
 	}
 	
+	public float x = -1, y = -1, w = 0, h = 0;
+	public float destx = -1, desty = -1;
+	float [] color = new float [] {GuiLayer.defaultColor[0], GuiLayer.defaultColor[1], GuiLayer.defaultColor[2]}, 
+		destColor = new float [] {GuiLayer.defaultColor[0], GuiLayer.defaultColor[1], GuiLayer.defaultColor[2]};
+	public void setColor(float r, float g, float b) {color[0] = r; color[0] = g; color[0] = b;}
+	public void setColor(float [] to) {color[0] = to[0]; color[0] = to[1]; color[0] = to[2]; destColor[0] = to[0]; destColor[1] = to[1]; destColor[2] = to[2];}
+	public void setDestColor(float [] to) {destColor[0] = to[0]; destColor[1] = to[1]; destColor[2] = to[2];}
+	public void setPosition(float x, float y) {this.x = x; this.y = y; this.destx = x; this.desty = y;}
+	public void setDestPosition(float x, float y) {this.destx = x; this.desty = y;}
 	public float getX() {return active ? x : -1;}
 	public float getY() {return active ? y : -1;}
 	public float getWidth() {return active ? w : 0;}
@@ -135,6 +128,9 @@ public class Button extends Widget implements GuiEvent.Source
 		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 
+	List<ActionListener> listeners = new LinkedList<ActionListener>();
+	public void addActionListener(ActionListener listener) {listeners.add(listener);}
+	public void removeActionListener(ActionListener listener) {listeners.remove(listener);}
 	Object instanceMonitor = new Object();
 	Object currentMonitor = instanceMonitor;
 	public Object getDefaultMonitor() {return instanceMonitor;}

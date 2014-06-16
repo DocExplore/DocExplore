@@ -16,6 +16,8 @@ package org.interreg.docexplore.reader;
 
 import java.awt.image.BufferedImage;
 
+import org.interreg.docexplore.reader.gfx.Texture;
+
 public interface Graphics
 {
 	public static interface Renderable
@@ -30,10 +32,12 @@ public interface Graphics
 	public void drawLine(double x1, double y1, double x2, double y2);
 	public void setWidth(float f);
 	public void fillTriangle(double x1, double y1, double x2, double y2, double x3, double y3);
+	
 	public void addImage(BufferedImage image, double x, double y, double w, double h);
 	public void removeImage(BufferedImage image);
 	
 	public void drawTriangle(double x1, double y1, double x2, double y2, double x3, double y3);
 	public void drawRect(double x1, double y1, double x2, double y2);
 	public void fillRect(double x1, double y1, double x2, double y2);
+	public void fillTexturedRect(Texture tex, double x1, double y1, double x2, double y2, float s1, float t1, float s2, float t2);
 }

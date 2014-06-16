@@ -83,6 +83,7 @@ import com.badlogic.gdx.graphics.GL10;
 
 public class ReaderApp extends DocExploreTool implements ApplicationListener
 {
+	public static ReaderApp app = null;
 	public static boolean local = false;
 	
 	public static interface Module
@@ -119,6 +120,7 @@ public class ReaderApp extends DocExploreTool implements ApplicationListener
 	{
 		this.startup = startup;
 		this.server = server;
+		app = this;
 	}
 	
 	public void create()

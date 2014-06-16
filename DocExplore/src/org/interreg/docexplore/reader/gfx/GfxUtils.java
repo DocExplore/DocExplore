@@ -21,6 +21,8 @@ import java.awt.image.BufferedImage;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
+import org.interreg.docexplore.util.ImageUtils;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Mesh;
@@ -121,5 +123,12 @@ public class GfxUtils
 		g.setComposite(AlphaComposite.Src);
 		g.setColor(Color.black);
 		g.fillRect(0, 0, w, h);
+	}
+	
+	public static BufferedImage getImage(String name)
+	{
+		try {return ImageUtils.read(Thread.currentThread().getContextClassLoader().getResource(GfxUtils.class.getPackage().getName().replace('.', '/')+"/"+name));}
+		catch (Exception e) {e.printStackTrace();}
+		return null;
 	}
 }

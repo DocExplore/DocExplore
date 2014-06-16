@@ -120,6 +120,15 @@ public class DebugGraphics implements Graphics, ReaderApp.Module
 		fillTriangle(x2, y2, x1, y2, x1, y1);
 	}
 	
+	public void fillTexturedRect(Texture tex, double x1, double y1, double x2, double y2, float s1, float t1, float s2, float t2)
+	{
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		tex.bind();
+		GfxUtils.fillQuad((float)x1, (float)y1, s1, t1, 
+			(float)x2, (float)y2, s2, t2);
+		gl.glDisable(GL10.GL_TEXTURE_2D);
+	}
+	
 	static class ImageOverlay
 	{
 		Texture tex;

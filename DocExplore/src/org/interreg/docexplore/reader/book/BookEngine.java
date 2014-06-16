@@ -95,6 +95,28 @@ public class BookEngine implements ReaderApp.Module
 		components.add(zoom);
 	}
 	
+	public void setLeftPage(final int page)
+	{
+		app.submitRenderTaskAndWait(new Runnable() {public void run()
+		{
+			model.setAngle((float)defaultAngle, (float)defaultAngle);
+			globalRot = 0;
+			globalTrans = 0;
+			backCoverView = false;
+			frontCoverView = false;
+			
+			model.leftStack.nStackPages = (page+1)/2;
+			model.rightStack.nStackPages = model.nPages-model.leftStack.nStackPages;
+			model.leftStack.update();
+			model.rightStack.update();
+			
+			updatePageCache();
+			updateLayout();
+			renderer.setupLeftRoiMask();
+			renderer.setupRightRoiMask();
+		}});
+	}
+	
 	public void pageTurnStarted(boolean left)
 	{
 		if (left)
@@ -177,6 +199,8 @@ public class BookEngine implements ReaderApp.Module
 	void updatePageCache()
 	{
 		int left = 1+2*(model.leftStack.nStackPages-1);
+		app.mainTask.pageField.setPageInterval(left+1, book.pages.size());
+		app.mainTask.slider.val = (left+1)*1f/book.pages.size();
 		app.logger.addEntry("Displaying page "+left);
 		for (int i=0;i<book.pages.size();i++)
 			if (i > left-cacheSpread && i < left+1+cacheSpread)
@@ -270,6 +294,9 @@ public class BookEngine implements ReaderApp.Module
 		
 		renderer.setupLeftRoiMask();
 		renderer.setupRightRoiMask();
+		
+		app.mainTask.slider.val = 0;
+		app.mainTask.pageField.setPageInterval(0, book.pages.size());
 		
 		new CameraKeyFrame().setup(0f, .9f*model.cover.coverHeight, 1.75f*viewDist*model.cover.coverHeight, 
 			0, .9f*model.cover.coverHeight, -1.75f*viewDist*model.cover.coverHeight, 
