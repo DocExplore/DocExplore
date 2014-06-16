@@ -39,8 +39,12 @@ public class SearchFS2
 		for (String mdContent : mdsContent)
 		{
 			int mdId = Integer.parseInt(mdContent.trim());
-			if ((keyId >= 0 && MetaDataFS2.getKeyId(root, mdId) != keyId) || !MetaDataFS2.getType(root, mdId).equals("txt"))
+			if ((keyId >= 0 && MetaDataFS2.getKeyId(root, mdId) != keyId))
 				continue;
+			if (value != null && value.length() > 0 && !MetaDataFS2.getType(root, mdId).equals("txt"))
+				continue;
+			if (value == null || value.length() == 0)
+				return 1;
 			int dist = Math.min(value.length()-1, 3);
 			double val = FuzzySearch.getScore(value, new String(ByteUtils.readStream(MetaDataFS2.getMetaDataValue(root, mdId))), dist);
 			if (val > score)

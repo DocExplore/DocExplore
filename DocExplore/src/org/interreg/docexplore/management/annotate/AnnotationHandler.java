@@ -142,7 +142,7 @@ public class AnnotationHandler
 		for (MetaData tag : tags)
 			document.removeMetaData(tag);
 		for (String tagName : tagNames)
-		{
+		{System.out.println("getting or creating "+tagName);
 			MetaData tag = link.getOrCreateTag(tagName);//new MetaData(link, link.tagKey, "<tag lang=\""+lang+"\">"+tagName+"</tag>");
 			document.addMetaData(tag);
 		}

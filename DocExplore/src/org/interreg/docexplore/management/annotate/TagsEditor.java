@@ -137,6 +137,6 @@ public class TagsEditor extends AnnotationEditor
 			if (tag.length() > 0)
 				tags.add(tag);
 		}
-		panel.handler.setTags(annotation, tags);
+		panel.handler.setTags(panel.document, tags);
 	}
 }
