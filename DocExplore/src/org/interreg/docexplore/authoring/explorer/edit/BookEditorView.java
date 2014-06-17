@@ -63,7 +63,7 @@ public class BookEditorView extends BookView
 		
 		this.coverManager = new CoverManager();
 		final JDialog coverDialog = new JDialog(explorer.tool, XMLResourceBundle.getBundledString("coverLabel"));
-		coverDialog.setAlwaysOnTop(true);
+		//coverDialog.setAlwaysOnTop(true);
 		coverDialog.add(coverManager);
 		coverDialog.pack();
 		GuiUtils.centerOnScreen(coverDialog);
