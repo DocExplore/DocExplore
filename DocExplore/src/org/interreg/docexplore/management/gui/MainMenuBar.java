@@ -178,13 +178,14 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 //		alignItem.setEnabled(false);
 //		toolsMenu.add(alignItem);
 		
-		toolsMenu.add(new AbstractAction(XMLResourceBundle.getBundledString("pluginAnalysisLabel"))
-		{
-			public void actionPerformed(ActionEvent e)
+		if (!win.pluginManager.analysisPlugins.isEmpty())
+			toolsMenu.add(new AbstractAction(XMLResourceBundle.getBundledString("pluginAnalysisLabel"))
 			{
-				win.pluginManager.analysisPluginSetup.setVisible(true);
-			}
-		});
+				public void actionPerformed(ActionEvent e)
+				{
+					win.pluginManager.analysisPluginSetup.setVisible(true);
+				}
+			});
 		toolsMenu.add(new AbstractAction(XMLResourceBundle.getBundledString("cleanLinkLabel"))
 		{
 			public void actionPerformed(ActionEvent e)
