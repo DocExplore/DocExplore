@@ -142,7 +142,7 @@ public class AnnotationHandler
 		for (MetaData tag : tags)
 			document.removeMetaData(tag);
 		for (String tagName : tagNames)
-		{System.out.println("getting or creating "+tagName);
+		{
 			MetaData tag = link.getOrCreateTag(tagName);//new MetaData(link, link.tagKey, "<tag lang=\""+lang+"\">"+tagName+"</tag>");
 			document.addMetaData(tag);
 		}
@@ -230,7 +230,12 @@ public class AnnotationHandler
 		if (transButton.isSelected())
 			annotation = new MetaData(link, link.transcriptionKey, "<author></author><content></content>");
 		else if (tagsButton.isSelected())
+		{
+			List<MetaData> mds = document.getMetaDataListForKey(link.tagsKey);
+			if (mds != null && mds.size() > 0)
+				return mds.get(0);
 			annotation = new MetaData(link, link.tagsKey, "");
+		}
 		else
 		{
 			String preselect = null;
