@@ -29,7 +29,7 @@ public class Texture implements Bindable
 {
 	public static int nTextures = 0;
 	
-	public final int id;
+	private int id;
 	int width, height;
 	ByteBuffer data;
 	public boolean inited, hasAlpha;
@@ -73,6 +73,8 @@ public class Texture implements Bindable
 		
 	public synchronized void update()
 	{
+		if (id < 0 || data == null)
+			return;
 		GL11 gl = Gdx.gl11;
 		gl.glBindTexture(GL11.GL_TEXTURE_2D, id);
 		gl.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, width, height, dataType, GL11.GL_UNSIGNED_BYTE, data);
@@ -92,6 +94,7 @@ public class Texture implements Bindable
 		int [] ida = {id};
 		Gdx.gl11.glDeleteTextures(1, ida, 0);
 		nTextures--;
+		id = -1;
 		if (data != null)
 		{
 			BufferUtils.disposeUnsafeByteBuffer(data);
