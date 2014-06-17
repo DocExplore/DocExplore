@@ -16,6 +16,7 @@ Spec.init = function(xml)
 	Spec.roiMaterial.depthTest = false;
 	Spec.roiSelectedMaterial = new THREE.LineBasicMaterial({color: 0xffff00});
 	Spec.roiSelectedMaterial.depthTest = false;
+	Spec.emptyTex = THREE.ImageUtils.loadTexture("empty.png");
 	
 	var start = xml.indexOf("<Book path=\"");
 	start += 12;
@@ -36,8 +37,8 @@ Spec.init = function(xml)
 		Spec.pages[Spec.pages.length] = Spec.buildPage(xml.substring(start, end+7), Spec.pages.length);
 		xml = xml.substring(end+7, xml.length);
 	}
-	
-	Spec.emptyTex = THREE.ImageUtils.loadTexture("empty.png");
+	if (Spec.pages.length%2 == 1)
+		Spec.pages[Spec.pages.length] = Spec.buildEmptyPage(Spec.pages.length);
 }
 
 Spec.buildPage = function(xml, index)
@@ -61,6 +62,17 @@ Spec.buildPage = function(xml, index)
 		xml = xml.substring(end+19, xml.length);
 	}
 	
+	return page;
+}
+
+Spec.buildEmptyPage = function(index)
+{
+	var page = {};
+	
+	page.path = null;
+	page.tex = null;
+	page.regions = [];
+	page.index = index;
 	return page;
 }
 
@@ -154,11 +166,16 @@ Spec.refreshTextures = function(midPage, spread)
 		if (Math.abs(i-midPage) < spread)
 		{
 			if (!Spec.pages[i].tex)
-				Spec.pages[i].tex = THREE.ImageUtils.loadTexture(Spec.pages[i].path);
+			{
+				if (Spec.pages[i].path != null)
+					Spec.pages[i].tex = THREE.ImageUtils.loadTexture(Spec.pages[i].path);
+				else Spec.pages[i].tex = Spec.emptyTex;
+			}
 		}
 		else if (Spec.pages[i].tex != null)
 		{
-			Spec.pages[i].tex.dispose();
+			if (Spec.pages[i].path != null)
+				Spec.pages[i].tex.dispose();
 			Spec.pages[i].tex = null;
 		}
 			
