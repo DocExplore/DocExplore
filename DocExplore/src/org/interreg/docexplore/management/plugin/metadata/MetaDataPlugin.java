@@ -30,6 +30,9 @@ import org.interreg.docexplore.management.annotate.AnnotationPanel;
 import org.interreg.docexplore.management.plugin.Plugin;
 import org.interreg.docexplore.manuscript.MetaData;
 
+/**
+ * Base interface for metadata plugins
+ */ 
 public interface MetaDataPlugin extends Plugin
 {
 	public String getType();
