@@ -21,6 +21,9 @@ import java.util.Map;
 import org.interreg.docexplore.management.gui.MainWindow;
 import org.interreg.docexplore.management.plugin.Plugin;
 
+/**
+ * Base interface for analysis plugins
+ */
 public interface AnalysisPlugin extends Plugin
 {
 	public void process(BufferedImage [] images, Map<String, Object> params, int task, Map<String, Component> results, AnalysisPluginTask monitor) throws Exception;
