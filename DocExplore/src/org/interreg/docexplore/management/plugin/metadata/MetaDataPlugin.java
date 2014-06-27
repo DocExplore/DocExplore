@@ -35,6 +35,7 @@ import org.interreg.docexplore.manuscript.MetaData;
  */ 
 public interface MetaDataPlugin extends Plugin
 {
+	//returns the type
 	public String getType();
 	public AnnotationEditor createEditor(AnnotationPanel panel, MetaData annotation) throws DataLinkException;
 	public JLabel createLabel(String keyName, MetaData annotation) throws DataLinkException;
