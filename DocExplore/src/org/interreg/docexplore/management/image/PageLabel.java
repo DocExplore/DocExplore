@@ -58,7 +58,14 @@ public class PageLabel extends JPanel
 		mini.setVerticalAlignment(SwingConstants.BOTTOM);
 		setPreferredSize(new Dimension(72, 80));
 		add(mini, BorderLayout.NORTH);
-		JLabel num = new JLabel("<html><b>"+page.getPageNumber()+"</b></html>", SwingConstants.CENTER);
+		
+		int nRegions = 0;
+		try {nRegions = page.getRegions().size();}
+		catch (Exception e) {e.printStackTrace();}
+		JLabel num = new JLabel("<html><b>"+page.getPageNumber()+(nRegions > 0 ? " ("+nRegions+")" : "")+"</b></html>", SwingConstants.CENTER);
+		
+		//JLabel num = new JLabel("<html><b>"+page.getPageNumber()+"</b></html>", SwingConstants.CENTER);
+		
 		num.setVerticalAlignment(SwingConstants.TOP);
 		add(num, BorderLayout.CENTER);
 		setOpaque(false);
