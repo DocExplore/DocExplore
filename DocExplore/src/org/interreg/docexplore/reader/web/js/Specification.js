@@ -137,13 +137,17 @@ Spec.buildRegion = function(xml, index)
 	return region;
 }
 
+function replaceAll(find, replace, str)
+{
+    return str.replace(new RegExp(find, 'g'), replace);
+}
 Spec.buildInfo = function(infoXml)
 {
 	var start = infoXml.indexOf("type=\"");
 	var end = infoXml.indexOf("\"", start+6);
 	var type = infoXml.substring(start+6, end);
 	if (type == "text")
-		return infoXml.substring(infoXml.indexOf(">")+1, infoXml.indexOf("</Info>"));
+		return replaceAll("\n", "&lt;br/>", infoXml.substring(infoXml.indexOf(">")+1, infoXml.indexOf("</Info>")));
 	else if (type == "image")
 	{
 		start = infoXml.indexOf("src=\"");

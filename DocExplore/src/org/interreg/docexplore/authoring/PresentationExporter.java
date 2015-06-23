@@ -24,8 +24,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.imageio.ImageIO;
-
 import org.interreg.docexplore.authoring.explorer.edit.CoverManager;
 import org.interreg.docexplore.authoring.explorer.edit.Style;
 import org.interreg.docexplore.authoring.explorer.edit.TextElement;
@@ -88,7 +86,8 @@ public abstract class PresentationExporter
 			{
 				Page page = book.getPage(i);
 				BufferedImage image = page.getImage().getImage();
-				ImageUtils.write(options.handlePage(image), format, new File(bookDir, "image"+pageNum+"."+format));
+				
+				ImageUtils.write(options.handlePage(fix(image)), format, new File(bookDir, "image"+pageNum+"."+format));
 				page.unloadImage();
 				
 				bookSpec.append("\t<Page src=\"").append("image").append(pageNum).append(".").append(format).append("\">\n");
@@ -130,7 +129,7 @@ public abstract class PresentationExporter
 						else if (md.getType().equals(MetaData.imageType))
 						{
 							BufferedImage roiImage = md.getImage();
-							ImageIO.write(roiImage, format, new File(bookDir, "roiImage"+imageNum+"."+format));
+							ImageUtils.write(fix(roiImage), format, new File(bookDir, "roiImage"+imageNum+"."+format));
 							
 							bookSpec.append("\t\t\t<Info type=\"image\" src=\"").append("roiImage").append(imageNum).append(".").append(format).append("\" />\n");
 							imageNum++;
@@ -162,5 +161,16 @@ public abstract class PresentationExporter
 		Page page = book.getPage(1);
 		BufferedImage image = page.getImage().getImage();
 		return String.format(Locale.ENGLISH, "%.2f", image.getWidth()*1./image.getHeight());
+	}
+	
+	BufferedImage fix(BufferedImage image)
+	{
+		if (image.getType() == BufferedImage.TYPE_CUSTOM)
+		{
+			BufferedImage tmp = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+			tmp.createGraphics().drawImage(image, null, 0, 0);
+			image = tmp;
+		}
+		return image;
 	}
 }
