@@ -10,12 +10,14 @@ Input.htmlMouseDown = function(x, y)
 	y -= pos.top;
 	Input.down = [x, y];
 	Input.isDown = true;
+	if (Input.isDrag)
+		Input.notifyDropped(x, y);
 	Input.isDrag = false;
 }
 
 Input.htmlMouseUp = function()
 {
-	if (!Input.isDown)
+	if (!Input.isDown && !Input.isDrag)
 		return;
 	var pos = $('#container').position();
 	var x = Input.lastMove[0]-pos.left;
@@ -50,8 +52,8 @@ Input.htmlMouseMove = function(x, y)
 
 Input.htmlMouseOut = function(x, y)
 {
-	if (Input.isDown)
-		Input.htmlMouseUp();
+	//if (Input.isDown)
+	//	Input.htmlMouseUp();
 }
 
 Input.listeners = [];
@@ -78,4 +80,24 @@ Input.notifyDropped = function(x, y)
 	for (var i=0;i<Input.listeners.length;i++)
 		if (Input.listeners[i].onDrop != undefined)
 			Input.listeners[i].onDrop(x, y);
+}
+
+Input.lastScale = -1;
+Input.waitForNextPinch = false;
+Input.pinch = function(scale)
+{
+	if (Input.waitForNextPinch)
+		return;
+	if (Input.lastScale < 0)
+		Input.lastScale = 1;
+	var amount = Input.lastScale-scale;
+	if (amount > 0)
+		amount *= 4;
+	Reader.zoomBy(amount);
+	Input.lastScale = scale;
+}
+Input.pinchEnd = function()
+{
+	Input.lastScale = -1;
+	Input.waitForNextPinch = false;
 }

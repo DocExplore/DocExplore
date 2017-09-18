@@ -21,6 +21,7 @@ import java.util.Collection;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 
+import org.interreg.docexplore.authoring.ExportOptions;
 import org.interreg.docexplore.authoring.explorer.edit.InfoElement;
 import org.interreg.docexplore.authoring.explorer.edit.MetaDataEditor;
 import org.interreg.docexplore.authoring.preview.PreviewPanel;
@@ -46,5 +47,6 @@ public interface MetaDataPlugin extends Plugin
 	public String getFileType();
 	public Icon createIcon(Object object);
 	public PreviewPanel getPreview(Object object, int mx, int my);
-	public void exportMetaData(MetaData md, StringBuffer xml, File bookDir, int id);
+	public void setupExportOptions(ExportOptions options, int exportType);
+	public void exportMetaData(MetaData md, StringBuffer xml, File bookDir, int id, ExportOptions options, int exportType);
 }

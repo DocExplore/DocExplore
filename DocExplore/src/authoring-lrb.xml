@@ -12,7 +12,8 @@
 	<entry key="generalMenuSaveAs">Save as...</entry>
 	<entry key="generalMenuNew">New</entry>
 	<entry key="generalSaveMessage">Would you like to save the current presentation?</entry>
-	<entry key="generalMenuExport">Add to Reader</entry>
+	<entry key="generalMenuExport">Export...</entry>
+	<entry key="generalExportDialog">Export</entry>
 	<entry key="generalMenuWebExport">Web export</entry>
 	<entry key="generalFilesLabel">Files</entry>
 	<entry key="generalPresentationLabel">Presentation</entry>
@@ -33,6 +34,15 @@
 Would you like to keep it in the editor?</entry>
 	<entry key="moveAnnotation">Move comment</entry>
 	<entry key="generalCopyPaste">Copy/Paste</entry>
+	<entry key="generalTitle">Title</entry>
+	<entry key="generalDescription">Description</entry>
+	
+	<entry key="exportReader">Export to Reader</entry>
+	<entry key="exportReaderDesc">This presentation will be added to the local collection of this DocExplore installation.</entry>
+	<entry key="exportWeb">Export to web</entry>
+	<entry key="exportWebDesc">This presentation will be packaged into an archive suitable for a website.</entry>
+	<entry key="exportMobile">Export to mobile</entry>
+	<entry key="exportMobileDesc">This presentation will be packaged into a file that can be loaded by the DocExplore mobile app.</entry>
 	
 	<entry key="viewHelpToggle">Show help</entry>
 	<entry key="helpBookMsg">This panel displays the pages of your presentation. To add pages, you can:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Click on the &amp;oplus; sign in the toolbar to browse for images&amp;uarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag books and pages from the right side &amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag images directly from your file explorer into this panel</entry>
@@ -84,11 +94,16 @@ Would you like to keep it in the editor?</entry>
 	
 	<entry key="exportDuplicateMessage">A presentation with the same title already exists. Do you want to replace it?</entry>
 	<entry key="exportOptions">Export options</entry>
+	<entry key="exportDimensionOption">Limit image size</entry>
 	<entry key="exportSizeLimit">Image dimensions shouldn't exceed </entry>
-	<entry key="exportSizeMessage">&lt;html>Limiting the dimensions of images serves to lower the hardware requirements of presentations.&lt;br/>
-If you experience excessive loading times or even crashes when viewing a presentation, it is &lt;br/>
-recommended to enable this option. Be aware that although this will not distort the images, it &lt;br/>
-might visibly reduce their quality, especially when zooming in.&lt;/html></entry>
+	<entry key="exportSizeMessage">&lt;html>&lt;div style=&quot;width: 360px;&quot;>Limiting the dimensions of images serves to lower the hardware requirements of presentations. 
+If you experience excessive loading times or even crashes when viewing a presentation, it is 
+recommended to enable this option. Be aware that although this will not distort the images, it 
+might visibly reduce their quality, especially when zooming in.&lt;/div>&lt;/html></entry>
+	<entry key="exportTransparencyOption">Transparency</entry>
+	<entry key="exportTransparencyLabel">Enable transparency</entry>
+	<entry key="exportTransparencyMessage">&lt;html>&lt;div style=&quot;width: 360px;&quot;>Enable this option if some of the pages of the presentation contain areas of transparency, otherwise they will not render properly. 
+&lt;u>Please note that if this option is enabled, the processing time required to complete the export may increase significantly as well as the resulting file sizes.&lt;/u>&lt;/div>&lt;/html></entry>
 	
 	<entry key="filterText">Text</entry>
 	<entry key="filterImage">Images</entry>

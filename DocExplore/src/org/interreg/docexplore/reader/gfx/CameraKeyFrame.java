@@ -93,7 +93,7 @@ public class CameraKeyFrame
 		
 		float eyex = (float)((br[0]+tl[0])/2+aspect/1.78*viewDist*Math.tan(.5f*fov));
 		float midy = (tl[1]+br[1])/2, midz = (tl[2]+br[2])/2;
-		float right = (float)(.5*Math.sin(.5f*fov)*viewDist);
+		//float right = (float)(.5*Math.sin(.5f*fov)*viewDist);
 		
 //		if (viewDist < .5f)
 //			viewDist = .5f;

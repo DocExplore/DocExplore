@@ -5,13 +5,15 @@ Camera.camTan = 0;
 Camera.aspect = 0;
 Camera.defaultPos = [0, 0, 0];
 Camera.attractorPos = [0, 0, 0];
+Camera.maxUnzoom = 6;
+Camera.defaultFov = 23;
 
 Camera.init = function(x, y, z)
 {
-	var fov = 23, near = 0.01, far = 100;
+	var near = 0.01, far = 100;
 	
 	Camera.aspect = Reader.width/Reader.height;
-	Camera.camera = new THREE.PerspectiveCamera(fov, Camera.aspect, near, far);
+	Camera.camera = new THREE.PerspectiveCamera(Camera.defaultFov, Camera.aspect, near, far);
 	
 	Camera.defaultPos = [x, y, z];
 	Camera.attractorPos = [x, y, z];
@@ -30,9 +32,19 @@ Camera.update = function()
 	Camera.camera.position.z += spring*(Camera.attractorPos[2]-Camera.camera.position.z);
 }
 
+Camera.unzoomed = function()
+{
+	return Camera.camera.position.z > Camera.maxUnzoom-.02;
+}
+
+Camera.translate = function(x, y)
+{
+	Camera.attractorPos[0] += x*Camera.camera.position.z;
+	Camera.attractorPos[1] += y*Camera.camera.position.z;
+}
 Camera.setPos = function(x, y, z)
 {
-	z = z > 6 ? 6 : z < 1 ? 1 : z;
+	z = z > Camera.maxUnzoom ? Camera.maxUnzoom : z < 2 ? 2 : z;
 	Camera.attractorPos = [x, y, z];
 }
 Camera.setDiffPos = function(x, y, z)
@@ -66,7 +78,7 @@ Camera.toWorldCoords = function(x, y)
 Camera.toWorldRay = function(x, y)
 {
 	var p = Camera.toWorldCoords(x, y);
-	return {x: p[0]-Camera.camera.position.x, y: p[1]-Camera.camera.position.y, z: -Camera.camera.position.z};
+	return new THREE.Vector3(p[0]-Camera.camera.position.x, p[1]-Camera.camera.position.y, -Camera.camera.position.z);
 }
 Camera.isLeftPage = function(p) {return p[0] < 0;}
 Camera.toRightPageCoords = function(p) {return [p[0]/(Spec.pageHeight*Spec.aspect), .5*(1-p[1]/(.5*Spec.pageHeight))];}

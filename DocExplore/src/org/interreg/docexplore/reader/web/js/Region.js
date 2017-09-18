@@ -1,9 +1,23 @@
 Region = {};
 
-Region.getRegionAt = function(page, x, y)
+Region.getRegionAt = function(x, y)
 {
+	var d = Camera.toWorldRay(x, y);
+	var p = new THREE.Vector3();
+	p.copy(Camera.camera.position);
+	p.sub(Reader.bookModel.model.position);
+	
+	Reader.bookModel.model.worldToLocal(p);
+	Reader.bookModel.model.worldToLocal(d);
+	
+	var coords = Reader.bookModel.toPage(p, d);
+	if (coords === null)
+		return null;
+	var page = coords[0] && Reader.leftPageIndex >= 0 ? Spec.pages[Reader.leftPageIndex] : !coords[0] && Reader.rightPageIndex >= 0 ? Spec.pages[Reader.rightPageIndex] : null;
+	if (page === null)
+		return null;
 	for (var i=0;i<page.regions.length;i++)
-		if (Region.contains(page.regions[i], x, y))
+		if (Region.contains(page.regions[i], coords[1][0], coords[1][1]))
 			return page.regions[i];
 	return null;
 }
@@ -76,4 +90,30 @@ Region.scaleInfo = function(html, scale)
 	//Reader.trace("after:");
 	//Reader.trace(html);
 	return html;
+}
+
+Region.buildRegionMesh = function(region)
+{
+	var coords = region.coords;
+	region.worldCoords = [];
+	var minx = null, miny = null, maxx = null, maxy = null;
+	for (var i=0;i<region.coords.length;i++)
+	{
+		//region.worldCoords[i] = region.index%2 == 1 ? Camera.fromLeftPageCoords(region.coords[i]) : Camera.fromRightPageCoords(region.coords[i]);
+		region.worldCoords[i] = new THREE.Vector3();
+		Reader.bookModel.fromPageToWorld(region.coords[i][0], region.coords[i][1], region.index%2 == 1, region.worldCoords[i]);
+		if (minx == null || region.worldCoords[i].x < minx) minx = region.worldCoords[i].x;
+		if (maxx == null || region.worldCoords[i].x > maxx) maxx = region.worldCoords[i].x;
+		if (miny == null || region.worldCoords[i].y < miny) miny = region.worldCoords[i].y;
+		if (maxy == null || region.worldCoords[i].y > maxy) maxy = region.worldCoords[i].y;
+	}
+	region.bounds[0] = [minx, miny];
+	region.bounds[1] = [maxx, maxy];
+	
+	var geom = new THREE.Geometry();
+	for (var i=0;i<region.worldCoords.length;i++)
+		geom.vertices.push(new THREE.Vector3(region.worldCoords[i].x, region.worldCoords[i].y, region.worldCoords[i].z));
+	geom.vertices.push(new THREE.Vector3(region.worldCoords[0].x, region.worldCoords[0].y, region.worldCoords[0].z));
+	region.line = new THREE.Line(geom, Spec.roiMaterial);
+	region.line.renderOrder = 200;
 }

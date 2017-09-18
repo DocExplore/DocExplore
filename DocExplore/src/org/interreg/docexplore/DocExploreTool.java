@@ -37,6 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.apache.commons.io.FileUtils;
 import org.interreg.docexplore.gui.ErrorHandler;
@@ -88,8 +89,7 @@ public class DocExploreTool
 		System.out.println("Encoding: "+System.getProperty("file.encoding"));
 		System.out.println("PID: "+Uninstaller.getPID());
 		
-		try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());}
-		catch (Exception e) {e.printStackTrace();}
+		setPreferredLAF();
 		
 		final File [] file = {null};
 		List<String> homes = getHomes();
@@ -116,6 +116,25 @@ public class DocExploreTool
 		}
 		
 		return file[0];
+	}
+	
+	public static void setPreferredLAF()
+	{
+		try
+		{
+			String laf = UIManager.getSystemLookAndFeelClassName();
+			if (laf.equals("javax.swing.plaf.metal.MetalLookAndFeel"))
+			{
+				for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+					if (info.getName().equals("Nimbus"))
+					{
+						laf = info.getClassName();
+						break;
+					}
+			}
+			UIManager.setLookAndFeel(laf);
+		}
+		catch (Exception e) {e.printStackTrace();}
 	}
 	
 	private static void initPlugins()
@@ -307,6 +326,7 @@ public class DocExploreTool
 	public static FileDialogs.Category getPluginCategory() {return getFileDialogs().getOrCreateCategory("DocExplore plugins", Collections.singleton("jar"));}
 	public static FileDialogs.Category getIBookCategory() {return getFileDialogs().getOrCreateCategory("DocExplore Interactive Book", Collections.singleton("dib"));}
 	public static FileDialogs.Category getWebIBookCategory() {return getFileDialogs().getOrCreateCategory("DocExplore Interactive Web Book", Collections.singleton("zip"));}
+	public static FileDialogs.Category getMobileIBookCategory() {return getFileDialogs().getOrCreateCategory("DocExplore Interactive Mobile Book", Collections.singleton("depa"));}
 	public static FileDialogs.Category getPresentationCategory() {return getFileDialogs().getOrCreateCategory("DocExplore Presentation", Collections.singleton("pres"));}
 	public static FileDialogs.Category getBookCategory() {return getFileDialogs().getOrCreateCategory("DocExplore Book", Collections.singleton("dmb"));}
 	public static FileDialogs getFileDialogs()

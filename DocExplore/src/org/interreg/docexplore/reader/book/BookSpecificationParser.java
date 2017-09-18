@@ -184,7 +184,7 @@ public class BookSpecificationParser
 					else throw new Exception("RegionOfInterest tag expected, found '"+childNode.getNodeName()+"'");
 				}
 			}
-			else throw new Exception("Page tag expected, found '"+pageNode.getNodeName()+"'");
+			//else throw new Exception("Page tag expected, found '"+pageNode.getNodeName()+"'");
 		}
 		bookSpecif.validate();
 		

@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.SwingUtilities;
 
 import org.interreg.docexplore.authoring.AuthoringToolFrame;
 import org.interreg.docexplore.gui.ErrorHandler;
@@ -130,7 +131,8 @@ public class Explorer extends JPanel
 	
 	public void explore(final String path)
 	{
-		GuiUtils.blockUntilComplete(new Runnable() {public void run()
+		//GuiUtils.blockUntilComplete(new Runnable() {public void run()
+		SwingUtilities.invokeLater(new Runnable() {@Override public void run()
 		{
 			try
 			{
@@ -157,7 +159,7 @@ public class Explorer extends JPanel
 				throw new Exception("Unable to handle path: '"+path+"'");
 			}
 			catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-		}}, this);
+		}});//}, this);
 	}
 	
 	public void refreshPath() {pathField.setText(pathToString(curPath));}

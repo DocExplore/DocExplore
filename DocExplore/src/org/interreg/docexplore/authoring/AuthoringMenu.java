@@ -59,7 +59,7 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 	JCheckBoxMenuItem helpToggle;
 	JMenuItem undoItem, redoItem;
 	JMenu file;
-	JMenuItem newItem, loadItem, saveItem, saveAsItem, exportItem, webExportItem, quitItem;
+	JMenuItem newItem, loadItem, saveItem, saveAsItem, exportItem, quitItem;
 	LinkedList<String> recent;
 	long lastLoad = System.currentTimeMillis();
 	
@@ -76,42 +76,36 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 		loadItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuLoad")) {public void actionPerformed(ActionEvent arg0) {load();}});
 		saveItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuSave")) {public void actionPerformed(ActionEvent arg0) {save();}});
 		saveAsItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuSaveAs")) {public void actionPerformed(ActionEvent arg0) {saveAs();}});
-		exportItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuExport")+"...") {public void actionPerformed(ActionEvent arg0)
-		{
-			GuiUtils.blockUntilComplete(new ProgressRunnable()
-			{
-				public void run()
-				{
-					try {authoringTool.readerExporter.doExport(authoringTool.editor.link);}
-					catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
-				}
-				public float getProgress() {return (float)authoringTool.readerExporter.progress[0];}
-			}, authoringTool.editor);
-		}});
-		webExportItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuWebExport")+"...") {public void actionPerformed(ActionEvent arg0)
-		{
-			GuiUtils.blockUntilComplete(new ProgressRunnable()
-			{
-				public void run()
-				{
-					try {authoringTool.webExporter.doExport(authoringTool.editor.link);}
-					catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
-				}
-				public float getProgress() {return (authoringTool.webExporter.copyComplete ? .5f : 0f)+(float)(.5*authoringTool.webExporter.progress[0]);}
-			}, authoringTool.editor);
-		}});
-//		webExportItem = new JMenuItem(new AbstractAction("Web export") {public void actionPerformed(ActionEvent arg0)
+//		exportItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuExport")+"...") {public void actionPerformed(ActionEvent arg0)
 //		{
-//			GuiUtils.blockUntilComplete(new Runnable() {public void run()
+//			GuiUtils.blockUntilComplete(new ProgressRunnable()
 //			{
-//				try 
+//				public void run()
 //				{
-//					new WebStaticExporter().doExport(authoringTool.editor.link.getBook(authoringTool.editor.link.getLink().getAllBookIds().get(0)));
+//					try {authoringTool.readerExporter.doExport(authoringTool.editor.link);}
+//					catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 //				}
-//				catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
-//			}}, authoringTool.editor);
+//				public float getProgress() {return (float)authoringTool.readerExporter.progress[0];}
+//			}, authoringTool.editor);
 //		}});
-//		webExportItem.setEnabled(false);
+		exportItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuExport")) {public void actionPerformed(ActionEvent arg0)
+		{
+			GuiUtils.centerOnComponent(authoringTool.exportDialog, authoringTool);
+			authoringTool.exportDialog.setVisible(true);
+		}});
+//		webExportItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuWebExport")+"...") {public void actionPerformed(ActionEvent arg0)
+//		{
+//			GuiUtils.blockUntilComplete(new ProgressRunnable()
+//			{
+//				public void run()
+//				{
+//					try {authoringTool.webExporter.doExport(authoringTool.editor.link);}
+//					catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
+//				}
+//				public float getProgress() {return (authoringTool.webExporter.copyComplete ? .5f : 0f)+(float)(.5*authoringTool.webExporter.progress[0]);}
+//			}, authoringTool.editor);
+//		}});
+		
 		quitItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuQuit")) {public void actionPerformed(ActionEvent arg0)
 			{authoringTool.quit();}});
 		buildFileMenu();
@@ -404,7 +398,7 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 		file.add(saveAsItem);
 		file.addSeparator();
 		file.add(exportItem);
-		file.add(webExportItem);
+		//file.add(webExportItem);
 		file.addSeparator();
 		if (!recent.isEmpty())
 		{

@@ -15,10 +15,11 @@ The fact that you are presently reading this means that you have had knowledge o
 package org.interreg.docexplore.authoring;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -29,27 +30,32 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.management.plugin.metadata.MetaDataPlugin;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
 
 @SuppressWarnings("serial")
 public class ExportOptions extends JPanel
 {
-	JCheckBox resizeBox;
+	JCheckBox resizeBox, transparencyBox;
 	JTextField resizeField;
+	
+	Map<String, JPanel> pluginOptions = new TreeMap<String, JPanel>();
 	
 	public ExportOptions()
 	{
-		super(new BorderLayout());
+		super(new LooseGridLayout(0, 1, 5, 5, true, true, SwingConstants.LEFT, SwingConstants.TOP, false, false));
 		
+		JPanel dimensionOptionPanel = new JPanel(new BorderLayout());
 		JPanel resizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		this.resizeBox = new JCheckBox();
-		resizeBox.setSelected(true);
 		resizePanel.add(resizeBox);
 		resizePanel.add(new JLabel(XMLResourceBundle.getBundledString("exportSizeLimit")));
 		this.resizeField = new JTextField(5);
@@ -78,11 +84,30 @@ public class ExportOptions extends JPanel
 		});
 		resizePanel.add(resizeField);
 		resizePanel.add(new JLabel("pixels"));
-		add(resizePanel, BorderLayout.CENTER);
-		add(new JLabel(XMLResourceBundle.getBundledString("exportSizeMessage")), BorderLayout.SOUTH);
+		dimensionOptionPanel.add(resizePanel, BorderLayout.CENTER);
+		dimensionOptionPanel.add(new JLabel(XMLResourceBundle.getBundledString("exportSizeMessage")), BorderLayout.SOUTH);
+		dimensionOptionPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("exportDimensionOption")));
+		add(dimensionOptionPanel);
+		
+		JPanel transparencyOptionPanel = new JPanel(new BorderLayout());
+		JPanel transparencyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		this.transparencyBox = new JCheckBox();
+		transparencyPanel.add(transparencyBox);
+		transparencyPanel.add(new JLabel(XMLResourceBundle.getBundledString("exportTransparencyLabel")));
+		transparencyOptionPanel.add(transparencyPanel, BorderLayout.CENTER);
+		transparencyOptionPanel.add(new JLabel(XMLResourceBundle.getBundledString("exportTransparencyMessage")), BorderLayout.SOUTH);
+		transparencyOptionPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("exportTransparencyOption")));
+		add(transparencyOptionPanel);
 		
 		setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 	}
+	
+	public void addPluginPanel(String name, JPanel panel)
+	{
+		pluginOptions.put(name, panel);
+		add(panel);
+	}
+	public JPanel getPluginPanel(String name) {return pluginOptions.get(name);}
 	
 	public BufferedImage handlePage(BufferedImage image)
 	{
@@ -106,8 +131,11 @@ public class ExportOptions extends JPanel
 	}
 	
 	static ExportOptions options = new ExportOptions();
-	public static ExportOptions getOptions(Component comp)
+	public static ExportOptions getOptions(AuthoringToolFrame comp, int exportType)
 	{
+		for (MetaDataPlugin plugin : comp.plugins)
+			plugin.setupExportOptions(options, exportType);
+		
 		final JDialog dialog = new JDialog(JOptionPane.getRootFrame(), XMLResourceBundle.getBundledString("exportOptions"), true);
 		dialog.setLayout(new BorderLayout());
 		dialog.add(options, BorderLayout.CENTER);

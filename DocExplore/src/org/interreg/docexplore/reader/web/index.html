@@ -5,15 +5,23 @@
 		<title>DocExplore</title>
 	</head>
 	
-	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-	<script src="js/three.js"></script>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/three.min.js"></script>
+	<script src="js/hammer.min.js"></script>
 	<script src="js/Math3D.js"></script>
 	<script src="js/Input.js"></script>
 	<script src="js/Specification.js"></script>
 	<script src="js/Region.js"></script>
 	<script src="js/Camera.js"></script>
 	<script src="js/Hand.js"></script>
-	<script src="js/Paper.js"></script>
+	<script src="js/SpringPaper.js"></script>
+	<script src="js/BookCover.js"></script>
+	<script src="js/PaperCurve.js"></script>
+	<script src="js/BookPageStack.js"></script>
+	<script src="js/BookPage.js"></script>
+	<script src="js/BookModel.js"></script>
+	<script src="js/TexLoader.js"></script>
+	<script src="js/Floor.js"></script>
 	
 	<body style="background: #f0f0f0">
 
@@ -34,22 +42,22 @@
 				<div id="roiContainer" style="background: black; overflow-y: scroll; width: 50%; position: fixed; left: 0px; top: 0px; opacity: 1; z-index: -1; border: 0px; padding: 0px"></div>
 			</td></tr>
 			
-			<tr style="border: 0px; padding: 0px"><td style="border: 0px; padding: 0px"><center>
-				<button style="" id="prev" onClick="Reader.requestPage = Reader.currentPage-2;"><image style="width: 64px; height: 64px" src="left.png" /></button>
-				<button id="zoomout" style="display: none" onMouseDown="Reader.zoomOut = true;" onMouseUp="Reader.zoomOut = false;"><image style="width: 64px; height: 64px" src="zoomout.png" /></button>
-				<button id="zoom" onClick="Reader.zoom();"><image style="width: 64px; height: 64px" id="zoomimg" src="zoom.png" /></button>
-				<button id="back" style="display: none" onClick="Reader.back();"><image style="width: 64px; height: 64px" src="back.png" /></button>
-				<button id="zoomin" style="display: none" onMouseDown="Reader.zoomIn = true;" onMouseUp="Reader.zoomIn = false;"><image style="width: 64px; height: 64px" src="zoomin.png" /></button>
-				<button id="next" onClick="Reader.requestPage = Reader.currentPage+2;"><image style="width: 64px; height: 64px" src="right.png" /></button>
-			</center></td></tr>
+			<tr style="border: 0px; padding: 0px"><td style="text-align: center; border: 0px; padding: 0px">
+				<button style="" id="prev" onClick="Reader.quickPrev();"><img style="width: 64px; height: 64px" src="left.png" /></button>
+				<button id="zoomout" style="display: none" onmousedown="Reader.zoomOut = true;" onmouseup="Reader.zoomOut = false;" onmouseout="Reader.zoomOut = false;"><img style="width: 64px; height: 64px" src="zoomout.png" /></button>
+				<button id="zoom" onClick="Reader.zoom();"><img style="width: 64px; height: 64px" id="zoomimg" src="zoom.png" /></button>
+				<button id="back" style="display: none" onClick="Reader.back();"><img style="width: 64px; height: 64px" src="back.png" /></button>
+				<button id="zoomin" style="display: none" onmousedown="Reader.zoomIn = true;" onmouseup="Reader.zoomIn = false;" onmouseout="Reader.zoomIn = false;"><img style="width: 64px; height: 64px" src="zoomin.png" /></button>
+				<button id="next" onClick="Reader.quickNext();"><img style="width: 64px; height: 64px" src="right.png" /></button>
+			</td></tr>
 			
-			<tr style="display: none; border: 0px; padding: 0px"><td style="border: 0px; padding: 0px"><center>
+			<tr style="display: none; border: 0px; padding: 0px"><td style="text-align: center; border: 0px; padding: 0px">
 				<textarea id="dbgArea" rows=10 cols=80></textarea>
-			</center></td></tr>
+			</td></tr>
 		
 		</table>
 		
-		<div style="position: fixed; left: 5px; bottom: 0px">
+		<div id="poweredBy" style="position: fixed; left: 5px; bottom: 0px">
             <i>Powered by <a href="http://www.docexplore.eu">DocExplore</a>, an <a href="http://www.interreg4a-manche.eu/index.php?lang=en">Interreg IV A</a> project</i>
         </div>
         <script>
@@ -63,18 +71,56 @@
                 return num+"-"+(num+1);
             }
         </script>
-        <div id="sliderDiv" style="position: fixed; right: 5px; bottom: 5px">
-            Page
-            <input id="sliderVal" type="text" disabled="true" value="1" size="4" style="vertical-align: baseline"/>
-            <input id="slider" type="range" value="0" min="0" max="100" data-show-value="true" data-popup-enabled="true" data-hightlight="true" style="vertical-align: bottom"
-                onChange="document.getElementById('sliderVal').value=formatVal(document.getElementById('slider').value); Reader.requestPage=2*Math.floor(document.getElementById('slider').value/2)-1;"
-                onInput="document.getElementById('sliderVal').value=formatVal(document.getElementById('slider').value);"/>
-        </div>
+        <table style="position: fixed; right: 5px; bottom: 5px">
+        	<tr><td style="text-align: right;">
+		    	<span id="loadingSpan" style="color: blue; font-style: italic;"></span>
+		    </td></tr>
+        	<tr><td>
+		        <div id="sliderDiv">
+		            Page
+		            <input id="sliderVal" type="text" disabled="true" value="1" size="4" style="vertical-align: baseline"/>
+		            <input id="slider" type="range" value="0" min="0" max="100" data-show-value="true" data-popup-enabled="true" data-hightlight="true" style="vertical-align: bottom"
+		                onChange="document.getElementById('sliderVal').value=formatVal(document.getElementById('slider').value); Reader.quickJump(2*Math.floor(document.getElementById('slider').value/2)-1);"
+		                onInput="document.getElementById('sliderVal').value=formatVal(document.getElementById('slider').value);"/>
+		        </div>
+		    </td></tr>
+		</table>
 		
 	</body>
 	
 	<script src="js/Reader.js"></script>
 	<script>
-		$.get('book0.xml', function(xml) {Reader.start(xml);}, 'text');
+		var ht = new Hammer(document.getElementById('container'));
+		ht.get('pinch').set({ enable: true});
+		ht.on('pinch', function(ev) {Input.pinch(ev.scale);})
+		ht.on('pinchend', function(ev) {Input.pinchEnd();})
+		
+		/*ht = new Hammer(document.getElementById('zoomin'));
+		ht.on('press', function(ev) {Reader.zoomIn = true;})
+		ht.on('pressup', function(ev) {Reader.zoomIn = false;})
+		
+		ht = new Hammer(document.getElementById('zoomout'));
+		ht.on('press', function(ev) {Reader.zoomOut = true;})
+		ht.on('pressup', function(ev) {Reader.zoomOut = false;})*/
+	</script>
+	<script>
+		function getQueryVariable(variable)
+		{
+  			var query = window.location.search.substring(1);
+  			var vars = query.split("&");
+  			for (var i=0;i<vars.length;i++)
+  			{
+    			var pair = vars[i].split("=");
+    			if (pair[0] == variable)
+    			{
+    				return pair[1];
+    			}
+  			}
+  			return ""+window.location;
+  		}
+		bookBasePath = getQueryVariable('path');
+		if (!bookBasePath.endsWith("/"))
+			bookBasePath = bookBasePath+"/";
+  		$.get(bookBasePath+'book0.xml', function(xml) {Reader.start(xml);}, 'text');
 	</script>
 </html>

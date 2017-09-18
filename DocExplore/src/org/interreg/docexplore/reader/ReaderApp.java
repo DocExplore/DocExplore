@@ -42,6 +42,7 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import org.interreg.docexplore.DocExplore;
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.Startup;
 import org.interreg.docexplore.Startup.PluginConfig;
@@ -316,6 +317,7 @@ public class ReaderApp extends DocExploreTool implements ApplicationListener
 			final JDialog modeDialog = new JDialog((Frame)null, "Mode", true);
 			JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
 			mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			@SuppressWarnings({ "rawtypes", "unchecked" })
 			JList modeList = new JList(displayModes);
 			modeList.setSelectedIndex(0);
 			mainPanel.add(new JScrollPane(modeList), BorderLayout.NORTH);
@@ -337,7 +339,10 @@ public class ReaderApp extends DocExploreTool implements ApplicationListener
 				(screenSize.height-(screenInsets.bottom+screenInsets.top)-modeDialog.getHeight())/2);
 			modeDialog.setVisible(true);
 			if (!ok[0])
+			{
+				DocExplore.main(new String [0]);
 				return;
+			}
 			mode = (DisplayMode)modeList.getSelectedValue();
 			fullscreen = fsBox.isSelected();
 		}

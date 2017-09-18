@@ -1,15 +1,16 @@
 var Reader = {};
 
-Reader.leftPage = {};
-Reader.rightPage = {};
-Reader.currentPage = -2;
-Reader.requestPage = -1;
+Reader.currentPage = -4;
+Reader.requestPage = -3;
 Reader.dbg = {};
 Reader.width = 0;
 Reader.height = 0;
 Reader.$roiArea = null;
 Reader.roiAlpha = 0;
 Reader.ecoMode = false;
+Reader.pageDepth = .025;
+Reader.useShadows = false;
+Reader.bookModel = null;
 
 var Detector = {
 
@@ -84,7 +85,14 @@ Reader.init = function()
 	Reader.$roiArea.css("height", Reader.height);
 	
 	if (Detector.webgl)
+	{
         Reader.renderer = new THREE.WebGLRenderer();
+        if (Reader.useShadows)
+        {
+        	Reader.renderer.shadowMap.enabled = true;
+        	Reader.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        }
+	}
     else
     {
         Reader.renderer = new THREE.CanvasRenderer();
@@ -95,78 +103,57 @@ Reader.init = function()
 	Reader.renderer.setSize(Reader.width, Reader.height);
 	Reader.renderer.autoClear = true;
     Reader.renderer.autoClearColor = true;
-    Reader.renderer.setClearColorHex(0xffffff);
+    Reader.renderer.setClearColor(new THREE.Color(0xf0f0f0));
 	$container.append(Reader.renderer.domElement);
 	
 	var distFactor = 2*Spec.aspect*Reader.height/Reader.width;
-    Camera.init(0, 0, 5*Math.max(1, distFactor));
+    Camera.init(0, 0, 5.2*Math.max(1, distFactor));
     Reader.scene = new THREE.Scene();
+    Reader.heightBound = Reader.width*1./Reader.height > 2*Spec.aspect;
     
     var pageHeight = Spec.pageHeight;
     var pageWidth = pageHeight*Spec.aspect;
-	
-	var leftPageGeom = new THREE.Geometry();
-	leftPageGeom.vertices.push(new THREE.Vector3(-pageWidth,  -.5*pageHeight, 0));
-	leftPageGeom.vertices.push(new THREE.Vector3(0,  -.5*pageHeight, 0));
-	leftPageGeom.vertices.push(new THREE.Vector3(0,  .5*pageHeight, 0));
-	leftPageGeom.vertices.push(new THREE.Vector3(-pageWidth,  .5*pageHeight, 0));
-	leftPageGeom.faces.push(new THREE.Face3(0, 1, 2));
-	leftPageGeom.faces.push(new THREE.Face3(0, 2, 3));
-	leftPageGeom.faceVertexUvs[0].push([new THREE.Vector2(0, 0),
-	                                    new THREE.Vector2(1, 0),
-	                                    new THREE.Vector2(1, 1)]);
-	leftPageGeom.faceVertexUvs[0].push([new THREE.Vector2(0, 0),
-	                                    new THREE.Vector2(1, 1),
-	                                    new THREE.Vector2(0, 1)]);
-	leftPageGeom.computeCentroids();
-	leftPageGeom.computeFaceNormals();
-	
-	var rightPageGeom = new THREE.Geometry();
-	rightPageGeom.vertices.push(new THREE.Vector3(0,  -.5*pageHeight, 0));
-	rightPageGeom.vertices.push(new THREE.Vector3(pageWidth,  -.5*pageHeight, 0));
-	rightPageGeom.vertices.push(new THREE.Vector3(pageWidth,  .5*pageHeight, 0));
-	rightPageGeom.vertices.push(new THREE.Vector3(0,  .5*pageHeight, 0));
-	rightPageGeom.faces.push(new THREE.Face3(0, 1, 2));
-	rightPageGeom.faces.push(new THREE.Face3(0, 2, 3));
-	rightPageGeom.faceVertexUvs[0].push([new THREE.Vector2(0, 0),
-	                                     new THREE.Vector2(1, 0),
-	                                     new THREE.Vector2(1, 1)]);
-	rightPageGeom.faceVertexUvs[0].push([new THREE.Vector2(0, 0),
-	                                     new THREE.Vector2(1, 1),
-	                                     new THREE.Vector2(0, 1)]);
-	rightPageGeom.computeCentroids();
-	rightPageGeom.computeFaceNormals();
-	
-	Reader.leftPage = new THREE.Mesh(leftPageGeom, new THREE.MeshLambertMaterial({map: null}));
-	Reader.leftPage.material.depthWrite = false;
-	Reader.rightPage = new THREE.Mesh(rightPageGeom, new THREE.MeshLambertMaterial({map: null}));
-	Reader.rightPage.material.depthWrite = false;
-	
-	Reader.scene.add(Reader.leftPage);
-	Reader.scene.add(Reader.rightPage);
 	
 	// and the camera
 	Reader.scene.add(Camera.camera);
 	
 	// create a point light
-	var pointLight = new THREE.PointLight(0xFFFFFF);
-	
+	var pointLight = new THREE.DirectionalLight(0xDFDFDF);
+	pointLight.castShadow = Reader.useShadows;
+	if (Reader.useShadows)
+	{
+		//pointLight.shadow.bias = .6;
+		pointLight.shadow.mapSize.width = 1024;
+		pointLight.shadow.mapSize.height = 1024;
+		pointLight.shadow.camera.left = -3;
+		pointLight.shadow.camera.right = 3;
+		pointLight.shadow.camera.top = 3;
+		pointLight.shadow.camera.bottom = -3;
+		pointLight.shadow.camera.near = 1;
+		pointLight.shadow.camera.far = 30;
+		//Reader.scene.add(new THREE.AmbientLight(0x404040));
+	}
 	// set its position
-	pointLight.position.x = 10;
-	pointLight.position.y = 50;
-	pointLight.position.z = 130;
+	pointLight.position.x = 1;
+	pointLight.position.y = 2;
+	pointLight.position.z = 13;
 	
 	// add to the scene
 	Reader.scene.add(pointLight);
-	//Reader.scene.add(new THREE.AmbientLight(0xffffff));
+	Reader.scene.add(new THREE.AmbientLight(0x202020));
 	
 	Reader.fcnt = 0;
 	
-	Paper.init(pageWidth, pageHeight);
 	Input.listeners.push(Reader);
 	
-	document.getElementById('slider').max=Spec.pages.length;
+	Reader.bookModel = new BookModel(pageWidth, pageHeight);
 	
+	Reader.scene.add(Reader.bookModel.model);
+	Reader.scene.add(Reader.bookModel.page.model);
+	
+	document.getElementById('slider').max = Spec.pages.length;
+	
+	TexLoader.refresh();
 	Reader.trace("init OK");
 }
 
@@ -187,8 +174,11 @@ Reader.leftPageIndex = 0;
 Reader.rightPageIndex = 0;
 Reader.handWasActive = false;
 Reader.forceModelSynchro = false;
+Reader.regionsAreShown = true;
 Reader.render = function()
 {
+	Reader.bookModel.update();
+	
 	if (Reader.zoomed)
 	{
 		if (Reader.zoomIn) Camera.setDiffPos(0, 0, -.1);
@@ -212,46 +202,63 @@ Reader.render = function()
 		Reader.clearModels();
 		
 		Reader.currentPage = nextPage;
-		if (Reader.currentPage < -1)
-			Reader.currentPage = -1;
-		if (Reader.currentPage > Spec.pages.length-1)
-			Reader.currentPage = Spec.pages.length-1;
+		if (Reader.currentPage < -3)
+			Reader.currentPage = -3;
+		if (Reader.currentPage > Spec.pages.length+1)
+			Reader.currentPage = Spec.pages.length+1;
 		document.getElementById('slider').value=Reader.currentPage+1;
         document.getElementById('sliderVal').value=formatVal(Reader.currentPage+1);
 		Reader.leftPageIndex = Reader.currentPage;
 		Reader.rightPageIndex = Reader.currentPage+1+(Hand.active ? 2 : 0);
-		if (Reader.leftPageIndex < 0)
+		if (Reader.leftPageIndex < 0 || Reader.leftPageIndex > Spec.pages.length-1)
 			Reader.leftPageIndex = -1;
-		if (Reader.rightPageIndex >= Spec.pages.length-1)
+		if (Reader.rightPageIndex < 0 || Reader.rightPageIndex >= Spec.pages.length-1)
 			Reader.rightPageIndex = -1;
 		
-		if (Hand.active)
-			Paper.setTexes(Spec.pages[Reader.leftPageIndex+1].tex, Spec.pages[Reader.leftPageIndex+2].tex);
+//		if (Hand.active)
+//		{
+//			Reader.bookModel.page.setFrontTex(Spec.pages[Reader.leftPageIndex+1].tex);
+//			Reader.bookModel.page.setBackTex(Spec.pages[Reader.leftPageIndex+2].tex);
+//		}
 		
-		Spec.refreshTextures(Reader.currentPage, 5);
+//		Spec.refreshTextures(Reader.currentPage, 5);
 		if (Reader.leftPageIndex >= 0)
 		{
 			var page = Spec.pages[Reader.leftPageIndex];
-			Reader.leftPage.material.map = page.tex;
-			for (i=0;i<page.regions.length;i++)
+//			Reader.bookModel.setLeftTex(page.tex);
+			for (var i=0;i<page.regions.length;i++)
 			{
-				Reader.tempModels[Reader.tempModels.length] = page.regions[i].line;
-				Reader.scene.add(page.regions[i].line);
+				var region = page.regions[i];
+				Region.buildRegionMesh(region);
+				Reader.tempModels[Reader.tempModels.length] = region.line;
+				Reader.scene.add(region.line);
+				region.line.visible = Reader.regionsAreShown;
 			}
 		}
-		else Reader.leftPage.material.map = Spec.emptyTex;
+		
 		if (Reader.rightPageIndex >= 0)
 		{
 			var page = Spec.pages[Reader.rightPageIndex];
-			Reader.rightPage.material.map = page.tex;
-			for (i=0;i<page.regions.length;i++)
+//			Reader.bookModel.setRightTex(page.tex);
+			for (var i=0;i<page.regions.length;i++)
 			{
-				Reader.tempModels[Reader.tempModels.length] = page.regions[i].line;
-				Reader.scene.add(page.regions[i].line);
+				var region = page.regions[i];
+				Region.buildRegionMesh(region);
+				Reader.tempModels[Reader.tempModels.length] = region.line;
+				Reader.scene.add(region.line);
+				region.line.visible = Reader.regionsAreShown;
 			}
 		}
-		else Reader.rightPage.material.map = Spec.emptyTex;
+		TexLoader.refresh();
 	}
+	
+	var shouldRegionsBeShown = !Hand.active && Reader.currentPage > -3 && Reader.currentPage < Spec.pages.length+1;
+	if (shouldRegionsBeShown != Reader.regionsAreShown)
+	{
+		if (shouldRegionsBeShown) Reader.showRegions();
+		else Reader.hideRegions();
+	}
+	
 	Reader.handWasActive = Hand.active;
 	Reader.forceModelSynchro = false;
 	
@@ -264,12 +271,26 @@ Reader.clearModels = function()
 		Reader.scene.remove(Reader.tempModels[i]);
 	Reader.tempModels = [];
 }
+Reader.showRegions = function()
+{
+	for (i=0;i<Reader.tempModels.length;i++)
+		Reader.tempModels[i].visible = true;
+	Reader.regionsAreShown = true;
+}
+Reader.hideRegions = function()
+{
+	for (i=0;i<Reader.tempModels.length;i++)
+		Reader.tempModels[i].visible = false;
+	Reader.regionsAreShown = false;
+}
 
 Reader.start = function(xml)
 {
 	Reader.dbg = document.getElementById("dbgArea");
 	
-	Spec.init(xml);
+	if (!bookBasePath.endsWith("/"))
+		bookBasePath = bookBasePath+"/";
+	Spec.init(bookBasePath, xml);
 	
 	Reader.init();
 	Reader.render();
@@ -280,19 +301,9 @@ Reader.onClick = function(x, y)
 {
 	if (!Reader.zoomed)
 	{
-		var worldp = Camera.toWorldCoords(x, y);
-		var isLeft = Camera.isLeftPage(worldp);
-		var p = isLeft ? Camera.toLeftPageCoords(worldp) : Camera.toRightPageCoords(worldp);
-		
 		var region = null;
 		if (Reader.selectedRegion == null)
-		{
-			if (isLeft && Reader.leftPageIndex >= 0)
-				region = Region.getRegionAt(Spec.pages[Reader.leftPageIndex], p[0], p[1]);
-			if (!isLeft && Reader.rightPageIndex >= 0)
-				region = Region.getRegionAt(Spec.pages[Reader.rightPageIndex], p[0], p[1]);
-		}
-		
+			region = Region.getRegionAt(x, y);
 		Reader.setSelectedRegion(region);
 	}
 }
@@ -331,6 +342,9 @@ Reader.setSelectedRegion = function(region)
 			$('#prev').css('display', 'inline');
 			$('#next').css('display', 'inline');
 			$('#sliderDiv').css('display', 'inline');
+			var videos = document.getElementsByTagName("video");
+			for (var i=0;i<videos.length;i++)
+				videos[i].pause();
 		}
 	}
 }
@@ -375,6 +389,34 @@ Reader.zoom = function()
 		$('#next').css('display', 'none');
 		$('#zoom').css('display', 'none');
 	}
+}
+Reader.zoomBy = function(amount)
+{
+	if (!Reader.zoomed)
+		Reader.zoom();
+	else if (Reader.zoomed && Camera.unzoomed() && amount > .1)
+	{
+		Reader.zoom();
+		Input.waitForNextPinch = true;
+	}
+	
+	if (Reader.zoomed)
+	{
+		Camera.setDiffPos(0, 0, amount);
+	}
+}
+
+Reader.quickNext = function()
+{
+	Reader.requestPage = Reader.currentPage+2;
+}
+Reader.quickPrev = function()
+{
+	Reader.requestPage = Reader.currentPage-2;
+}
+Reader.quickJump = function(page)
+{
+	Reader.requestPage = page;
 }
 
 Reader.trace = function(text)

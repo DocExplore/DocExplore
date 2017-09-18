@@ -14,6 +14,7 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.authoring;
 
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -48,7 +49,7 @@ public abstract class PresentationExporter
 	
 	float [] progress = {0};
 	
-	protected void doExport(Book book, File exportDir, ExportOptions options, int bookNum, String format) throws Exception
+	protected void doExport(Book book, File exportDir, ExportOptions options, int bookNum, String format, int exportType) throws Exception
 	{
 		progress[0] = 0;
 		try
@@ -57,40 +58,73 @@ public abstract class PresentationExporter
 			File bookDir = new File(exportDir, "book"+bookNum);
 			bookDir.mkdir();
 			
+			boolean transparency = options.transparencyBox.isSelected();
+			if (transparency)
+				format = "PNG";
+			boolean [] transArray = transparency ? transArray(book) : null;
+			
 			StringBuffer bookSpec = new StringBuffer("<Book path=\"").append("book").append(bookNum).append("/\" aspectRatio=\"").append(aspectRatio(book)).append("\"");
 			BufferedImage cover = CoverManager.buildCoverImage(book);
 			if (cover != null)
 			{
-				ImageUtils.write(cover, format, new File(bookDir, "cover."+format));
-				bookSpec.append(" cover=\"cover."+format+"\"");
+				ImageUtils.write(cover, "PNG", new File(bookDir, "cover.png"));
+				bookSpec.append(" cover=\"cover.png\"");
 				cover = null;
 				
 				BufferedImage preview = CoverManager.buildPreviewCoverImage(book);
 				if (preview != null)
-					ImageUtils.write(preview, format, new File(exportDir, "book"+bookNum+"."+format));
+					ImageUtils.write(preview, "PNG", new File(exportDir, "book"+bookNum+"."+format));
 				preview = null;
 			}
 			BufferedImage innerCover = CoverManager.buildInnerCoverImage(book);
 			if (innerCover != null)
 			{
-				ImageUtils.write(innerCover, format, new File(bookDir, "innerCover."+format));
-				bookSpec.append(" innerCover=\"innerCover."+format+"\"");
+				ImageUtils.write(innerCover, "PNG", new File(bookDir, "innerCover.png"));
+				bookSpec.append(" innerCover=\"innerCover.png\"");
 				innerCover = null;
 			}
+			bookSpec.append(" leftSide=\"leftSide."+format+"\" rightSide=\"rightSide."+format+"\"");
 			bookSpec.append(">\n");
 			
+			bookSpec.append("\t<Name>");
+			bookSpec.append(book.getName());
+			bookSpec.append("</Name>\n");
+			
+			bookSpec.append("\t<Description>");
+			MetaDataKey descKey = book.getLink().getOrCreateKey("Description");
+			List<MetaData> descMds = book.getMetaDataListForKey(descKey);
+			if (descMds.size() > 0)
+				bookSpec.append(descMds.get(0).getString());
+			bookSpec.append("</Description>\n");
+			
+			BufferedImage sideLeft = null, sideRight = null;
 			int pageNum = 0;
 			int lastPage = book.getLastPageNumber();
 			int imageNum = 0;
 			for (int i=1;i<=lastPage;i++)
 			{
 				Page page = book.getPage(i);
-				BufferedImage image = page.getImage().getImage();
+				BufferedImage image = transparency ? buildTransImage(book, i, transArray) : fix(page.getImage().getImage());
+				BufferedImage timage = transparency ? page.getImage().getImage() : null;
 				
-				ImageUtils.write(options.handlePage(fix(image)), format, new File(bookDir, "image"+pageNum+"."+format));
+				if (sideLeft == null)
+				{
+					sideLeft = new BufferedImage(lastPage/2, image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+					sideRight = new BufferedImage(lastPage/2, image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+				}
+				if (i%2 == 0)
+					sideLeft.createGraphics().drawImage(image, (i-1)/2, 0, (i-1)/2+1, sideLeft.getHeight(), 0, 0, 1, image.getHeight(), null);
+				else sideRight.createGraphics().drawImage(image, (i-1)/2, 0, (i-1)/2+1, sideRight.getHeight(), image.getWidth()-1, 0, image.getWidth(), image.getHeight(), null);
+				
+				ImageUtils.write(options.handlePage(image), format, new File(bookDir, "image"+pageNum+"."+format));
+				if (transparency)
+					ImageUtils.write(options.handlePage(timage), format, new File(bookDir, "timage"+pageNum+"."+format));
 				page.unloadImage();
 				
-				bookSpec.append("\t<Page src=\"").append("image").append(pageNum).append(".").append(format).append("\">\n");
+				bookSpec.append("\t<Page src=\"").append("image").append(pageNum).append(".").append(format).append("\"");
+				if (transparency)
+					bookSpec.append(" tsrc=\"").append("timage").append(pageNum).append(".").append(format).append("\"");
+				bookSpec.append(">\n");
 				for (Region region : page.getRegions())
 				{
 					{
@@ -134,7 +168,7 @@ public abstract class PresentationExporter
 							bookSpec.append("\t\t\t<Info type=\"image\" src=\"").append("roiImage").append(imageNum).append(".").append(format).append("\" />\n");
 							imageNum++;
 						}
-						else tool.exportMetaData(md, bookSpec, bookDir, imageNum++);
+						else tool.exportMetaData(md, bookSpec, bookDir, imageNum++, options, exportType);
 					}
 					
 					bookSpec.append("\t\t</RegionOfInterest>\n");
@@ -152,6 +186,9 @@ public abstract class PresentationExporter
 			FileOutputStream bookOutput = new FileOutputStream(new File(exportDir, bookFileName));
 			bookOutput.write(bookSpec.toString().getBytes(Charset.forName("UTF-8")));
 			bookOutput.close();
+			
+			ImageUtils.write(options.handlePage(sideLeft), format, new File(bookDir, "leftSide."+format));
+			ImageUtils.write(options.handlePage(sideRight), format, new File(bookDir, "rightSide."+format));
 		}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 	}
@@ -172,5 +209,59 @@ public abstract class PresentationExporter
 			image = tmp;
 		}
 		return image;
+	}
+	
+	BufferedImage buildTransImage(Book book, int page, boolean [] trans) throws Exception
+	{
+		BufferedImage last = book.getPage(page).getImage().getImage();
+		
+		boolean left = page%2 == 0;
+		int lastPage = book.getLastPageNumber();
+		int from = page-1;
+		if (left) while (from > 1 && trans[from])
+			from -= 2;
+		else while (from < lastPage-1 && trans[from])
+			from += 2;
+		if (from == page-1)
+			return last;
+		BufferedImage first = book.getPage(from+1).getImage().getImage();
+		book.getPage(from+1).unloadImage();
+		
+		BufferedImage res = new BufferedImage(last.getWidth(), last.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		for (int i=0;i<res.getWidth();i++)
+			for (int j=0;j<res.getHeight();j++)
+				res.setRGB(i, j, first.getRGB(i*first.getWidth()/res.getWidth(), j*first.getHeight()/res.getHeight()));
+		
+		Graphics2D g = res.createGraphics();
+		for (int i=from+(left ? 2 : -2);left && i<page-1 || !left && i>page-1;i+=(left ? 2 : -2))
+		{
+			g.drawImage(book.getPage(i+1).getImage().getImage(), 0, 0, res.getWidth(), res.getHeight(), null);
+			book.getPage(i+1).unloadImage();
+		}
+		g.drawImage(last, 0, 0, res.getWidth(), res.getHeight(), null);
+		book.getPage(page).unloadImage();
+		
+		return res;
+	}
+	
+	boolean hasTransparency(BufferedImage image)
+	{
+		for (int i=0;i<image.getWidth();i++)
+			for (int j=0;j<image.getHeight();j++)
+				if (ImageUtils.alpha(image.getRGB(i, j)) < 255)
+					return true;
+		return false;
+	}
+	boolean [] transArray(Book book) throws Exception
+	{
+		int lastPage = book.getLastPageNumber();
+		boolean [] array = new boolean [lastPage];
+		for (int i=1;i<=lastPage;i++)
+		{
+			Page page = book.getPage(i);
+			array[i-1] = hasTransparency(page.getImage().getImage());
+			page.unloadImage();
+		}
+		return array;
 	}
 }

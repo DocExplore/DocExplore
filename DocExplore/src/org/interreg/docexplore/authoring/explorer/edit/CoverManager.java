@@ -28,6 +28,7 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -266,7 +267,7 @@ public class CoverManager extends JPanel
 			BufferedImage front = getImage(book, "frontCover");
 			BufferedImage back = getImage(book, "backCover");
 			if (front == null && back == null)
-				return null;
+				return ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("org/interreg/docexplore/reader/book/defaultCover.png"));
 			BufferedImage res = new BufferedImage(
 				(front != null ? front.getWidth() : back.getWidth())+(back != null ? back.getWidth() : front.getWidth()), 
 				Math.max((front != null ? front.getHeight() : back.getHeight()), (back != null ? back.getHeight() : front.getHeight())), 
@@ -295,7 +296,7 @@ public class CoverManager extends JPanel
 			BufferedImage front = getImage(book, "frontInnerCover");
 			BufferedImage back = getImage(book, "backInnerCover");
 			if (front == null && back == null)
-				return null;
+				return ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("org/interreg/docexplore/reader/book/defaultInnerCover.png"));
 			BufferedImage res = new BufferedImage(
 				(front != null ? front.getWidth() : back.getWidth())+(back != null ? back.getWidth() : front.getWidth()), 
 				Math.max((front != null ? front.getHeight() : back.getHeight()), (back != null ? back.getHeight() : front.getHeight())), 

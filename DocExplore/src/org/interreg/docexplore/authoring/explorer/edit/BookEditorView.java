@@ -297,9 +297,6 @@ public class BookEditorView extends BookView
 					newPageSet.add((Page)item.object);
 			int insertIndex = vim.insertionIndex(where.x, where.y);
 			
-			if (newPageSet.size() == 1 && (newPageSet.get(0).pageNum == insertIndex || newPageSet.get(0).pageNum == insertIndex+1))
-				return;
-			
 			Page moveAfter = insertIndex == 0 ? null : curBook.getPage(insertIndex);
 			MovePagesAction action = explorer.getActionProvider().movePages(newPageSet, moveAfter);
 			try

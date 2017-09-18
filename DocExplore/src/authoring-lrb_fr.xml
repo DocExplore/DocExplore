@@ -12,7 +12,8 @@
 	<entry key="generalMenuSaveAs">Enregistrer sous...</entry>
 	<entry key="generalMenuNew">Nouveau</entry>
 	<entry key="generalSaveMessage">Voulez-vous enregistrer la présentation actuelle?</entry>
-	<entry key="generalMenuExport">Ajouter au feuilleteur</entry>
+	<entry key="generalMenuExport">Export...</entry>
+	<entry key="generalExportDialog">Export</entry>
 	<entry key="generalMenuWebExport">Export Web</entry>
 	<entry key="generalFilesLabel">Fichiers</entry>
 	<entry key="generalPresentationLabel">Présentation</entry>
@@ -33,6 +34,15 @@
 Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="moveAnnotation">Déplacement de commentaire</entry>
 	<entry key="generalCopyPaste">Copier/Coller</entry>
+	<entry key="generalTitle">Titre</entry>
+	<entry key="generalDescription">Description</entry>
+	
+	<entry key="exportReader">Export vers le feuilleteur</entry>
+	<entry key="exportReaderDesc">Cette présentation sera ajoutée à la collection local de cette installation de DocExplore.</entry>
+	<entry key="exportWeb">Export vers le web</entry>
+	<entry key="exportWebDesc">Cette présentation sera placée dans une archive qui pourra être intégrée à un site web.</entry>
+	<entry key="exportMobile">Export vers mobile</entry>
+	<entry key="exportMobileDesc">Cette présentation sera placée dans un fichier lisible par l'application mobile DocExplore.</entry>
 	
 	<entry key="viewHelpToggle">Afficher l'aide</entry>
 	<entry key="helpBookMsg">Ce panneau affiche les pages de votre présentation. Pour en ajouter vous pouvez:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Cliquer sur l'icône &amp;oplus; dans la barre d'outils pour importer des images&amp;uarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser livres et pages depuis la droite &amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser directement des images depuis votre navigateur de fichiers</entry>
@@ -84,11 +94,17 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	
 	<entry key="exportDuplicateMessage">Un livre du même nom existe déjà. Souhaitez-vous le remplacer?</entry>
 	<entry key="exportOptions">Options d'export</entry>
+	<entry key="exportDimensionOption">Limiter la taille des images</entry>
 	<entry key="exportSizeLimit">Les dimensions des images ne doivent pas dépasser </entry>
-	<entry key="exportSizeMessage">&lt;html>La limitation des dimensions d'images sert à réduire les performances matérielles requises par les présentations.&lt;br/>
-Si vous constatez des temps de chargement excessifs ou des plantages lors de la visualisation, il est&lt;br/>
-recommandé d'activer cette option. Cependant, bien qu'elle ne déformera pas les images, elle peut entraîner&lt;br/>
-une baisse de qualité visible, notamment en utilisant la fonction zoom.&lt;/html></entry>
+	<entry key="exportSizeMessage">&lt;html>&lt;div style=&quot;width: 360px;&quot;>La limitation des dimensions d'images sert à réduire les performances matérielles requises par les présentations. 
+Si vous constatez des temps de chargement excessifs ou des plantages lors de la visualisation, il est 
+recommandé d'activer cette option. Cependant, bien qu'elle ne déformera pas les images, elle peut entraîner 
+une baisse de qualité visible, notamment en utilisant la fonction zoom.&lt;/div>&lt;/html></entry>
+	<entry key="exportTransparencyOption">Transparence</entry>
+	<entry key="exportTransparencyLabel">Activer la transparency</entry>
+	<entry key="exportTransparencyMessage">&lt;html>&lt;div style=&quot;width: 360px;&quot;>Cochez cette option si certaines pages de la présentation contiennent des zones transparentes, 
+faute de quoi elles ne s'afficheront pas correctement. 
+&lt;u>Notez qui si vous activez cette option, le temps de traitement de l'export peut augmenter considérablement ainsi que sa taille des fichiers résultant.&lt;/u>&lt;/div>&lt;/html></entry>
 	
 	<entry key="filterText">Du texte</entry>
 	<entry key="filterImage">Des images</entry>

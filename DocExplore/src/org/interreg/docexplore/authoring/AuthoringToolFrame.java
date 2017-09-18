@@ -31,7 +31,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
@@ -60,6 +59,7 @@ import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.manuscript.Region;
+import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
 import org.interreg.docexplore.util.history.HistoryManager;
 import org.interreg.docexplore.util.history.HistoryPanel;
@@ -86,6 +86,8 @@ public class AuthoringToolFrame extends JFrame
 	public ImportOptions importOptions;
 	public StyleManager styleManager;
 	public MetaDataClipboard clipboard;
+	ExportDialog exportDialog;
+	NameDialog nameDialog;
 	
 	public final List<MetaDataPlugin> plugins;
 	public static final String defaultTitle = "Untitled";
@@ -98,6 +100,8 @@ public class AuthoringToolFrame extends JFrame
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.startup = startup;
 		this.displayHelp = startup.showHelp;
+		this.exportDialog = new ExportDialog(this);
+		this.nameDialog = new NameDialog();
 		
 		startup.screen.setText("Initializing history");
 		this.historyManager = new HistoryManager(50, new File(DocExploreTool.getHomeDir(), ".at-cache"));
@@ -211,13 +215,17 @@ public class AuthoringToolFrame extends JFrame
 			{
 				try
 				{
-					Book book = editorLink.getBook(editorLink.getLink().getAllBookIds().get(0));
-					String name = JOptionPane.showInputDialog(AuthoringToolFrame.this, XMLResourceBundle.getBundledString("collectionAddBookMessage"), book.getName());
-					if (name == null)
-						return;
-					book.setName(name);
-					editorLink.notifyDataLinkChanged();
-					editor.refreshPath();
+//					Book book = editorLink.getBook(editorLink.getLink().getAllBookIds().get(0));
+//					String name = JOptionPane.showInputDialog(AuthoringToolFrame.this, XMLResourceBundle.getBundledString("collectionAddBookMessage"), book.getName());
+//					if (name == null)
+//						return;
+//					book.setName(name);
+					GuiUtils.centerOnComponent(nameDialog, AuthoringToolFrame.this);
+					if (nameDialog.show(editorLink.getBook(editorLink.getLink().getAllBookIds().get(0))))
+					{
+						editorLink.notifyDataLinkChanged();
+						editor.refreshPath();
+					}
 				}
 				catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}
@@ -254,7 +262,8 @@ public class AuthoringToolFrame extends JFrame
 		{
 			public void componentResized(ComponentEvent e)
 			{
-				splitPane.setDividerLocation(splitPane.getDividerLocation()*getWidth()/oldSize);
+				if (oldSize > 0)
+					splitPane.setDividerLocation(splitPane.getDividerLocation()*getWidth()/oldSize);
 				oldSize = getWidth();
 			}
 		});
@@ -310,11 +319,11 @@ public class AuthoringToolFrame extends JFrame
 				return plugin.createIcon(md);
 		return null;
 	}
-	public void exportMetaData(MetaData md, StringBuffer xml, File bookDir, int id)
+	public void exportMetaData(MetaData md, StringBuffer xml, File bookDir, int id, ExportOptions options, int exportType)
 	{
 		for (MetaDataPlugin plugin : plugins)
 			if (md.getType().equals(plugin.getType()))
-				{plugin.exportMetaData(md, xml, bookDir, id); break;}
+				{plugin.exportMetaData(md, xml, bookDir, id, options, exportType); break;}
 	}
 	public PreviewPanel createPreview(Object object, int mx, int my)
 	{

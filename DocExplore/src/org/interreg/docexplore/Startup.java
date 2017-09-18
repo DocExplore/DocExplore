@@ -29,7 +29,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import javax.swing.JFrame;
-import javax.swing.UIManager;
 
 import org.interreg.docexplore.datalink.DataLink;
 import org.interreg.docexplore.datalink.filesystem.DataLinkFileSystem;
@@ -250,14 +249,7 @@ public class Startup
 			Locale.setDefault(Locale.FRENCH);
 		else Locale.setDefault(Locale.ENGLISH);
 
-		try
-		{
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
-//				if ("Nimbus".equals(info.getName()))
-//					{UIManager.setLookAndFeel(info.getClassName()); break;}
-		}
-		catch (Exception e) {e.printStackTrace();}
+		DocExploreTool.setPreferredLAF();
 		
 //		try {System.setProperty("com.apple.mrj.application.apple.menu.about.name", appName);}
 //		catch (Exception e) {e.printStackTrace();}
