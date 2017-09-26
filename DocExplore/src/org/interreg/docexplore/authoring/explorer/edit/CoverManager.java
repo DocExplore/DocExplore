@@ -260,14 +260,14 @@ public class CoverManager extends JPanel
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 		return null;
 	}
-	public static BufferedImage buildCoverImage(Book book)
+	public static BufferedImage buildCoverImage(Book book, boolean trans)
 	{
 		try
 		{
 			BufferedImage front = getImage(book, "frontCover");
 			BufferedImage back = getImage(book, "backCover");
 			if (front == null && back == null)
-				return ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("org/interreg/docexplore/reader/book/defaultCover.png"));
+				return ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("org/interreg/docexplore/reader/book/defaultCover"+(trans ? "" : "NoTrans")+".png"));
 			BufferedImage res = new BufferedImage(
 				(front != null ? front.getWidth() : back.getWidth())+(back != null ? back.getWidth() : front.getWidth()), 
 				Math.max((front != null ? front.getHeight() : back.getHeight()), (back != null ? back.getHeight() : front.getHeight())), 
@@ -289,14 +289,14 @@ public class CoverManager extends JPanel
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 		return null;
 	}
-	public static BufferedImage buildInnerCoverImage(Book book)
+	public static BufferedImage buildInnerCoverImage(Book book, boolean trans)
 	{
 		try
 		{
 			BufferedImage front = getImage(book, "frontInnerCover");
 			BufferedImage back = getImage(book, "backInnerCover");
 			if (front == null && back == null)
-				return ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("org/interreg/docexplore/reader/book/defaultInnerCover.png"));
+				return ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("org/interreg/docexplore/reader/book/defaultInnerCover"+(trans ? "" : "NoTrans")+".png"));
 			BufferedImage res = new BufferedImage(
 				(front != null ? front.getWidth() : back.getWidth())+(back != null ? back.getWidth() : front.getWidth()), 
 				Math.max((front != null ? front.getHeight() : back.getHeight()), (back != null ? back.getHeight() : front.getHeight())), 

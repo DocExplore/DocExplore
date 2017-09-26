@@ -60,35 +60,9 @@ public class WebExporter extends PresentationExporter
 		if (!noHtml)
 		{
 			copyResource("org/interreg/docexplore/reader/web/index.html", exportDir);
-			copyResource("org/interreg/docexplore/reader/web/back.png", exportDir);
-			copyResource("org/interreg/docexplore/reader/web/empty.png", exportDir);
-			copyResource("org/interreg/docexplore/reader/web/left.png", exportDir);
-			copyResource("org/interreg/docexplore/reader/web/right.png", exportDir);
-			copyResource("org/interreg/docexplore/reader/web/zoom.png", exportDir);
-			copyResource("org/interreg/docexplore/reader/web/zoomin.png", exportDir);
-			copyResource("org/interreg/docexplore/reader/web/zoomout.png", exportDir);
-			copyResource("org/interreg/docexplore/reader/web/floor.png", exportDir);
-			copyResource("org/interreg/docexplore/reader/web/loading.jpg", exportDir);
-			copyResource("org/interreg/docexplore/reader/web/empty.png", exportDir);
 			File jsDir = new File(exportDir, "js");
 			jsDir.mkdir();
-			copyResource("org/interreg/docexplore/reader/web/js/BookCover.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/BookModel.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/BookPage.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/BookPageStack.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/Camera.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/Floor.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/hammer.min.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/Hand.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/Input.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/jquery-3.1.1.min.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/Math3D.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/PaperCurve.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/Reader.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/Region.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/Specification.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/SpringPaper.js", jsDir);
-			copyResource("org/interreg/docexplore/reader/web/js/TexLoader.js", jsDir);
+			copyResource("org/interreg/docexplore/reader/web/js/DocexReader.js", jsDir);
 			copyResource("org/interreg/docexplore/reader/web/js/three.min.js", jsDir);
 		}
 		copyComplete = true;

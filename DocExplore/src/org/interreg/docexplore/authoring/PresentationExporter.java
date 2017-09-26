@@ -64,23 +64,23 @@ public abstract class PresentationExporter
 			boolean [] transArray = transparency ? transArray(book) : null;
 			
 			StringBuffer bookSpec = new StringBuffer("<Book path=\"").append("book").append(bookNum).append("/\" aspectRatio=\"").append(aspectRatio(book)).append("\"");
-			BufferedImage cover = CoverManager.buildCoverImage(book);
+			BufferedImage cover = CoverManager.buildCoverImage(book, format.toLowerCase().equals("png"));
 			if (cover != null)
 			{
-				ImageUtils.write(cover, "PNG", new File(bookDir, "cover.png"));
-				bookSpec.append(" cover=\"cover.png\"");
+				ImageUtils.write(cover, format, new File(bookDir, "cover."+format));
+				bookSpec.append(" cover=\"cover."+format+"\"");
 				cover = null;
 				
 				BufferedImage preview = CoverManager.buildPreviewCoverImage(book);
 				if (preview != null)
-					ImageUtils.write(preview, "PNG", new File(exportDir, "book"+bookNum+"."+format));
+					ImageUtils.write(preview, format, new File(exportDir, "book"+bookNum+"."+format));
 				preview = null;
 			}
-			BufferedImage innerCover = CoverManager.buildInnerCoverImage(book);
+			BufferedImage innerCover = CoverManager.buildInnerCoverImage(book, format.toLowerCase().equals("png"));
 			if (innerCover != null)
 			{
-				ImageUtils.write(innerCover, "PNG", new File(bookDir, "innerCover.png"));
-				bookSpec.append(" innerCover=\"innerCover.png\"");
+				ImageUtils.write(innerCover, format, new File(bookDir, "innerCover."+format));
+				bookSpec.append(" innerCover=\"innerCover."+format+"\"");
 				innerCover = null;
 			}
 			bookSpec.append(" leftSide=\"leftSide."+format+"\" rightSide=\"rightSide."+format+"\"");
