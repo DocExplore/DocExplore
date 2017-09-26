@@ -227,6 +227,9 @@ public class AnnotationHandler
 			return null;
 		
 		MetaData annotation = null;
+		MetaDataPlugin plugin = null;
+		String sourceUri = null;
+		
 		if (transButton.isSelected())
 			annotation = new MetaData(link, link.transcriptionKey, "<author></author><content></content>");
 		else if (tagsButton.isSelected())
@@ -262,6 +265,7 @@ public class AnnotationHandler
 					}
 					catch (Exception e) {in.close(); throw e;}
 					annotation = new MetaData(link, key, MetaData.imageType, new FileInputStream(file));
+					sourceUri = file.getAbsolutePath();
 				}
 				catch (Exception e) {throw new DataLinkException(link.getLink(), "Error opening image : '"+file.getAbsolutePath()+"'", e);}
 			}
@@ -270,8 +274,14 @@ public class AnnotationHandler
 			else for (int i=0;i<pluginButtons.length;i++)
 				if (pluginButtons[i].isSelected())
 				{
-					MetaDataPlugin plugin = win.pluginManager.metaDataPlugins.get(i);
-					InputStream stream = plugin.createDefaultValue();
+					plugin = win.pluginManager.metaDataPlugins.get(i);
+					Object val = plugin.createDefaultValue();
+					InputStream stream = null;
+					if (val instanceof InputStream)
+						stream = (InputStream)val;
+					else if (val instanceof File)
+						try {stream = new FileInputStream((File)val); sourceUri = ((File)val).getAbsolutePath();}
+						catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 					if (stream != null)
 						annotation = new MetaData(link, key, plugin.getType(), stream);
 					break;
@@ -279,6 +289,8 @@ public class AnnotationHandler
 		}
 		if (annotation != null)
 		{
+			if (sourceUri != null)
+				annotation.addMetaData(new MetaData(link, link.getOrCreateKey("source-uri"), sourceUri));
 			final AddMetaDataAction addMetDataAction = win.getActionProvider().addMetaData(document, annotation);
 			try
 			{
@@ -336,6 +348,7 @@ public class AnnotationHandler
 		}
 		if (!foundPreselect)
 			keys.add(preselect);
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		JComboBox keyBox = new JComboBox(keys.toArray());
 		keyBox.setEditable(true);
 		keyBox.setSelectedItem(preselect);

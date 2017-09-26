@@ -63,9 +63,12 @@ public class ImportOptions implements BookImporter.PresentationFilter
 	{
 		ImportPanel importPanel;
 		String annotationName;
+		@SuppressWarnings("rawtypes")
 		JComboBox shouldImportBox;
+		@SuppressWarnings("rawtypes")
 		JComboBox styleBox;
 		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public AnnotationPanel(ImportPanel importPanel, String annotationName)
 		{
 			super(new FlowLayout(FlowLayout.LEFT));
@@ -119,6 +122,7 @@ public class ImportOptions implements BookImporter.PresentationFilter
 		JTextField pageTagField, regionTagField;
 		Map<String, AnnotationPanel> annotationPanels = new TreeMap<String, ImportOptions.AnnotationPanel>();
 		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public ImportPanel(DocExploreDataLink sourceLink, List<Page> pages, ImportOptions importOptions) throws DataLinkException
 		{
 			super(new LooseGridLayout(0, 1, 5, 5, true, false, SwingConstants.LEFT, SwingConstants.TOP, true, false));
@@ -336,6 +340,8 @@ public class ImportOptions implements BookImporter.PresentationFilter
 	public boolean keepAnnotation(AnnotatedObject from, AnnotatedObject to, MetaData annotation) throws DataLinkException
 	{
 		if (from instanceof Page && annotation.getKey() == link.miniKey)
+			return true;
+		if (from instanceof MetaData && annotation.getKey().getBestName().equals("source-uri"))
 			return true;
 		if (!(from instanceof Region))
 			return false;

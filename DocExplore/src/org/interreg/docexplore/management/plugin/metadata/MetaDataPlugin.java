@@ -15,7 +15,6 @@ The fact that you are presently reading this means that you have had knowledge o
 package org.interreg.docexplore.management.plugin.metadata;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.Collection;
 
 import javax.swing.Icon;
@@ -40,7 +39,7 @@ public interface MetaDataPlugin extends Plugin
 	public String getType();
 	public AnnotationEditor createEditor(AnnotationPanel panel, MetaData annotation) throws DataLinkException;
 	public JLabel createLabel(String keyName, MetaData annotation) throws DataLinkException;
-	public InputStream createDefaultValue();
+	public Object createDefaultValue();
 	public Collection<File> openFiles(boolean multiple);
 	public InfoElement createInfoElement(MetaDataEditor editor, MetaData md, int width) throws DataLinkException;
 	public boolean canPreview(Object object);
