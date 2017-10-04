@@ -329,6 +329,7 @@ public class DocExploreTool
 	public static FileDialogs.Category getMobileIBookCategory() {return getFileDialogs().getOrCreateCategory("DocExplore Interactive Mobile Book", Collections.singleton("depa"));}
 	public static FileDialogs.Category getPresentationCategory() {return getFileDialogs().getOrCreateCategory("DocExplore Presentation", Collections.singleton("pres"));}
 	public static FileDialogs.Category getBookCategory() {return getFileDialogs().getOrCreateCategory("DocExplore Book", Collections.singleton("dmb"));}
+	public static FileDialogs.Category getStitchingCategory() {return getFileDialogs().getOrCreateCategory("DocExplore Stitching", Collections.singleton("stch"));}
 	public static FileDialogs getFileDialogs()
 	{
 		if (fileDialogs == null || !fileDialogs.fdcache.getParentFile().equals(homeDir))
