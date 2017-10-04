@@ -64,11 +64,11 @@ public class XMLResourceBundle extends ResourceBundle
 			String sub = className.substring("org.interreg.docexplore.".length());
 			int index = sub.indexOf('.');
 			if (index < 0)
-				return ResourceBundle.getBundle("default-lrb", bundleControl).getString(key);
-			return ResourceBundle.getBundle(sub.substring(0, index)+"-lrb", bundleControl).getString(key);
+				try {return ResourceBundle.getBundle("default-lrb", bundleControl).getString(key);} catch (Exception e) {e.printStackTrace(); return "???";}
+			try {return ResourceBundle.getBundle(sub.substring(0, index)+"-lrb", bundleControl).getString(key);} catch (Exception e) {e.printStackTrace(); return "???";}
 		}
 		
-		return ResourceBundle.getBundle("langBundle", bundleControl).getString(key);
+		try {return ResourceBundle.getBundle("langBundle", bundleControl).getString(key);} catch (Exception e) {e.printStackTrace(); return "???";}
 	}
 	
 	public static String getDefaultBaseName()

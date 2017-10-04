@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>English resources</comment>
+	
+	<entry key="frameTitle">DocExplore Stitching Tool</entry>
+
+	<entry key="generalMenuFile">File</entry>
+	<entry key="generalMenuQuit">Back to menu</entry>
+	<entry key="generalMenuLoad">Open</entry>
+	<entry key="generalMenuSave">Save</entry>
+	<entry key="generalMenuSaveAs">Save as...</entry>
+	<entry key="generalMenuNew">New</entry>
+	<entry key="generalSaveMessage">Would you like to save the current presentation?</entry>
+	<entry key="generalMenuImport">Import...</entry>
+	<entry key="generalMenuExport">Export...</entry>
+	<entry key="generalExportDialog">Export</entry>
+	<entry key="generalMenuWebExport">Web export</entry>
+	<entry key="generalFilesLabel">Files</entry>
+	<entry key="generalPresentationLabel">Presentation</entry>
+	<entry key="generalLibraryLabel">Library</entry>
+	<entry key="generalMenuView">Settings</entry>
+	<entry key="generalMenuEdit">Edit</entry>
+	<entry key="generalMenuEditUndo">Undo</entry>
+	<entry key="generalMenuEditRedo">Redo</entry>
+	<entry key="generalMenuEditViewHistory">View history</entry>
+	<entry key="generalHistory">History</entry>
+	<entry key="generalPreview">Preview</entry>
+	<entry key="generalOkLabel">OK</entry>
+    <entry key="generalCancelLabel">Cancel</entry>
+    <entry key="generalCloseLabel">Close</entry>
+    <entry key="generalPathLabel">Path</entry>
+    <entry key="generalRecoveryLabel">Recovery</entry>
+    <entry key="generalRecoveryMessage">A presentation has been recovered from a previous session.
+Would you like to keep it in the editor?</entry>
+	<entry key="moveAnnotation">Move comment</entry>
+	<entry key="generalCopyPaste">Copy/Paste</entry>
+	<entry key="generalTitle">Title</entry>
+	<entry key="generalDescription">Description</entry>
+	
+	<entry key="exportReader">Export to Reader</entry>
+	<entry key="exportReaderDesc">This presentation will be added to the local collection of this DocExplore installation.</entry>
+	<entry key="exportWeb">Export to web</entry>
+	<entry key="exportWebDesc">This presentation will be packaged into an archive suitable for a website.</entry>
+	<entry key="exportMobile">Export to mobile</entry>
+	<entry key="exportMobileDesc">This presentation will be packaged into a file that can be loaded by the DocExplore mobile app.</entry>
+	
+	<entry key="viewHelpToggle">Show help</entry>
+	<entry key="helpBookMsg">This panel displays the pages of your presentation. To add pages, you can:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Click on the &amp;oplus; sign in the toolbar to browse for images&amp;uarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag books and pages from the right side &amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag images directly from your file explorer into this panel</entry>
+	<entry key="helpPageMsg">This is a slide of your presentation. You can:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Create and modify regions of interest with the toolbar above&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Add regions and annotations by dragging them from the right&amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag supported files on a region from your file explorer</entry>
+	<entry key="helpRegionMsg">You have selected a region of interest and the elements it contains are displayed in the right panel &amp;rarr;&lt;br/>You can add, remove, edit and reorder the elements using the toolbars.</entry>
+	<entry key="helpCollectionMsg">This is your digital collection from the management tool.&lt;br/>&amp;larr; Drag items to the left to include them in your presentation.</entry>
+	<entry key="helpLocalMsg">This is your local storage. Double click on a drive to browse contents.</entry>
+	<entry key="helpFolderMsg">Right click on a file to preview contents.&lt;br/>&amp;larr; Drag files to the left to include them in your presentation.</entry>
+	
+	<entry key="generalToolbarFilter">Set import filter...</entry>
+	<entry key="generalToolbarParent">Browse parent</entry>
+	<entry key="generalToolbarView">Toggle list/icon view</entry>
+	<entry key="generalToolbarCreate">Create a book...</entry>
+	<entry key="generalToolbarEdit">Edit selected book...</entry>
+	<entry key="generalToolbarRemove">Remove selected books...</entry>
+	<entry key="generalToolbarRemovePage">Remove selected pages...</entry>
+	<entry key="generalToolbarAddPages">Add pages...</entry>
+	<entry key="generalAddAnnotation">Add</entry>
+	
+	<entry key="imageToolbarZoomIn">Zoom In</entry>
+	<entry key="imageToolbarZoomOut">Zoom Out</entry>
+	<entry key="imageToolbarAddFreeRoi">Add a free region of interest</entry>
+	<entry key="imageToolbarAddRectRoi">Add a rectangle region of interest</entry>
+	<entry key="imageToolbarDelRoi">Delete a Region Of Interest</entry>
+	<entry key="imageToolbarCrop">Crop page</entry>
+	<entry key="imageToolbarFit">Fit in frame</entry>
+	<entry key="imageLocateLabel">Get location code</entry>
+	<entry key="imageToolbarPreviousHistoric">Previous page</entry>
+	<entry key="imageToolbarNextHistoric">Next page</entry>
+	
+	<entry key="collectionAddBookMessage">Please specify a title for the presentation</entry>
+	<entry key="collectionDefaultBookLabel">New presentation</entry>
+	
+	<entry key="textDefaultMessage">Enter text here</entry>
+	<entry key="annotationText">Text</entry>
+	<entry key="annotationImage">Image</entry>
+	<entry key="annotationMedia">Media</entry>
+	
+	<entry key="styleEdit">Edit styles</entry>
+	<entry key="styleStyles">Styles</entry>
+	<entry key="styleSettings">Settings</entry>
+	<entry key="styleName">Name</entry>
+	<entry key="styleFont">Font</entry>
+	<entry key="stylePreview">Preview</entry>
+	<entry key="styleClose">Close</entry>
+	<entry key="styleTest">Wafting zephyrs quickly vexed Jumbo.</entry>
+	
+	<entry key="bgcolorPropertyName">Color</entry>
+	
+	<entry key="exportDuplicateMessage">A presentation with the same title already exists. Do you want to replace it?</entry>
+	<entry key="exportOptions">Export options</entry>
+	<entry key="exportDimensionOption">Limit image size</entry>
+	<entry key="exportSizeLimit">Image dimensions shouldn't exceed </entry>
+	<entry key="exportSizeMessage">&lt;html>&lt;div style=&quot;width: 360px;&quot;>Limiting the dimensions of images serves to lower the hardware requirements of presentations. 
+If you experience excessive loading times or even crashes when viewing a presentation, it is 
+recommended to enable this option. Be aware that although this will not distort the images, it 
+might visibly reduce their quality, especially when zooming in.&lt;/div>&lt;/html></entry>
+	<entry key="exportTransparencyOption">Transparency</entry>
+	<entry key="exportTransparencyLabel">Enable transparency</entry>
+	<entry key="exportTransparencyMessage">&lt;html>&lt;div style=&quot;width: 360px;&quot;>Enable this option if some of the pages of the presentation contain areas of transparency, otherwise they will not render properly. 
+&lt;u>Please note that if this option is enabled, the processing time required to complete the export may increase significantly as well as the resulting file sizes.&lt;/u>&lt;/div>&lt;/html></entry>
+	
+	<entry key="filterText">Text</entry>
+	<entry key="filterImage">Images</entry>
+	<entry key="filterMedia">Media</entry>
+	<entry key="filterConfig">Filter configuration</entry>
+	<entry key="filterPages">Display</entry>
+	<entry key="filterAllPages">Show all pages</entry>
+	<entry key="filterRoiPages">Only show pages with annotated regions of interest</entry>
+	<entry key="filterAnnotPages">Only show pages with regions of interest annotated with </entry>
+	<entry key="filterTagPages">Only show pages with regions of interest tagged with </entry>
+	<entry key="filterRois">Import</entry>
+	<entry key="filterAnnotRois">Do not import regions without annotations</entry>
+	<entry key="filterTagRois">Only import annotations named</entry>
+	
+	<entry key="previewTitle">Preview</entry>
+	<entry key="previewRatio">Display aspect ratio</entry>
+	<entry key="previewWarning">Warning: the specificities of your display may incur slight changes in layout</entry>
+	
+	<entry key="importTitle">Import Options</entry>
+	<entry key="importAnnotations">Annotations</entry>
+	<entry key="importRegions">Regions</entry>
+	<entry key="importPages">Pages</entry>
+	<entry key="importRegionTags">Only import regions that are tagged with at least one of the following tags:</entry>
+	<entry key="importRegionAnnotations">Discard regions with no annotations</entry>
+	<entry key="importPageTags">Only import pages that are tagged with at least one of the following tags:</entry>
+	<entry key="importPageRegions">Discard pages with no regions</entry>
+	<entry key="importTextStyle">and text content should be styled as</entry>
+	<entry key="importAnnotationFilter">&lt;html>Annotations named &lt;b>%name&lt;/b> should be &lt;/html></entry>
+	<entry key="importImported">Imported</entry>
+	<entry key="importDiscarded">Discarded</entry>
+	
+	<entry key="coverLabel">Cover</entry>
+	<entry key="coverFront">Front cover</entry>
+	<entry key="coverBack">Back cover</entry>
+	<entry key="coverFrontInner">Front inner cover</entry>
+	<entry key="coverBackInner">Back inner cover</entry>
+	<entry key="coverDiscard">Discard</entry>
+	<entry key="coverBrowse">Browse...</entry>
+	
+	<entry key="fixChars">Fix special characters</entry>
+	<entry key="fixCharsMsg">The presentation was created in</entry>
+	<entry key="fixCharsWin">Windows</entry>
+	<entry key="fixCharsMac">Mac OSX</entry>
+</properties>

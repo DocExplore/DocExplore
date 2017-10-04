@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="jar/gdx-backend-lwjgl.jar"/>
 	<classpathentry kind="lib" path="jar/gdx-natives.jar"/>
 	<classpathentry kind="lib" path="jar/gdx.jar"/>
+	<classpathentry kind="lib" path="jar/JFeatureLib.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
