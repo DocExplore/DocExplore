@@ -107,8 +107,7 @@ public class GuiUtils
 			running[0] = false;
 			while (!busyDialog.isVisible())
 				try {Thread.sleep(100);} catch (Exception e) {}
-			busyDialog.setVisible(false);
-			
+			SwingUtilities.invokeLater(new Runnable() {@Override public void run() {busyDialog.setVisible(false);}});
 		}}.start();
 		new Thread() {public void run()
 		{
