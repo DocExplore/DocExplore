@@ -1,8 +1,6 @@
 package org.interreg.docexplore.stitcher;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.io.File;
 import java.io.ObjectInputStream;
@@ -11,59 +9,57 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.JPanel;
-
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.util.GuiUtils;
 
 @SuppressWarnings("serial")
-public class FragmentView extends JPanel
+public class FragmentView extends NavView
 {
+	Stitcher stitcher;
+	List<Fragment> fragments = new ArrayList<Fragment>();
+	List<FragmentAssociation> associations = new ArrayList<FragmentAssociation>();
+	
 	Fragment selected = null;
 	Fragment highlighted = null;
 	Fragment knobFragment = null;
 	FragmentKnob knob = null;
 	
-	List<Fragment> fragments = new ArrayList<Fragment>();
+	List<Fragment> fullFragments = new ArrayList<Fragment>();
 	
-	double x0 = 0, y0 = 0;
-	double scale = 100;
-	
-	FragmentViewMouseListener mouseListener;
-	
-	public FragmentView()
+	public FragmentView(Stitcher stitcher)
 	{
-		setFocusable(true);
-		setBackground(Color.darkGray);
+		this.stitcher = stitcher;
 		
-		this.mouseListener = new FragmentViewMouseListener(this);
-		addMouseListener(mouseListener);
-		addMouseMotionListener(mouseListener);
-		addMouseWheelListener(mouseListener);
+		requestFocusInWindow();
+		addKeyListener((FragmentViewInputListener)inputListener);
+		setPreferredSize(new Dimension(800, 600));
 	}
+	@Override protected NavViewInputListener createInputListener() {return new FragmentViewInputListener(this);}
 	
 	int serialVersion = 0;
 	public void write(ObjectOutputStream out) throws Exception
 	{
+		super.write(out);
 		out.writeInt(serialVersion);
-		out.writeDouble(x0);
-		out.writeDouble(y0);
-		out.writeDouble(scale);
 		out.writeInt(fragments.size());
 		for (int i=0;i<fragments.size();i++)
 			fragments.get(i).write(out);
+		out.writeInt(associations.size());
+		for (int i=0;i<associations.size();i++)
+			associations.get(i).write(out, fragments);
 	}
 	
 	public void read(ObjectInputStream in) throws Exception
 	{
+		super.read(in);
 		@SuppressWarnings("unused")
 		int serialVersion = in.readInt();
-		x0 = in.readDouble();
-		y0 = in.readDouble();
-		scale = in.readDouble();
 		int n = in.readInt();
 		for (int i=0;i<n;i++)
 			fragments.add(new Fragment(in));
+		n = in.readInt();
+		for (int i=0;i<n;i++)
+			associations.add(new FragmentAssociation(in, fragments));
 		repaint();
 	}
 	
@@ -97,11 +93,7 @@ public class FragmentView extends JPanel
 		if (fragments == null)
 			fragments = this.fragments;
 		if (fragments.isEmpty())
-		{
-			x0 = 0; 
-			y0 = 0;
-			scale = 100;
-		}
+			resetView();
 		else
 		{
 			double minx = 0, maxx = 0, miny = 0, maxy = 0;
@@ -114,37 +106,54 @@ public class FragmentView extends JPanel
 				if (first || f.maxy > maxy) maxy = f.maxy;
 				first = false;
 			}
-			double w = (1+margin)*(maxx-minx), h = (1+margin)*(maxy-miny);
-			x0 = .5*(maxx+minx);
-			y0 = .5*(maxy+miny);
-			scale = Math.min(getWidth()/w, getHeight()/h);
+			fitView(minx, miny, maxx, maxy, margin);
 		}
 		repaint();
 	}
 	
-	public void clear()
+	public void toggleFull(Fragment f)
 	{
+		f.toggleFull();
+		if (fullFragments.contains(f))
+		{
+			fullFragments.remove(f);
+		}
+		else
+		{
+			fullFragments.add(f);
+			while (fullFragments.size() > 3)
+			{
+				fullFragments.get(0).toggleFull();
+				fullFragments.remove(0);
+			}
+		}
+		repaint();
+	}
+	
+	public void delete(Fragment f)
+	{
+		if (selected == f)
+			selected = null;
+		if (highlighted == f)
+			highlighted = null;
+		if (knobFragment == f)
+			knobFragment = null;
+		fragments.remove(f);
+		fullFragments.remove(f);
+		repaint();
+	}
+	
+	public void resetView()
+	{
+		super.resetView();
 		fragments.clear();
+		associations.clear();
+		fullFragments.clear();
 		selected = null;
 		highlighted = null;
 		knobFragment = null;
 		knob = null;
-		x0 = 0;
-		y0 = 0;
-		scale = 100;
-		repaint();
 	}
-	
-	public void scrollPixels(double px, double py)
-	{
-		x0 -= px/scale;
-		y0 -= py/scale;
-	}
-	
-	public double toViewX(double x) {return (x-getWidth()/2)/scale+x0;}
-	public double toViewY(double y) {return (y-getHeight()/2)/scale+y0;}
-	public double fromViewX(double x) {return scale*(x-x0)+getWidth()/2;}
-	public double fromViewY(double y) {return scale*(y-y0)+getHeight()/2;}
 	
 	public List<Fragment> nearFragments(double x, double y, double ray, List<Fragment> near)
 	{
@@ -194,21 +203,12 @@ public class FragmentView extends JPanel
 		return false;
 	}
 	
-	BasicStroke stroke = new BasicStroke(1);
-	@Override protected void paintChildren(Graphics _g)
+	@Override protected void drawView(Graphics2D g, double pixelSize)
 	{
-		super.paintChildren(_g);
-		
-		Graphics2D g = (Graphics2D)_g;
-		g.translate(getWidth()/2-scale*x0, getHeight()/2-scale*y0);
-		g.scale(scale, scale);
-		
 		for (int i=0;i<fragments.size();i++)
 			fragments.get(i).drawImage(g);
 		
-		BasicStroke stroke = new BasicStroke((float)(2/scale));
-		g.setStroke(stroke);
 		for (int i=0;i<fragments.size();i++)
-			fragments.get(i).drawOutline(g, scale, fragments.get(i) == selected, fragments.get(i) == highlighted, fragments.get(i) == knobFragment ? knob : null);
+			fragments.get(i).drawOutline(g, pixelSize, fragments.get(i) == selected, fragments.get(i) == highlighted, fragments.get(i) == knobFragment ? knob : null);
 	}
 }

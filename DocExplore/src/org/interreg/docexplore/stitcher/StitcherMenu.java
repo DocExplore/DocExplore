@@ -56,6 +56,21 @@ public class StitcherMenu extends JMenuBar
 			stitcher.view.fitView(.1);
 		}}));
 		add(view);
+		
+		JMenu tools = new JMenu("Tools");
+		tools.add(new JMenuItem(new AbstractAction("Detect layout") {@Override public void actionPerformed(ActionEvent e)
+		{
+			GuiUtils.blockUntilComplete(new GuiUtils.ProgressRunnable()
+			{
+				float [] progress = {0};
+				@Override public void run()
+				{
+					new LayoutDetector(stitcher.view).process(progress);
+				}
+				@Override public float getProgress() {return progress[0];}
+			}, stitcher.view);
+		}}));
+		add(tools);
 	}
 	
 	private void buildFileMenu()

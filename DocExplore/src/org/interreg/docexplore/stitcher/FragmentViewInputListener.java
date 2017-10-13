@@ -1,66 +1,68 @@
 package org.interreg.docexplore.stitcher;
 
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentViewMouseListener implements MouseListener, MouseMotionListener, MouseWheelListener
+public class FragmentViewInputListener extends NavViewInputListener implements KeyListener
 {
 	public static final double knobRay = 5;
 	
 	FragmentView view;
 	
-	public FragmentViewMouseListener(FragmentView view)
+	public FragmentViewInputListener(FragmentView view)
 	{
+		super(view);
 		this.view = view;
 	}
 	
-	boolean panning = false;
 	double offsetx = 0, offsety = 0;
-	int panDownX = 0, panDownY = 0;
 	@Override public void mousePressed(MouseEvent e)
 	{
-		if ((e.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
-		{
-			panning = true;
-			panDownX = e.getX();
-			panDownY = e.getY();
-			return;
-		}
+		super.mousePressed(e);
 		
 		double mx = view.toViewX(e.getX()), my = view.toViewY(e.getY());
 		if (((e.getModifiers() & (InputEvent.BUTTON1_MASK+InputEvent.BUTTON3_MASK)) != 0) && view.knobFragment != null)
 		{
 			view.knob.onGrab(view.knobFragment, mx, my);
+			view.knobFragment.alpha = .6f;
 			view.repaint();
 		}
 		else if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0 && view.highlighted != null)
 		{
 			view.selected = view.highlighted;
+			view.fragments.remove(view.selected);
+			view.fragments.add(view.selected);
 			offsetx = view.selected.uix-view.toViewX(e.getX());
 			offsety = view.selected.uiy-view.toViewY(e.getY());
+			view.selected.alpha = .6f;
 			view.repaint();
 		}
 	}
 	@Override public void mouseReleased(MouseEvent e)
 	{
-		if ((e.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
-			panning = false;
-		else if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0 && view.highlighted == null && view.knobFragment == null)
-		{
+		super.mouseReleased(e);
+		
+		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0 && view.highlighted == null && view.knobFragment == null)
 			view.selected = null;
-			view.repaint();
-		}
+		if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0 && (e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) != 0 
+			&& view.highlighted != null && view.selected != null && view.highlighted != view.selected && view.knobFragment == null)
+				view.stitcher.editStitches(view.selected, view.highlighted);
+		if (view.selected != null)
+			view.selected.alpha = 1;
+		if (view.knobFragment != null)
+			view.knobFragment.alpha = 1;
+		view.repaint();
 	}
 
 	List<Fragment> near = new ArrayList<Fragment>();
 	@Override public void mouseMoved(MouseEvent e)
 	{
+		super.mouseMoved(e);
+		
 		double viewRay = knobRay/view.scale;
 		near.clear();
 		view.nearFragments(view.toViewX(e.getX()), view.toViewY(e.getY()), viewRay, near);
@@ -107,16 +109,7 @@ public class FragmentViewMouseListener implements MouseListener, MouseMotionList
 	}
 	@Override public void mouseDragged(MouseEvent e)
 	{
-		if (panning)
-		{
-			int dx = e.getX()-panDownX;
-			int dy = e.getY()-panDownY;
-			panDownX = e.getX();
-			panDownY = e.getY();
-			view.scrollPixels(dx, dy);
-			view.repaint();
-			return;
-		}
+		super.mouseDragged(e);
 		
 		double mx = view.toViewX(e.getX()), my = view.toViewY(e.getY());
 		if (view.knobFragment != null && (e.getModifiersEx() & (MouseEvent.BUTTON1_DOWN_MASK+MouseEvent.BUTTON3_DOWN_MASK)) != 0)
@@ -130,25 +123,15 @@ public class FragmentViewMouseListener implements MouseListener, MouseMotionList
 			view.repaint();
 		}
 	}
-
-	double k = 1.2;
-	@Override public void mouseWheelMoved(MouseWheelEvent e)
+	
+	@Override public void keyReleased(KeyEvent e)
 	{
-		int r = e.getWheelRotation();
-		double xc = view.toViewX(e.getX()), yc = view.toViewY(e.getY());
-		if (r == 0)
-			return;
-		view.scale *= Math.pow(k, -r);
-		double xp = view.fromViewX(xc), yp = view.fromViewY(yc);
-		view.scrollPixels(e.getX()-xp, e.getY()-yp);
-		view.repaint();
+		if (e.getKeyCode() == KeyEvent.VK_SPACE && view.selected != null)
+			view.toggleFull(view.selected);
+		else if (e.getKeyCode() == KeyEvent.VK_DELETE && view.selected != null)
+			view.delete(view.selected);
 	}
 	
-	@Override public void mouseClicked(MouseEvent e)
-	{
-		
-	}
-	
-	@Override public void mouseEntered(MouseEvent e) {}
-	@Override public void mouseExited(MouseEvent e) {}
+	@Override public void keyTyped(KeyEvent e) {}
+	@Override public void keyPressed(KeyEvent e) {}
 }

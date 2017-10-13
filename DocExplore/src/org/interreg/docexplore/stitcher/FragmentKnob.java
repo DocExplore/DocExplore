@@ -34,8 +34,9 @@ public enum FragmentKnob
 	
 	public void onDrag(Fragment fragment, double x, double y, boolean rightClick, boolean shift, boolean ctrl)
 	{
-		boolean resize = rightClick == shift || ctrl;
-		boolean rotate = rightClick != shift || ctrl;
+		boolean resize = !rightClick || ctrl;
+		boolean rotate = rightClick || ctrl;
+		boolean coarse = shift;
 		if (resize)
 		{
 			double l = Math.sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy));
@@ -55,6 +56,11 @@ public enum FragmentKnob
 				a += 2*Math.PI;
 			while (a >= 2*Math.PI)
 				a -= 2*Math.PI;
+			if (coarse)
+			{
+				int step = (int)Math.round(a/(.125*Math.PI));
+				a = step*.125*Math.PI;
+			}
 			fragment.setAngle(a);
 		}
 		FragmentKnob opp = values()[(ordinal()+2)%values().length];

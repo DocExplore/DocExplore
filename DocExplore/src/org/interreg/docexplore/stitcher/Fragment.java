@@ -1,5 +1,6 @@
 package org.interreg.docexplore.stitcher;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -13,10 +14,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.util.ImageUtils;
+
+import de.lmu.ifi.dbs.jfeaturelib.features.SURF;
+import ij.process.ColorProcessor;
 
 public class Fragment
 {
@@ -29,10 +36,24 @@ public class Fragment
 	double uix, uiy;
 	double uiw;
 	double uiang;
+	List<POI> features = new ArrayList<POI>(0);
+	
+	BufferedImage full = null;
 	
 	AffineTransform transform;
 	double uih, ux, uy, vx, vy;
 	double minx, miny, maxx, maxy;
+	
+	Fragment()
+	{
+		this.file = null;
+		this.imagew = 100;
+		this.imageh = 100;
+		this.mini = null;
+		this.uix = 0; this.uiy = 0;
+		this.uiw = 1;
+		this.uiang = 0;
+	}
 	
 	public Fragment(File file) throws Exception
 	{
@@ -47,6 +68,7 @@ public class Fragment
 		this.uix = 0; this.uiy = 0;
 		this.uiw = 1;
 		this.uiang = 0;
+		computeSurf(img);
 		
 		update();
 	}
@@ -64,6 +86,10 @@ public class Fragment
 		this.uix = in.readDouble(); this.uiy = in.readDouble();
 		this.uiw = in.readDouble();
 		this.uiang = in.readDouble();
+		int n = in.readInt();
+		this.features = new ArrayList<POI>(n);
+		for (int i=0;i<n;i++)
+			features.add(new POI(in, this, i));
 		
 		update();
 	}
@@ -81,6 +107,25 @@ public class Fragment
 		out.writeDouble(uix); out.writeDouble(uiy);
 		out.writeDouble(uiw);
 		out.writeDouble(uiang);
+		out.writeInt(features.size());
+		for (int i=0;i<features.size();i++)
+			features.get(i).write(out);
+	}
+	
+	public void computeSurf(BufferedImage full) throws Exception
+	{
+		ColorProcessor cp = new ColorProcessor(full);
+		
+		SURF desc = new SURF(4, 4, .001f, 2, false, false, false, 1, false);
+		
+//		LocalBinaryPatterns desc = new LocalBinaryPatterns();
+//		desc.setNumberOfHistogramBins(256);
+		
+		desc.run(cp);
+		List<double []> v = desc.getFeatures();
+		features = new ArrayList<POI>(v.size());
+		for (int i=0;i<v.size();i++)
+			features.add(new POI(this, v.get(i), features.size()));
 	}
 	
 	public void setPos(double uix, double uiy)
@@ -99,7 +144,17 @@ public class Fragment
 		this.uiang = uiang;
 		update();
 	}
+	public void toggleFull()
+	{
+		if (full != null)
+			full = null;
+		else try {full = ImageIO.read(file);}
+		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
+		update();
+	}
 	
+	double fromImageToLocalX(double x) {return x/imagew;}
+	double fromImageToLocalY(double y) {return y/imageh;}
 	public double toLocalX(double x, double y) {return ((x-uix)*ux+(y-uiy)*uy)/(ux*ux+uy*uy);}
 	public double toLocalY(double x, double y) {return ((x-uix)*vx+(y-uiy)*vy)/(vx*vx+vy*vy);}
 	public double fromLocalX(double x, double y) {return uix+x*ux+y*vx;}
@@ -173,7 +228,38 @@ public class Fragment
 		this.transform = new AffineTransform();
 		transform.translate(uix, uiy);
 		transform.rotate(uiang);
-		transform.scale(uiw/mini.getWidth(), uih/mini.getHeight());
+		BufferedImage img = full != null ? full : mini;
+		transform.scale(uiw/img.getWidth(), uih/img.getHeight());
+	}
+	
+	public Rectangle2D overlap(Fragment f)
+	{
+		double minx, miny, maxx, maxy;
+		double x = minx = maxx = toLocalX(f.uix, f.uiy);
+		double y = miny = maxy = toLocalY(f.uix, f.uiy);
+		for (int i=0;i<3;i++)
+		{
+			double fx = 0, fy = 0;
+			switch (i)
+			{
+				case 0: fx = f.uix+f.ux; fy = f.uiy+f.uy; break;
+				case 1: fx = f.uix+f.ux+f.vx; fy = f.uiy+f.uy+f.vy; break;
+				case 2: fx = f.uix+f.vx; fy = f.uiy+f.vy; break;
+			}
+			x = toLocalX(fx, fy);
+			y = toLocalY(fx, fy);
+			minx = Math.min(minx, x);
+			miny = Math.min(miny, y);
+			maxx = Math.max(maxx, x);
+			maxy = Math.max(maxy, y);
+		}
+		minx = Math.max(0, Math.min(1, minx));
+		miny = Math.max(0, Math.min(1, miny));
+		maxx = Math.max(0, Math.min(1, maxx));
+		maxy = Math.max(0, Math.min(1, maxy));
+		if ((maxx-minx)*(maxy-miny) == 0)
+			return new Rectangle2D.Double(0, 0, 1, 1);
+		return new Rectangle2D.Double(minx, miny, maxx-minx, maxy-miny);
 	}
 	
 	Line2D.Double line = new Line2D.Double();
@@ -191,7 +277,7 @@ public class Fragment
 		{
 			Color textColor = g.getColor();
 			Font font = g.getFont();
-			g.setFont(font.deriveFont((float)(font.getSize2D()/pixelSize)));
+			g.setFont(font.deriveFont((float)(16f/pixelSize)));
 			Rectangle2D bounds = g.getFontMetrics().getStringBounds(file.getName(), g);
 			double sh = g.getFont().getSize2D();
 			g.setColor(new Color(0f, 0f, 0f, .5f));
@@ -205,14 +291,16 @@ public class Fragment
 			g.setColor(Color.red);
 			double kx = uix+knob.ax*ux+knob.ay*vx;
 			double ky = uiy+knob.ax*uy+knob.ay*vy;
-			double r = FragmentViewMouseListener.knobRay;
+			double r = FragmentViewInputListener.knobRay;
 			knobRect.setRect(kx-r/pixelSize, ky-r/pixelSize, 2*r/pixelSize, 2*r/pixelSize);
 			g.draw(knobRect);
 			
 		}
 	}
+	float alpha = 1;
 	public void drawImage(Graphics2D g)
 	{
-		g.drawImage(mini, transform, null);
+		g.setComposite(AlphaComposite.SrcOver.derive(alpha));
+		g.drawImage(full != null ? full : mini, transform, null);
 	}
 }
