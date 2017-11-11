@@ -17,8 +17,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -37,6 +35,7 @@ public class Fragment
 	double uiw;
 	double uiang;
 	List<POI> features = new ArrayList<POI>(0);
+	int index;
 	
 	BufferedImage full = null;
 	
@@ -44,20 +43,21 @@ public class Fragment
 	double uih, ux, uy, vx, vy;
 	double minx, miny, maxx, maxy;
 	
-	Fragment()
-	{
-		this.file = null;
-		this.imagew = 100;
-		this.imageh = 100;
-		this.mini = null;
-		this.uix = 0; this.uiy = 0;
-		this.uiw = 1;
-		this.uiang = 0;
-	}
+//	Fragment(int index)
+//	{
+//		this.file = null;
+//		this.imagew = 100;
+//		this.imageh = 100;
+//		this.mini = null;
+//		this.uix = 0; this.uiy = 0;
+//		this.uiw = 1;
+//		this.uiang = 0;
+//		this.index = index;
+//	}
 	
-	public Fragment(File file) throws Exception
+	public Fragment(File file, int index) throws Exception
 	{
-		BufferedImage img = ImageIO.read(file);
+		BufferedImage img = ImageUtils.read(file);
 		if (img == null)
 			throw new NullPointerException();
 		
@@ -68,12 +68,13 @@ public class Fragment
 		this.uix = 0; this.uiy = 0;
 		this.uiw = 1;
 		this.uiang = 0;
-		computeSurf(img);
+		computeFeatures(img);
+		this.index = index;
 		
 		update();
 	}
 	
-	public Fragment(ObjectInputStream in) throws Exception
+	public Fragment(ObjectInputStream in, int index) throws Exception
 	{
 		@SuppressWarnings("unused")
 		int serialVersion = in.readInt();
@@ -81,7 +82,7 @@ public class Fragment
 		this.imagew = in.readInt();
 		this.imageh = in.readInt();
 		ByteArrayInputStream imgIn = new ByteArrayInputStream((byte [])in.readObject());
-		this.mini = ImageIO.read(imgIn);
+		this.mini = ImageUtils.read(imgIn);
 		imgIn.close();
 		this.uix = in.readDouble(); this.uiy = in.readDouble();
 		this.uiw = in.readDouble();
@@ -90,6 +91,7 @@ public class Fragment
 		this.features = new ArrayList<POI>(n);
 		for (int i=0;i<n;i++)
 			features.add(new POI(in, this, i));
+		this.index = index;
 		
 		update();
 	}
@@ -101,7 +103,7 @@ public class Fragment
 		out.writeInt(imagew);
 		out.writeInt(imageh);
 		ByteArrayOutputStream imgOut = new ByteArrayOutputStream();
-		ImageIO.write(mini, "PNG", imgOut);
+		ImageUtils.write(mini, "PNG", imgOut);
 		out.writeObject(imgOut.toByteArray());
 		imgOut.close();
 		out.writeDouble(uix); out.writeDouble(uiy);
@@ -112,11 +114,11 @@ public class Fragment
 			features.get(i).write(out);
 	}
 	
-	public void computeSurf(BufferedImage full) throws Exception
+	public void computeFeatures(BufferedImage full) throws Exception
 	{
 		ColorProcessor cp = new ColorProcessor(full);
 		
-		SURF desc = new SURF(4, 4, .001f, 2, false, false, false, 1, false);
+		SURF desc = new SURF(4, 4, (float)Stitcher.surfFeatureThreshold, 2, false, false, false, 1, false);
 		
 //		LocalBinaryPatterns desc = new LocalBinaryPatterns();
 //		desc.setNumberOfHistogramBins(256);
@@ -126,6 +128,7 @@ public class Fragment
 		features = new ArrayList<POI>(v.size());
 		for (int i=0;i<v.size();i++)
 			features.add(new POI(this, v.get(i), features.size()));
+		System.out.println(features.size());
 	}
 	
 	public void setPos(double uix, double uiy)
@@ -148,13 +151,15 @@ public class Fragment
 	{
 		if (full != null)
 			full = null;
-		else try {full = ImageIO.read(file);}
+		else try {full = ImageUtils.read(file);}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 		update();
 	}
 	
 	double fromImageToLocalX(double x) {return x/imagew;}
 	double fromImageToLocalY(double y) {return y/imageh;}
+	double fromLocalToImageX(double x) {return x*imagew;}
+	double fromLocalToImageY(double y) {return y*imageh;}
 	public double toLocalX(double x, double y) {return ((x-uix)*ux+(y-uiy)*uy)/(ux*ux+uy*uy);}
 	public double toLocalY(double x, double y) {return ((x-uix)*vx+(y-uiy)*vy)/(vx*vx+vy*vy);}
 	public double fromLocalX(double x, double y) {return uix+x*ux+y*vx;}
@@ -259,7 +264,15 @@ public class Fragment
 		maxy = Math.max(0, Math.min(1, maxy));
 		if ((maxx-minx)*(maxy-miny) == 0)
 			return new Rectangle2D.Double(0, 0, 1, 1);
-		return new Rectangle2D.Double(minx, miny, maxx-minx, maxy-miny);
+		double w = maxx-minx, h = maxy-miny;
+		if (w > h)
+		{
+			return new Rectangle2D.Double(0, miny, 1, h);
+		}
+		else
+		{
+			return new Rectangle2D.Double(minx, 0, w, 1);
+		}
 	}
 	
 	Line2D.Double line = new Line2D.Double();

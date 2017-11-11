@@ -1,6 +1,7 @@
 package org.interreg.docexplore.stitcher;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,12 +17,15 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.XMLResourceBundle;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
+
+import com.sun.glass.events.KeyEvent;
 
 @SuppressWarnings("serial")
 public class StitcherMenu extends JMenuBar
@@ -65,11 +69,37 @@ public class StitcherMenu extends JMenuBar
 				float [] progress = {0};
 				@Override public void run()
 				{
-					new LayoutDetector(stitcher.view).process(progress);
+					new LayoutDetector(stitcher.fragmentSet).process(progress);
+					stitcher.view.repaint();
 				}
 				@Override public float getProgress() {return progress[0];}
 			}, stitcher.view);
-		}}));
+		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));}});
+		tools.add(new JMenuItem(new AbstractAction("Consolidate") {@Override public void actionPerformed(ActionEvent e)
+		{
+			GuiUtils.blockUntilComplete(new Runnable()
+			{
+				@Override public void run()
+				{
+					if (stitcher.view.selected == null)
+						return;
+					new LayoutDetector(stitcher.fragmentSet).consolidate(stitcher.view.selected);
+					stitcher.view.repaint();
+				}
+			}, stitcher.view);
+		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));}});
+		tools.add(new JMenuItem(new AbstractAction("Render") {@Override public void actionPerformed(ActionEvent e)
+		{
+			GuiUtils.blockUntilComplete(new GuiUtils.ProgressRunnable()
+			{
+				float [] progress = {0};
+				@Override public void run()
+				{
+					new Renderer().render(stitcher.fragmentSet, "render", new File("C:\\Users\\aburn\\Desktop\\tmp"), progress);
+				}
+				@Override public float getProgress() {return progress[0];}
+			}, stitcher.view);
+		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));}});
 		add(tools);
 	}
 	
@@ -99,7 +129,7 @@ public class StitcherMenu extends JMenuBar
 		File [] images = DocExploreTool.getFileDialogs().openFiles(DocExploreTool.getImagesCategory());
 		if (images == null || images.length == 0)
 			return;
-		stitcher.view.importFragments(images);
+		stitcher.importFragments(images);
 	}
 	
 	static class RecentItem extends JMenuItem
@@ -138,9 +168,8 @@ public class StitcherMenu extends JMenuBar
 		addRecent(curFile.getAbsolutePath());
 		writeRecent();
 		
-		GuiUtils.blockUntilComplete(new ProgressRunnable()
+		GuiUtils.blockUntilComplete(new Runnable()
 		{
-			float [] progress = {0};
 			public void run()
 			{
 				ObjectInputStream in = null;
@@ -152,7 +181,6 @@ public class StitcherMenu extends JMenuBar
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 				if (in != null) try {in.close();} catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 			}
-			public float getProgress() {return (float)progress[0];}
 		}, stitcher.win);
 		stitcher.modified = false;
 		return true;

@@ -13,28 +13,22 @@ public class FragmentAssociation
 	FragmentDescription d1, d2;
 	List<Association> associations = new ArrayList<Association>(0);
 	Map<POI, List<Association>> associationsByPOI = new HashMap<POI, List<Association>>();
-	double lengthRef;
+	int index;
 	
-	public FragmentAssociation(Fragment f1, Fragment f2) {this(f1, f2, false);}
-	public FragmentAssociation(Fragment f1, Fragment f2, boolean useOverlap)
+	private FragmentTransform transform = null;
+	FragmentDistortion distortion = null;
+	
+	public FragmentAssociation(Fragment f1, Fragment f2, int index)
 	{
-		if (useOverlap)
-		{
-			this.d1 = new FragmentDescription(this, f1, f1.overlap(f2));
-			this.d2 = new FragmentDescription(this, f2, f2.overlap(f1));
-		}
-		else
-		{
-			this.d1 = new FragmentDescription(this, f1, new Rectangle2D.Double(0, 0, 1, 1));
-			this.d2 = new FragmentDescription(this, f2, new Rectangle2D.Double(0, 0, 1, 1));
-		}
-		this.lengthRef = .25*Math.max(d1.fragment.uiw*d1.rect.getWidth(), d1.fragment.uih*d1.rect.getHeight());
-		lengthRef *= lengthRef;
+		this.d1 = new FragmentDescription(this, f1, new Rectangle2D.Double(0, 0, 1, 1));
+		this.d2 = new FragmentDescription(this, f2, new Rectangle2D.Double(0, 0, 1, 1));
+		this.index = index;
+		
 		resetAssociationsByPOI();
 	}
 	
 	static int serialVersion = 0;
-	public FragmentAssociation(ObjectInputStream in, List<Fragment> fragments) throws Exception
+	public FragmentAssociation(ObjectInputStream in, int index, List<Fragment> fragments) throws Exception
 	{
 		@SuppressWarnings("unused")
 		int serialVersion = in.readInt();
@@ -44,7 +38,9 @@ public class FragmentAssociation
 		this.associations = new ArrayList<Association>(n);
 		for (int i=0;i<n;i++)
 			associations.add(new Association(in, this, i));
-		this.lengthRef = in.readDouble();
+		this.index = index;
+		this.transform = (FragmentTransform)in.readObject();
+		this.distortion = (FragmentDistortion)in.readObject();
 		resetAssociationsByPOI();
 	}
 	
@@ -56,7 +52,8 @@ public class FragmentAssociation
 		out.writeInt(associations.size());
 		for (int i=0;i<associations.size();i++)
 			associations.get(i).write(out);
-		out.writeDouble(lengthRef);
+		out.writeObject(transform);
+		out.writeObject(distortion);
 	}
 	
 	void resetAssociationsByPOI()
@@ -65,6 +62,7 @@ public class FragmentAssociation
 		for (int i=0;i<associations.size();i++)
 		{
 			Association a = associations.get(i);
+			a.index = i;
 			
 			List<Association> list = associationsByPOI.get(a.p1);
 			if (list == null)
@@ -78,6 +76,29 @@ public class FragmentAssociation
 		}
 	}
 	
+	Association add(POI p1, POI p2)
+	{
+		if (p1.fragment == d2.fragment)
+		{
+			POI tmp = p1;
+			p1 = p2;
+			p2 = tmp;
+		}
+		Association a = new Association(this, p1, p2, associations.size());
+		associations.add(a);
+		List<Association> list = associationsByPOI.get(a.p1);
+		if (list == null)
+			associationsByPOI.put(a.p1, list = new ArrayList<Association>(1));
+		list.add(a);
+		list = associationsByPOI.get(a.p2);
+		if (list == null)
+			associationsByPOI.put(a.p2, list = new ArrayList<Association>(1));
+		list.add(a);
+//		if (p1.descriptor.length > 0 && p2.descriptor.length > 0)
+//			System.out.println("surf dist: "+p1.descriptorDistance2(p2));
+		transform = null;
+		return a;
+	}
 	void remove(Association a)
 	{
 		if (a.index < associations.size()-1)
@@ -95,6 +116,52 @@ public class FragmentAssociation
 		list.remove(a);
 		if (list.isEmpty())
 			associationsByPOI.remove(a.p2);
+		transform = null;
+	}
+	
+	public Fragment other(Fragment f) {return d1.fragment == f ? d2.fragment : d2.fragment == f ? d1.fragment : null;}
+	
+	public void transform(Fragment res) {transform(res, null);}
+	public void transform(Fragment res, float [] progress) {transform(res, progress, 0, 1);}
+	public void transform(Fragment res, float [] progress, float ps, float pe)
+	{
+		if (associations.size() < 3)
+		{
+			if (progress != null) progress[0] = pe;
+			return;
+		}
+		if (transform == null)
+			this.transform = FragmentTransform.build(this, progress, pe, ps);
+		if (res != d1.fragment)
+			transform.transform(d1.fragment, res);
+		else transform.itransform(d2.fragment, res);
+		
+		d1.rect = d1.fragment.overlap(d2.fragment);
+		d2.rect = d2.fragment.overlap(d1.fragment);
+		this.distortion = new FragmentDistortion(this);
+		FragmentAssociationUtils.tightenRectShortestDimension(d1);
+		FragmentAssociationUtils.tightenRectShortestDimension(d2);
+		
+		if (progress != null) progress[0] = pe;
+	}
+	
+	public boolean isDistorted(Fragment f, double x, double y)
+	{
+		return (f == d1.fragment ? d1 : d2).distortionFactor(x, y) >= 0;
+	}
+	public double distortionAlpha(Fragment f, double x, double y)
+	{
+		return (f == d1.fragment ? d1 : d2).distortionAlpha(x, y);
+	}
+	public double getDistortedImageX(Fragment f, double x, double y)
+	{
+		if (distortion == null || (f != d1.fragment && f != d2.fragment)) return x;
+		return (f == d1.fragment ? d1 : d2).getDistortedImageX(x, y);
+	}
+	public double getDistortedImageY(Fragment f, double x, double y)
+	{
+		if (distortion == null || (f != d1.fragment && f != d2.fragment)) return y;
+		return (f == d1.fragment ? d1 : d2).getDistortedImageY(x, y);
 	}
 	
 	public double meanUIDistance()
@@ -115,56 +182,13 @@ public class FragmentAssociation
 		return dev/associations.size();
 	}
 	
-	public void computeSurf()
+	public void refreshFeatures()
 	{
 		associations.clear();
 		resetAssociationsByPOI();
-		d1.compute();
-		d2.compute();
-	}
-	
-	public void match(float [] progress)
-	{
-		match(progress, 0, 1);
-	}
-	public void match(float [] progress, float ps, float pe)
-	{
-		associations.clear();
-		for (int i=0;i<d1.features.size();i++)
-		{
-			progress[0] = ps+i*1f/d1.features.size()*(pe-ps);
-			
-			POI poi1 = d1.features.get(i);
-			POI min = null;
-			double minDist = 0;
-			for (int j=0;j<d2.features.size();j++)
-			{
-				POI poi2 = d2.features.get(j);
-				double dist = poi1.descriptorDistance2(poi2);
-				if (min == null || dist < minDist)
-				{
-					min = poi2;
-					minDist = dist;
-				}
-			}
-			if (minDist < .15)
-				associations.add(new Association(this, poi1, min, 1/(1+minDist), associations.size()));
-		}
-		resetAssociationsByPOI();
-		
-		for (int i=0;i<d2.features.size();i++)
-		{
-			List<Association> list = associationsByPOI.get(d2.features.get(i));
-			if (list == null || list.size() < 2)
-				continue;
-			double maxStrength = -1;
-			for (int j=0;j<list.size();j++)
-				if (list.get(j).strength > maxStrength)
-					maxStrength = list.get(j).strength;
-			while (list.get(0).strength < maxStrength) remove(list.get(0));
-			while (list.get(list.size()-1).strength < maxStrength) remove(list.get(list.size()-1));
-			while (list.size() > 1) remove(list.get(list.size()-1));
-		}
+		d1.refreshFeatures();
+		d2.refreshFeatures();
+		transform = null;
 	}
 	
 	public void filterByUIDistance(double lim)
@@ -172,30 +196,6 @@ public class FragmentAssociation
 		for (int i=0;i<associations.size();i++)
 			if (Math.sqrt(associations.get(i).uiDistance2()) > lim)
 				{remove(associations.get(i)); i--;}
-	}
-	
-	public void filterByDescriptor()
-	{
-		double avg = 0;
-		for (int i=0;i<associations.size();i++)
-			avg += associations.get(i).strength;
-		avg /= associations.size();
-		for (int i=0;i<associations.size();i++)
-			if (associations.get(i).strength < avg)
-				remove(associations.get(i--));
-//		System.out.println(">"+r+"/"+(associations.size()+r)+" "+(r*100/(associations.size()+r)));
-		
-//		Set<Association> set = new TreeSet<Association>(new Comparator<Association>() {@Override public int compare(Association o1, Association o2)
-//		{
-//			return o1.strength-o2.strength < 0 ? -1 : o1.strength == o2.strength ? 0 : 1;
-//		}});
-//		set.addAll(associations);
-//		
-//		int remove = associations.size()-associations.size()/100;
-//		for (Association a : set)
-//			if (--remove == 0)
-//				break;
-//			else remove(a);
 	}
 	
 	public void removeUnusedDescriptors(float [] progress)

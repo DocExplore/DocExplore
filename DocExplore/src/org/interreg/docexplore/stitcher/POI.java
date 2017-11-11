@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 public class POI
 {
 	Fragment fragment;
-	double x, y;
+	double x, y, trace, strength, scale, orientation;
 	double [] descriptor;
 	int index;
 	
@@ -15,9 +15,21 @@ public class POI
 		this.fragment = fragment;
 		this.x = surf[0];
 		this.y = surf[1];
-		this.descriptor = new double [surf.length-2];
+		this.trace = surf[2];
+		this.strength = surf[3];
+		this.scale = surf[4];
+		this.orientation = surf[5];
+		this.descriptor = new double [surf.length-6];
 		for (int i=0;i<descriptor.length;i++)
-			descriptor[i] = surf[i+2];
+			descriptor[i] = surf[i+6];
+		this.index = index;
+	}
+	public POI(Fragment fragment, double x, double y, int index)
+	{
+		this.fragment = fragment;
+		this.x = x;
+		this.y = y;
+		this.descriptor = new double [0];
 		this.index = index;
 	}
 	public POI(POI poi, int index)
@@ -25,6 +37,10 @@ public class POI
 		this.fragment = poi.fragment;
 		this.x = poi.x;
 		this.y = poi.y;
+		this.trace = poi.trace;
+		this.strength = poi.strength;
+		this.scale = poi.scale;
+		this.orientation = poi.orientation;
 		this.descriptor = poi.descriptor;
 		this.index = index;
 	}
@@ -37,6 +53,10 @@ public class POI
 		this.fragment = fragment;
 		this.x = in.readDouble();
 		this.y = in.readDouble();
+		this.trace = in.readDouble();
+		this.strength = in.readDouble();
+		this.scale = in.readDouble();
+		this.orientation = in.readDouble();
 		this.descriptor = (double [])in.readObject();
 		this.index = index;
 	}
@@ -46,15 +66,27 @@ public class POI
 		out.writeInt(serialVersion);
 		out.writeDouble(x);
 		out.writeDouble(y);
+		out.writeDouble(trace);
+		out.writeDouble(strength);
+		out.writeDouble(scale);
+		out.writeDouble(orientation);
 		out.writeObject(descriptor);
 	}
 	
+	public double featureDistance2(POI poi)
+	{
+		return descriptorDistance2(poi)+Stitcher.surfScaleAndOrientationWeight*scaleAndOrientationDistance2(poi);
+	}
 	public double descriptorDistance2(POI poi)
 	{
 		double dist = 0;
 		for (int k=0;k<descriptor.length;k++)
 			dist += (descriptor[k]-poi.descriptor[k])*(descriptor[k]-poi.descriptor[k]);
 		return dist;
+	}
+	public double scaleAndOrientationDistance2(POI poi)
+	{
+		return (scale-poi.scale)*(scale-poi.scale)+(orientation-poi.orientation)*(orientation-poi.orientation);
 	}
 	public double uiDistance2(POI poi)
 	{

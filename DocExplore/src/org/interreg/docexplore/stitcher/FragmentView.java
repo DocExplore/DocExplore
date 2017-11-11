@@ -1,23 +1,19 @@
 package org.interreg.docexplore.stitcher;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.io.File;
+import java.awt.geom.Line2D;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.util.GuiUtils;
-
 @SuppressWarnings("serial")
 public class FragmentView extends NavView
 {
 	Stitcher stitcher;
-	List<Fragment> fragments = new ArrayList<Fragment>();
-	List<FragmentAssociation> associations = new ArrayList<FragmentAssociation>();
 	
 	Fragment selected = null;
 	Fragment highlighted = null;
@@ -41,12 +37,6 @@ public class FragmentView extends NavView
 	{
 		super.write(out);
 		out.writeInt(serialVersion);
-		out.writeInt(fragments.size());
-		for (int i=0;i<fragments.size();i++)
-			fragments.get(i).write(out);
-		out.writeInt(associations.size());
-		for (int i=0;i<associations.size();i++)
-			associations.get(i).write(out, fragments);
 	}
 	
 	public void read(ObjectInputStream in) throws Exception
@@ -54,44 +44,14 @@ public class FragmentView extends NavView
 		super.read(in);
 		@SuppressWarnings("unused")
 		int serialVersion = in.readInt();
-		int n = in.readInt();
-		for (int i=0;i<n;i++)
-			fragments.add(new Fragment(in));
-		n = in.readInt();
-		for (int i=0;i<n;i++)
-			associations.add(new FragmentAssociation(in, fragments));
 		repaint();
-	}
-	
-	public void importFragments(final File [] files)
-	{
-		GuiUtils.blockUntilComplete(new GuiUtils.ProgressRunnable()
-		{
-			float progress = 0;
-			@Override public void run()
-			{
-				double x0 = 0;
-				for (int i=0;i<files.length;i++) try
-				{
-					progress = i*1f/files.length;
-					Fragment f = new Fragment(files[i]);
-					fragments.add(f);
-					f.setPos(x0, f.uiy);
-					while (boundsIntersect(f))
-						f.setPos(x0 = f.uix+1.5, f.uiy);
-				}
-				catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
-			}
-			@Override public float getProgress() {return progress;}
-		}, this);
-		fitView(.1);
 	}
 	
 	public void fitView(double margin) {fitView(null, margin);}
 	public void fitView(Collection<Fragment> fragments, double margin)
 	{
 		if (fragments == null)
-			fragments = this.fragments;
+			fragments = stitcher.fragmentSet.fragments;
 		if (fragments.isEmpty())
 			resetView();
 		else
@@ -130,7 +90,7 @@ public class FragmentView extends NavView
 		repaint();
 	}
 	
-	public void delete(Fragment f)
+	void fragmentDeleted(Fragment f)
 	{
 		if (selected == f)
 			selected = null;
@@ -138,7 +98,6 @@ public class FragmentView extends NavView
 			highlighted = null;
 		if (knobFragment == f)
 			knobFragment = null;
-		fragments.remove(f);
 		fullFragments.remove(f);
 		repaint();
 	}
@@ -146,8 +105,6 @@ public class FragmentView extends NavView
 	public void resetView()
 	{
 		super.resetView();
-		fragments.clear();
-		associations.clear();
 		fullFragments.clear();
 		selected = null;
 		highlighted = null;
@@ -157,9 +114,9 @@ public class FragmentView extends NavView
 	
 	public List<Fragment> nearFragments(double x, double y, double ray, List<Fragment> near)
 	{
-		for (int i=0;i<fragments.size();i++)
-			if (fragments.get(i).isNear(x, y, ray))
-				near.add(fragments.get(i));
+		for (int i=0;i<stitcher.fragmentSet.fragments.size();i++)
+			if (stitcher.fragmentSet.fragments.get(i).isNear(x, y, ray))
+				near.add(stitcher.fragmentSet.fragments.get(i));
 		return near;
 	}
 	
@@ -167,7 +124,7 @@ public class FragmentView extends NavView
 	public Fragment fragmentAt(double x, double y)
 	{
 		nearFragments.clear();
-		fragmentsAt(x, y, nearFragments);
+		stitcher.fragmentSet.fragmentsAt(x, y, nearFragments);
 		if (nearFragments.isEmpty())
 			return null;
 		if (nearFragments.size() == 1)
@@ -188,27 +145,36 @@ public class FragmentView extends NavView
 		}
 		return min;
 	}
-	public void fragmentsAt(double x, double y, Collection<Fragment> res)
-	{
-		for (int i=0;i<fragments.size();i++)
-			if (fragments.get(i).contains(x, y))
-				res.add(fragments.get(i));
-	}
 	
 	public boolean boundsIntersect(Fragment f)
 	{
-		for (int i=0;i<fragments.size();i++)
-			if (fragments.get(i) != f && fragments.get(i).boundsIntersect(f))
+		for (int i=0;i<stitcher.fragmentSet.fragments.size();i++)
+			if (stitcher.fragmentSet.fragments.get(i) != f && stitcher.fragmentSet.fragments.get(i).boundsIntersect(f))
 				return true;
 		return false;
 	}
 	
+	Color associationColor = new Color(0f, 0f, 1f, .5f);
+	Line2D.Double line = new Line2D.Double();
 	@Override protected void drawView(Graphics2D g, double pixelSize)
 	{
-		for (int i=0;i<fragments.size();i++)
-			fragments.get(i).drawImage(g);
+		for (int i=0;i<stitcher.fragmentSet.fragments.size();i++)
+			stitcher.fragmentSet.fragments.get(i).drawImage(g);
 		
-		for (int i=0;i<fragments.size();i++)
-			fragments.get(i).drawOutline(g, pixelSize, fragments.get(i) == selected, fragments.get(i) == highlighted, fragments.get(i) == knobFragment ? knob : null);
+		for (int i=0;i<stitcher.fragmentSet.fragments.size();i++)
+		{
+			Fragment f = stitcher.fragmentSet.fragments.get(i);
+			f.drawOutline(g, pixelSize, f == selected, f == highlighted, f == knobFragment ? knob : null);
+		}
+		
+		g.setColor(associationColor);
+		for (int i=0;i<stitcher.fragmentSet.associations.size();i++)
+		{
+			FragmentAssociation fa = stitcher.fragmentSet.associations.get(i);
+			line.setLine(
+				fa.d1.fragment.uix+.5*fa.d1.fragment.ux+.5*fa.d1.fragment.vx, fa.d1.fragment.uiy+.5*fa.d1.fragment.uy+.5*fa.d1.fragment.vy, 
+				fa.d2.fragment.uix+.5*fa.d2.fragment.ux+.5*fa.d2.fragment.vx, fa.d2.fragment.uiy+.5*fa.d2.fragment.uy+.5*fa.d2.fragment.vy);
+			g.draw(line);
+		}
 	}
 }

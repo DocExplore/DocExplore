@@ -5,14 +5,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import org.interreg.docexplore.gui.ErrorHandler;
 
@@ -25,6 +19,8 @@ public class StitchEditor extends JPanel
 	FragmentAssociation map = null;
 	StitchEditorToolkit toolkit;
 	
+	boolean showAssociations = true, showAlpha = false;
+	
 	public StitchEditor(Stitcher stitcher)
 	{
 		super();
@@ -36,6 +32,7 @@ public class StitchEditor extends JPanel
 		add(this.left = new FragmentDescriptionView(this));
 		add(this.right = new FragmentDescriptionView(this));
 		setPreferredSize(new Dimension(800, 600));
+		requestFocusInWindow();
 	}
 	
 	public void setMap(FragmentAssociation map)
@@ -56,6 +53,8 @@ public class StitchEditor extends JPanel
 		right.setImageDescription(map.d2);
 	}
 	
+	public FragmentDescriptionView otherView(FragmentDescriptionView v) {return v == left ? right : left;}
+	
 	public void flip()
 	{
 		if (layout.getRows() == 1)
@@ -71,83 +70,39 @@ public class StitchEditor extends JPanel
 		layout.layoutContainer(this);
 		repaint();
 	}
+	public void reverse()
+	{
+		boolean reversed = getComponent(0) == right;
+		remove(left);
+		remove(right);
+		if (reversed) {add(left); add(right);}
+		else {add(right); add(left);}
+		layout.layoutContainer(this);
+		repaint();
+	}
 	
 	Point point = new Point();
-	Color lineCol = new Color(1f, 0, 0, .5f);
+	Color associationCol = new Color(1f, 0, 1f, .5f);
 	@Override protected void paintChildren(Graphics g)
 	{
 		super.paintChildren(g);
 		
-		if (map != null)
-			for (int i=0;i<map.associations.size();i++)
-			{
-				Association a = map.associations.get(i);
-				float s = (float)(a.strength*a.strength*a.strength*a.strength);
-//				if (s == 0)
-//					continue;
-				g.setColor(new Color(s, 0, 1-s, .5f));
-				point.x = (int)left.fromViewX(a.p1.x);
-				point.y = (int)left.fromViewY(a.p1.y);
-				Point conv = SwingUtilities.convertPoint(left, point, this);
-				int x0 = conv.x;
-				int y0 = conv.y;
-				point.x = (int)right.fromViewX(a.p2.x);
-				point.y = (int)right.fromViewY(a.p2.y);
-				conv = SwingUtilities.convertPoint(right, point, this);
-				int x1 = conv.x;
-				int y1 = conv.y;
-				g.drawLine(x0, y0, x1, y1);
-			}
-	}
-	
-	public JMenuBar buildMenu()
-	{
-		JMenuBar bar = new JMenuBar();
-		JMenu file = new JMenu("File");
-		bar.add(file);
-		file.add(new JMenuItem(new AbstractAction("Clear and close") {@Override public void actionPerformed(ActionEvent e)
-		{
-			stitcher.view.associations.remove(map);
-			StitchEditor.this.getTopLevelAncestor().setVisible(false);
-		}}));
-		file.add(new JMenuItem(new AbstractAction("Close") {@Override public void actionPerformed(ActionEvent e)
-		{
-			StitchEditor.this.getTopLevelAncestor().setVisible(false);
-		}}));
-		JMenu view = new JMenu("View");
-		bar.add(view);
-		view.add(new JMenuItem(new AbstractAction("Flip") {@Override public void actionPerformed(ActionEvent e)
-		{
-			flip();
-		}}));
-		JMenu tools = new JMenu("Tools");
-		bar.add(tools);
-		tools.add(new JMenuItem(new AbstractAction("Compute features") {@Override public void actionPerformed(ActionEvent e)
-		{
-			toolkit.computeFeatures();
-		}}));
-		tools.add(new JMenuItem(new AbstractAction("Match features") {@Override public void actionPerformed(ActionEvent e)
-		{
-			toolkit.matchFeatures();
-			toolkit.clean();
-		}}));
-		tools.add(new JMenuItem(new AbstractAction("Filter matches") {@Override public void actionPerformed(ActionEvent e)
-		{
-			toolkit.filterMatches();
-			toolkit.clean();
-		}}));
-		tools.add(new JMenuItem(new AbstractAction("Tighten") {@Override public void actionPerformed(ActionEvent e)
-		{
-			toolkit.tighten();
-		}}));
-		tools.add(new JMenuItem(new AbstractAction("Coarse match") {@Override public void actionPerformed(ActionEvent e)
-		{
-			toolkit.coarseMatch();
-		}}));
-		tools.add(new JMenuItem(new AbstractAction("Group match") {@Override public void actionPerformed(ActionEvent e)
-		{
-			toolkit.groupMatch();
-		}}));
-		return bar;
+//		if (map != null)
+//			for (int i=0;i<map.associations.size();i++)
+//			{
+//				Association a = map.associations.get(i);
+//				g.setColor(associationCol);
+//				point.x = (int)left.fromViewX(a.p1.x);
+//				point.y = (int)left.fromViewY(a.p1.y);
+//				Point conv = SwingUtilities.convertPoint(left, point, this);
+//				int x0 = conv.x;
+//				int y0 = conv.y;
+//				point.x = (int)right.fromViewX(a.p2.x);
+//				point.y = (int)right.fromViewY(a.p2.y);
+//				conv = SwingUtilities.convertPoint(right, point, this);
+//				int x1 = conv.x;
+//				int y1 = conv.y;
+//				g.drawLine(x0, y0, x1, y1);
+//			}
 	}
 }

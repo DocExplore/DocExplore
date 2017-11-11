@@ -34,8 +34,7 @@ public class FragmentViewInputListener extends NavViewInputListener implements K
 		else if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0 && view.highlighted != null)
 		{
 			view.selected = view.highlighted;
-			view.fragments.remove(view.selected);
-			view.fragments.add(view.selected);
+			view.stitcher.fragmentSet.moveToLast(view.selected);
 			offsetx = view.selected.uix-view.toViewX(e.getX());
 			offsety = view.selected.uiy-view.toViewY(e.getY());
 			view.selected.alpha = .6f;
@@ -51,6 +50,22 @@ public class FragmentViewInputListener extends NavViewInputListener implements K
 		if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0 && (e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) != 0 
 			&& view.highlighted != null && view.selected != null && view.highlighted != view.selected && view.knobFragment == null)
 				view.stitcher.editStitches(view.selected, view.highlighted);
+//		if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0 && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0 
+//			&& view.highlighted != null && view.selected != null && view.highlighted != view.selected && view.knobFragment == null)
+//		{
+//			FragmentAssociation fa = null;
+//			List<FragmentAssociation> list = view.stitcher.fragmentSet.associationsByFragment.get(view.selected);
+//			if (list != null)
+//				for (int i=0;i<list.size();i++)
+//					if (list.get(i).other(view.selected) == view.highlighted)
+//						{fa = list.get(i); break;}
+//			if (fa != null && fa.transform != null)
+//			{
+//				if (view.selected == fa.d1.fragment)
+//					fa.transform.transform(view.selected, view.highlighted);
+//				else fa.transform.itransform(view.selected, view.highlighted);
+//			}
+//		}
 		if (view.selected != null)
 			view.selected.alpha = 1;
 		if (view.knobFragment != null)
@@ -129,7 +144,11 @@ public class FragmentViewInputListener extends NavViewInputListener implements K
 		if (e.getKeyCode() == KeyEvent.VK_SPACE && view.selected != null)
 			view.toggleFull(view.selected);
 		else if (e.getKeyCode() == KeyEvent.VK_DELETE && view.selected != null)
-			view.delete(view.selected);
+		{
+			view.stitcher.remove(view.selected);
+			view.selected = null;
+			view.repaint();
+		}
 	}
 	
 	@Override public void keyTyped(KeyEvent e) {}

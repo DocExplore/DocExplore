@@ -85,6 +85,7 @@ public class NavView extends JPanel
 	public double fromViewX(double x) {return scale*(x-x0)+getWidth()/2;}
 	public double fromViewY(double y) {return scale*(y-y0)+getHeight()/2;}
 	
+	protected float defaultStrokeWidth = 2;
 	BasicStroke stroke = new BasicStroke(1);
 	@Override protected void paintChildren(Graphics _g)
 	{
@@ -94,7 +95,7 @@ public class NavView extends JPanel
 		g.translate(getWidth()/2-scale*x0, getHeight()/2-scale*y0);
 		g.scale(scale, scale);
 		
-		BasicStroke stroke = new BasicStroke((float)(2/scale));
+		BasicStroke stroke = new BasicStroke((float)(defaultStrokeWidth/scale));
 		g.setStroke(stroke);
 		
 		drawView(g, scale);

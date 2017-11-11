@@ -9,10 +9,22 @@ import javax.swing.SwingUtilities;
 
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.Startup;
+import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.util.GuiUtils;
 
 public class Stitcher extends DocExploreTool
 {
+	public static final double surfFeatureThreshold = .00085f;
+	public static final double surfMatchThreshold = .4;
+	public static final double surfScaleAndOrientationWeight = .1;
+	
+	public static final double groupSpreadRay = 22;
+	public static final double groupEdgenessWeight = .5;
+	public static final double groupAreaWeight = .5;
+	public static final int groupSizeThreshold = 7;
+	public static final double groupConfidenceThreshold = .035;
+	public static final double groupDivergenceRatioThreshold = .2;
+	
 	Startup startup;
 	JFrame win, editorWin;
 	StitcherMenu menu;
@@ -20,9 +32,13 @@ public class Stitcher extends DocExploreTool
 	StitchEditor editor;
 	boolean modified = false;
 	
+	FragmentSet fragmentSet;
+	
 	public Stitcher(Startup startup) throws Exception
 	{
 		this.startup = startup;
+		this.fragmentSet = new FragmentSet();
+		
 		this.win = new JFrame("Stitcher");
 		this.view = new FragmentView(this);
 		
@@ -36,26 +52,68 @@ public class Stitcher extends DocExploreTool
 		editorWin.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.editor = new StitchEditor(this);
 		editorWin.add(editor);
-		editorWin.setJMenuBar(editor.buildMenu());
+		editorWin.setJMenuBar(new StitchEditorMenu(editor));
 		editorWin.pack();
 		
 //		menu.load(new File("C:\\Users\\aburn\\Documents\\pres\\Msu_18bis-140\\msu18b.stch"), true);
 //		editStitches(view.fragments.get(0), view.fragments.get(1));
 	}
 	
+	int serialVersion = 0;
 	public void write(ObjectOutputStream out) throws Exception
 	{
+		out.writeInt(serialVersion);
 		view.write(out);
+		fragmentSet.write(out);
 	}
 	
 	public void read(ObjectInputStream in) throws Exception
 	{
 		clear();
+		@SuppressWarnings("unused")
+		int serialVersion = in.readInt();
 		view.read(in);
+		fragmentSet = new FragmentSet(in);
+		view.repaint();
+	}
+	
+	public void remove(Fragment f)
+	{
+		fragmentSet.remove(f);
+		view.repaint();
+	}
+	public void remove(FragmentAssociation fa)
+	{
+		fragmentSet.remove(fa);
+		view.repaint();
+	}
+	
+	public void importFragments(final File [] files)
+	{
+		GuiUtils.blockUntilComplete(new GuiUtils.ProgressRunnable()
+		{
+			float progress = 0;
+			@Override public void run()
+			{
+				double x0 = 0;
+				for (int i=0;i<files.length;i++) try
+				{
+					progress = i*1f/files.length;
+					Fragment f = fragmentSet.add(files[i]);
+					f.setPos(x0, f.uiy);
+					while (view.boundsIntersect(f))
+						f.setPos(x0 = f.uix+1.5, f.uiy);
+				}
+				catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
+			}
+			@Override public float getProgress() {return progress;}
+		}, win);
+		view.fitView(.1);
 	}
 	
 	void clear()
 	{
+		fragmentSet = new FragmentSet();
 		view.resetView();
 		modified = true;
 	}
@@ -80,18 +138,9 @@ public class Stitcher extends DocExploreTool
 			{
 				@Override public void run()
 				{
-					FragmentAssociation map = null;
-					for (int i=0;i<view.associations.size();i++)
-					{
-						FragmentAssociation fa = view.associations.get(i);
-						if (fa.d1.fragment == f1 && fa.d2.fragment == f2 || fa.d1.fragment == f2 && fa.d2.fragment == f1)
-							{map = fa; break;}
-					}
+					FragmentAssociation map = fragmentSet.get(f1, f2);
 					if (map == null)
-					{
-						map = new FragmentAssociation(f1, f2);
-						view.associations.add(map);
-					}
+						map = fragmentSet.add(f1, f2);
 					editor.setMap(map);
 				}
 			}, editorWin);
