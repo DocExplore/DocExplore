@@ -14,17 +14,14 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.management.image;
 
-import java.awt.Point;
-
-public class CropOperation extends SquareOperation
+public class CropOperation extends RectROIOperation
 {
-	public void pointDropped(PageViewer ic, Point point, int modifiers)
+	@Override public void pointDropped(PageEditor view, int cx, int cy, double vx, double vy, int downw, int downy, int deltax, int deltay, int modifiers)
 	{
-		second = new Point(point);
+		second.setLocation(Math.max(0, Math.min(view.getImage().getWidth()-1, (int)(vx+.5))), Math.max(0, Math.min(view.getImage().getHeight()-1, (int)(vy+.5))));
 		int tlx = Math.min(first.x, second.x), tly = Math.min(first.y, second.y);
 		int brx = Math.max(first.x, second.x), bry = Math.max(first.y, second.y);
-		ic.cropPage(tlx, tly, brx, bry);
-		this.first = null;
-		this.second = null;
+		view.getHost().getActionListener().onCropPageRequest(view.page, tlx, tly, brx, bry);
+		view.repaint();
 	}
 }

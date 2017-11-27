@@ -20,26 +20,34 @@ import java.util.List;
 
 import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.actions.AddBookAction;
+import org.interreg.docexplore.util.history.ReversibleAction;
 
 public class AddFS2BookAction extends AddBookAction
 {
-	public AddFS2BookAction(DocExploreDataLink link, String title, List<File> files)
+	public AddFS2BookAction(DocExploreDataLink link, String title, List<File> files, boolean poster)
 	{
-		super(link, title, files);
+		super(link, title, files, poster);
 	}
 
 	DeleteFS2BooksAction reverse = null;
-	AddFS2PagesAction action = null;
+	ReversibleAction action = null;
 	public void doAction() throws Exception
 	{
 		if (reverse == null)
 		{
 			book = new Book(link, title);
-			action = new AddFS2PagesAction(link, book, files);
+			if (!poster)
+				action = new AddFS2PagesAction(link, book, files);
+			else
+			{
+				book.addMetaData(new MetaData(link, link.displayKey, "poster"));
+				action = new AddFS2PosterPartsAction(link, book, files);
+			}
 			action.cacheDir = cacheDir;
 			action.doAction();
-			failed = action.failed;
+			failed = (action instanceof AddFS2PagesAction ? ((AddFS2PagesAction)action).failed : ((AddFS2PosterPartsAction)action).failed);
 			action = null;
 		}
 		else reverse.undoAction();
@@ -63,7 +71,7 @@ public class AddFS2BookAction extends AddBookAction
 
 	public double progress()
 	{
-		AddFS2PagesAction action = this.action;
+		ReversibleAction action = this.action;
 		if (action != null)
 			return action.progress();
 		return super.progress();

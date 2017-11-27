@@ -27,16 +27,17 @@ import javax.swing.JPanel;
 
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.gui.ErrorHandler;
+import org.interreg.docexplore.gui.IconButton;
 import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.gui.ToolbarButton;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.Page;
+import org.interreg.docexplore.util.GuiUtils;
 
 @SuppressWarnings("serial")
 public class ManageToolbar extends JPanel
 {
 	ManageComponent manageComp;
-	ToolbarButton addButton, deleteButton, editButton, /*processButton, */exportButton, importButton;
+	IconButton addButton, deleteButton, editButton, /*processButton, */exportButton, importButton;
 	
 	public ManageToolbar(final ManageComponent manageComp)
 	{
@@ -44,41 +45,39 @@ public class ManageToolbar extends JPanel
 		
 		this.manageComp = manageComp;
 		
-		addButton = new ToolbarButton("add-24x24.png", XMLResourceBundle.getBundledString("manageAddBookLabel"));
-		deleteButton = new ToolbarButton("remove-24x24.png", XMLResourceBundle.getBundledString("manageDeleteBookLabel"));
-		editButton = new ToolbarButton("pencil-24x24.png", XMLResourceBundle.getBundledString("manageRenameLabel"));
+		addButton = new IconButton("add-24x24.png", XMLResourceBundle.getBundledString("manageAddBookLabel"));
+		deleteButton = new IconButton("remove-24x24.png", XMLResourceBundle.getBundledString("manageDeleteBookLabel"));
+		editButton = new IconButton("pencil-24x24.png", XMLResourceBundle.getBundledString("manageRenameLabel"));
 //		processButton = new ToolbarButton("gears-24x24.png", XMLResourceBundle.getBundledString("manageProcessBookLabel"));
-		exportButton = new ToolbarButton("export-24x24.png", XMLResourceBundle.getBundledString("manageExportBookLabel"));
-		importButton = new ToolbarButton("import-24x24.png", XMLResourceBundle.getBundledString("manageImportBookLabel"));
+		exportButton = new IconButton("export-24x24.png", XMLResourceBundle.getBundledString("manageExportBookLabel"));
+		importButton = new IconButton("import-24x24.png", XMLResourceBundle.getBundledString("manageImportBookLabel"));
 		
 		addButton.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent arg0)
 		{
-			List<File> files = SelectPagesPanel.show();
-			if (files == null)
-				return;
-			String title = JOptionPane.showInputDialog(manageComp.win, XMLResourceBundle.getBundledString("manageInputTitleLabel"));
-			if (title == null || title.trim().length() == 0)
-				return;
-			try {if (manageComp.findTitle(title) != null)
-			{
-				JOptionPane.showMessageDialog(manageComp.win, XMLResourceBundle.getBundledString("manageRenameExistsMessage"));
-				return;
-			}}
-			catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-			manageComp.handler.addBook(title, files);
-			((CollectionNode)manageComp.bookList.getModel()).reload();
-			manageComp.bookList.repaint();
+			GuiUtils.centerOnScreen(manageComp.createDialog);
+			manageComp.createDialog.setVisible(true);
+//			List<File> files = SelectPagesPanel.show();
+//			if (files == null)
+//				return;
+//			String title = JOptionPane.showInputDialog(manageComp.win, XMLResourceBundle.getBundledString("manageInputTitleLabel"));
+//			if (title == null || title.trim().length() == 0)
+//				return;
+//			try {if (manageComp.findTitle(title) != null)
+//			{
+//				JOptionPane.showMessageDialog(manageComp.win, XMLResourceBundle.getBundledString("manageRenameExistsMessage"));
+//				return;
+//			}}
+//			catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
+//			manageComp.handler.addBook(title, files);
+//			((CollectionNode)manageComp.bookList.getModel()).reload();
+//			manageComp.bookList.repaint();
+			
 		}});
 		deleteButton.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent arg0)
 		{
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			List<Book> books = (List)Arrays.asList(manageComp.bookList.getSelectedValues());
-			if (manageComp.handler.booksDeleted(books))
-			{
-				((CollectionNode)manageComp.bookList.getModel()).reload();
-				manageComp.bookList.clearSelection();
-				manageComp.bookList.repaint();
-			}
+			manageComp.handler.onDeleteBooksRequest(books);
 		}});
 		editButton.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent arg0)
 		{

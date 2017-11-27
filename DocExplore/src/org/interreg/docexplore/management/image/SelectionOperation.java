@@ -14,31 +14,40 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.management.image;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Polygon;
-import java.awt.Stroke;
+import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.JDialog;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
+
+import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
+import org.interreg.docexplore.gui.image.ImageView;
+import org.interreg.docexplore.internationalization.XMLResourceBundle;
 import org.interreg.docexplore.management.image.RegionOverlay.RegionObject;
-import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Region;
+import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.Pair;
 
-public class SelectionOperation implements PageViewer.ImageOperation
+public class SelectionOperation implements ImageView.Operation<PageEditor>
 {
 	public SelectionOperation()
 	{
 	}
 	
-	final static int pointRay = 10;
+	final static int pointRay = 15;
 	Pair<RegionObject, Integer> near = null;
-	Point grabbed = null;
 	int [][] axis = null;
 	
 	int [][] buildAxis(RegionObject region, int from)
@@ -55,7 +64,7 @@ public class SelectionOperation implements PageViewer.ImageOperation
 			{poly.xpoints[next], poly.ypoints[next]},
 			{poly.xpoints[nextnext], poly.ypoints[nextnext]}};
 	}
-	void applyAxis(PageViewer ic, RegionObject region, int from, int [][] axis)
+	void applyAxis(PageEditor view, RegionObject region, int from, int [][] axis)
 	{
 		Polygon poly = region.polygon;
 		int prev = (from+poly.npoints-1)%poly.npoints;
@@ -71,21 +80,21 @@ public class SelectionOperation implements PageViewer.ImageOperation
 		poly.xpoints[next] = (int)(axis[4][0]+k*v1x);
 		poly.ypoints[next] = (int)(axis[4][1]+k*v1y);
 		
-		constrain(ic, region, prev);
-		constrain(ic, region, next);
+		constrain(view, region, prev);
+		constrain(view, region, next);
 	}
-	void constrain(PageViewer ic, RegionObject region, int from)
+	void constrain(PageEditor view, RegionObject region, int from)
 	{
 		Polygon poly = region.polygon;
-		poly.xpoints[from] = Math.max(0, Math.min(ic.image.getWidth()-1, poly.xpoints[from]));
-		poly.ypoints[from] = Math.max(0, Math.min(ic.image.getHeight()-1, poly.ypoints[from]));
+		poly.xpoints[from] = Math.max(0, Math.min(view.getImage().getWidth()-1, poly.xpoints[from]));
+		poly.ypoints[from] = Math.max(0, Math.min(view.getImage().getHeight()-1, poly.ypoints[from]));
 	}
 	
-	public void pointClicked(PageViewer ic, Point point, int modifiers, int clickCount)
+	public void pointClicked(PageEditor view, int cx, int cy, double vx, double vy, int modifiers, int clickCount)
 	{
 		if ((modifiers & (InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK)) == (InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK))
 		{
-			near = ic.overlay.pointAt(point, pointRay/ic.transform.getScaleX());
+			near = view.regions.pointAt(vx, vy, pointRay/view.getScale());
 			if (near != null && near.first.polygon.npoints > 3)
 			{
 				Polygon poly = near.first.polygon;
@@ -98,12 +107,13 @@ public class SelectionOperation implements PageViewer.ImageOperation
 				poly.xpoints = xpoints; poly.ypoints = ypoints;
 				poly.invalidate();
 				near.first.synchronizeOutline();
+				view.repaint();
 			}
 			near = null;
 		}
 		else if ((modifiers & (InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK)) == (InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK))
 		{
-			near = ic.overlay.pointAt(point, pointRay/ic.transform.getScaleX());
+			near = view.regions.pointAt(vx, vy, pointRay/view.getScale());
 			if (near != null)
 			{
 				Polygon poly = near.first.polygon;
@@ -115,47 +125,50 @@ public class SelectionOperation implements PageViewer.ImageOperation
 				if ((x-xt1)*(x-xt1)+(y-yt1)*(y-yt1) < (x-xt2)*(x-xt2)+(y-yt2)*(y-yt2))
 					{poly.xpoints[near.second] = xt1; poly.ypoints[near.second] = yt1;}
 				else {poly.xpoints[near.second] = xt2; poly.ypoints[near.second] = yt2;}
-				constrain(ic, near.first, near.second);
+				constrain(view, near.first, near.second);
 				poly.invalidate();
 				near.first.synchronizeOutline();
+				view.repaint();
 			}
 			near = null;
 		}
 		else
 		{
-			List<Region> regions = ic.overlay.regionsAt(point);
+			List<Region> regions = view.regions.regionsAt(vx, vy);
 			Region region = null;
 			try
 			{
 				if (!regions.isEmpty())
 				{
-					AnnotatedObject obj = ic.document;
-					if (obj instanceof Region && regions.contains(obj))
-						region = regions.get((regions.indexOf(obj)+1)%regions.size());
+					if (view.region != null && regions.contains(view.region))
+						region = regions.get((regions.indexOf(view.region)+1)%regions.size());
 					else region = regions.get(0);
-					ic.notifyObjectSelected(region);
+					view.switchDocument(region);
 				}
-				else ic.notifyObjectSelected(ic.getPage());
+				else if (view.region != null)
+					view.switchDocument(view.page);
 			}
 			catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 			
 			if (region != null && clickCount == 2)
-				ic.notifyRegionAnnotationRequested(region);
+				view.getHost().onAddAnnotationRequest();
 		}
 	}
 	
-	public void pointHovered(PageViewer ic, Point point, int modifiers)
+	public void pointHovered(PageEditor view, int cx, int cy, double vx, double vy, int modifiers)
 	{
-		Region region = ic.overlay.regionAt(point);
-		ic.overlay.setHighlightedRegion(region);
-		
-		near = ic.overlay.pointAt(point, pointRay/ic.transform.getScaleX());
+		Region region = view.regions.regionAt(vx, vy);
+		view.regions.setHighlightedRegion(region);
+		Pair<RegionObject, Integer> near = view.regions.pointAt(vx, vy, pointRay/view.getScale());
+		if (near == null && this.near != null || near != null && this.near == null || near != this.near && (near.first != this.near.first || near.second != this.near.second))
+			view.repaint();
+		this.near = near;
 	}
 
-	public void pointGrabbed(PageViewer ic, Point point, int modifiers)
+	public void pointGrabbed(PageEditor view, int cx, int cy, double vx, double vy, int modifiers)
 	{
 		axis = null;
-		near = ic.overlay.pointAt(point, pointRay/ic.transform.getScaleX());
+		near = view.regions.pointAt(vx, vy, pointRay/view.getScale());
 		if (near != null && (modifiers & (InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK)) == InputEvent.SHIFT_DOWN_MASK)
 		{
 			Polygon poly = near.first.polygon;
@@ -169,11 +182,10 @@ public class SelectionOperation implements PageViewer.ImageOperation
 			poly.xpoints = xpoints; poly.ypoints = ypoints;
 			poly.invalidate();
 			near.second = near.second+1;
+			view.repaint();
 		}
-		else if (near == null)
-			grabbed = new Point(point);
 	}
-	public void pointDragged(PageViewer ic, Point point, int modifiers)
+	public void pointDragged(PageEditor view, int cx, int cy, double vx, double vy, int downw, int downy, int deltax, int deltay, int modifiers)
 	{
 		if (near != null)
 		{
@@ -181,34 +193,56 @@ public class SelectionOperation implements PageViewer.ImageOperation
 				axis = null;
 			else if (axis == null)
 				axis = buildAxis(near.first, near.second);
-			near.first.polygon.xpoints[near.second] = point.x;
-			near.first.polygon.ypoints[near.second] = point.y;
+			near.first.polygon.xpoints[near.second] = (int)(vx+.5);
+			near.first.polygon.ypoints[near.second] = (int)(vy+.5);
 			if (axis != null)
-				applyAxis(ic, near.first, near.second, axis);
+				applyAxis(view, near.first, near.second, axis);
 			near.first.polygon.invalidate();
+			view.repaint();
 		}
-		else if (grabbed != null)
-			ic.setImageAtDisplay(grabbed, ic.toDisplayCoordinates(point));
 	}
-	public void pointDropped(PageViewer ic, Point point, int modifiers)
+	public void pointDropped(PageEditor view, int cx, int cy, double vx, double vy, int downw, int downy, int deltax, int deltay, int modifiers)
 	{
 		if (near != null)
+		{
 			near.first.synchronizeOutline();
-		grabbed = null;
+			view.repaint();
+		}
+	}
+	
+	@SuppressWarnings("serial")
+	public void contextMenuRequested(final PageEditor view, int cx, int cy, final double vx, final double vy, int modifiers)
+	{
+		JPopupMenu popup = new JPopupMenu();
+		popup.add(new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("imageLocateLabel")) {@Override public void actionPerformed(ActionEvent arg0)
+		{
+			try
+			{
+				JDialog dialog = new JDialog(JOptionPane.getRootFrame(), true);
+				String code = BookEditor.encode(view.page, (int)vx, (int)vy);
+				JTextField field = new JTextField(code);
+				field.setFont(Font.decode(null).deriveFont(24f).deriveFont(Font.BOLD));
+				field.setEditable(false);
+				field.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+				dialog.add(field);
+				dialog.pack();
+				GuiUtils.centerOnComponent(dialog, view);
+				dialog.setVisible(true);
+			}
+			catch (DataLinkException e) {ErrorHandler.defaultHandler.submit(e);}
+		}}));
+		popup.show(view, cx, cy);
 	}
 	
 	final static Color pointColor = new Color(64, 255, 64, 255);
-	public void render(PageViewer ic, Graphics2D g)
+	Rectangle2D.Double rect = new Rectangle2D.Double();
+	public void render(PageEditor view, Graphics2D g, double pixelSize)
 	{
 		if (near == null)
 			return;
 		
-		Point point = new Point(near.first.polygon.xpoints[near.second], near.first.polygon.ypoints[near.second]);
-		double w = pointRay/ic.transform.getScaleX(),  h = pointRay/ic.transform.getScaleY();
-		Rectangle2D.Double rect = new Rectangle2D.Double(point.x-w/2, point.y-h/2, w, h);
-		
-		Stroke pointStroke = new BasicStroke((float)(1.5/ic.transform.getScaleX()), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f);
-		g.setStroke(pointStroke);
+		double w = pointRay/view.getScale(),  h = pointRay/view.getScale();
+		rect.setFrame(near.first.polygon.xpoints[near.second]-w/2, near.first.polygon.ypoints[near.second]-h/2, w, h);
 		g.setColor(pointColor);
 		g.draw(rect);
 	}

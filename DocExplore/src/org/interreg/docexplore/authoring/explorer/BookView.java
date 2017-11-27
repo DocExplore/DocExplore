@@ -27,6 +27,7 @@ import javax.swing.SwingUtilities;
 
 import org.interreg.docexplore.authoring.preview.PreviewPanel;
 import org.interreg.docexplore.gui.ErrorHandler;
+import org.interreg.docexplore.management.image.PosterUtils;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.MetaData;
@@ -51,10 +52,16 @@ public class BookView extends DataLinkView implements FilterPanel.Listener
 					return;
 				Point p = new Point(e.getPoint());
 				SwingUtilities.convertPointToScreen(p, BookView.this);
-				PreviewPanel.previewPage((Page)((ViewItem)comp).data.object, p.x, p.y);
+				if (((ViewItem)comp).data.object instanceof Page)
+					PreviewPanel.previewPage((Page)((ViewItem)comp).data.object, p.x, p.y);
+				else if (((ViewItem)comp).data.object instanceof MetaData && ((MetaData)((ViewItem)comp).data.object).getType().equals(MetaData.imageType))
+					try {PreviewPanel.previewImage(((MetaData)((ViewItem)comp).data.object).getImage(), p.x, p.y);}
+					catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex, true);}
 			}
 		});
 	}
+	
+	@Override public Component getViewComponent() {return scrollPane;}
 	
 	@Override public boolean canHandle(String path) throws Exception
 	{
@@ -88,6 +95,18 @@ public class BookView extends DataLinkView implements FilterPanel.Listener
 			page.unloadAll(false);
 		}
 		System.gc();
+		
+		if (PosterUtils.isPoster(curBook))
+		{
+			List<MetaData> parts = curBook.getMetaDataListForKey(explorer.link.partKey);
+			for (MetaData part : parts)
+			{
+				String [] pos = part.getMetaDataString(explorer.link.partPosKey).split(",");
+				res.add(new ViewItem(explorer.partTerm+" "+pos[0]+","+pos[1], "", part));
+			}
+			//PosterUtils.getPosterParts(link, book)
+		}
+		
 		return res;
 	}
 
@@ -96,7 +115,8 @@ public class BookView extends DataLinkView implements FilterPanel.Listener
 		try
 		{
 			MetaDataKey miniKey = explorer.link.getKey("mini", "");
-			return new ImageIcon(((Page)object).getMetaDataListForKey(miniKey).get(0).getImage());
+			List<MetaData> minis = ((AnnotatedObject)object).getMetaDataListForKey(miniKey);
+			return minis.isEmpty() ? null : new ImageIcon(minis.get(0).getImage());
 		}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
 		return null;

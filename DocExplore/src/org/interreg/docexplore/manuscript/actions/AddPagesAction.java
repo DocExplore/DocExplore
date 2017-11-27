@@ -25,9 +25,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.XMLResourceBundle;
 import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.MetaData;
-import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.util.FileImageSource;
 import org.interreg.docexplore.util.Pair;
@@ -37,7 +37,7 @@ public class AddPagesAction extends UnreversibleAction
 	public final DocExploreDataLink link;
 	public final Book book;
 	public final List<File> files;
-	public final List<Pair<Page, File>> failed = new LinkedList<Pair<Page, File>>();
+	public final List<Pair<AnnotatedObject, File>> failed = new LinkedList<Pair<AnnotatedObject, File>>();
 	public final List<Page> pages = new LinkedList<Page>();
 	double progress;
 	
@@ -56,9 +56,6 @@ public class AddPagesAction extends UnreversibleAction
 		
 		try
 		{
-			final MetaDataKey sourceKey = link.getOrCreateKey("source-file", "");
-			final MetaDataKey dimKey = link.getOrCreateKey("dimension", "");
-			
 			for (final File file : files)
 			{
 				final Page page = book.appendPage(new FileImageSource(file));
@@ -67,15 +64,15 @@ public class AddPagesAction extends UnreversibleAction
 				{
 					try
 					{
-						page.addMetaData(new MetaData(link, sourceKey, file.getName()));
+						page.addMetaData(new MetaData(link, link.sourceKey, file.getName()));
 						BufferedImage image = page.getImage().getImage();
-						page.addMetaData(new MetaData(link, dimKey, image.getWidth()+","+image.getHeight()));
+						page.addMetaData(new MetaData(link, link.dimKey, image.getWidth()+","+image.getHeight()));
 						DocExploreDataLink.getImageMini(page);
 					}
 					catch (Exception e)
 					{
 						ErrorHandler.defaultHandler.submit(e, true);
-						synchronized (failed) {failed.add(new Pair<Page, File>(page, file));}
+						synchronized (failed) {failed.add(new Pair<AnnotatedObject, File>(page, file));}
 					}
 					
 					cnt.incrementAndGet();
@@ -89,8 +86,8 @@ public class AddPagesAction extends UnreversibleAction
 			try {Thread.sleep(50);}
 			catch (Exception e) {}
 		
-		for (Pair<Page, File> pair : failed)
-			pair.first.removeFromBook();
+		for (Pair<AnnotatedObject, File> pair : failed)
+			((Page)pair.first).removeFromBook();
 	}
 	
 	public double progress() {return progress;}

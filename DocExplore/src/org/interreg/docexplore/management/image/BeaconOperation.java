@@ -21,7 +21,7 @@ import java.awt.Rectangle;
 
 import org.interreg.docexplore.internationalization.XMLResourceBundle;
 
-public class BeaconOperation implements PageViewer.ImageOperation
+public class BeaconOperation implements PageEditor.Operation<PageEditor>
 {
 	Point point;
 	long start, elapsed, duration, period;
@@ -40,23 +40,23 @@ public class BeaconOperation implements PageViewer.ImageOperation
 		return elapsed > duration;
 	}
 
-	public void pointClicked(PageViewer ic, Point point, int modifiers, int clickCount) {}
-	public void pointDragged(PageViewer ic, Point point, int modifiers) {}
-	public void pointDropped(PageViewer ic, Point point, int modifiers) {}
-	public void pointGrabbed(PageViewer ic, Point point, int modifiers) {}
-	public void pointHovered(PageViewer ic, Point point, int modifiers) {}
+	public void pointClicked(PageEditor view, int cx, int cy, double vx, double vy, int modifiers, int clickCount) {}
+	public void pointDragged(PageEditor view, int cx, int cy, double vx, double vy, int downw, int downy, int deltax, int deltay, int modifiers) {}
+	public void pointDropped(PageEditor view, int cx, int cy, double vx, double vy, int downw, int downy, int deltax, int deltay, int modifiers) {}
+	public void pointGrabbed(PageEditor view, int cx, int cy, double vx, double vy, int modifiers) {}
+	public void pointHovered(PageEditor view, int cx, int cy, double vx, double vy, int modifiers) {}
+	public void contextMenuRequested(PageEditor view, int cx, int cy, double vx, double vy, int modifiers) {}
 	
-	public void render(final PageViewer ic, Graphics2D g)
+	public void render(final PageEditor view, Graphics2D g, double pixelSize)
 	{
 		if (start < 0)
 		{
 			start = System.currentTimeMillis();
-			ic.setImageAtDisplay(point, new Point(ic.getWidth()/2, ic.getHeight()/2));
+			view.setView(point.x, point.y, view.getScale());
 		}
 		else elapsed = System.currentTimeMillis()-start;
 		if ((elapsed/period)%2 == 0)
 		{
-			g.setStroke(SquareOperation.crosshairStroke);
 			Rectangle bounds = g.getClipBounds();
 			g.setColor(Color.blue);
 			g.drawLine((int)bounds.getMinX(), point.y, (int)bounds.getMaxX(), point.y);
@@ -67,9 +67,13 @@ public class BeaconOperation implements PageViewer.ImageOperation
 			new Thread() {public void run() {
 				try {Thread.sleep(period/2);}
 				catch (Exception e) {}
-				ic.repaint();
+				view.repaint();
 			}}.start();
-		else ic.setOperation(PageViewer.defaultOperation);
+		else
+		{
+			view.cancelOperation();
+			view.repaint();
+		}
 	}
 	
 	public String getMessage() {return XMLResourceBundle.getBundledString("statusBeaconMessage");}

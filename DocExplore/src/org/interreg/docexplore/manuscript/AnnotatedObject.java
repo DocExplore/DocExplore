@@ -109,6 +109,24 @@ public abstract class AnnotatedObject extends ManuscriptObject
 		return metaDatas;
 	}
 	
+	public String getMetaDataString(MetaDataKey key) throws DataLinkException
+	{
+		List<MetaData> mds = getMetaDataListForKey(key);
+		for (MetaData md : mds)
+			if (md.type.equals(MetaData.textType))
+				return md.getString();
+		return null;
+	}
+	public void setMetaDataString(MetaDataKey key, String value) throws DataLinkException
+	{
+		List<MetaData> mds = getMetaDataListForKey(key);
+		if (mds.isEmpty())
+			addMetaData(new MetaData(key.link, key, value));
+		else for (MetaData md : mds)
+			if (md.type.equals(MetaData.textType))
+				md.setString(value);
+	}
+	
 	/**
 	 * Adds an annotation to this AnnotatedObject.
 	 * @param metaData

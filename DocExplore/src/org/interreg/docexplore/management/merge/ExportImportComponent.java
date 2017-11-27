@@ -164,8 +164,8 @@ public class ExportImportComponent extends JPanel
 				
 				notifyListeners(dest);
 				
-				leftComp.reload();
-				rightComp.reload();
+				leftComp.refresh();
+				rightComp.refresh();
 				
 				validate();
 				invalidate();

@@ -17,11 +17,15 @@ package org.interreg.docexplore.manuscript.actions;
 import java.io.File;
 import java.util.List;
 
+import org.interreg.docexplore.datalink.fs2.AddFS2PagesAction;
+import org.interreg.docexplore.datalink.fs2.AddFS2PosterPartsAction;
 import org.interreg.docexplore.internationalization.XMLResourceBundle;
 import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
-import org.interreg.docexplore.manuscript.Page;
+import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.util.Pair;
+import org.interreg.docexplore.util.history.ReversibleAction;
 
 public class AddBookAction extends UnreversibleAction
 {
@@ -29,22 +33,34 @@ public class AddBookAction extends UnreversibleAction
 	public String title;
 	public List<File> files;
 	public Book book = null;
-	public List<Pair<Page, File>> failed = null;
+	public List<Pair<AnnotatedObject, File>> failed = null;
+	public boolean poster;
 	
 	public AddBookAction(DocExploreDataLink link, String title, List<File> files)
+	{
+		this(link, title, files, false);
+	}
+	public AddBookAction(DocExploreDataLink link, String title, List<File> files, boolean poster)
 	{
 		this.link = link;
 		this.title = title;
 		this.files = files;
+		this.poster = poster;
 	}
 	
-	AddPagesAction action = null;
+	ReversibleAction action = null;
 	public void doAction() throws Exception
 	{
 		book = new Book(link, title);
-		action = new AddPagesAction(link, book, files);
+		if (!poster)
+			action = new AddPagesAction(link, book, files);
+		else
+		{
+			book.addMetaData(new MetaData(link, link.displayKey, "poster"));
+			action = new AddPosterPartsAction(link, book, files);
+		}
 		action.doAction();
-		failed = action.failed;
+		failed = (action instanceof AddFS2PagesAction ? ((AddFS2PagesAction)action).failed : ((AddFS2PosterPartsAction)action).failed);
 		action = null;
 	}
 
@@ -61,7 +77,7 @@ public class AddBookAction extends UnreversibleAction
 	
 	public double progress()
 	{
-		AddPagesAction action = this.action;
+		ReversibleAction action = this.action;
 		if (action != null)
 			return action.progress();
 		return super.progress();

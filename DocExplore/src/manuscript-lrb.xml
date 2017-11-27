@@ -7,6 +7,8 @@
 	<entry key="addMetaData">Add annotation</entry>
 	<entry key="addPage">Add page</entry>
 	<entry key="addPages">Add pages</entry>
+	<entry key="addPart">Add part</entry>
+	<entry key="addParts">Add parts</entry>
 	<entry key="addRegion">Add region</entry>
 	<entry key="deleteBook">Delete book</entry>
 	<entry key="deleteBooks">Delete books</entry>
@@ -15,5 +17,7 @@
 	<entry key="deletePages">Delete pages</entry>
 	<entry key="deleteRegion">Delete region</entry>
 	<entry key="movePages">Move pages</entry>
+	<entry key="moveParts">Move parts</entry>
+	<entry key="transposeParts">Transpose parts</entry>
 	<entry key="cropPage">Crop page</entry>
 </properties>

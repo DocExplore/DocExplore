@@ -16,6 +16,7 @@ package org.interreg.docexplore.util.history;
 
 import java.awt.BorderLayout;
 import java.io.File;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,11 +28,12 @@ import javax.swing.SwingUtilities;
 
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.util.GuiUtils;
+import org.interreg.docexplore.util.Pair;
 
 public class HistoryManager
 {
 	File cacheDir;
-	LinkedList<ReversibleAction> history;
+	LinkedList<Pair<ReversibleAction, Date>> history;
 	int limit;
 	int cursor;
 	
@@ -48,7 +50,7 @@ public class HistoryManager
 	
 	public HistoryManager(int limit, File cacheDir)
 	{
-		this.history = new LinkedList<ReversibleAction>();
+		this.history = new LinkedList<Pair<ReversibleAction, Date>>();
 		this.limit = limit;
 		this.cursor = 0;
 		this.listeners = new LinkedList<HistoryListener>();
@@ -70,8 +72,8 @@ public class HistoryManager
 	public void reset() {reset(-1);}
 	public void reset(int limit)
 	{
-		for (ReversibleAction action : history)
-			action.dispose();
+		for (Pair<ReversibleAction, Date> action : history)
+			action.first.dispose();
 		history.clear();
 		for (File subDir : cacheDir.listFiles())
 			if (subDir.isDirectory())
@@ -127,13 +129,13 @@ public class HistoryManager
 	public ReversibleAction getUndoableAction()
 	{
 		if (canUndo())
-			return history.get(cursor-1);
+			return history.get(cursor-1).first;
 		return null;
 	}
 	public ReversibleAction getRedoableAction()
 	{
 		if (canRedo())
-			return history.get(cursor);
+			return history.get(cursor).first;
 		return null;
 	}
 	
@@ -166,7 +168,7 @@ public class HistoryManager
 		actionDone = true;
 	}
 	
-	public void doAction(final ReversibleAction action) throws Throwable
+	public void submit(final ReversibleAction action) throws Throwable
 	{
 		action.cacheDir = getNewCacheDir();
 		
@@ -179,18 +181,18 @@ public class HistoryManager
 		while (history.size() > cursor)
 			try
 			{
-				ReversibleAction old = history.removeLast();
-				deleteCacheDir(old.cacheDir);
-				old.dispose();
+				Pair<ReversibleAction, Date> old = history.removeLast();
+				deleteCacheDir(old.first.cacheDir);
+				old.first.dispose();
 			}
 			catch (Throwable t) {ErrorHandler.defaultHandler.submit(t);}
-		history.add(action);
+		history.add(new Pair<ReversibleAction, Date>(action, new Date()));
 		if (history.size() > limit)
 			try
 			{
-				ReversibleAction old = history.removeFirst();
-				deleteCacheDir(old.cacheDir);
-				old.dispose();
+				Pair<ReversibleAction, Date> old = history.removeFirst();
+				deleteCacheDir(old.first.cacheDir);
+				old.first.dispose();
 			}
 			catch (Throwable t) {ErrorHandler.defaultHandler.submit(t);}
 		else cursor++;
@@ -202,7 +204,7 @@ public class HistoryManager
 	{
 		if (!canUndo())
 			return;
-		history.get(cursor-1).undoAction();
+		history.get(cursor-1).first.undoAction();
 		cursor--;
 		
 		notifyListeners();
@@ -212,7 +214,7 @@ public class HistoryManager
 	{
 		if (!canRedo())
 			return;
-		history.get(cursor).doAction();
+		history.get(cursor).first.doAction();
 		cursor++;
 		
 		notifyListeners();

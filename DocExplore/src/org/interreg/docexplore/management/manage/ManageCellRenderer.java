@@ -27,17 +27,22 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 
+import org.interreg.docexplore.datalink.DataLinkException;
+import org.interreg.docexplore.gui.ErrorHandler;
+import org.interreg.docexplore.management.gui.MainWindow;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.util.ImageUtils;
 
 public class ManageCellRenderer implements ListCellRenderer
 {
+	MainWindow win;
 	Color selectionColor;
 	int targetRow;
 	int targetDiff;
 	
-	public ManageCellRenderer()
+	public ManageCellRenderer(MainWindow win)
 	{
+		this.win = win;
 		this.selectionColor = new Color(10, 36, 106);
 		this.targetRow = -1;
 	}
@@ -47,7 +52,10 @@ public class ManageCellRenderer implements ListCellRenderer
 	Color oddDark = new Color(.75f, .45f, .45f), evenDark = new Color(.45f, .45f, .75f);
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean selected, boolean hasFocus)
 	{
-		JLabel label = new JLabel(((Book)value).getName(), ImageUtils.getIcon("book-48x48.png"), SwingConstants.LEFT);
+		String display = null;
+		try {display = ((Book)value).getMetaDataString(win.getDocExploreLink().displayKey);}
+		catch (DataLinkException e) {ErrorHandler.defaultHandler.submit(e, false);}
+		JLabel label = new JLabel(((Book)value).getName(), display != null && display.equals("poster") ? ImageUtils.getIcon("scroll-48x48.png") : ImageUtils.getIcon("book-48x48.png"), SwingConstants.LEFT);
 		
 		JPanel p1 = new JPanel(new BorderLayout());
 		JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));

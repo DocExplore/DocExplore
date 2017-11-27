@@ -61,7 +61,7 @@ public class MainStatusBar extends JPanel implements MainWindow.MainWindowListen
 	public void setConnectionStatus(String s) {connectionStatus.setText(s); repaint();}
 	public void setMessage(String s) {message.setText(s); repaint();}
 
-	public void activeDocumentChanged(AnnotatedObject document) {}
+	public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document) {}
 	public void dataLinkChanged(DocExploreDataLink link) {setConnectionStatus(!link.isLinked() ? XMLResourceBundle.getBundledString("generalNoLinkStatus") : 
 		link.getWrappedSource().getDescription());}
 }

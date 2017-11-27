@@ -16,16 +16,18 @@ package org.interreg.docexplore.management.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -33,10 +35,8 @@ import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
@@ -50,7 +50,6 @@ import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.XMLResourceBundle;
 import org.interreg.docexplore.management.Clipboard;
 import org.interreg.docexplore.management.DocExploreDataLink;
-import org.interreg.docexplore.management.image.PageViewer;
 import org.interreg.docexplore.management.manage.ManageComponent;
 import org.interreg.docexplore.management.manage.ManageHandler;
 import org.interreg.docexplore.management.plugin.PluginManager;
@@ -70,7 +69,7 @@ public class MainWindow extends JFrame
 {
 	public static interface MainWindowListener
 	{
-		public void activeDocumentChanged(AnnotatedObject document);
+		public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document);
 		public void dataLinkChanged(DocExploreDataLink link);
 	}
 	
@@ -208,9 +207,11 @@ public class MainWindow extends JFrame
 	void notifyActiveDocumentChanged()
 	{
 		DocumentPanel panel = getActiveTab();
-		AnnotatedObject document = panel != null ? panel.document : null;
+		AnnotatedObject document = panel != null ? panel.getDocument() : null;
+		if (panel != null)
+			statusBar.setMessage(panel.message);
 		for (MainWindowListener listener : listeners)
-			listener.activeDocumentChanged(document);
+			listener.activeDocumentChanged(panel, document);
 	}
 	void notifyDataLinkChanged()
 	{
@@ -242,22 +243,45 @@ public class MainWindow extends JFrame
 	}
 	
 	/**
-	 * Remove a tab by searching his id into tabbedPane
+	 * Remove a tab by searching its id into tabbedPane
 	 * @param index
 	 * @throws IllegalArgumentException if index = -1
 	 */
 	public void removeTab(int index) throws IllegalArgumentException
 	{
-		try{tabbedPane.remove(index);}
+		((DocumentPanel)tabbedPane.getComponentAt(index)).documentIsClosing();
+		try{tabbedPane.removeTabAt(index);}
 		catch(IndexOutOfBoundsException e) {ErrorHandler.defaultHandler.submit(e);}
 	}
 	
-	public DocumentPanel addTab(final AnnotatedObject document) throws Exception
+	public DocumentPanel addTab(final AnnotatedObject document)
 	{
-		DocumentPanel panel = new DocumentPanel(MainWindow.this, (DocExploreDataLink)document.getLink());
-		tabbedPane.add("", panel);
-		return setTabDocument(tabbedPane.getTabCount()-1, document, true);
-			
+		try
+		{
+			int index = getIndexForDocument(document);
+			if (index < 0)
+			{
+				final DocumentPanel [] panel = {null};
+				GuiUtils.blockUntilComplete(new Runnable() {@Override public void run()
+				{
+					try {panel[0] = new DocumentPanel(MainWindow.this, document);}
+					catch (Exception e) {ErrorHandler.defaultHandler.submit(e, false);}
+				}}, MainWindow.this);
+				if (panel[0] == null)
+					return null;
+				String title = getTabName(document);
+				tabbedPane.add("", panel[0]);
+				index = tabbedPane.getTabCount()-1;
+				tabbedPane.setTabComponentAt(index, new DocumentTab(this, title));
+				tabbedPane.setSelectedIndex(index);
+				tabbedPane.validate();
+				tabbedPane.repaint();
+			}
+			else tabbedPane.setSelectedIndex(index);
+			return (DocumentPanel)tabbedPane.getComponentAt(index);
+		}
+		catch (Exception e) {ErrorHandler.defaultHandler.submit(e, false);}
+		return null;
 	}
 	
 	public void closeBooks(Collection<Book> books)
@@ -304,10 +328,22 @@ public class MainWindow extends JFrame
 	
 	public DocumentPanel getPanelForDocument(AnnotatedObject document)
 	{
+		int index = getIndexForDocument(document);
+		if (index < 0)
+			return null;
+		return (DocumentPanel)tabbedPane.getComponentAt(index);
+	}
+	public AnnotatedObject baseDocument(AnnotatedObject document) {return document instanceof Region ? ((Region)document).getPage() : document;}
+	public int getIndexForDocument(AnnotatedObject document)
+	{
+		document = baseDocument(document);
 		for (int i=0;i<tabbedPane.getTabCount();i++)
-			if (((DocumentPanel)tabbedPane.getComponentAt(i)).getDocument() == document)
-				return (DocumentPanel)tabbedPane.getComponentAt(i);
-		return null;
+		{
+			AnnotatedObject open = ((DocumentPanel)tabbedPane.getComponentAt(i)).getDocument();
+			if (baseDocument(open) == document)
+				return i;
+		}
+		return -1;
 	}
 	public DocumentPanel getPanelForPage(Page page)
 	{
@@ -322,7 +358,7 @@ public class MainWindow extends JFrame
 	
 	public String getTabName(AnnotatedObject document)
 	{
-		String title = null;
+		String title = "???";
 		if (document instanceof Page || document instanceof Region)
 		{
 			Page page = document instanceof Page ? (Page)document :
@@ -334,85 +370,6 @@ public class MainWindow extends JFrame
 		else if (document instanceof Book)
 			title = ((Book)document).getName();
 		return title;
-	}
-	
-	public DocumentPanel setTabDocument(int index, final AnnotatedObject document, boolean reset) throws Exception
-	{
-		AnnotatedObject alreadyOpen = null;
-		for (int i=0;i<tabbedPane.getTabCount();i++)
-		{
-			DocumentPanel panel = (DocumentPanel)tabbedPane.getComponentAt(i);
-			if (i != index && panel.getDocument() == document || DocExploreDataLink.isSamePage(panel.getDocument(), document))
-			{
-				if (i != index)
-				{
-					((DocumentPanel)tabbedPane.getComponentAt(index)).documentIsClosing(null);
-					tabbedPane.removeTabAt(index);
-					if (i > index) i--;
-				}
-				index = i;
-				alreadyOpen = ((DocumentPanel)tabbedPane.getComponentAt(index)).document;
-				break;
-			}
-		}
-		
-		final DocumentPanel panel = (DocumentPanel)tabbedPane.getComponentAt(index);
-		if (panel.document != null && panel.document != document)
-			panel.documentIsClosing(document);
-		String title = getTabName(document);
-		if (title == null)
-			throw new Exception("Cannot open tab for object ("+document.getClass().getName()+")");
-		
-		tabbedPane.setTabComponentAt(index, new DocumentTab(title, MainWindow.this.tabbedPane));
-		
-		if (alreadyOpen == null)
-		{
-			if (reset)
-				panel.setDividerLocation(.5);
-			
-			final JDialog dialog = new JDialog(this, true);
-			dialog.setUndecorated(true);
-			JProgressBar progress = new JProgressBar(JProgressBar.HORIZONTAL);
-			progress.setIndeterminate(true);
-			dialog.add(new JLabel(XMLResourceBundle.getBundledString("manageLoadingLabel")), BorderLayout.NORTH);
-			dialog.add(progress, BorderLayout.SOUTH);
-			dialog.pack();
-			GuiUtils.centerOnScreen(dialog);
-			
-			new Thread() {public void run()
-			{
-				try {panel.fillPanels(document);}
-				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-				
-				while (!dialog.isVisible())
-					try {Thread.sleep(100);}
-					catch (Exception e) {}
-				dialog.setVisible(false);
-			}}.start();
-			
-			dialog.setVisible(true);
-		}
-		else if (DocExploreDataLink.isSamePage(document, alreadyOpen))
-		{
-			double zoom = panel.pageViewer.transform.getScaleX();
-			Point ori = panel.viewerScrollPane.getViewport().getViewPosition();
-			PageViewer.ImageOperation operation = panel.pageViewer.getOperation();
-			
-			panel.fillPanels(document);
-			
-			panel.pageViewer.setZoom(zoom);
-			panel.viewerScrollPane.getViewport().setViewPosition(ori);
-			panel.pageViewer.setOperation(operation);
-		}
-		tabbedPane.setSelectedIndex(index);
-		tabbedPane.validate();
-		tabbedPane.repaint();
-		return (DocumentPanel)tabbedPane.getComponentAt(index);
-	}
-	
-	public DocumentPanel setActiveTabDocument(AnnotatedObject document) throws Exception
-	{
-		return setTabDocument(tabbedPane.getSelectedIndex(), document, false);
 	}
 	
 	public DocumentPanel getActiveTab()
@@ -428,5 +385,133 @@ public class MainWindow extends JFrame
 				((DocumentPanel)comps[i]).annotationPanel.contractAllAnnotations();
 		processWindowEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		setVisible(false);
+	}
+	
+	public static interface DocExploreActionListener
+	{
+		public void onAction(String action);
+		public void onActionState(String action, boolean state);
+	}
+	private Map<String, List<DocExploreActionListener>> deActionListeners = new TreeMap<String, List<DocExploreActionListener>>();
+	public void addDocExploreActionListener(String action, DocExploreActionListener listener)
+	{
+		List<DocExploreActionListener> listeners = deActionListeners.get(action);
+		if (listeners == null)
+			deActionListeners.put(action, listeners = new ArrayList<DocExploreActionListener>());
+		listeners.add(listener);
+	}
+	public void removeDocExploreActionListener(String action, DocExploreActionListener listener)
+	{
+		List<DocExploreActionListener> listeners = deActionListeners.get(action);
+		if (listeners != null)
+			listeners.remove(listener);
+	}
+	
+	public void broadcastAction(String action)
+	{
+		DocumentPanel panel = getActiveTab();
+		if (panel != null)
+			panel.onActionRequest(action);
+		List<DocExploreActionListener> listeners = deActionListeners.get(action);
+		if (listeners != null)
+			for (int i=0;i<listeners.size();i++)
+				listeners.get(i).onAction(action);
+	}
+	public void broadcastActionState(String action, boolean state)
+	{
+		DocumentPanel panel = getActiveTab();
+		if (panel != null)
+			panel.onActionStateRequest(action, state);
+		List<DocExploreActionListener> listeners = deActionListeners.get(action);
+		if (listeners != null)
+			for (int i=0;i<listeners.size();i++)
+				listeners.get(i).onActionState(action, state);
+	}
+	
+	public void onCollectionChanged()
+	{
+		manageComponent.refresh();
+	}
+	public void onBookAdded(Book book)
+	{
+	}
+	public void onBookDeleted(Book book)
+	{
+		for (int i=0;i<tabbedPane.getTabCount();i++)
+		{
+			DocumentPanel panel = (DocumentPanel)tabbedPane.getComponentAt(i);
+			if (panel.getDocument() instanceof Book && panel.getDocument().getId() == book.getId() ||
+				panel.getDocument() instanceof Page && ((Page)panel.getDocument()).getBook().getId() == book.getId() ||
+				panel.getDocument() instanceof Region && ((Region)panel.getDocument()).getPage().getBook().getId() == book.getId())
+					removeTab(i--);
+		}
+	}
+	public void onBookChanged(Book book)
+	{
+		for (int i=0;i<tabbedPane.getTabCount();i++)
+		{
+			DocumentPanel panel = (DocumentPanel)tabbedPane.getComponentAt(i);
+			if (panel.getDocument() instanceof Book && panel.getDocument().getId() == book.getId() ||
+				panel.getDocument() instanceof Page && ((Page)panel.getDocument()).getBook().getId() == book.getId() ||
+				panel.getDocument() instanceof Region && ((Region)panel.getDocument()).getPage().getBook().getId() == book.getId())
+					panel.refresh();
+		}
+	}
+	public void onPageAdded(Page page)
+	{
+	}
+	public void onPageDeleted(Page page)
+	{
+		for (int i=0;i<tabbedPane.getTabCount();i++)
+		{
+			DocumentPanel panel = (DocumentPanel)tabbedPane.getComponentAt(i);
+			if (panel.getDocument() instanceof Page && ((Page)panel.getDocument()).getId() == page.getId() ||
+				panel.getDocument() instanceof Region && ((Region)panel.getDocument()).getPage().getId() == page.getId())
+					removeTab(i--);
+		}
+	}
+	public void onPageChanged(Page page)
+	{
+		for (int i=0;i<tabbedPane.getTabCount();i++)
+		{
+			DocumentPanel panel = (DocumentPanel)tabbedPane.getComponentAt(i);
+			if (panel.getDocument() instanceof Book && panel.getDocument().getId() == page.getBook().getId() ||
+				panel.getDocument() instanceof Page && ((Page)panel.getDocument()).getId() == page.getId())
+					panel.refresh();
+		}
+	}
+	public void onRegionAdded(Region region)
+	{
+	}
+	public void onRegionDeleted(Region region)
+	{
+		for (int i=0;i<tabbedPane.getTabCount();i++)
+		{
+			DocumentPanel panel = (DocumentPanel)tabbedPane.getComponentAt(i);
+			if (panel.getDocument() instanceof Region && ((Region)panel.getDocument()).getId() == region.getId())
+				removeTab(i--);
+		}
+	}
+	public void onRegionChanged(Region region)
+	{
+		for (int i=0;i<tabbedPane.getTabCount();i++)
+		{
+			DocumentPanel panel = (DocumentPanel)tabbedPane.getComponentAt(i);
+			if (panel.getDocument() instanceof Page && panel.getDocument().getId() == region.getPage().getId() || 
+				panel.getDocument() instanceof Region && ((Region)panel.getDocument()).getId() == region.getId())
+				panel.refresh();
+		}
+	}
+	public void onMetaDataAdded(AnnotatedObject object) {onMetaDataChanged(object);}
+	public void onMetaDataDeleted(AnnotatedObject object) {onMetaDataChanged(object);}
+	public void onMetaDataChanged(AnnotatedObject object)
+	{
+		for (int i=0;i<tabbedPane.getTabCount();i++)
+		{
+			DocumentPanel panel = (DocumentPanel)tabbedPane.getComponentAt(i);
+			if (panel.getDocument().getClass() == object.getClass() && panel.getDocument().getId() == object.getId())
+				try {panel.annotationPanel.setDocument(object);}
+				catch (DataLinkException e) {ErrorHandler.defaultHandler.submit(e);}
+		}
 	}
 }

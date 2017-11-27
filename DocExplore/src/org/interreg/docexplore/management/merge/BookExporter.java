@@ -33,6 +33,11 @@ import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.util.Pair;
 
+/**
+ * Exports objects from a datalink to another. After each add operation, all transfered items are stored in arrays for additional filtering in subclasses.
+ * @author Alexander Burnett
+ *
+ */
 public class BookExporter
 {
 	public static interface MetaDataFilter
@@ -42,10 +47,10 @@ public class BookExporter
 	
 	public float progress;
 	
-	public List<Book> copiedBooks = new Vector<Book>();
-	public List<Page> copiedPages = new Vector<Page>();
-	public List<Region> copiedRegions = new Vector<Region>();
-	public List<Pair<AnnotatedObject, MetaData>> copiedMds = new Vector<Pair<AnnotatedObject, MetaData>>();
+	protected List<Book> copiedBooks = new Vector<Book>();
+	protected List<Page> copiedPages = new Vector<Page>();
+	protected List<Region> copiedRegions = new Vector<Region>();
+	protected List<Pair<AnnotatedObject, MetaData>> copiedMds = new Vector<Pair<AnnotatedObject, MetaData>>();
 	
 	public BookExporter()
 	{
@@ -177,24 +182,32 @@ public class BookExporter
 	
 	public MetaData add(MetaData md, AnnotatedObject to, MetaDataFilter filter) throws Exception
 	{
+		return add(md, to.getLink(), to, filter);
+	}
+	public MetaData add(MetaData md, ManuscriptLink link, MetaDataFilter filter) throws Exception
+	{
+		return add(md, link, null, filter);
+	}
+	public MetaData add(MetaData md, ManuscriptLink link, AnnotatedObject to, MetaDataFilter filter) throws Exception
+	{
 		clearCopies();
 		try
 		{
-			Boolean isAutoWrite = (Boolean)to.getLink().getProperty("autoWrite");
+			Boolean isAutoWrite = (Boolean)link.getProperty("autoWrite");
 			if (isAutoWrite != null && isAutoWrite)
-				to.getLink().setProperty("autoWrite", false);
+				link.setProperty("autoWrite", false);
 			
-			MetaData mdCopy = addMetaData(md, to, filter);
+			MetaData mdCopy = to == null ? addMetaData(md, link, filter) : addMetaData(md, to, filter);
 			if (mdCopy != null)
 				copiedMds.add(new Pair<AnnotatedObject, MetaData>(to, mdCopy));
 			
 			if (isAutoWrite != null && isAutoWrite)
-				to.getLink().setProperty("autoWrite", true);
+				link.setProperty("autoWrite", true);
 			return mdCopy;
 		}
 		catch (Exception e)
 		{
-			to.getLink().setProperty("autoWrite", true);
+			link.setProperty("autoWrite", true);
 			progress = 1;
 			throw e;
 		}
@@ -318,7 +331,7 @@ public class BookExporter
 				if (filter == null || filter.keepAnnotation(from, to, metaData))
 					addMetaData(metaData, to, filter);
 	}
-	protected MetaData addMetaData(MetaData metaData, AnnotatedObject to, MetaDataFilter filter) throws DataLinkException
+	protected MetaData addMetaData(MetaData metaData, ManuscriptLink to, MetaDataFilter filter) throws DataLinkException
 	{
 		MetaData mdCopy = null;
 		MetaDataKey key = null;
@@ -326,23 +339,25 @@ public class BookExporter
 		String keyName = metaData.getKey().getName("");
 		if (keyName == null)
 			return null;
-		key = to.getLink().getKey(keyName, "");
+		
+		key = to.getKey(keyName, "");
 		if (key == null)
 		{
-			key = to.getLink().getOrCreateKey(keyName, "");
+			key = to.getOrCreateKey(keyName, "");
 			String locName = metaData.getKey().getName();
 			if (locName != null)
 				key.setName(locName);
 		}
-		
-//		if (metaData.getType().equals(MetaData.textType))
-//			mdCopy = new MetaData(to.getLink(), key, metaData.getString());
-//		else if (metaData.getType().equals(MetaData.imageType))
-//			mdCopy = new MetaData(to.getLink(), key, MetaData.imageType, metaData.getValue());
-		mdCopy = new MetaData(to.getLink(), key, metaData.getType(), metaData.getValue());
-		to.addMetaData(mdCopy);
+
+		mdCopy = new MetaData(to, key, metaData.getType(), metaData.getValue());
 		
 		copyMetaData(metaData, mdCopy, filter);
+		return mdCopy;
+	}
+	protected MetaData addMetaData(MetaData metaData, AnnotatedObject to, MetaDataFilter filter) throws DataLinkException
+	{
+		MetaData mdCopy = addMetaData(metaData, to.getLink(), filter);
+		to.addMetaData(mdCopy);
 		return mdCopy;
 	}
 	

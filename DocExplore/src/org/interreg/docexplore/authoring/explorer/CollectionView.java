@@ -20,6 +20,8 @@ import java.util.Vector;
 
 import javax.swing.Icon;
 
+import org.interreg.docexplore.datalink.DataLinkException;
+import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -31,7 +33,8 @@ public class CollectionView extends DataLinkView
 		super(explorer);
 	}
 	
-	Icon icon = ImageUtils.getIcon("book-48x48.png");
+	Icon bookIcon = ImageUtils.getIcon("book-64x64.png");
+	Icon posterIcon = ImageUtils.getIcon("scroll-64x64.png");
 	@Override protected List<ViewItem> buildItemList(String path) throws Exception
 	{
 		if (!path.equals("docex://"))
@@ -53,7 +56,17 @@ public class CollectionView extends DataLinkView
 		return path.equals("docex://");
 	}
 
-	@Override protected Icon getIcon(Object object) {return icon;}
+	@Override protected Icon getIcon(Object object)
+	{
+		if (object instanceof Book) try
+		{
+			String display = ((Book)object).getMetaDataString(explorer.link.displayKey);
+			if (display != null && display.equals("poster"))
+				return posterIcon;
+		}
+		catch (DataLinkException e) {ErrorHandler.defaultHandler.submit(e, false);}
+		return bookIcon;
+	}
 	
 	@Override public DropType getDropType(ExplorerView source, List<ViewItem.Data> items) {return DropType.None;}
 	@Override public void itemsDropped(ExplorerView source, List<ViewItem.Data> items, Point where) throws Exception {}

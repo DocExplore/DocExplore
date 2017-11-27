@@ -16,20 +16,21 @@ package org.interreg.docexplore.datalink.fs2;
 
 import java.util.List;
 
+import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.actions.AddMetaDataAction;
 
 public class AddFS2MetaDataAction extends AddMetaDataAction
 {
-	DataLinkFS2 link;
+	DocExploreDataLink link;
 	
-	public AddFS2MetaDataAction(DataLinkFS2 link, AnnotatedObject document, MetaData annotation)
+	public AddFS2MetaDataAction(DocExploreDataLink link, AnnotatedObject document, MetaData annotation)
 	{
 		super(document, annotation);
 		this.link = link;
 	}
-	public AddFS2MetaDataAction(DataLinkFS2 link, AnnotatedObject document, List<MetaData> annotations)
+	public AddFS2MetaDataAction(DocExploreDataLink link, AnnotatedObject document, List<MetaData> annotations)
 	{
 		super(document, annotations);
 		this.link = link;

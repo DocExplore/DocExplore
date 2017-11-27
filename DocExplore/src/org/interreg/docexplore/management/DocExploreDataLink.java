@@ -60,6 +60,9 @@ public final class DocExploreDataLink extends ManuscriptLink
 	public MetaDataKey miniKey;
 	public MetaDataKey dimKey;
 	public MetaDataKey sourceKey;
+	public MetaDataKey partKey;
+	public MetaDataKey partPosKey;
+	public MetaDataKey displayKey;
 	
 	public Set<MetaDataKey> readOnlyKeys, functionalKeys;
 	
@@ -110,11 +113,17 @@ public final class DocExploreDataLink extends ManuscriptLink
 				this.miniKey = getOrCreateKey("mini", "");
 				this.dimKey = getOrCreateKey("dimension", "");
 				this.sourceKey = getOrCreateKey("source-file", "");
+				this.partKey = getOrCreateKey("part", "");
+				this.partPosKey = getOrCreateKey("part-pos", "");
+				this.displayKey = getOrCreateKey("display", "");
 				
 				this.readOnlyKeys = new TreeSet<MetaDataKey>();
 				readOnlyKeys.add(miniKey);
 				readOnlyKeys.add(dimKey);
 				readOnlyKeys.add(sourceKey);
+				readOnlyKeys.add(partKey);
+				readOnlyKeys.add(partPosKey);
+				readOnlyKeys.add(displayKey);
 				
 				this.functionalKeys = new TreeSet<MetaDataKey>();
 				functionalKeys.add(miniKey);
@@ -254,6 +263,7 @@ public final class DocExploreDataLink extends ManuscriptLink
 		return null;
 	}
 	
+	public static final int miniSize = 128;
 	public static BufferedImage getImageMini(Page page) throws Exception {return getImageMini(page, false);}
 	public static BufferedImage getImageMini(Page page, boolean noUnload) throws Exception
 	{
@@ -267,7 +277,7 @@ public final class DocExploreDataLink extends ManuscriptLink
 			return mini;
 		}
 		
-		mini = ImageUtils.createIconSizeImage(page.getImage().getImage(), 64f);
+		mini = ImageUtils.createIconSizeImage(page.getImage().getImage(), miniSize);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		ImageUtils.write(mini, "png", os);
 		InputStream is = new ByteArrayInputStream(os.toByteArray());

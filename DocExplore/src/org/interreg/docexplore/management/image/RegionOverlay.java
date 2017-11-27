@@ -14,7 +14,6 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.management.image;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -65,83 +64,103 @@ public class RegionOverlay
 		}
 	}
 	
+	PageEditor editor;
+	Page page;
 	Set<RegionObject> objects;
-	Region focused, highlighted;
+	int focused, highlighted;
 	
-	public RegionOverlay()
+	public RegionOverlay(PageEditor editor)
 	{
+		this.editor = editor;
 		this.objects = new HashSet<RegionOverlay.RegionObject>();
-		this.focused = null;
-		this.highlighted = null;
+		this.focused = -1;
+		this.highlighted = -1;
 	}
 	
-	public void setDocument(Page page, Region focused) throws DataLinkException
+	public void setPage(Page page, Region focused) throws DataLinkException {setPage(page, focused == null ? -1 : focused.getId(), false);}
+	public void setPage(Page page, boolean refresh) throws DataLinkException {setPage(page, focused, refresh);}
+	public void setPage(Page page, int focused, boolean refresh) throws DataLinkException
 	{
-		objects.clear();
-		this.focused = null;
-		this.highlighted = null;
-		
-		if (page != null)
+		if (page == this.page && !refresh)
 		{
-			for (Region region : page.getRegions())
-				objects.add(new RegionObject(region));
-			this.focused = focused;
+			setFocusedRegion(focused);
+			return;
 		}
+		
+		objects.clear();
+		this.highlighted = -1;
+		boolean focusFound = false;
+		for (Region region : page.getRegions())
+		{
+			objects.add(new RegionObject(region));
+			focusFound |= region.getId() == focused;
+		}
+		this.focused = !focusFound ? -1 : focused;
+		editor.repaint();
 	}
-	
+	public void setFocusedRegion(int regionId)
+	{
+		if (this.focused == regionId)
+			return;
+		this.focused = regionId;
+		editor.repaint();
+	}
 	public void setHighlightedRegion(Region region)
 	{
-		this.highlighted = region;
+		int id = region == null ? -1 : region.getId();
+		if (this.highlighted == id)
+			return;
+		this.highlighted = id;
+		editor.repaint();
 	}
 	
 	final static Color regionOutlineColor = new Color(255, 127, 127, 192);
 	final static Color regionFocusedOutlineColor = new Color(255, 255, 64, 255);
 	final static Color regionHighlightedOutlineColor = new Color(255, 160, 64, 255);
-	public void render(Graphics2D g)
+	public void render(Graphics2D g, double pixelSize)
 	{
-		g.setStroke(new BasicStroke((float)(3./g.getTransform().getScaleX()), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-		
+		if (pixelSize == 0)
+			return;
 		for (RegionObject object : objects)
 		{
-			g.setColor(object.region == focused ? regionFocusedOutlineColor : 
-				object.region == highlighted ? regionHighlightedOutlineColor :
+			g.setColor(object.region.getId() == focused ? regionFocusedOutlineColor : 
+				object.region.getId() == highlighted ? regionHighlightedOutlineColor :
 				regionOutlineColor);
 			g.drawPolygon(object.polygon);
 		}
 	}
 	
-	public Region regionAt(Point point)
+	public Region regionAt(double x, double y)
 	{
 		for (RegionObject object : objects)
-			if (object.polygon.contains(point))
+			if (object.polygon.contains(x, y))
 				return object.region;
 		return null;
 	}
-	public RegionObject regionObjectAt(Point point)
+	public RegionObject regionObjectAt(double x, double y)
 	{
 		for (RegionObject object : objects)
-			if (object.polygon.contains(point))
+			if (object.polygon.contains(x, y))
 				return object;
 		return null;
 	}
 	
-	public List<Region> regionsAt(Point point)
+	public List<Region> regionsAt(double x, double y)
 	{
 		List<Region> regions = new LinkedList<Region>();
 		for (RegionObject object : objects)
-			if (object.polygon.contains(point))
+			if (object.polygon.contains(x, y))
 				regions.add(object.region);
 		return regions;
 	}
 	
-	public Pair<RegionObject, Integer> pointAt(Point imagePoint, double ray)
+	public Pair<RegionObject, Integer> pointAt(double x, double y, double ray)
 	{
-		Point point = new Point();
 		for (RegionObject object : objects)
 			for (int i=0;i<object.polygon.npoints;i++)
 			{
-				point.setLocation(object.polygon.xpoints[i], object.polygon.ypoints[i]);
-				if (imagePoint.distanceSq(point) <= ray*ray)
+				int px = object.polygon.xpoints[i], py = object.polygon.ypoints[i];
+				if ((x-px)*(x-px)+(y-py)*(y-py) <= ray*ray)
 					return new Pair<RegionObject, Integer>(object, i);
 			}
 		return null;

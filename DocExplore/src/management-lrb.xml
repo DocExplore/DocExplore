@@ -68,6 +68,7 @@
 	<entry key="imageToolbarScroll">Scroll</entry>
 	<entry key="imageToolbarSelect">Select</entry>
 	<entry key="imageToolbarFit">Fit in frame</entry>
+	<entry key="imageToolbarTranspose">Transpose</entry>
 	<entry key="imageGotoLabel">Go to</entry>
 	<entry key="imageLocateLabel">Get location code</entry>
 	<entry key="imageLockTooltip">Lock/Unlock page configuration</entry>
@@ -163,6 +164,7 @@
 	<entry key="manageSelectNoneLabel">Select none</entry>
 	<entry key="manageInputTitleLabel">Give a title to the book</entry>
 	<entry key="manageAppendPagesLabel">Append pages to the book</entry>
+	<entry key="manageRefreshLabel">Refresh</entry>
 	<entry key="manageImportPagesLabel">Importing...</entry>
 	<entry key="manageLoadingLabel">Loading page...</entry>
 	<entry key="manageCreatePresentation">Create presentation of the selected book</entry>
@@ -301,4 +303,9 @@ Do you wish to continue?</entry>
     <entry key="tagDeleteMessage">All occurrences of the tag &lt;i>%from&lt;/i> will be removed.</entry>
     <entry key="tagEmptyMessage">The tag can't be empty.</entry>
     <entry key="tagUsedMessage">This tag already exists.</entry>
+    
+    <entry key="createBookFromImagesLabel">Create a new book from images</entry>
+    <entry key="createBookFromImagesMessage">Select image files which make up the pages of a new book. The pages will stay in the order the images were selected but they can be reordered at any time.</entry>
+    <entry key="createDocumentFromImagesLabel">Create a single page document from images</entry>
+    <entry key="createDocumentFromImagesMessage">Select image files which make up the parts of a single page document. The image configuration will be guessed based on the file names but it can be changed at any time.</entry>
 </properties>

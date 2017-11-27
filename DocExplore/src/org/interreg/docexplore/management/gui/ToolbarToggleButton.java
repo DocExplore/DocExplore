@@ -22,31 +22,29 @@ import javax.swing.Icon;
 import org.interreg.docexplore.gui.IconToggleButton;
 import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
-import org.interreg.docexplore.manuscript.Page;
-import org.interreg.docexplore.manuscript.Region;
+import org.interreg.docexplore.util.ImageUtils;
 
 public class ToolbarToggleButton extends IconToggleButton implements MainWindow.MainWindowListener
 {
 	private static final long serialVersionUID = 8928621174282726861L;
 	
-	public ToolbarToggleButton(String iconName, String toolTip)
+	public static interface ToolbarToggleButtonListener
 	{
-		super(iconName, toolTip);
-		
-		addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				if (isSelected())
-					toggled();
-				else untoggled();
-			}
-		});
-	}
-	public ToolbarToggleButton(Icon icon, String toolTip)
+		public void onToolbarButton(ToolbarButton button);
+		public void onToolbarToggleButton(ToolbarToggleButton button, boolean selected);
+	};
+	
+	ToolbarToggleButtonListener listener;
+	String action;
+	
+	public ToolbarToggleButton(String iconName, String toolTip) {this(null, null, iconName, toolTip);}
+	public ToolbarToggleButton(ToolbarToggleButtonListener listener, String action, String iconName, String toolTip) {this(listener, action, ImageUtils.getIcon(iconName), toolTip);}
+	public ToolbarToggleButton(Icon icon, String toolTip) {this(null, null, icon, toolTip);}
+	public ToolbarToggleButton(ToolbarToggleButtonListener listener, String action, Icon icon, String toolTip)
 	{
 		super(icon, toolTip);
-		
+		this.listener = listener;
+		this.action = action;
 		addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -56,14 +54,23 @@ public class ToolbarToggleButton extends IconToggleButton implements MainWindow.
 				else untoggled();
 			}
 		});
+		setFocusable(false);
 	}
 
-	public void toggled() {}
-	public void untoggled() {}
-	
-	public void activeDocumentChanged(AnnotatedObject document)
+	public void toggled()
 	{
-		setEnabled(document != null && (document instanceof Page || document instanceof Region));
+		if (listener != null)
+			listener.onToolbarToggleButton(this, true);
+	}
+	public void untoggled()
+	{
+		if (listener != null)
+			listener.onToolbarToggleButton(this, false);
+	}
+	
+	public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
+	{
+		setEnabled(document != null);
 	}
 
 	public void dataLinkChanged(DocExploreDataLink link) {}

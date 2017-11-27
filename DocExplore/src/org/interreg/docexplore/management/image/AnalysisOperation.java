@@ -14,37 +14,29 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.management.image;
 
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import org.interreg.docexplore.internationalization.XMLResourceBundle;
 
-public class AnalysisOperation extends SquareOperation
+public class AnalysisOperation extends RectROIOperation
 {
 	public AnalysisOperation()
 	{
 		super();
 	}
 	
-	public void pointClicked(PageViewer ic, Point point, int modifiers, int clickCount)
+	@Override public void pointDropped(PageEditor view, int cx, int cy, double vx, double vy, int downw, int downy, int deltax, int deltay, int modifiers)
 	{
-		if (second != null)
-			return;
-		if (first == null)
-			first = new Point(point);
-		else
-		{
-			second = new Point(point);
-			
-			int x = Math.min(first.x, second.x), y = Math.min(first.y, second.y);
-			int w = Math.abs(first.x-second.x), h = Math.abs(first.y-second.y);
-			BufferedImage area = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
-			area.createGraphics().drawImage(ic.image.getSubimage(x, y, w, h), 0, 0, null);
-			ic.notifyAnalysisRequested(area);
-			
-			this.first = null;
-			this.second = null;
-		}
+		second.setLocation(Math.max(0, Math.min(view.getImage().getWidth()-1, (int)(vx+.5))), Math.max(0, Math.min(view.getImage().getHeight()-1, (int)(vy+.5))));
+		
+		int x = Math.min(first.x, second.x), y = Math.min(first.y, second.y);
+		int w = Math.abs(first.x-second.x), h = Math.abs(first.y-second.y);
+		BufferedImage area = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
+		area.createGraphics().drawImage(view.getImage().getSubimage(x, y, w, h), 0, 0, null);
+		view.getHost().onAnalysisRequest(area);
+		
+		this.first = null;
+		this.second = null;
 	}
 	
 	public String getMessage() {return XMLResourceBundle.getBundledString("statusAnalysisMessage");}

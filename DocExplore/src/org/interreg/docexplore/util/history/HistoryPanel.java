@@ -20,6 +20,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -30,27 +33,28 @@ import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
+import org.interreg.docexplore.util.Pair;
 
 @SuppressWarnings("serial")
 public class HistoryPanel extends JPanel implements HistoryManager.HistoryListener
 {
 	static class ActionElement extends JPanel
 	{
+		static DateFormat df = new SimpleDateFormat("HH:mm:ss");
 		HistoryPanel panel;
 		int index;
 		ReversibleAction action;
 		boolean selected = false;
 		
-		ActionElement(HistoryPanel panel, ReversibleAction action, int index)
+		ActionElement(HistoryPanel panel, ReversibleAction action, Date time, int index)
 		{
 			super(new BorderLayout());
 			
 			this.panel = panel;
 			this.index = index;
 			this.action = action;
-			if (index == panel.manager.cursor-1)
-				add(new JLabel("<html><b>"+action.description()+"</b></html>"));
-			else add(new JLabel(action.description()));
+			boolean current = index == panel.manager.cursor-1;
+			add(new JLabel("<html>"+(current ? "<b>" : "")+df.format(time)+" "+action.description()+(current ? "</b>" : "")+"</html>"));
 		}
 		
 		void setSelected(boolean selected)
@@ -82,7 +86,7 @@ public class HistoryPanel extends JPanel implements HistoryManager.HistoryListen
 		this.scrollPane = new JScrollPane(content, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		add(scrollPane, BorderLayout.CENTER);
-		scrollPane.setPreferredSize(new Dimension(200, 500));
+		scrollPane.setPreferredSize(new Dimension(300, 500));
 		
 		manager.addHistoryListener(this);
 		historyChanged(manager);
@@ -132,9 +136,9 @@ public class HistoryPanel extends JPanel implements HistoryManager.HistoryListen
 		elements.clear();
 		
 		int cnt = 0;
-		for (ReversibleAction action : manager.history)
+		for (Pair<ReversibleAction, Date> action : manager.history)
 		{
-			ActionElement element = new ActionElement(this, action, cnt++);
+			ActionElement element = new ActionElement(this, action.first, action.second, cnt++);
 			content.add(element);
 			elements.add(element);
 		}

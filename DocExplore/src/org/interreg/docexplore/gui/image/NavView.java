@@ -1,26 +1,26 @@
-package org.interreg.docexplore.stitcher;
+package org.interreg.docexplore.gui.image;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import javax.swing.JPanel;
 
-@SuppressWarnings("serial")
 public class NavView extends JPanel
 {
+	private static final long serialVersionUID = 1252503368700161717L;
+	
 	double x0 = 0, y0 = 0;
 	double scale = 100;
 	
-	NavViewInputListener inputListener;
+	protected NavViewInputListener inputListener;
 	
 	public NavView()
 	{
 		setFocusable(true);
-		setBackground(Color.darkGray);
 		
 		this.inputListener = createInputListener();
 		addMouseListener(inputListener);
@@ -63,6 +63,7 @@ public class NavView extends JPanel
 		onViewChange();
 		repaint();
 	}
+	public double getScale() {return scale;}
 	public void setScale(double scale)
 	{
 		this.scale = scale;
@@ -86,23 +87,32 @@ public class NavView extends JPanel
 	public double fromViewY(double y) {return scale*(y-y0)+getHeight()/2;}
 	
 	protected float defaultStrokeWidth = 2;
+	protected AffineTransform defaultTransform = new AffineTransform();
 	BasicStroke stroke = new BasicStroke(1);
 	@Override protected void paintChildren(Graphics _g)
 	{
 		super.paintChildren(_g);
 		
+		if (scale == 0)
+			return;
+		
 		Graphics2D g = (Graphics2D)_g;
-		g.translate(getWidth()/2-scale*x0, getHeight()/2-scale*y0);
-		g.scale(scale, scale);
+		
+		AffineTransform transform = g.getTransform();
+		defaultTransform.setTransform(transform);
+		transform.translate(getWidth()/2-scale*x0, getHeight()/2-scale*y0);
+		transform.scale(scale, scale);
+		g.setTransform(transform);
 		
 		BasicStroke stroke = new BasicStroke((float)(defaultStrokeWidth/scale));
 		g.setStroke(stroke);
 		
 		drawView(g, scale);
+		
+		g.setTransform(defaultTransform);
+		drawComponent(g);
 	}
 	
-	protected void drawView(Graphics2D g, double pixelSize)
-	{
-		
-	}
+	protected void drawView(Graphics2D g, double pixelSize) {}
+	protected void drawComponent(Graphics2D g) {}
 }

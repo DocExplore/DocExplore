@@ -35,11 +35,14 @@ public class DataLinkActionProvider implements ActionProvider
 	}
 	
 	public AddPagesAction addPages(Book book, List<File> files) {return new AddPagesAction(link, book, files);}
+	public AddPosterPartsAction addParts(Book book, List<File> files) {return new AddPosterPartsAction(link, book, files);}
 	public DeleteBooksAction deleteBooks(List<Book> books) {return new DeleteBooksAction(books);}
 	public DeletePagesAction deletePages(List<Page> pages) {return new DeletePagesAction(pages);}
-	public AddBookAction addBook(String title, List<File> files) {return new AddBookAction(link, title, files);}
+	public AddBookAction addBook(String title, List<File> files, boolean poster) {return new AddBookAction(link, title, files, poster);}
 	public DeleteMetaDataAction deleteMetaData(AnnotatedObject document, MetaData annotation) {return new DeleteMetaDataAction(document, annotation);}
 	public DeleteMetaDataAction deleteMetaDatas(AnnotatedObject document, List<MetaData> annotations) {return new DeleteMetaDataAction(document, annotations);}
+	public DeletePosterPartsAction deletePart(Book book, MetaData part) {return new DeletePosterPartsAction(link, book, part);}
+	public DeletePosterPartsAction deleteParts(Book book, List<MetaData> parts) {return new DeletePosterPartsAction(link, book, parts);}
 	public AddMetaDataAction addMetaData(AnnotatedObject document, MetaData annotation) {return new AddMetaDataAction(document, annotation);}
 	public AddMetaDataAction addMetaDatas(AnnotatedObject document, List<MetaData> annotations) {return new AddMetaDataAction(document, annotations);}
 	public DeleteRegionsAction deleteRegion(Region region) {return new DeleteRegionsAction(region);}
@@ -48,4 +51,5 @@ public class DataLinkActionProvider implements ActionProvider
 	public AddRegionsAction addRegions(Page page, List<Point []> outlines) {return new AddRegionsAction(page, outlines);}
 	public MovePagesAction movePages(List<Page> pages, Page moveAfter) {return new MovePagesAction(pages, moveAfter);}
 	public CropPageAction cropPage(Page page, int tlx, int tly, int brx, int bry) {return new CropPageAction(page, tlx, tly, brx, bry);}
+	public MovePartAction movePart(Book book, MetaData part, int col, int row, boolean insertRow) {return new MovePartAction(link ,book, part, col, row, insertRow);}
 }

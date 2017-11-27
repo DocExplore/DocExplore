@@ -111,20 +111,22 @@ public class AnnotationPanel extends JPanel
 		try {handler.deleteMetaData(document, editor.annotation);}
 		catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 	}
-	public void addAnnotation()
+	public MetaData addAnnotation()
 	{
 		try
 		{
 			MetaData object = handler.createMetaData(document);
 			if (object == null)
-				return;
+				return null;
 			AnnotationEditor editor = getEditorFor(object);
 			if (editor == null)
-				return;
+				return null;
 			annotationList.contractAll();
 			editor.expand();
+			return object;
 		}
 		catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
+		return null;
 	}
 	
 	public void setDocument(AnnotatedObject document) throws DataLinkException

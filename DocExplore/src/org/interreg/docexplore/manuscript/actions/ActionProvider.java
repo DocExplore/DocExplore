@@ -27,11 +27,14 @@ import org.interreg.docexplore.manuscript.Region;
 public interface ActionProvider
 {
 	public AddPagesAction addPages(Book book, List<File> files);
+	public AddPosterPartsAction addParts(Book book, List<File> files);
 	public DeleteBooksAction deleteBooks(List<Book> books);
 	public DeletePagesAction deletePages(List<Page> pages);
-	public AddBookAction addBook(String title, List<File> files);
+	public AddBookAction addBook(String title, List<File> files, boolean poster);
 	public DeleteMetaDataAction deleteMetaData(AnnotatedObject document, MetaData annotation);
 	public DeleteMetaDataAction deleteMetaDatas(AnnotatedObject document, List<MetaData> annotations);
+	public DeletePosterPartsAction deletePart(Book book, MetaData part);
+	public DeletePosterPartsAction deleteParts(Book book, List<MetaData> parts);
 	public AddMetaDataAction addMetaData(AnnotatedObject document, MetaData annotation);
 	public AddMetaDataAction addMetaDatas(AnnotatedObject document, List<MetaData> annotations);
 	public DeleteRegionsAction deleteRegion(Region region);
@@ -39,5 +42,6 @@ public interface ActionProvider
 	public AddRegionsAction addRegion(Page page, Point [] outline);
 	public AddRegionsAction addRegions(Page page, List<Point []> outlines);
 	public MovePagesAction movePages(List<Page> pages, Page moveAfter);
+	public MovePartAction movePart(Book book, MetaData part, int col, int row, boolean insertRow);
 	public CropPageAction cropPage(Page page, int tlx, int tly, int brx, int bry);
 }

@@ -32,7 +32,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 /**
@@ -43,6 +42,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
 @SuppressWarnings("serial")
 public class DocumentTab extends JPanel
 {
+	MainWindow win;
 	private JLabel label;
 	
 	public void setTitle(String title)
@@ -51,12 +51,13 @@ public class DocumentTab extends JPanel
 		label.repaint();
 	}
 	
-	public DocumentTab(String title, final JTabbedPane pane)
+	public DocumentTab(final MainWindow win, String title)
 	{
 		//unset default FlowLayout' gaps
 		super(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		setOpaque(false);
 
+		this.win = win;
 		//make JLabel read titles from JTabbedPane
 		label = new JLabel(title); 
 		add(label);
@@ -110,10 +111,7 @@ public class DocumentTab extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				Component comp = pane.getComponentAt(pane.indexOfTabComponent(DocumentTab.this));
-				if (comp instanceof DocumentPanel)
-					((DocumentPanel)comp).documentIsClosing(null);
-				pane.remove(pane.indexOfTabComponent(DocumentTab.this));
+				win.removeTab(win.tabbedPane.indexOfTabComponent(DocumentTab.this));
 			}
 		});
 		add(button);

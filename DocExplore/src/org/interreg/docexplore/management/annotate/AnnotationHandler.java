@@ -153,7 +153,7 @@ public class AnnotationHandler
 		final DeleteMetaDataAction deletePagesAction = win.getActionProvider().deleteMetaData(document, annotation);
 		try
 		{
-			win.historyManager.doAction(new WrappedAction(deletePagesAction)
+			win.historyManager.submit(new WrappedAction(deletePagesAction)
 			{
 				public void doAction() throws Exception {super.doAction(); refreshAnnotationPanel(document);}
 				public void undoAction() throws Exception {super.undoAction(); refreshAnnotationPanel(document);}
@@ -291,16 +291,18 @@ public class AnnotationHandler
 		{
 			if (sourceUri != null)
 				annotation.addMetaData(new MetaData(link, link.getOrCreateKey("source-uri"), sourceUri));
-			final AddMetaDataAction addMetDataAction = win.getActionProvider().addMetaData(document, annotation);
-			try
-			{
-				win.historyManager.doAction(new WrappedAction(addMetDataAction)
-				{
-					public void doAction() throws Exception {super.doAction(); refreshAnnotationPanel(document);}
-					public void undoAction() throws Exception {super.undoAction(); refreshAnnotationPanel(document);}
-				});
-			}
-			catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
+			win.manageComponent.handler.onAddAnnotationRequest(document, annotation);
+//			final AddMetaDataAction addMetDataAction = win.getActionProvider().addMetaData(document, annotation);
+//			try
+//			{
+//				
+//				win.historyManager.doAction(new WrappedAction(addMetDataAction)
+//				{
+//					public void doAction() throws Exception {super.doAction(); refreshAnnotationPanel(document);}
+//					public void undoAction() throws Exception {super.undoAction(); refreshAnnotationPanel(document);}
+//				});
+//			}
+//			catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
 		}
 		return annotation;
 	}

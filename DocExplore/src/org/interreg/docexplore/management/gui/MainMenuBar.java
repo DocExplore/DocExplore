@@ -373,7 +373,7 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 		redoItem.setEnabled(manager.canRedo());
 	}
 
-	public void activeDocumentChanged(AnnotatedObject document) {}
+	public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document) {}
 
 	public void dataLinkChanged(DocExploreDataLink link)
 	{

@@ -15,116 +15,48 @@ The fact that you are presently reading this means that you have had knowledge o
 package org.interreg.docexplore.management.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.management.annotate.AnnotationPanel;
-import org.interreg.docexplore.management.image.BookViewer;
-import org.interreg.docexplore.management.image.PageViewer;
-import org.interreg.docexplore.management.image.PageViewer.ImageOperation;
+import org.interreg.docexplore.management.image.BookEditor;
+import org.interreg.docexplore.management.image.PosterPageEditor;
+import org.interreg.docexplore.management.manage.ActionRequestListener;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
-import org.interreg.docexplore.manuscript.actions.AddRegionsAction;
-import org.interreg.docexplore.manuscript.actions.CropPageAction;
-import org.interreg.docexplore.manuscript.actions.DeleteRegionsAction;
-import org.interreg.docexplore.manuscript.actions.WrappedAction;
 
 /**
  * The top level panel handling an annotated object. It is comprised of a view panel 
  * and a meta data panel.
  * @author Burnett
  */
-public class DocumentPanel extends JSplitPane {
-
+public class DocumentPanel extends JSplitPane implements DocumentEditorHost
+{
 	private static final long serialVersionUID = -3062167501953632763L;
 	
 	public final MainWindow win;
-	AnnotatedObject document;
+	private AnnotatedObject document;
+	private DocumentEditor editor;
 	public final AnnotationPanel annotationPanel;
+	String message = "";
 	
-	public final BookViewer bookViewer;
-	public final PageViewer pageViewer;
-	public final JScrollPane viewerScrollPane;
-	
-	public DocumentPanel(final MainWindow win, final DocExploreDataLink link) throws DataLinkException
+	public DocumentPanel(final MainWindow win, AnnotatedObject document) throws Exception
 	{
 		super(JSplitPane.HORIZONTAL_SPLIT);
 		
 		this.win = win;
-		this.document = null;
-		this.bookViewer = new BookViewer(win);
-		this.pageViewer = new PageViewer();
-		pageViewer.addListener(new PageViewer.Listener()
-		{
-			public void regionRemoved(Region region)
-			{
-				try
-				{
-					final Page page = region.getPage();
-					DeleteRegionsAction action = win.getActionProvider().deleteRegion(region);
-					win.historyManager.doAction(new WrappedAction(action)
-					{
-						public void doAction() throws Exception {super.doAction(); reloadViewer(page);}
-						public void undoAction() throws Exception {super.undoAction(); reloadViewer(page);}
-					});
-					win.setActiveTabDocument(page); 
-				}
-				catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
-			}
-			public void regionAdded(final Page page, Point [] outline)
-			{
-				try 
-				{
-					AddRegionsAction action = win.getActionProvider().addRegion(page, outline);
-					win.historyManager.doAction(new WrappedAction(action)
-					{
-						public void doAction() throws Exception {super.doAction(); reloadViewer(page);}
-						public void undoAction() throws Exception {super.undoAction(); reloadViewer(page); win.setActiveTabDocument(page);}
-					});
-					win.setActiveTabDocument(action.regions.get(0));
-				}
-				catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
-			}
-			public void pageCropped(final Page page, int tlx, int tly, int brx, int bry)
-			{
-				try 
-				{
-					CropPageAction action = win.getActionProvider().cropPage(page, tlx, tly, brx, bry);
-					win.historyManager.doAction(new WrappedAction(action)
-					{
-						public void doAction() throws Exception {super.doAction(); reloadViewer(page);}
-						public void undoAction() throws Exception {super.undoAction(); reloadViewer(page);}
-					});
-				}
-				catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
-			}
-			public void objectSelected(AnnotatedObject object) {try {win.setActiveTabDocument(object);} catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}}
-			public void analysisRequested(BufferedImage image) {win.pluginManager.analysisPluginSetup.addAnalysisInput(image);}
-			public void regionAnnotationRequested(Region region) {annotationPanel.addAnnotation();}
-			public void operationSet(ImageOperation operation)
-			{
-				if (operation == PageViewer.defaultOperation)
-					win.toolBar.unselectRoiButtons();
-				win.statusBar.setMessage(operation.getMessage());
-			}
-		});
+		this.document = document;
+		this.annotationPanel = new AnnotationPanel(win);
 		
 		JPanel viewPanel = new JPanel(new BorderLayout());
-		this.viewerScrollPane = new JScrollPane(pageViewer);
-		viewerScrollPane.setWheelScrollingEnabled(true);
-		viewerScrollPane.getVerticalScrollBar().setUnitIncrement(15);
-    	viewPanel.add(viewerScrollPane, BorderLayout.CENTER);
-		
-		annotationPanel = new AnnotationPanel(win);
 		
 		this.setDividerLocation(.5);
 		setLeftComponent(viewPanel);
@@ -133,73 +65,47 @@ public class DocumentPanel extends JSplitPane {
 		this.setContinuousLayout(true);
 		this.setResizeWeight(.5);
 		//this.setOneTouchExpandable(true);
+		
+		this.editor = getEditorForDocument(document);
+		annotationPanel.setDocument(document);
+		viewPanel.add(editor.getComponent(), BorderLayout.CENTER);
+		win.notifyActiveDocumentChanged();
 	}
 	
-	private void reloadViewer(Page page) throws DataLinkException
+	public void onActionRequest(String action)
 	{
-		DocumentPanel panel = win.getPanelForPage(page);
-		if (panel == null)
-			return;
-		panel.pageViewer.reload();
+		try {editor.onActionRequest(action);}
+		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
+	}
+	public void onActionStateRequest(String action, boolean state)
+	{
+		try {editor.onActionStateRequest(action, state);}
+		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 	}
 	
-	void documentIsClosing(AnnotatedObject next)
+	private DocumentEditor getEditorForDocument(AnnotatedObject document) throws Exception
+	{
+		if (document instanceof Book) return new BookEditor(this, (Book)document);
+		if (document instanceof Page) return new PosterPageEditor(this, (Page)document);
+		if (document instanceof Region) return new PosterPageEditor(this, (Region)document);
+		return null;
+	}
+	
+	public void goTo(String s) throws Exception {editor.goTo(s);}
+	
+	void documentIsClosing()
 	{
 		annotationPanel.contractAllAnnotations();
-		if (document == null)
-			return;
-		if (next != null && DocExploreDataLink.isSamePage(document, next))
-			return;
-		
-		if (document instanceof Page || document instanceof Region)
-		{
-			Page page = document instanceof Page ? (Page)document : ((Region)document).getPage();
-			page.unloadRegions();
-			page.unloadImage();
-			page.unloadMetaData();
-		}
-		else if (document instanceof Book)
-		{
-			Book book = (Book)document;
-			book.unloadMetaData();
-		}
-		//System.out.println("unload "+document.getCanonicalUri());
+		editor.onClose();
 	}
 	
-	/**
-	 * Sets the target of this panel and updates its sub panels.
-	 * @param document An annotated object.
-	 * @throws DataLinkException
-	 */
-	public void fillPanels(AnnotatedObject document) throws DataLinkException
+	public void refresh() {editor.refresh();}
+	
+	public void setMessage(String s)
 	{
-		if (this.document == document)
-			return;
-		setDocument(document);
-	}
-	void refresh() throws DataLinkException
-	{
-		setDocument(document);
-	}
-	void setDocument(AnnotatedObject document) throws DataLinkException
-	{
-		this.document = document;
-		
-		annotationPanel.setDocument(document);
-		boolean isBook = document instanceof Book;
-		if (isBook)
-		{
-			if (viewerScrollPane.getViewport().getView() != bookViewer)
-				viewerScrollPane.setViewportView(bookViewer);
-			bookViewer.setDocument(document);
-		}
-		else
-		{
-			if (viewerScrollPane.getViewport().getView() != pageViewer)
-				viewerScrollPane.setViewportView(pageViewer);
-			pageViewer.setDocument(document);
-		}
-		win.notifyActiveDocumentChanged();
+		this.message = s;
+		if (win.getActiveTab() == this)
+			win.statusBar.setMessage(s);
 	}
 	
 	/**
@@ -207,6 +113,30 @@ public class DocumentPanel extends JSplitPane {
 	 * @return
 	 */
 	public AnnotatedObject getDocument() {return document;}
+	public DocumentEditor getEditor() {return editor;}
+
+	@Override public DocExploreDataLink getLink() {return win.getDocExploreLink();}
+	@Override public ActionRequestListener getActionListener() {return win.manageComponent.handler;}
+	
+	@Override public void onDocumentSwitched(AnnotatedObject document)
+	{
+		int open = win.getIndexForDocument(document);
+		int index = win.getIndexForDocument(this.document);
+		if (open >= 0 && open != index)
+		{
+			win.removeTab(index);
+			win.tabbedPane.setSelectedIndex(win.getIndexForDocument(document));
+		}
+		documentIsClosing();
+		this.document = document;
+		try {annotationPanel.setDocument(document);}
+		catch (DataLinkException e) {ErrorHandler.defaultHandler.submit(e);}
+		win.refreshTabNames();
+		win.notifyActiveDocumentChanged();
+	}
+	@Override public DocumentPanel onDocumentEditorRequest(AnnotatedObject document) {return win.addTab(document);}
+	@Override public void onCloseRequest() {win.removeTab(win.getIndexForDocument(document));}
+	@Override public MetaData onAddAnnotationRequest() {return annotationPanel.addAnnotation();}
+	@Override public void onAnalysisRequest(BufferedImage image) {win.pluginManager.analysisPluginSetup.addAnalysisInput(image);}
+	@Override public void onActionStateRequestCompleted() {if (win.getActiveTab() == this) win.notifyActiveDocumentChanged();}
 }
-
-

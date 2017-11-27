@@ -68,6 +68,7 @@
 	<entry key="imageToolbarScroll">Défiler</entry>
 	<entry key="imageToolbarSelect">Sélectionner</entry>
 	<entry key="imageToolbarFit">Ajuster au cadre</entry>
+	<entry key="imageToolbarTranspose">Transposer</entry>
 	<entry key="imageGotoLabel">Aller à</entry>
 	<entry key="imageLocateLabel">Code d'emplacement</entry>
 	<entry key="imageLockTooltip">Verrouiller/Déverrouiller la configuration des pages</entry>
@@ -163,6 +164,7 @@
 	<entry key="manageSelectNoneLabel">Ne rien sélectionner</entry>
 	<entry key="manageInputTitleLabel">Donnez un titre au livre</entry>
 	<entry key="manageAppendPagesLabel">Ajouter des pages au livre</entry>
+	<entry key="manageRefreshLabel">Rafraîchir</entry>
 	<entry key="manageImportPagesLabel">Import en cours...</entry>
 	<entry key="manageLoadingLabel">Chargement de la page...</entry>
 	<entry key="manageCreatePresentation">Créer une présentation du livre sélectionné</entry>
@@ -297,4 +299,9 @@ Souhaitez-vous continuer?</entry>
     <entry key="tagDeleteMessage">Toutes les occurrences de &lt;i>%from&lt;/i> vont être supprimées.</entry>
     <entry key="tagEmptyMessage">Le mot-clé ne peut être vide.</entry>
     <entry key="tagUsedMessage">Ce mot-clé existe déjà.</entry>
+    
+    <entry key="createBookFromImagesLabel">Créer un nouveau livre à partir d'images</entry>
+    <entry key="createBookFromImagesMessage">Sélectionnez les images qui constituent les pages d'un livre. L'ordre des pages suivra l'ordre des images mais il pourra être changé à tout moment.</entry>
+    <entry key="createDocumentFromImagesLabel">Créer un document d'une seule page à partir d'images</entry>
+    <entry key="createDocumentFromImagesMessage">Sélectionnez les images qui constituent les parties d'un document. L'arrangement des images sera déduite des noms de fichiers mais il pourra être changé à tout moment</entry>
 </properties>

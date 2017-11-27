@@ -27,20 +27,40 @@ public class ToolbarButton extends IconButton implements MainWindow.MainWindowLi
 {
 	private static final long serialVersionUID = -5038557065370024502L;
 	
-	public ToolbarButton(String iconName, String toolTip)
+	public static interface ToolbarButtonListener
+	{
+		public void onToolbarButton(ToolbarButton button);
+	};
+	
+	ToolbarButtonListener listener;
+	String action;
+	
+	public ToolbarButton(String iconName, String toolTip) {this(null, null, iconName, toolTip);}
+	public ToolbarButton(ToolbarButtonListener listener, String action, String iconName, String toolTip)
 	{
 		super(iconName, toolTip);
+		this.listener = listener;
+		this.action = action;
 		addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) {clicked();}});
+		setFocusable(false);
 	}
-	public ToolbarButton(Icon icon, String toolTip)
+	public ToolbarButton(Icon icon, String toolTip) {this(null, null, icon, toolTip);}
+	public ToolbarButton(ToolbarButtonListener listener, String action, Icon icon, String toolTip)
 	{
 		super(icon, toolTip);
+		this.listener = listener;
+		this.action = action;
 		addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) {clicked();}});
+		setFocusable(false);
 	}
 
-	public void clicked() {}
+	public void clicked()
+	{
+		if (listener != null)
+			listener.onToolbarButton(this);
+	}
 	
-	public void activeDocumentChanged(AnnotatedObject document)
+	public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 	{
 		setEnabled(document != null);
 	}

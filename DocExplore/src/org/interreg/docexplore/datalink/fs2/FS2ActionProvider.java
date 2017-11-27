@@ -28,13 +28,16 @@ import org.interreg.docexplore.manuscript.actions.ActionProvider;
 import org.interreg.docexplore.manuscript.actions.AddBookAction;
 import org.interreg.docexplore.manuscript.actions.AddMetaDataAction;
 import org.interreg.docexplore.manuscript.actions.AddPagesAction;
+import org.interreg.docexplore.manuscript.actions.AddPosterPartsAction;
 import org.interreg.docexplore.manuscript.actions.AddRegionsAction;
 import org.interreg.docexplore.manuscript.actions.CropPageAction;
 import org.interreg.docexplore.manuscript.actions.DeleteBooksAction;
 import org.interreg.docexplore.manuscript.actions.DeleteMetaDataAction;
 import org.interreg.docexplore.manuscript.actions.DeletePagesAction;
+import org.interreg.docexplore.manuscript.actions.DeletePosterPartsAction;
 import org.interreg.docexplore.manuscript.actions.DeleteRegionsAction;
 import org.interreg.docexplore.manuscript.actions.MovePagesAction;
+import org.interreg.docexplore.manuscript.actions.MovePartAction;
 
 public class FS2ActionProvider implements ActionProvider
 {
@@ -48,21 +51,21 @@ public class FS2ActionProvider implements ActionProvider
 	}
 
 	public AddPagesAction addPages(Book book, List<File> files) {return new AddFS2PagesAction(link, book, files);}
+	public AddPosterPartsAction addParts(Book book, List<File> files) {return new AddFS2PosterPartsAction(link, book, files);}
 	public DeleteBooksAction deleteBooks(List<Book> books) {return new DeleteFS2BooksAction(link, books);}
 	public DeletePagesAction deletePages(List<Page> pages) {return new DeleteFS2PagesAction(link, pages);}
-	public AddBookAction addBook(String title, List<File> files) {return new AddFS2BookAction(link, title, files);}
-	public DeleteMetaDataAction deleteMetaData(AnnotatedObject document, MetaData annotation)
-		{return new DeleteFS2MetaDataAction((DataLinkFS2)link.getLink(), document, annotation);}
-	public DeleteMetaDataAction deleteMetaDatas(AnnotatedObject document, List<MetaData> annotations)
-		{return new DeleteFS2MetaDataAction((DataLinkFS2)link.getLink(), document, annotations);}
-	public AddMetaDataAction addMetaData(AnnotatedObject document, MetaData annotation)
-		{return new AddFS2MetaDataAction((DataLinkFS2)link.getLink(), document, annotation);}
-	public AddMetaDataAction addMetaDatas(AnnotatedObject document, List<MetaData> annotations)
-		{return new AddFS2MetaDataAction((DataLinkFS2)link.getLink(), document, annotations);}
+	public AddBookAction addBook(String title, List<File> files, boolean poster) {return new AddFS2BookAction(link, title, files, poster);}
+	public DeleteMetaDataAction deleteMetaData(AnnotatedObject document, MetaData annotation) {return new DeleteFS2MetaDataAction(link, document, annotation);}
+	public DeleteMetaDataAction deleteMetaDatas(AnnotatedObject document, List<MetaData> annotations) {return new DeleteFS2MetaDataAction(link, document, annotations);}
+	public AddMetaDataAction addMetaData(AnnotatedObject document, MetaData annotation) {return new AddFS2MetaDataAction(link, document, annotation);}
+	public AddMetaDataAction addMetaDatas(AnnotatedObject document, List<MetaData> annotations) {return new AddFS2MetaDataAction(link, document, annotations);}
+	public DeletePosterPartsAction deletePart(Book book, MetaData part) {return new DeleteFS2PosterPartsAction(link, book, part);}
+	public DeletePosterPartsAction deleteParts(Book book, List<MetaData> parts) {return new DeleteFS2PosterPartsAction(link, book, parts);}
 	public DeleteRegionsAction deleteRegion(Region region) {return new DeleteFS2RegionsAction((DataLinkFS2)link.getLink(), region);}
 	public DeleteRegionsAction deleteRegions(List<Region> regions) {return new DeleteFS2RegionsAction((DataLinkFS2)link.getLink(), regions);}
 	public AddRegionsAction addRegion(Page page, Point [] outline) {return new AddFS2RegionsAction((DataLinkFS2)link.getLink(), page, outline);}
 	public AddRegionsAction addRegions(Page page, List<Point []> outlines) {return new AddFS2RegionsAction((DataLinkFS2)link.getLink(), page, outlines);}
 	public MovePagesAction movePages(List<Page> pages, Page moveAfter) {return new MovePagesAction(pages, moveAfter);}
 	public CropPageAction cropPage(Page page, int tlx, int tly, int brx, int bry) {return new CropPageAction(page, tlx, tly, brx, bry);}
+	public MovePartAction movePart(Book book, MetaData part, int col, int row, boolean insertRow) {return new MovePartAction(link, book, part, col, row, insertRow);}
 }

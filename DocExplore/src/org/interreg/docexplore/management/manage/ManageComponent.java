@@ -59,10 +59,11 @@ public class ManageComponent extends JPanel
 	MainWindow win;
 	public final ManageHandler handler;
 	ManageToolbar toolbar;
+	CreateBookDialog createDialog;
 	JList bookList;
 	
 	@SuppressWarnings("serial")
-	public ManageComponent(MainWindow win, final ManageHandler handler, boolean editable, boolean showPages)
+	public ManageComponent(final MainWindow win, final ManageHandler handler, boolean editable, boolean showPages)
 	{
 		super(new BorderLayout());
 		
@@ -70,9 +71,10 @@ public class ManageComponent extends JPanel
 		this.handler = handler;
 		this.bookList = new JList(new CollectionNode(this));
 		setBorder(BorderFactory.createLineBorder(Color.black, 1));
+		this.createDialog = new CreateBookDialog(this);
 		
 		bookList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		bookList.setCellRenderer(new ManageCellRenderer());
+		bookList.setCellRenderer(new ManageCellRenderer(win));
 		//tree.setRowHeight(52);
 		add(new JScrollPane(bookList), BorderLayout.CENTER);
 		
@@ -87,7 +89,7 @@ public class ManageComponent extends JPanel
 						int index = bookList.locationToIndex(e.getPoint());
 						if (index < 0 || !bookList.getCellBounds(index, index).contains(e.getPoint()))
 							return;
-						handler.bookOpened((Book)bookList.getModel().getElementAt(index));
+						win.addTab((Book)bookList.getModel().getElementAt(index));
 					}
 				}
 			});
@@ -112,19 +114,15 @@ public class ManageComponent extends JPanel
 		{
 			@SuppressWarnings({ "unchecked", "rawtypes" })
 			Vector<Book> books = new Vector(Arrays.asList(bookList.getSelectedValues()));
-			if (books.size() > 0 && handler.booksDeleted(books))
-			{
-				((CollectionNode)bookList.getModel()).reload();
-				bookList.clearSelection();
-				bookList.repaint();
-			}
+			if (books.size() > 0)
+				handler.onDeleteBooksRequest(books);
 		}});
 	}
 	public ManageComponent(MainWindow win, ManageHandler handler) {this(win, handler, true, true);}
 	
 	public void setSingleSelection() {bookList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);}
 	
-	public void reload()
+	public void refresh()
 	{
 		((CollectionNode)bookList.getModel()).reload();
 		repaint();
@@ -261,7 +259,7 @@ public class ManageComponent extends JPanel
 			}
 			public float getProgress() {return .5f*exporter.progress+.5f*progress[0];}
 		}, win);
-		reload();
+		refresh();
 	}
 	
 	Book findTitle(String title) throws DataLinkException

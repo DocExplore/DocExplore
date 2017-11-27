@@ -1,4 +1,4 @@
-package org.interreg.docexplore.stitcher;
+package org.interreg.docexplore.gui.image;
 
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -7,30 +7,43 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import org.interreg.docexplore.gui.ErrorHandler;
+
 public class NavViewInputListener implements MouseListener, MouseMotionListener, MouseWheelListener
 {
 	NavView view;
+	int panningButton;
 	
 	public NavViewInputListener(NavView view)
 	{
+		this(view, InputEvent.BUTTON3_MASK);
+	}
+	public NavViewInputListener(NavView view, int panningButton)
+	{
+		if (panningButton == InputEvent.BUTTON1_MASK)
+		{
+			ErrorHandler.defaultHandler.submit(new Exception("Can't use left click as panning button, switching to right"), false);
+			panningButton = InputEvent.BUTTON3_MASK;
+		}
 		this.view = view;
+		this.panningButton = panningButton;
 	}
 	
 	boolean panning = false;
-	int panDownX = 0, panDownY = 0;
+	int panDownX = 0, panDownY = 0, panCurX = 0, panCurY = 0;
 	@Override public void mousePressed(MouseEvent e)
 	{
-		if ((e.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
+		//if ((e.getModifiers() & panningButton) != 0)
 		{
 			panning = true;
-			panDownX = e.getX();
-			panDownY = e.getY();
+			panDownX = panCurX = e.getX();
+			panDownY = panCurY = e.getY();
 			return;
 		}
 	}
 	@Override public void mouseReleased(MouseEvent e)
 	{
-		if ((e.getModifiers() & InputEvent.BUTTON2_MASK) != 0)
+		//if ((e.getModifiers() & panningButton) != 0)
 			panning = false;
 	}
 
@@ -39,10 +52,10 @@ public class NavViewInputListener implements MouseListener, MouseMotionListener,
 	{
 		if (panning)
 		{
-			int dx = e.getX()-panDownX;
-			int dy = e.getY()-panDownY;
-			panDownX = e.getX();
-			panDownY = e.getY();
+			int dx = e.getX()-panCurX;
+			int dy = e.getY()-panCurY;
+			panCurX = e.getX();
+			panCurY = e.getY();
 			view.scrollPixels(dx, dy);
 		}
 	}
