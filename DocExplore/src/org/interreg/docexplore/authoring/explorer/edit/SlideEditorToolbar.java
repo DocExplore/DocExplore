@@ -15,32 +15,30 @@ The fact that you are presently reading this means that you have had knowledge o
 package org.interreg.docexplore.authoring.explorer.edit;
 
 import java.awt.FlowLayout;
-import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.WrapLayout;
 import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.management.gui.DocumentPanel;
 import org.interreg.docexplore.management.gui.ToolbarButton;
 import org.interreg.docexplore.management.gui.ToolbarToggleButton;
 import org.interreg.docexplore.management.image.CropOperation;
-import org.interreg.docexplore.management.image.FreeShapeOperation;
-import org.interreg.docexplore.management.image.SquareOperation;
+import org.interreg.docexplore.management.image.FreeShapeROIOperation;
+import org.interreg.docexplore.management.image.RectROIOperation;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
 
 @SuppressWarnings("serial")
-public class PageEditorToolbar extends JPanel
+public class SlideEditorToolbar extends JPanel
 {
-	public PageEditorToolbar(final PageEditor editor, final JScrollPane scrollPane)
+	public SlideEditorToolbar(final SlideEditor editor)
 	{
 		super(new WrapLayout(FlowLayout.LEFT));
 		
@@ -54,11 +52,7 @@ public class PageEditorToolbar extends JPanel
 					if (pageNum < 2)
 						return;
 					final Page page = editor.view.curPage.getBook().getPage(pageNum-1);
-					SwingUtilities.invokeLater(new Runnable() {public void run()
-					{
-						editor.view.explorer.explore(page.getBook().getCanonicalUri());
-						editor.view.explorer.explore(page.getCanonicalUri());
-					}});
+					editor.view.explorer.explore(page.getCanonicalUri());
 				}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 			}
@@ -73,35 +67,9 @@ public class PageEditorToolbar extends JPanel
 					if (pageNum > editor.view.curPage.getBook().getLastPageNumber()-1)
 						return;
 					final Page page = editor.view.curPage.getBook().getPage(pageNum+1);
-					SwingUtilities.invokeLater(new Runnable() {public void run()
-					{
-						editor.view.explorer.explore(page.getBook().getCanonicalUri());
-						editor.view.explorer.explore(page.getCanonicalUri());
-					}});
+					editor.view.explorer.explore(page.getCanonicalUri());
 				}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-			}
-		}));
-		
-		final double zoomFactor = 1.5;
-		editor.addMainWindowListener((ToolbarButton)add(new ToolbarButton("zoom-in-24x24.png", XMLResourceBundle.getBundledString("imageToolbarZoomIn"))
-		{
-			public void clicked()
-			{
-				Point point = scrollPane.getViewport().getViewPosition();
-				editor.applyZoomShift(zoomFactor);
-				point.x *= zoomFactor; point.y *= zoomFactor;
-				scrollPane.getViewport().setViewPosition(point);
-			}
-		}));
-		editor.addMainWindowListener((ToolbarButton)add(new ToolbarButton("zoom-out-24x24.png", XMLResourceBundle.getBundledString("imageToolbarZoomOut"))
-		{
-			public void clicked()
-			{
-				Point point = scrollPane.getViewport().getViewPosition();
-				editor.applyZoomShift(1/zoomFactor);
-				point.x /= zoomFactor; point.y /= zoomFactor;
-				scrollPane.getViewport().setViewPosition(point);
 			}
 		}));
 		
@@ -123,7 +91,7 @@ public class PageEditorToolbar extends JPanel
 				for (ToolbarToggleButton button : roiButtons)
 					if (button != this)
 						button.setSelected(false);
-				editor.setOperation(new FreeShapeOperation());
+				editor.setOperation(new FreeShapeROIOperation());
 			}
 			public void untoggled()
 			{
@@ -140,7 +108,7 @@ public class PageEditorToolbar extends JPanel
 				for (ToolbarToggleButton button : roiButtons)
 					if (button != this)
 						button.setSelected(false);
-				editor.setOperation(new SquareOperation());
+				editor.setOperation(new RectROIOperation());
 			}
 			public void untoggled()
 			{
@@ -154,10 +122,10 @@ public class PageEditorToolbar extends JPanel
 		{
 			public void clicked()
 			{
-				if (editor.document != null && editor.document instanceof Region)
-					editor.deleteRegion((Region)editor.document);
+				if (editor.getDocument() != null && editor.getDocument() instanceof Region)
+					editor.getHost().getActionListener().onDeleteRegionRequest((Region)editor.getDocument());
 			}
-			public void activeDocumentChanged(AnnotatedObject document)
+			public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
 				setEnabled(document != null && document instanceof Region);
 			}

@@ -14,6 +14,7 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.authoring.explorer.edit;
 
+import java.awt.Component;
 import java.awt.Point;
 import java.io.File;
 import java.util.LinkedList;
@@ -21,7 +22,6 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.swing.Icon;
-import javax.swing.JScrollPane;
 
 import org.interreg.docexplore.authoring.explorer.DataLinkExplorer;
 import org.interreg.docexplore.authoring.explorer.DataLinkView;
@@ -29,7 +29,6 @@ import org.interreg.docexplore.authoring.explorer.ExplorerView;
 import org.interreg.docexplore.authoring.explorer.PageView;
 import org.interreg.docexplore.authoring.explorer.RegionView;
 import org.interreg.docexplore.authoring.explorer.ViewItem;
-import org.interreg.docexplore.authoring.explorer.ViewMouseListener;
 import org.interreg.docexplore.authoring.explorer.file.FolderView;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
@@ -38,31 +37,30 @@ import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
 
 @SuppressWarnings("serial")
-public class PageEditorView extends DataLinkView
+public class SlideEditorView extends DataLinkView
 {
-	public PageEditor editor;
+	public SlideEditor editor;
 	
-	public PageEditorView(final DataLinkExplorer explorer)
+	public SlideEditorView(final DataLinkExplorer explorer)
 	{
 		super(explorer);
-		this.editor = new PageEditor(explorer.scrollPane, this);
+		try {this.editor = new SlideEditor(this);}
+		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 	}
+	
+	@Override public Component getViewComponent() {return editor;}
 	
 	public void shown()
 	{
 		explorer.toolPanel.add(editor.toolBar); 
-		explorer.setCustomView(editor);
-		ViewMouseListener.makeFileSystemDropTarget(editor);
-		explorer.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		try {editor.setDocument(curPage);}
-		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-		explorer.validate();
+		editor.toolBar.revalidate();
+		editor.toolBar.repaint();
 	}
 	public void hidden()
 	{
 		explorer.toolPanel.remove(editor.toolBar);
-		explorer.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		explorer.validate();
+		explorer.toolPanel.revalidate();
+		explorer.toolPanel.repaint();
 	}
 
 	@Override public boolean canHandle(String path) throws Exception {return AnnotatedObject.resolveUri(explorer.link, path) instanceof Page;}
@@ -70,6 +68,7 @@ public class PageEditorView extends DataLinkView
 	@Override protected List<ViewItem> buildItemList(String path) throws Exception
 	{
 		curPage = (Page)AnnotatedObject.resolveUri(explorer.link, path);
+		editor.switchDocument(curPage);
 		return new Vector<ViewItem>();
 	}
 	@Override protected Icon getIcon(Object object) {return null;}
@@ -91,8 +90,7 @@ public class PageEditorView extends DataLinkView
 	{
 		if (source == null)
 		{
-			where = editor.toImage(where);
-			Region region = editor.overlay.regionAt(where);
+			Region region = editor.getOverlay().regionAt(editor.toViewX(where.x), editor.toViewY(where.y));
 			if (region == null)
 				return;
 			List<MetaData> annotations = new LinkedList<MetaData>();
@@ -124,8 +122,7 @@ public class PageEditorView extends DataLinkView
 		}
 		else if (source instanceof RegionView)
 		{
-			where = editor.toImage(where);
-			Region region = editor.overlay.regionAt(where);
+			Region region = editor.getOverlay().regionAt(editor.toViewX(where.x), editor.toViewY(where.y));
 			if (region == null)
 				return;
 			List<MetaData> annotations = new LinkedList<MetaData>();
@@ -137,8 +134,7 @@ public class PageEditorView extends DataLinkView
 		}
 		else if (source instanceof FolderView)
 		{
-			where = editor.toImage(where);
-			Region region = editor.overlay.regionAt(where);
+			Region region = editor.getOverlay().regionAt(editor.toViewX(where.x), editor.toViewY(where.y));
 			if (region == null)
 				return;
 			List<MetaData> annotations = new LinkedList<MetaData>();

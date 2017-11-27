@@ -15,6 +15,7 @@ The fact that you are presently reading this means that you have had knowledge o
 package org.interreg.docexplore.authoring;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
@@ -45,7 +46,7 @@ import org.interreg.docexplore.authoring.explorer.ExplorerView;
 import org.interreg.docexplore.authoring.explorer.edit.ImportOptions;
 import org.interreg.docexplore.authoring.explorer.edit.InfoElement;
 import org.interreg.docexplore.authoring.explorer.edit.MetaDataEditor;
-import org.interreg.docexplore.authoring.explorer.edit.PageEditorView;
+import org.interreg.docexplore.authoring.explorer.edit.SlideEditorView;
 import org.interreg.docexplore.authoring.explorer.edit.StyleManager;
 import org.interreg.docexplore.authoring.preview.PreviewPanel;
 import org.interreg.docexplore.datalink.DataLink;
@@ -68,7 +69,7 @@ import org.interreg.docexplore.util.history.HistoryPanel;
 public class AuthoringToolFrame extends JFrame
 {
 	public Startup startup;
-	JSplitPane splitPane;
+	public JSplitPane splitPane;
 	JPanel explorer;
 	DataLinkExplorer linkExplorer;
 	//FileExplorer fileExplorer;
@@ -88,6 +89,7 @@ public class AuthoringToolFrame extends JFrame
 	public MetaDataClipboard clipboard;
 	ExportDialog exportDialog;
 	NameDialog nameDialog;
+	JPanel rightPanel;
 	
 	public final List<MetaDataPlugin> plugins;
 	public static final String defaultTitle = "Untitled";
@@ -101,7 +103,7 @@ public class AuthoringToolFrame extends JFrame
 		this.startup = startup;
 		this.displayHelp = startup.showHelp;
 		this.exportDialog = new ExportDialog(this);
-		this.nameDialog = new NameDialog();
+		this.nameDialog = new NameDialog(this);
 		
 		startup.screen.setText("Initializing history");
 		this.historyManager = new HistoryManager(50, new File(DocExploreTool.getHomeDir(), ".at-cache"));
@@ -187,8 +189,8 @@ public class AuthoringToolFrame extends JFrame
 		startup.screen.setText("Creating editor");
 		this.editor = new DataLinkExplorer(this, editorLink, new BookImporter());
 		for (ExplorerView view : editor.views)
-			if (view instanceof PageEditorView)
-				{this.mdEditor = new MetaDataEditor(((PageEditorView)view).editor);}
+			if (view instanceof SlideEditorView)
+				{this.mdEditor = new MetaDataEditor(((SlideEditorView)view).editor);}
 		editor.addListener(new Explorer.Listener()
 		{
 			@Override public void exploringChanged(Object object)
@@ -196,15 +198,18 @@ public class AuthoringToolFrame extends JFrame
 				try
 				{
 					boolean isRegion = object instanceof Region;
-					int div = splitPane.getDividerLocation();
 					mdEditor.setDocument(null);
 					if (isRegion)
 						mdEditor.setDocument((Region)object);
 					if (isRegion != regionMode)
-						splitPane.setRightComponent(isRegion ? mdEditor : explorer);
+					{
+						rightPanel.removeAll();
+						Component right = isRegion ? mdEditor : explorer;
+						rightPanel.add(right, BorderLayout.CENTER);
+						right.revalidate();
+						right.repaint();
+					}
 					regionMode = isRegion;
-					validate();
-					splitPane.setDividerLocation(div);
 				}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 			}
@@ -221,9 +226,15 @@ public class AuthoringToolFrame extends JFrame
 //						return;
 //					book.setName(name);
 					GuiUtils.centerOnComponent(nameDialog, AuthoringToolFrame.this);
-					if (nameDialog.show(editorLink.getBook(editorLink.getLink().getAllBookIds().get(0))))
+					Book book = editorLink.getBook(editorLink.getLink().getAllBookIds().get(0));
+					if (nameDialog.show(editorLink, book))
 					{
-						editorLink.notifyDataLinkChanged();
+						String bookName = "";
+						bookName = book.getName();
+						String linkTitle = menu.curFile == null ? null : menu.curFile.getAbsolutePath();
+						titleLabel.setText("<html><font style=\"font-size:14\">"+XMLResourceBundle.getBundledString("generalPresentationLabel")+" : <b>"+bookName+"</b>" +
+							(linkTitle != null ? " ("+linkTitle+")" : "")+"</font></html>");
+						setTitle(XMLResourceBundle.getBundledString("frameTitle")+" "+(linkTitle != null ? linkTitle : ""));
 						editor.refreshPath();
 					}
 				}
@@ -233,6 +244,7 @@ public class AuthoringToolFrame extends JFrame
 		editBook.setToolTipText(XMLResourceBundle.getBundledString("generalToolbarEdit"));
 		
 		this.splitPane = new JSplitPane();
+		splitPane.setContinuousLayout(false);
 		JPanel editorPanel = new JPanel(new BorderLayout());
 		JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		titlePanel.add(titleLabel);
@@ -240,7 +252,9 @@ public class AuthoringToolFrame extends JFrame
 		//editorPanel.add(titlePanel, BorderLayout.NORTH);
 		editorPanel.add(editor, BorderLayout.CENTER);
 		splitPane.setLeftComponent(editorPanel);
-		splitPane.setRightComponent(explorer);
+		rightPanel = new JPanel(new BorderLayout(0, 0));
+		splitPane.setRightComponent(rightPanel);
+		rightPanel.add(explorer, BorderLayout.CENTER);
 		
 		getContentPane().setLayout(new BorderLayout());
 		add(titlePanel, BorderLayout.NORTH);

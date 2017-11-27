@@ -15,8 +15,8 @@ The fact that you are presently reading this means that you have had knowledge o
 package org.interreg.docexplore.authoring.explorer;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -26,6 +26,7 @@ import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.gui.ErrorHandler;
@@ -40,6 +41,7 @@ public abstract class ExplorerView extends JPanel
 	public List<ViewItem> items;
 	public Set<ViewItem> selected;
 	boolean iconMode = true;
+	JScrollPane scrollPane;
 	
 	public ExplorerView(final Explorer explorer)
 	{
@@ -55,7 +57,13 @@ public abstract class ExplorerView extends JPanel
 		ViewMouseListener vml = new ViewMouseListener(this);
 		addMouseListener(vml);
 		addMouseMotionListener(vml);
+		
+		this.scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+		scrollPane.setViewportView(this);
 	}
+	
+	public Component getViewComponent() {return scrollPane;}
 	
 	public static interface SelectionListener
 	{
@@ -123,11 +131,10 @@ public abstract class ExplorerView extends JPanel
 		
 		if (explorer.tool.displayHelp && msg.length() > 0)
 		{
-			Rectangle visible = explorer.scrollPane.getViewport().getViewRect();
 			BufferedImage help = helpRenderer.getImage(
 				"<html><div style=\"font-family: Arial; font-size: 24; font-weight: bold; color: rgb(128, 128, 128)\">"+msg+"</div></html>", 
-				visible.width, background);
-			g.drawImage(help, visible.x, visible.y+visible.height-help.getHeight(), null);
+				getWidth(), background);
+			g.drawImage(help, 0, getHeight()-help.getHeight(), null);
 		}
 	}
 	
@@ -159,6 +166,8 @@ public abstract class ExplorerView extends JPanel
 		for (ViewItem item : items)
 			add(item);
 		updateSelection();
-		explorer.scrollPane.validate();
+		
+		revalidate();
+		repaint();
 	}
 }

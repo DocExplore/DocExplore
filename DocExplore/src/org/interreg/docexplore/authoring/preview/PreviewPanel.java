@@ -21,6 +21,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JDialog;
@@ -49,6 +51,15 @@ public abstract class PreviewPanel extends JDialog
 					dispose();
 				}
 			}
+		});
+		addWindowFocusListener(new WindowFocusListener()
+		{
+			@Override public void windowLostFocus(WindowEvent e)
+			{
+				setVisible(false);
+				dispose();
+			}
+			@Override public void windowGainedFocus(WindowEvent e) {}
 		});
 		addFocusListener(new FocusAdapter()
 		{

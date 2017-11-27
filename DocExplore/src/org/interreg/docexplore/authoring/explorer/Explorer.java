@@ -18,8 +18,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
@@ -30,7 +28,6 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
@@ -54,11 +51,11 @@ public class Explorer extends JPanel
 	
 	protected JLabel titleLabel;
 	public List<ExplorerView> views;
-	public JScrollPane scrollPane;
 	protected JTextField pathField;
 	public String curPath;
 	public boolean iconMode = true;
 	ExplorerView curView;
+	Component curViewComponent;
 	public JPanel toolPanel;
 	JButton upButton;
 	
@@ -69,19 +66,6 @@ public class Explorer extends JPanel
 		this.tool = tool;
 		this.views = new Vector<ExplorerView>();
 		this.curView = null;
-		this.scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-		add(scrollPane, BorderLayout.CENTER);
-		scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {public void adjustmentValueChanged(AdjustmentEvent e)
-		{
-			if (scrollPane.getViewport().getView() != null)
-				scrollPane.getViewport().getView().repaint();
-		}});
-		scrollPane.getHorizontalScrollBar().addAdjustmentListener(new AdjustmentListener() {public void adjustmentValueChanged(AdjustmentEvent e)
-		{
-			if (scrollPane.getViewport().getView() != null)
-				scrollPane.getViewport().getView().repaint();
-		}});
 		
 		this.toolPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
 		toolPanel.add(titleLabel = new JLabel(XMLResourceBundle.getBundledString("generalPathLabel")));
@@ -114,16 +98,42 @@ public class Explorer extends JPanel
 		add(toolPanel, BorderLayout.NORTH);
 	}
 	
+	boolean viewNeedsRevalidation = true;
+	public void setView(ExplorerView view)
+	{
+		Component viewComponent = view != null ? view.getViewComponent() : null;
+		if (curViewComponent == viewComponent)
+			return;
+		viewNeedsRevalidation = true;
+		if (curView != null)
+		{
+			remove(this.curViewComponent);
+			curView.hidden();
+		}
+		this.curView = view;
+		this.curViewComponent = viewComponent;
+		if (curView != null)
+		{
+			add(curViewComponent, BorderLayout.CENTER);
+			curView.shown();
+		}
+	}
+	
 	List<Listener> listeners = new LinkedList<Listener>();
 	public void addListener(Listener listener) {listeners.add(listener);}
 	public void removeListener(Listener listener) {listeners.remove(listener);}
 	public void notifyExploringChanged(final Object explored)
 	{
-		GuiUtils.blockUntilComplete(new Runnable() {public void run()
+//		GuiUtils.blockUntilComplete(new Runnable() {public void run()
+//		{
+//			for (Listener listener : listeners)
+//				listener.exploringChanged(explored);
+//		}}, this);
+		SwingUtilities.invokeLater(new Runnable() {public void run()
 		{
 			for (Listener listener : listeners)
 				listener.exploringChanged(explored);
-		}}, this);
+		}});
 	}
 	
 	public String getParentPath(String path) {return path;}
@@ -131,8 +141,8 @@ public class Explorer extends JPanel
 	
 	public void explore(final String path)
 	{
-		//GuiUtils.blockUntilComplete(new Runnable() {public void run()
-		SwingUtilities.invokeLater(new Runnable() {@Override public void run()
+		//System.out.println("explore: "+path);
+		GuiUtils.blockUntilComplete(new Runnable() {public void run()
 		{
 			try
 			{
@@ -140,17 +150,9 @@ public class Explorer extends JPanel
 					if (view.canHandle(path))
 				{
 					view.setPath(path);
-					scrollPane.setViewportView(view);
 					curPath = path;
 					pathField.setText(pathToString(path));
-					validate();
-					if (curView != null && view != curView)
-					{
-						curView.hidden();
-						if (view != null)
-							view.shown();
-					}
-					curView = view;
+					setView(view);
 					String parentPath = getParentPath(curPath);
 					parentPath = parentPath == null ? "" : parentPath;
 					upButton.setEnabled(!parentPath.equals(curPath));
@@ -159,15 +161,25 @@ public class Explorer extends JPanel
 				throw new Exception("Unable to handle path: '"+path+"'");
 			}
 			catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-		}});//}, this);
+		}}, this);
+		
+		if (viewNeedsRevalidation)
+		{
+			viewNeedsRevalidation = false;
+			SwingUtilities.invokeLater(new Runnable() {@Override public void run()
+			{
+				revalidate();
+				repaint();
+				SwingUtilities.invokeLater(new Runnable() {@Override public void run()
+				{
+					curViewComponent.revalidate();
+					curViewComponent.validate();
+					curViewComponent.repaint();
+				}});
+			}});
+		}
 	}
 	
 	public void refreshPath() {pathField.setText(pathToString(curPath));}
 	String pathToString(String path) {return path;}
-	
-	public void setCustomView(Component view)
-	{
-		scrollPane.setViewportView(view);
-		scrollPane.validate();
-	}
 }

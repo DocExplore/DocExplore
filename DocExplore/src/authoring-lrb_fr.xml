@@ -73,8 +73,13 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="imageToolbarPreviousHistoric">Page précédente</entry>	
 	<entry key="imageToolbarNextHistoric">Page suivante</entry>	
 	
-	<entry key="collectionAddBookMessage">Veuillez indiquer un titre pour le livre</entry>
-	<entry key="collectionDefaultBookLabel">Nouveau livre</entry>
+	<entry key="collectionAddBookMessage">Veuillez indiquer un titre pour cette présentation</entry>
+	<entry key="collectionDefaultBookLabel">Nouvelle présentation</entry>
+	<entry key="collectionBookDisplayLabel">Afficher en tant que livre</entry>
+	<entry key="collectionPosterDisplayLabel">Afficher en tant que poster</entry>
+	<entry key="collectionBookDisplayLockedMsg">La présentation doit être vide pour changer l'affichage</entry>
+	<entry key="collectionToBookDisplayLabel">Affichage livre</entry>
+	<entry key="collectionToPosterDisplayLabel">Affichage poster</entry>
 	
 	<entry key="textDefaultMessage">Entrez votre texte ici</entry>
 	<entry key="annotationText">Texte</entry>

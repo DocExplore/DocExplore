@@ -20,9 +20,9 @@ import java.util.List;
 
 import org.interreg.docexplore.authoring.AuthoringToolFrame;
 import org.interreg.docexplore.authoring.BookImporter;
-import org.interreg.docexplore.authoring.explorer.edit.BookEditorView;
+import org.interreg.docexplore.authoring.explorer.edit.PresentationEditorView;
 import org.interreg.docexplore.authoring.explorer.edit.CollectionEditorView;
-import org.interreg.docexplore.authoring.explorer.edit.PageEditorView;
+import org.interreg.docexplore.authoring.explorer.edit.SlideEditorView;
 import org.interreg.docexplore.datalink.fs2.FS2ActionProvider;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.XMLResourceBundle;
@@ -43,10 +43,11 @@ public class DataLinkExplorer extends Explorer
 	public BookImporter importer;
 	ActionProvider actionProvider;
 	
-	BookEditorView bev = null;
-	PageEditorView pev = null;
+	PresentationEditorView bev = null;
+	SlideEditorView pev = null;
 	
 	public String pageTerm = "Page";
+	public String partTerm = "Part";
 	
 	public DataLinkExplorer(AuthoringToolFrame tool, DocExploreDataLink link, BookImporter importer) throws Exception
 	{
@@ -57,8 +58,8 @@ public class DataLinkExplorer extends Explorer
 		{
 			this.importer = importer;
 			addView(new CollectionEditorView(this));
-			addView(bev = new BookEditorView(this));
-			addView(pev = new PageEditorView(this));
+			addView(bev = new PresentationEditorView(this));
+			addView(pev = new SlideEditorView(this));
 			pageTerm = "Slide";
 			reset();
 		}
@@ -109,7 +110,7 @@ public class DataLinkExplorer extends Explorer
 		try
 		{
 			final AddRegionsAction action = getActionProvider().addRegions(page, null);
-			tool.historyManager.doAction(new WrappedAction(action)
+			tool.historyManager.submit(new WrappedAction(action)
 			{
 				public void doAction() throws Exception
 				{
@@ -132,7 +133,7 @@ public class DataLinkExplorer extends Explorer
 		try
 		{
 			final AddMetaDataAction action = getActionProvider().addMetaDatas(region, new LinkedList<MetaData>());
-			tool.historyManager.doAction(new WrappedAction(action)
+			tool.historyManager.submit(new WrappedAction(action)
 			{
 				public void doAction() throws Exception
 				{

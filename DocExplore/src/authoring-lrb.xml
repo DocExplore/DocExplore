@@ -75,6 +75,11 @@ Would you like to keep it in the editor?</entry>
 	
 	<entry key="collectionAddBookMessage">Please specify a title for the presentation</entry>
 	<entry key="collectionDefaultBookLabel">New presentation</entry>
+	<entry key="collectionBookDisplayLabel">Display as a book</entry>
+	<entry key="collectionPosterDisplayLabel">Display as a poster</entry>
+	<entry key="collectionBookDisplayLockedMsg">The presentation must be empty to change the display</entry>
+	<entry key="collectionToBookDisplayLabel">Display as book</entry>
+	<entry key="collectionToPosterDisplayLabel">Display as poster</entry>
 	
 	<entry key="textDefaultMessage">Enter text here</entry>
 	<entry key="annotationText">Text</entry>

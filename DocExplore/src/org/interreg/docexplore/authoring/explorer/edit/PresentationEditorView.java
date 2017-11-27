@@ -14,11 +14,13 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.authoring.explorer.edit;
 
+import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +42,7 @@ import org.interreg.docexplore.authoring.explorer.file.FolderView;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.XMLResourceBundle;
 import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.management.image.PosterUtils;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
@@ -53,11 +56,13 @@ import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 import org.interreg.docexplore.util.ImageUtils;
 
 @SuppressWarnings("serial")
-public class BookEditorView extends BookView
+public class PresentationEditorView extends BookView
 {
+	boolean isPoster = false;
 	CoverManager coverManager;
+	PosterEditor posterEditor;
 	
-	public BookEditorView(final DataLinkExplorer explorer) throws Exception
+	public PresentationEditorView(final DataLinkExplorer explorer) throws Exception
 	{
 		super(explorer);
 		
@@ -75,57 +80,68 @@ public class BookEditorView extends BookView
 				final File [] files = DocExploreTool.getFileDialogs().openFiles(DocExploreTool.getImagesCategory());
 				if (files == null)
 					return;
-				final List<Page> newPageSet = new LinkedList<Page>();
-				GuiUtils.blockUntilComplete(new ProgressRunnable()
+				if (posterEditor != null)
 				{
-					float progress = 0;
-					public void run()
+					posterEditor.listener.onAppendPartsRequest(curBook, Arrays.asList(files));
+				}
+				else
+				{
+					final List<Page> newPageSet = new LinkedList<Page>();
+					GuiUtils.blockUntilComplete(new ProgressRunnable()
 					{
-						try
+						float progress = 0;
+						public void run()
 						{
-							int cnt = 0;
-							int insertIndex = items.size();
-							for (File file : files)
+							try
 							{
-								FileImageSource image = new FileImageSource(file);
-								if (!image.isValid())
-									continue;
-								Page page = curBook.insertPage((insertIndex++)+1, image);
-								DocExploreDataLink.getImageMini(page);
-								newPageSet.add(page);
-								progress = (++cnt)*1f/files.length;
+								int cnt = 0;
+								int insertIndex = items.size();
+								for (File file : files)
+								{
+									FileImageSource image = new FileImageSource(file);
+									if (!image.isValid())
+										continue;
+									Page page = curBook.insertPage((insertIndex++)+1, image);
+									DocExploreDataLink.getImageMini(page);
+									newPageSet.add(page);
+									progress = (++cnt)*1f/files.length;
+								}
+								submitAddPagesAction(newPageSet);
 							}
-							pagesImported(newPageSet);
+							catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 						}
-						catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
-					}
-					public float getProgress() {return progress;}
-				}, BookEditorView.this);
-				
-				refreshSelection(newPageSet);
+						public float getProgress() {return progress;}
+					}, PresentationEditorView.this);
+					refreshSelection(newPageSet);
+				}
 			}
 		});
 		final JButton removePage = new JButton(new AbstractAction("", ImageUtils.getIcon("remove-24x24.png"))
 		{
 			@Override public void actionPerformed(ActionEvent e)
 			{
-				if (selected.isEmpty())
-					return;
-				
-				final List<Page> pages = new LinkedList<Page>();
-				for (ViewItem item : selected)
-					if (item.data.object instanceof Page)
-						pages.add((Page)item.data.object);
-				final DeletePagesAction deletePagesAction = explorer.getActionProvider().deletePages(pages);
-				try
+				if (posterEditor != null)
+					posterEditor.listener.onDeletePartsRequest(curBook, posterEditor.getSelectedParts());
+				else
 				{
-					explorer.tool.historyManager.doAction(new WrappedAction(deletePagesAction)
+					if (selected.isEmpty())
+						return;
+					
+					final List<Page> pages = new LinkedList<Page>();
+					for (ViewItem item : selected)
+						if (item.data.object instanceof Page)
+							pages.add((Page)item.data.object);
+					final DeletePagesAction deletePagesAction = explorer.getActionProvider().deletePages(pages);
+					try
 					{
-						public void doAction() throws Exception {super.doAction(); explorer.explore("docex://"+curBook.getId());}
-						public void undoAction() throws Exception {super.undoAction(); explorer.explore("docex://"+curBook.getId());}
-					});
+						explorer.tool.historyManager.submit(new WrappedAction(deletePagesAction)
+						{
+							public void doAction() throws Exception {super.doAction(); explorer.explore("docex://"+curBook.getId());}
+							public void undoAction() throws Exception {super.undoAction(); explorer.explore("docex://"+curBook.getId());}
+						});
+					}
+					catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 				}
-				catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}
 		});
 		
@@ -163,17 +179,33 @@ public class BookEditorView extends BookView
 		msg = XMLResourceBundle.getBundledString("helpBookMsg");
 	}
 	
+	@Override public Component getViewComponent()
+	{
+		if (isPoster)
+			return posterEditor;
+		return super.getViewComponent();
+	}
+	
 	@Override protected List<ViewItem> buildItemList(String path) throws Exception
 	{
 		Book old = curBook;
 		List<ViewItem> items = super.buildItemList(path);
+		isPoster = curBook == null ? false : PosterUtils.isPoster(curBook);
 		if (old != curBook)
 			coverManager.setBook(curBook);
+		if (curBook != null && isPoster && (posterEditor == null || old != curBook))
+			posterEditor = new PosterEditor(this, curBook);
+		else if (!isPoster)
+			posterEditor = null;
+		if (posterEditor != null)
+			posterEditor.refresh();
 		return items;
 	}
 
 	@Override public DropType getDropType(ExplorerView source, List<ViewItem.Data> items)
 	{
+		if (posterEditor != null)
+			return DropType.OnItem;
 		if (source == null)
 			return DropType.BetweenItems;
 		if (source instanceof CollectionView)
@@ -203,7 +235,7 @@ public class BookEditorView extends BookView
 				DocExploreDataLink.getImageMini(page);
 				newPageSet.add(page);
 			}
-			pagesImported(newPageSet);
+			submitAddPagesAction(newPageSet);
 			refreshSelection(newPageSet);
 		}
 		else if ((source instanceof BookView && source != this) || source instanceof FolderView || source instanceof CollectionView)
@@ -271,22 +303,8 @@ public class BookEditorView extends BookView
 				for (Page page : sourceSet)
 					if (importOptions.keepPage(page))
 						newPageSet.add(explorer.importer.add(page, curBook, (insertIndex++)+1, importOptions));
-					
-//				for (ViewItem item : items)
-//					if (item.object instanceof Book)
-//				{
-//					Book book = (Book)item.object;
-//					if (curBook.pagesByNumber.isEmpty() && curBook.getName().equals(XMLResourceBundle.getBundledString("collectionDefaultBookLabel")))
-//					{
-//						curBook.setName(book.getName());
-//						explorer.link.notifyDataLinkChanged();
-//					}
-//					int lastPage = book.getLastPageNumber();
-//					for (int i=1;i<=lastPage;i++)
-//						newPageSet.add(explorer.importer.add(book.getPage(i), curBook, (insertIndex++)+1, explorer.tool.filter));
-//				}
 			}
-			pagesImported(newPageSet);
+			submitAddPagesAction(newPageSet);
 			refreshSelection(newPageSet);
 		}
 		else if (source instanceof BookView && source == this)
@@ -301,7 +319,7 @@ public class BookEditorView extends BookView
 			MovePagesAction action = explorer.getActionProvider().movePages(newPageSet, moveAfter);
 			try
 			{
-				explorer.tool.historyManager.doAction(new WrappedAction(action)
+				explorer.tool.historyManager.submit(new WrappedAction(action)
 				{
 					public void doAction() throws Exception {super.doAction(); explorer.explore("docex://"+curBook.getId());}
 					public void undoAction() throws Exception {super.undoAction(); explorer.explore("docex://"+curBook.getId());}
@@ -345,12 +363,17 @@ public class BookEditorView extends BookView
 		return false;
 	}
 	
-	void pagesImported(List<Page> pages)
+	/**
+	 * Submits an add pages action to the history manager.
+	 * Assumes that the pages are already added to the book and will skip the first "do" ("undo" works nonetheless).
+	 * @param pages
+	 */
+	void submitAddPagesAction(List<Page> pages)
 	{
 		try
 		{
 			final AddPagesAction action = explorer.getActionProvider().addPages(curBook, null);
-			explorer.tool.historyManager.doAction(new WrappedAction(action)
+			explorer.tool.historyManager.submit(new WrappedAction(action)
 			{
 				public void doAction() throws Exception
 				{

@@ -44,7 +44,7 @@ public abstract class DataLinkView extends ExplorerView implements ViewMouseList
 		
 		msg = XMLResourceBundle.getBundledString("helpCollectionMsg");
 	}
-
+	
 	@Override protected String getPath(Object object) {return ((AnnotatedObject)object).getCanonicalUri();}
 
 	public static enum DropType {None, Anywhere, OnItem, BetweenItems};

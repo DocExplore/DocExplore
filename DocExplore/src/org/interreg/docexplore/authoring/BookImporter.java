@@ -28,6 +28,12 @@ import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.util.Pair;
 
+/**
+ * Handles the import of objects from a datalink into a presentation (hence the BookImporter inheritance), 
+ * with extended filtering options (ImportOptions class) and default values for display ranks of annotations inside regions.
+ * @author Alexander Burnett
+ *
+ */
 public class BookImporter extends BookExporter
 {
 	public static interface PresentationFilter extends BookExporter.MetaDataFilter
@@ -44,13 +50,13 @@ public class BookImporter extends BookExporter
 	@Override public Book add(Book from, ManuscriptLink to, MetaDataFilter filter) throws Exception
 	{
 		Book res = super.add(from, to, filter);
-		updateCopiedMetaData(filter instanceof PresentationFilter ? (PresentationFilter)filter : null);
+		updateCopiedMetaData(filter != null && filter instanceof PresentationFilter ? (PresentationFilter)filter : null);
 		return res;
 	}
 	@Override public Page add(Page page, Book to, int pageNum, MetaDataFilter filter) throws Exception
 	{
 		Page res = super.add(page, to, pageNum, filter);
-		updateCopiedMetaData(filter instanceof PresentationFilter ? (PresentationFilter)filter : null);
+		updateCopiedMetaData(filter != null && filter instanceof PresentationFilter ? (PresentationFilter)filter : null);
 		MetaDataKey key = res.getLink().getOrCreateKey("imported-from", "");
 		MetaData importedFrom = new MetaData(res.getLink(), key, "From '"+page.getBook().getName()+"', page "+page.getPageNumber());
 		res.addMetaData(importedFrom);
@@ -59,19 +65,24 @@ public class BookImporter extends BookExporter
 	@Override public Region add(Region region, Page to, MetaDataFilter filter) throws Exception
 	{
 		Region res = super.add(region, to, filter);
-		updateCopiedMetaData(filter instanceof PresentationFilter ? (PresentationFilter)filter : null);
+		updateCopiedMetaData(filter != null && filter instanceof PresentationFilter ? (PresentationFilter)filter : null);
 		return res;
 	}
 	@Override public MetaData add(MetaData md, AnnotatedObject to, MetaDataFilter filter) throws Exception
 	{
 		MetaData res = super.add(md, to, filter);
-		updateCopiedMetaData(filter instanceof PresentationFilter ? (PresentationFilter)filter : null);
+		updateCopiedMetaData(filter != null && filter instanceof PresentationFilter ? (PresentationFilter)filter : null);
 		return res;
 	}
+	@Override public MetaData add(MetaData md, ManuscriptLink to, MetaDataFilter filter) throws Exception
+	{
+		MetaData res = super.add(md, to, filter);
+		updateCopiedMetaData(filter != null && filter instanceof PresentationFilter ? (PresentationFilter)filter : null);
+		return res;
+	}
+	
 	@Override protected MetaData addMetaData(MetaData metaData, AnnotatedObject to, MetaDataFilter filter) throws DataLinkException
 	{
-		//if (authoringTool.filter.active && to instanceof Region && !authoringTool.filter.annotationFilter.matches(authoringTool.linkExplorer.link, metaData))
-		//	return null;
 		return super.addMetaData(metaData, to, filter);
 	}
 	@Override protected void addRegion(Region region, Page toPage, MetaDataFilter filter) throws DataLinkException
@@ -100,18 +111,25 @@ public class BookImporter extends BookExporter
 	}
 	void updateMetaData(AnnotatedObject object, MetaData md, PresentationFilter filter) throws Exception
 	{
-		if (md.getType().equals(MetaData.textType))
+		if (object == null)
 		{
-			String content = extractContent(md.getString());
-			object.removeMetaData(md);
-			if (filter != null)
-				filter.updateMetaData(md);
-			md.setKey(getDisplayKey(md.getLink()));
-			object.addMetaData(md);
-			md.setString(content);
+			
 		}
-		setRank(md, getHighestRank(object)+1);
-		object.unloadMetaData();
+		else if (object instanceof Region)
+		{
+			if (md.getType().equals(MetaData.textType))
+			{
+				String content = extractContent(md.getString());
+				object.removeMetaData(md);
+				if (filter != null)
+					filter.updateMetaData(md);
+				md.setKey(getDisplayKey(md.getLink()));
+				object.addMetaData(md);
+				md.setString(content);
+			}
+			setRank(md, getHighestRank(object)+1);
+			object.unloadMetaData();
+		}
 	}
 	public static MetaDataKey getDisplayKey(ManuscriptLink link) throws Exception {return link.getOrCreateKey("display", "");}
 	String extractContent(String metaData)

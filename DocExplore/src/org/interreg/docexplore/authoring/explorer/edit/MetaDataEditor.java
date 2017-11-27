@@ -57,7 +57,7 @@ import org.interreg.docexplore.util.ImageUtils;
 @SuppressWarnings("serial")
 public class MetaDataEditor extends JPanel
 {
-	public PageEditor pageEditor;
+	public SlideEditor pageEditor;
 	List<InfoElement> elements;
 	public AnnotatedObject document;
 	JPanel elementPanel;
@@ -69,7 +69,7 @@ public class MetaDataEditor extends JPanel
 	public static int preferredWidth = 512;
 	static ROIPreview previewDialog = new ROIPreview(preferredWidth);
 	
-	public MetaDataEditor(final PageEditor pageEditor)
+	public MetaDataEditor(final SlideEditor pageEditor)
 	{
 		super(new BorderLayout());
 		
@@ -90,7 +90,7 @@ public class MetaDataEditor extends JPanel
 				final int maxRank = BookImporter.getHighestRank(document);
 				final int insertRank = monitoredRank >= 0 && monitoredRank < maxRank ? monitoredRank+1 : maxRank+1;
 				AddMetaDataAction action = pageEditor.view.explorer.getActionProvider().addMetaData(document, newMd);
-				pageEditor.view.explorer.tool.historyManager.doAction(new WrappedAction(action)
+				pageEditor.view.explorer.tool.historyManager.submit(new WrappedAction(action)
 				{
 					public void doAction() throws Exception {BookImporter.insert(newMd, document, insertRank); monitoredRank = insertRank; reload();}
 					public void undoAction() throws Exception {BookImporter.remove(newMd, document); monitoredRank = insertRank-1; reload();}
