@@ -14,16 +14,20 @@ import org.interreg.docexplore.util.GuiUtils;
 
 public class Stitcher extends DocExploreTool
 {
-	public static final double surfFeatureThreshold = .00085f;
-	public static final double surfMatchThreshold = .4;
-	public static final double surfScaleAndOrientationWeight = .1;
+	public static final double surfFeatureThreshold = .0014f;
+	public static final double surfMatchThreshold = .2;
+	public static final double surfScaleAndOrientationWeight = .2;
 	
 	public static final double groupSpreadRay = 22;
-	public static final double groupEdgenessWeight = .5;
+	public static final int groupSizeThreshold = 5;
+	public static final double groupEarlyConfidenceThreshold = .1;
+	public static final double groupLateConfidenceThreshold = .35;
+	public static final double groupDivergenceRatioThreshold = .11;
+	
+	public static final double groupMatchingWeight = 1;
+	public static final double groupEdgenessWeight = .2;
 	public static final double groupAreaWeight = .5;
-	public static final int groupSizeThreshold = 7;
-	public static final double groupConfidenceThreshold = .035;
-	public static final double groupDivergenceRatioThreshold = .2;
+	public static final double groupDeviationWeight = 0;
 	
 	Startup startup;
 	JFrame win, editorWin;

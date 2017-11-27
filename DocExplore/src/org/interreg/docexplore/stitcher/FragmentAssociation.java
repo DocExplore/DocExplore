@@ -1,6 +1,5 @@
 package org.interreg.docexplore.stitcher;
 
-import java.awt.geom.Rectangle2D;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -16,12 +15,11 @@ public class FragmentAssociation
 	int index;
 	
 	private FragmentTransform transform = null;
-	FragmentDistortion distortion = null;
 	
 	public FragmentAssociation(Fragment f1, Fragment f2, int index)
 	{
-		this.d1 = new FragmentDescription(this, f1, new Rectangle2D.Double(0, 0, 1, 1));
-		this.d2 = new FragmentDescription(this, f2, new Rectangle2D.Double(0, 0, 1, 1));
+		this.d1 = new FragmentDescription(this, f1);
+		this.d2 = new FragmentDescription(this, f2);
 		this.index = index;
 		
 		resetAssociationsByPOI();
@@ -40,7 +38,6 @@ public class FragmentAssociation
 			associations.add(new Association(in, this, i));
 		this.index = index;
 		this.transform = (FragmentTransform)in.readObject();
-		this.distortion = (FragmentDistortion)in.readObject();
 		resetAssociationsByPOI();
 	}
 	
@@ -53,7 +50,6 @@ public class FragmentAssociation
 		for (int i=0;i<associations.size();i++)
 			associations.get(i).write(out);
 		out.writeObject(transform);
-		out.writeObject(distortion);
 	}
 	
 	void resetAssociationsByPOI()
@@ -136,32 +132,7 @@ public class FragmentAssociation
 			transform.transform(d1.fragment, res);
 		else transform.itransform(d2.fragment, res);
 		
-		d1.rect = d1.fragment.overlap(d2.fragment);
-		d2.rect = d2.fragment.overlap(d1.fragment);
-		this.distortion = new FragmentDistortion(this);
-		FragmentAssociationUtils.tightenRectShortestDimension(d1);
-		FragmentAssociationUtils.tightenRectShortestDimension(d2);
-		
 		if (progress != null) progress[0] = pe;
-	}
-	
-	public boolean isDistorted(Fragment f, double x, double y)
-	{
-		return (f == d1.fragment ? d1 : d2).distortionFactor(x, y) >= 0;
-	}
-	public double distortionAlpha(Fragment f, double x, double y)
-	{
-		return (f == d1.fragment ? d1 : d2).distortionAlpha(x, y);
-	}
-	public double getDistortedImageX(Fragment f, double x, double y)
-	{
-		if (distortion == null || (f != d1.fragment && f != d2.fragment)) return x;
-		return (f == d1.fragment ? d1 : d2).getDistortedImageX(x, y);
-	}
-	public double getDistortedImageY(Fragment f, double x, double y)
-	{
-		if (distortion == null || (f != d1.fragment && f != d2.fragment)) return y;
-		return (f == d1.fragment ? d1 : d2).getDistortedImageY(x, y);
 	}
 	
 	public double meanUIDistance()

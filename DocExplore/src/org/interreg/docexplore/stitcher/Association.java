@@ -35,6 +35,8 @@ public class Association
 		out.writeInt(p2.index);
 	}
 	
+	public POI poiFor(Fragment f) {return f == fa.d1.fragment ? p1 : f == fa.d2.fragment ? p2 : null;}
+	
 	public POI other(POI poi) {return poi == p1 ? p2 : poi == p2 ? p1 : null;}
 	
 	public double featureDistance2() {return p1.featureDistance2(p2);}

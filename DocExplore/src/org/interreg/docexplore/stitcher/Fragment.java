@@ -43,6 +43,8 @@ public class Fragment
 	double uih, ux, uy, vx, vy;
 	double minx, miny, maxx, maxy;
 	
+	FragmentDistortion distortion = null;
+	
 //	Fragment(int index)
 //	{
 //		this.file = null;
@@ -91,8 +93,9 @@ public class Fragment
 		this.features = new ArrayList<POI>(n);
 		for (int i=0;i<n;i++)
 			features.add(new POI(in, this, i));
-		this.index = index;
+		this.distortion = (FragmentDistortion)in.readObject();
 		
+		this.index = index;
 		update();
 	}
 	
@@ -112,6 +115,7 @@ public class Fragment
 		out.writeInt(features.size());
 		for (int i=0;i<features.size();i++)
 			features.get(i).write(out);
+		out.writeObject(distortion);
 	}
 	
 	public void computeFeatures(BufferedImage full) throws Exception
@@ -128,7 +132,6 @@ public class Fragment
 		features = new ArrayList<POI>(v.size());
 		for (int i=0;i<v.size();i++)
 			features.add(new POI(this, v.get(i), features.size()));
-		System.out.println(features.size());
 	}
 	
 	public void setPos(double uix, double uiy)

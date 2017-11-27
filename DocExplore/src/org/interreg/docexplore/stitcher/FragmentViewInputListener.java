@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.interreg.docexplore.gui.image.NavViewInputListener;
+
 public class FragmentViewInputListener extends NavViewInputListener implements KeyListener
 {
 	public static final double knobRay = 5;
@@ -78,7 +80,7 @@ public class FragmentViewInputListener extends NavViewInputListener implements K
 	{
 		super.mouseMoved(e);
 		
-		double viewRay = knobRay/view.scale;
+		double viewRay = knobRay/view.getScale();
 		near.clear();
 		view.nearFragments(view.toViewX(e.getX()), view.toViewY(e.getY()), viewRay, near);
 		

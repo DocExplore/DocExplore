@@ -3,6 +3,8 @@ package org.interreg.docexplore.stitcher;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 
+import org.interreg.docexplore.gui.image.NavViewInputListener;
+
 public class FragmentDescriptionViewInputListener extends NavViewInputListener
 {
 	public static final double poiRay = 2;
@@ -88,7 +90,7 @@ public class FragmentDescriptionViewInputListener extends NavViewInputListener
 							minDist = d;
 						}
 					}
-		if (min != null && minDist <= (poiRay/view.scale+1)*(poiRay/view.scale+1))
+		if (min != null && minDist <= (poiRay/view.getScale()+1)*(poiRay/view.getScale()+1))
 			view.setHighlighted(min);
 		else view.setHighlighted(null);
 	}

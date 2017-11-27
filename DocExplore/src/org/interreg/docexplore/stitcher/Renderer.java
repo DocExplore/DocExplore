@@ -32,7 +32,7 @@ public class Renderer
 		if (img == null)
 			return 0;
 		recent.add(f);
-		while (images.size() > 6)
+		while (images.size() > 8)
 		{
 			images.remove(recent.get(0));
 			recent.remove(0);
@@ -87,27 +87,15 @@ public class Renderer
 				for (int k=0;k<list.size();k++)
 				{
 					Fragment f = list.get(k);
-					boolean distorted = false;
-					double ix = f.fromLocalToImageX(f.toLocalX(vx, vy));
-					double iy = f.fromLocalToImageY(f.toLocalY(vx, vy));
-					List<FragmentAssociation> maps = set.associationsByFragment.get(f);
-					if (maps != null)
-						for (int l=0;l<maps.size();l++)
+					double lx = f.toLocalX(vx, vy), ly = f.toLocalY(vx, vy);
+					double ix = f.fromLocalToImageX(lx), iy = f.fromLocalToImageY(ly);
+					double dx = ix+f.distortion.getDist(ix, iy, 0), dy = iy+f.distortion.getDist(ix, iy, 1);
+					int rgb = getPixel(f, dx, dy);
+					if (rgb != 0)
 					{
-						FragmentAssociation map = maps.get(l);
-						if (!map.isDistorted(f, ix, iy))
-							continue;
-						distorted = true;
-						double dx = map.getDistortedImageX(f, ix, iy);
-						double dy = map.getDistortedImageY(f, ix, iy);
-						double a = map.distortionAlpha(f, ix, iy);
-						int rgb = getPixel(f, dx, dy);
-						if (rgb != 0) {r += a*ImageUtils.red(rgb); g += a*ImageUtils.green(rgb); b += a*ImageUtils.blue(rgb); n += a;}
-					}
-					if (!distorted)
-					{
-						int rgb = getPixel(f, ix, iy);
-						if (rgb != 0) {r += ImageUtils.red(rgb); g += ImageUtils.green(rgb); b += ImageUtils.blue(rgb); n += 1;}
+						float a = (float)Math.min(Math.min(ix,  f.imagew-ix), Math.min(iy,  f.imageh-iy));
+						a *= a;
+						{r += a*ImageUtils.red(rgb); g += a*ImageUtils.green(rgb); b += a*ImageUtils.blue(rgb); n += a;}
 					}
 				}
 				list.clear();

@@ -143,20 +143,20 @@ public class FragmentAssociationUtils
 		rect.setRect(minx, miny, maxx-minx, maxy-miny);
 	}
 	
-	public static void tightenRectShortestDimension(FragmentDescription d)
-	{
-		double min = Double.MAX_VALUE, max = -Double.MAX_VALUE;
-		boolean hor = d.rect.getWidth() < d.rect.getHeight();
-		for (int i=0;i<d.features.size();i++)
-		{
-			POI poi = d.features.get(i);
-			if (d.fa.associationsByPOI.get(poi) == null)
-				continue;
-			double k = hor ? d.fragment.fromImageToLocalX(poi.x) : d.fragment.fromImageToLocalY(poi.y);
-			if (i == 0 || k < min) min = k;
-			if (i == 0 || k > max) max = k;
-		}
-		if (hor) {d.rect.setRect(min, d.rect.getY(), max-min, d.rect.getHeight());}
-		else {d.rect.setRect(d.rect.getX(), min, d.rect.getWidth(), max-min);}
-	}
+//	public static void tightenRectShortestDimension(FragmentDescription d)
+//	{
+//		double min = Double.MAX_VALUE, max = -Double.MAX_VALUE;
+//		boolean hor = d.rect.getWidth() < d.rect.getHeight();
+//		for (int i=0;i<d.features.size();i++)
+//		{
+//			POI poi = d.features.get(i);
+//			if (d.fa.associationsByPOI.get(poi) == null)
+//				continue;
+//			double k = hor ? d.fragment.fromImageToLocalX(poi.x) : d.fragment.fromImageToLocalY(poi.y);
+//			if (i == 0 || k < min) min = k;
+//			if (i == 0 || k > max) max = k;
+//		}
+//		if (hor) {d.rect.setRect(min, d.rect.getY(), max-min, d.rect.getHeight());}
+//		else {d.rect.setRect(d.rect.getX(), min, d.rect.getWidth(), max-min);}
+//	}
 }

@@ -53,13 +53,6 @@ public class LayoutDetector
 		if (associations.isEmpty())
 			map = null;
 		
-//		{
-//			FragmentAssociationUtils.boundingRect(associations, f1, bounds1);
-//			FragmentAssociationUtils.boundingRect(associations, f2, bounds2);
-//			if (bounds1.contains(.5, .5) || bounds2.contains(.5, .5))
-//				map = null;
-//		}
-		
 		if (map != null)
 		{
 			map.associations.clear();
@@ -91,6 +84,19 @@ public class LayoutDetector
 				stack.add(next);
 			}
 		}
+		
+		for (Fragment fragment : closed)
+		{
+			List<FragmentAssociation> list = set.associationsByFragment.get(fragment);
+			if (list != null)
+			{
+				for (int i=0;i<list.size();i++)
+					associations.addAll(list.get(i).associations);
+				fragment.distortion = new FragmentDistortion(fragment, associations);
+				associations.clear();
+			}
+		}
+		
 		closed.clear();
 	}
 }

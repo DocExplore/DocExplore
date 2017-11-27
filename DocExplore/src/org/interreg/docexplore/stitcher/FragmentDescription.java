@@ -1,6 +1,5 @@
 package org.interreg.docexplore.stitcher;
 
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,18 +15,16 @@ public class FragmentDescription
 	
 	FragmentAssociation fa;
 	Fragment fragment;
-	Rectangle2D rect;
 	List<POI> features = new ArrayList<POI>(0);
 	
 	@SuppressWarnings("unchecked")
 	List<POI> [][] bins = new ArrayList [0][0];
 	BufferedImage image = null;
 	
-	public FragmentDescription(FragmentAssociation fa, Fragment fragment, Rectangle2D rect)
+	public FragmentDescription(FragmentAssociation fa, Fragment fragment)
 	{
 		this.fa = fa;
 		this.fragment = fragment;
-		this.rect = rect;
 		resetBins();
 	}
 	
@@ -37,7 +34,6 @@ public class FragmentDescription
 		int serialVersion = in.readInt();
 		this.fa = fa;
 		this.fragment = fragments.get(in.readInt());
-		this.rect = (Rectangle2D)in.readObject();
 		int n = in.readInt();
 		this.features = new ArrayList<POI>(n);
 		for (int i=0;i<n;i++)
@@ -50,7 +46,6 @@ public class FragmentDescription
 	{
 		out.writeInt(serialVersion);
 		out.writeInt(fragments.indexOf(fragment));
-		out.writeObject(rect);
 		out.writeInt(features.size());
 		for (int i=0;i<features.size();i++)
 			features.get(i).write(out);
@@ -138,12 +133,7 @@ public class FragmentDescription
 	{
 		features = new ArrayList<POI>();
 		for (int i=0;i<fragment.features.size();i++)
-		{
-			POI poi = fragment.features.get(i);
-			double lx = fragment.fromImageToLocalX(poi.x), ly = fragment.fromImageToLocalY(poi.y);
-			if (lx >= rect.getX() && ly >= rect.getY() && lx <= rect.getX()+rect.getWidth() && ly <= rect.getY()+rect.getHeight())
-				features.add(new POI(poi, features.size()));
-		}
+			features.add(new POI(fragment.features.get(i), features.size()));
 		resetBins();
 	}
 	
@@ -181,13 +171,13 @@ public class FragmentDescription
 			poi.descriptor = new double [0];
 	}
 	
-	double fromImageToLocalX(double x) {return rect.getX()+rect.getWidth()*x/image.getWidth();}
-	double fromImageToLocalY(double y) {return rect.getY()+rect.getHeight()*y/image.getHeight();}
+	double fromImageToLocalX(double x) {return x/image.getWidth();}
+	double fromImageToLocalY(double y) {return y/image.getHeight();}
 	
 	public double [] fromFeature(double x, double y, double [] res)
 	{
-		double lx = rect.getX()+rect.getWidth()*x/image.getWidth();
-		double ly = rect.getY()+rect.getHeight()*y/image.getHeight();
+		double lx = x/image.getWidth();
+		double ly = y/image.getHeight();
 		res[0] = fragment.fromLocalX(lx, ly);
 		res[1] = fragment.fromLocalY(lx, ly);
 		return res;
@@ -195,35 +185,12 @@ public class FragmentDescription
 	
 	double imageDistToRect(double lx, double ly)
 	{
-		boolean inx = lx >= rect.getX() && lx <= rect.getX()+rect.getWidth();
-		boolean iny = ly >= rect.getY() && ly <= rect.getY()+rect.getHeight();
+		boolean inx = lx >= 0 && lx <= 1;
+		boolean iny = ly >= 0 && ly <= 1;
 		if (inx && iny)
 			return 0;
-		double dx = inx ? 0 : Math.min(Math.abs(rect.getX()-lx),  Math.abs(rect.getX()+rect.getWidth()-lx));
-		double dy = iny ? 0 : Math.min(Math.abs(rect.getY()-ly),  Math.abs(rect.getY()+rect.getHeight()-ly));
+		double dx = inx ? 0 : Math.min(Math.abs(-lx),  Math.abs(1-lx));
+		double dy = iny ? 0 : Math.min(Math.abs(-ly),  Math.abs(1-ly));
 		return Math.max(dx*fragment.imagew, dy*fragment.imageh);
-	}
-	double distortionAlpha(double x, double y)
-	{
-		return fa.distortion.alpha(fa, fragment, fragment.fromImageToLocalX(x), fragment.fromImageToLocalY(y));
-	}
-	double distortionFactor(double x, double y)
-	{
-		return fa.distortion.distortion(fa, fragment, fragment.fromImageToLocalX(x), fragment.fromImageToLocalY(y));
-//		double dl = imageDistToRect(fragment.fromImageToLocalX(x), fragment.fromImageToLocalY(y));
-//		double r = rect.getWidth() < rect.getHeight() ? .25*rect.getWidth()*fragment.imagew : .25*rect.getHeight()*fragment.imageh;
-//		return Math.max(0, r-dl)/r;
-	}
-	double getDistortedImageX(double x, double y)
-	{
-		double k = distortionFactor(x, y);
-		if (k < 0) return x;
-		return x-k*fa.distortion.getDist(x, y, 0, this == fa.d2);
-	}
-	double getDistortedImageY(double x, double y)
-	{
-		double k = distortionFactor(x, y);
-		if (k < 0) return y;
-		return y-k*fa.distortion.getDist(x, y, 1, this == fa.d2);
 	}
 }

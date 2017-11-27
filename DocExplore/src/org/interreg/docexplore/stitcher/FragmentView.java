@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.interreg.docexplore.gui.image.NavView;
+import org.interreg.docexplore.gui.image.NavViewInputListener;
+
 @SuppressWarnings("serial")
 public class FragmentView extends NavView
 {

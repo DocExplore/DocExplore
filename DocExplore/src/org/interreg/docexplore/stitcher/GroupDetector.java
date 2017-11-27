@@ -1,5 +1,9 @@
 package org.interreg.docexplore.stitcher;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,27 +12,35 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+
 public class GroupDetector
 {
-	static class Group
+	public class Group
 	{
-		double dx, dy;
+		FragmentAssociation map;
+		double meddx, meddy;
+		double meandx, meandy;
 		List<Association> assocs;
 		
 		Map<POI, Integer> assocIndexes;
 		double [] bounds1, bounds2;
 		int index;
 		
-		Group(double dx, double dy)
+		Group(FragmentAssociation map, double dx, double dy)
 		{
-			this.dx = dx;
-			this.dy = dy;
+			this.map = map;
+			this.meddx = dx;
+			this.meddy = dy;
+			this.meandx = dx;
+			this.meandy = dy;
 			this.assocs = new ArrayList<Association>(1);
 		}
 		
 		void updateDiff()
 		{
-			double dminx = 0, dminy = 0, dmaxx = 0, dmaxy = 0;
+			double dminx = 0, dminy = 0, dmaxx = 0, dmaxy = 0, sumx = 0, sumy = 0;
 			for (int i=0;i<assocs.size();i++)
 			{
 				Association a = assocs.get(i);
@@ -37,10 +49,33 @@ public class GroupDetector
 				if (i == 0 || dy < dminy) dminy = dy;
 				if (i == 0 || dx > dmaxx) dmaxx = dx;
 				if (i == 0 || dy > dmaxy) dmaxy = dy;
+				sumx += dx;
+				sumy += dy;
 			}
-			dx = .5*(dminx+dmaxx);
-			dy = .5*(dminy+dmaxy);
+			meddx = .5*(dminx+dmaxx);
+			meddy = .5*(dminy+dmaxy);
+			meandx = sumx/assocs.size();
+			meandx = sumy/assocs.size();
+			
 		}
+		void computeBounds()
+		{
+			bounds(assocs, true, bounds1 = new double [4]);
+			bounds(assocs, false, bounds2 = new double [4]);
+		}
+		
+		double deviation()
+		{
+			double sum = 0;
+			for (int i=0;i<assocs.size();i++)
+			{
+				Association a = assocs.get(i);
+				double dx = a.p2.x-a.p1.x, dy = a.p2.y-a.p1.y;
+				sum += (dx-meandx)*(dx-meandx)+(dy-meandy)*(dy-meandy);
+			}
+			return Math.sqrt(sum/assocs.size());
+		}
+		
 		void computeMap()
 		{
 			this.assocIndexes = new HashMap<POI, Integer>(assocs.size()*2);
@@ -80,6 +115,61 @@ public class GroupDetector
 				assocIndexes.put(a.p1, a.index);
 				assocIndexes.put(a.p2, a.index);
 			}
+		}
+		
+		double matchingFactor(boolean left)
+		{
+			double [] bounds = left ? bounds1 : bounds2;
+			FragmentDescription d = (left ? map.d1 : map.d2);
+			d.containedPOIs(bounds[0], bounds[1], bounds[2]-bounds[0], bounds[3]-bounds[1], near);
+			double matching = assocs.size()*1f/Math.max(1, near.size());
+			near.clear();
+			return matching;
+		}
+		double edgenessFactor(boolean left)
+		{
+			double [] bounds = left ? bounds1 : bounds2;
+			FragmentDescription desc = (left ? map.d1 : map.d2);
+			double l = bounds[0]/desc.fragment.imagew, u = bounds[1]/desc.fragment.imageh, r = bounds[2]/desc.fragment.imagew, d = bounds[3]/desc.fragment.imageh;
+			return Math.max(Math.max((1-l)*(d-u), r*(d-u)), Math.max((1-u)*(r-l), d*(r-l)));
+		}
+		double areaFactor(boolean left)
+		{
+			double [] bounds = left ? bounds1 : bounds2;
+			FragmentDescription desc = (left ? map.d1 : map.d2);
+			double l = bounds[0]/desc.fragment.imagew, u = bounds[1]/desc.fragment.imageh, r = bounds[2]/desc.fragment.imagew, d = bounds[3]/desc.fragment.imageh;
+			return Math.max((r-l)/(d-u), (d-u)/(r-l))*Math.max((r-l)*(r-l), (d-u)*(d-u));
+		}
+		double deviationFactor()
+		{
+			return Math.min(1, assocs.size()*Stitcher.groupSpreadRay/(deviation()));
+		}
+		double lateGroupConfidence()
+		{
+			return 
+				Math.pow(Math.min(matchingFactor(true), matchingFactor(false)), Stitcher.groupMatchingWeight)*
+//				Math.pow(.5*(edgenessFactor(true)+edgenessFactor(false)), Stitcher.groupEdgenessWeight)*
+				Math.pow(Math.min(areaFactor(true), areaFactor(false)), Stitcher.groupAreaWeight)*
+				Math.pow(deviationFactor(), Stitcher.groupDeviationWeight)*
+				(1-1/Math.sqrt(assocs.size()));
+		}
+		double earlyGroupConfidence()
+		{
+			return 
+				Math.pow(.5*(matchingFactor(true)+matchingFactor(false)), Stitcher.groupMatchingWeight)*
+//				Math.pow(.5*(edgenessFactor(true)+edgenessFactor(false)), Stitcher.groupEdgenessWeight)*
+//				Math.pow(.5*(areaFactor(true)+areaFactor(false)), Stitcher.groupAreaWeight)*
+				Math.pow(deviationFactor(), Stitcher.groupDeviationWeight);
+		}
+		void dump()
+		{
+			System.out.printf("size: %d, match: %.3f-%.3f, edge: %.3f-%.3f, area: %.3f-%.3f, dev: %.3f => %.4f %.4f\n", 
+				assocs.size(),
+				matchingFactor(true), matchingFactor(false),
+				edgenessFactor(true), edgenessFactor(false),
+				areaFactor(true), areaFactor(false),
+				deviationFactor(),
+				earlyGroupConfidence(), lateGroupConfidence());
 		}
 	}
 	
@@ -126,15 +216,15 @@ public class GroupDetector
 //				System.out.println(i+","+j);
 //			}
 //		}
-		int bx = binx(group.dx);
-		int by = biny(group.dy);
+		int bx = binx(group.meddx);
+		int by = biny(group.meddy);
 		if (groups[bx][by] == null)
 			return;
 		groups[bx][by].remove(group);
 	}
 	void addGroup(Group group)
 	{
-		int i = binx(group.dx), j = biny(group.dy);
+		int i = binx(group.meddx), j = biny(group.meddy);
 		if (groups[i][j] == null)
 			groups[i][j] = new ArrayList<Group>(1);
 		groups[i][j].add(group);
@@ -154,7 +244,7 @@ public class GroupDetector
 			Group g = groups[i][j].get(k);
 			if (g == exclude)
 				continue;
-			double d = (g.dx-dx)*(g.dx-dx)+(g.dy-dy)*(g.dy-dy);
+			double d = (g.meddx-dx)*(g.meddx-dx)+(g.meddy-dy)*(g.meddy-dy);
 			if (d < ray*ray && (min == null || d < minDist))
 			{
 				min = g;
@@ -169,7 +259,7 @@ public class GroupDetector
 		Group g = findNearestGroup(dx, dy, Stitcher.groupSpreadRay);
 		if (g == null)
 		{
-			g = new Group(dx, dy);
+			g = new Group(a.fa, dx, dy);
 			g.assocs.add(a);
 		}
 		else
@@ -189,7 +279,7 @@ public class GroupDetector
 					for (int k=0;k<groups[i][j].size();k++)
 		{
 			Group g = groups[i][j].get(k);
-			Group c = findNearestGroup(g.dx, g.dy, Stitcher.groupSpreadRay, g);
+			Group c = findNearestGroup(g.meddx, g.meddy, Stitcher.groupSpreadRay, g);
 			if (c != null)
 				merges.add(new Group [] {g, c});
 		}
@@ -226,7 +316,7 @@ public class GroupDetector
 				Group g2 = groups.get(j);
 				double mx2 = .5*(g2.bounds1[0]+g2.bounds1[2]), my2 = .5*(g2.bounds1[1]+g2.bounds1[3]);
 				double dist = Math.sqrt((mx1-mx2)*(mx1-mx2)+(my1-my2)*(my1-my2));
-				double ddist = Math.sqrt((g1.dx-g2.dx)*(g1.dx-g2.dx)+(g1.dy-g2.dy)*(g1.dy-g2.dy));
+				double ddist = Math.sqrt((g1.meddx-g2.meddx)*(g1.meddx-g2.meddx)+(g1.meddy-g2.meddy)*(g1.meddy-g2.meddy));
 				//System.out.printf("%d %d => %.3f\n", i, j, ddist/dist);
 				if (ddist/dist < Stitcher.groupDivergenceRatioThreshold)
 					merges.add(new Group [] {g1, g2});
@@ -293,7 +383,7 @@ public class GroupDetector
 				POI p1 = near.get(i);
 				if (associated1.contains(p1))
 					continue;
-				POI min = findLocalMatch(p1, map.d2, .15*Stitcher.groupSpreadRay, a.p2.x-a.p1.x, a.p2.y-a.p1.y, associated2);
+				POI min = findLocalMatch(p1, map.d2, .3*Stitcher.groupSpreadRay, a.p2.x-a.p1.x, a.p2.y-a.p1.y, associated2);
 				if (min != null)
 				{
 					Association newa = new Association(map, p1, min, 0);
@@ -309,16 +399,16 @@ public class GroupDetector
 		if (spread)
 			g.updateDiff();
 	}
-	void spreadGroupInternally(FragmentAssociation map, Group g, Set<POI> associated1, Set<POI> associated2, double [] bounds)
+	void spreadGroupInternally(FragmentAssociation map, Group g, Set<POI> associated1, Set<POI> associated2)
 	{
 		boolean spread = false;
-		map.d1.containedPOIs(bounds[0], bounds[1], bounds[2]-bounds[0], bounds[3]-bounds[1], near);
+		map.d1.containedPOIs(g.bounds1[0], g.bounds1[1], g.bounds1[2]-g.bounds1[0], g.bounds1[3]-g.bounds1[1], near);
 		for (int i=0;i<near.size();i++)
 		{
 			POI p1 = near.get(i);
 			if (associated1.contains(p1))
 				continue;
-			POI min = findLocalMatch(p1, map.d2, .15*Stitcher.groupSpreadRay, g.dx, g.dy, associated2);
+			POI min = findLocalMatch(p1, map.d2, .3*Stitcher.groupSpreadRay, g.meddx, g.meddy, associated2);
 			if (min != null)
 			{
 				Association newa = new Association(map, p1, min, 0);
@@ -333,7 +423,6 @@ public class GroupDetector
 			g.updateDiff();
 	}
 	//returns level of confidence
-	double [] bounds = {0, 0, 0, 0};
 	Set<POI> associated1 = new HashSet<POI>();
 	Set<POI> associated2 = new HashSet<POI>();
 	void strengthenGroup(FragmentAssociation map, Group g)
@@ -347,44 +436,13 @@ public class GroupDetector
 		//System.out.printf("%d => ", g.assocs.size());
 		spreadGroupLocally(map, g, associated1, associated2);
 		//System.out.printf("%d => ", g.assocs.size());
-		bounds(g.assocs, true, bounds);
-		spreadGroupInternally(map, g, associated1, associated2, bounds);
+		g.computeBounds();
+		spreadGroupInternally(map, g, associated1, associated2);
 		//System.out.printf("%d ", g.assocs.size());
+		g.computeBounds();
 		
 		associated1.clear();
 		associated2.clear();
-	}
-	
-	double confidence(FragmentAssociation map, Group g, double areaWeight)
-	{
-		bounds(g.assocs, true, g.bounds1 = new double [4]);
-		map.d1.containedPOIs(g.bounds1[0], g.bounds1[1], g.bounds1[2]-g.bounds1[0], g.bounds1[3]-g.bounds1[1], near);
-		double matching1 = g.assocs.size()*1f/Math.max(1, near.size());
-		double l = g.bounds1[0]/map.d1.fragment.imagew, u = g.bounds1[1]/map.d1.fragment.imageh, r = g.bounds1[2]/map.d1.fragment.imagew, d = g.bounds1[3]/map.d1.fragment.imageh;
-		double edgeness1 = Math.max(Math.max((1-l)*(d-u), r*(d-u)), Math.max((1-u)*(r-l), d*(r-l)));
-		double area1 = Math.min(r-l, d-u);
-		double conf1 = Math.pow(matching1, 2-Stitcher.groupEdgenessWeight)*Math.pow(edgeness1, Stitcher.groupEdgenessWeight);
-		conf1 *= Math.pow(area1, areaWeight);
-		near.clear();
-		
-		bounds(g.assocs, false, g.bounds2 = new double [4]);
-		map.d2.containedPOIs(g.bounds2[0], g.bounds2[1], g.bounds2[2]-g.bounds2[0], g.bounds2[3]-g.bounds2[1], near);
-		double matching2 = g.assocs.size()*1f/Math.max(1, near.size());
-		l = g.bounds2[0]/map.d2.fragment.imagew; u = g.bounds2[1]/map.d2.fragment.imageh; r = g.bounds2[2]/map.d2.fragment.imagew; d = g.bounds2[3]/map.d2.fragment.imageh;
-		double edgeness2 = Math.max(Math.max((1-l)*(d-u), r*(d-u)), Math.max((1-u)*(r-l), d*(r-l)));
-		double area2 = Math.min(r-l, d-u);
-		double conf2 = Math.pow(matching2, 2-Stitcher.groupEdgenessWeight)*Math.pow(edgeness2, Stitcher.groupEdgenessWeight);
-		conf2 *= Math.pow(area2, areaWeight);
-		near.clear();
-		
-//		double c = Math.min(conf1, conf2);
-//		if (c >= .5*Stitcher.groupConfidenceThreshold && g.assocs.size() >= Stitcher.groupSizeThreshold) System.out.printf(">%d %.3f,%.3f %.3f,%.3f %.3f\n", 
-//			g.assocs.size(), 
-//			matching1, edgeness1, 
-// 			matching2, edgeness2, 
-//			c);
-		
-		return Math.min(conf1, conf2);
 	}
 	
 	ArrayList<POI> local = new ArrayList<POI>();
@@ -413,7 +471,11 @@ public class GroupDetector
 	}
 	
 	public void detect(FragmentAssociation map, Collection<Association> res)
-	{System.out.println("detect "+map.d1.fragment.file.getName()+"-"+map.d2.fragment.file.getName());
+	{
+		detect(map, res, false);
+	}
+	public void detect(FragmentAssociation map, Collection<Association> res, boolean force)
+	{
 		setup(map);
 		for (int i=0;i<map.associations.size();i++)
 		{
@@ -422,7 +484,7 @@ public class GroupDetector
 		}
 		while (findSmallMerges() > 0);
 		
-		List<Group> largeGroups = new ArrayList<Group>();
+		List<Group> lateGroups = new ArrayList<Group>();
 		for (int i=0;i<groups.length;i++)
 			for (int j=0;j<groups[0].length;j++)
 				if (groups[i][j] != null)
@@ -431,8 +493,13 @@ public class GroupDetector
 					{
 						Group g = groups[i][j].get(k);
 						strengthenGroup(map, g);
-						double c = confidence(map, g, 0);
-						if (c < Stitcher.groupConfidenceThreshold || g.assocs.size() < Stitcher.groupSizeThreshold)
+						boolean reject = g.assocs.size() < Stitcher.groupSizeThreshold;
+						if (!reject)
+						{
+							double c = g.earlyGroupConfidence();
+							reject = c < Stitcher.groupEarlyConfidenceThreshold;
+						}
+						if (reject)
 						{
 							groups[i][j].set(k, groups[i][j].get(groups[i][j].size()-1));
 							groups[i][j].remove(groups[i][j].size()-1);
@@ -440,29 +507,84 @@ public class GroupDetector
 						}
 						else
 						{
-							g.index = largeGroups.size();
-							largeGroups.add(g);
+							g.index = lateGroups.size();
+							lateGroups.add(g);
 							g.computeMap();
+							//g.dump();
+							//showGroup(g);
 						}
 					}
 					if (groups[i][j].isEmpty())
 						groups[i][j] = null;
 				}
-		while (findLargeMerges(largeGroups) > 0);
+		while (findLargeMerges(lateGroups) > 0);
+		
+//		for (int i=0;i<lateGroups.size();i++)
+//		{
+//			res.addAll(lateGroups.get(i).assocs);
+//		}
 		
 		Group max = null;
 		double maxd = 0;
-		for (int i=0;i<largeGroups.size();i++)
+		for (int i=0;i<lateGroups.size();i++)
 		{
-			double d = confidence(map, largeGroups.get(i), Stitcher.groupAreaWeight);
-			if (max == null || d > maxd)
+			Group g = lateGroups.get(i);
+			g.computeBounds();
+			double d = g.lateGroupConfidence();
+			g.dump();
+			//showGroup(g);
+			if (d > maxd && g.assocs.size() >= 2*Stitcher.groupSizeThreshold && d > Stitcher.groupLateConfidenceThreshold)
 			{
 				maxd = d;
-				max = largeGroups.get(i);
+				max = g;
 			}
 		}
-		if (max != null) System.out.println(maxd);
-		if (max != null && maxd > Stitcher.groupConfidenceThreshold && max.assocs.size() > 2*Stitcher.groupSizeThreshold)
+		if (max == null && force)
+			for (int i=0;i<lateGroups.size();i++)
+			{
+				Group g = lateGroups.get(i);
+				double d = g.lateGroupConfidence();
+				if (d > maxd)
+				{
+					maxd = d;
+					max = g;
+				}
+			}
+				
+		if (max != null)
+			max.dump();
+		if (max != null)
 			res.addAll(max.assocs);
+	}
+	
+	@SuppressWarnings("serial")
+	public static void showGroup(final Group gr)
+	{
+		JDialog dialog = new JDialog((Frame)null, "Group", true);
+		dialog.add(new JPanel()
+		{
+			{setPreferredSize(new Dimension(1920, 1080));}
+			@Override protected void paintComponent(Graphics g)
+			{
+				super.paintComponent(g);
+				
+				Fragment f1 = gr.map.d1.fragment, f2 = gr.map.d2.fragment;
+				int scale = 3;
+				g.drawImage(f1.mini, 0, 0, f1.imagew/scale, f1.imageh/scale, null);
+				int xoff = f1.imagew/scale;
+				g.drawImage(f2.mini, xoff, 0, f2.imagew/scale, f2.imageh/scale, null);
+				g.setColor(Color.red);
+				for (int i=0;i<gr.assocs.size();i++)
+				{
+					int x1 = (int)(gr.assocs.get(i).p1.x/scale);
+					int y1 = (int)(gr.assocs.get(i).p1.y/scale);
+					int x2 = (int)(xoff+gr.assocs.get(i).p2.x/scale);
+					int y2 = (int)(gr.assocs.get(i).p2.y/scale);
+					g.drawLine(x1, y1, x2, y2);
+				}
+			}
+		});
+		dialog.pack();
+		dialog.setVisible(true);
 	}
 }

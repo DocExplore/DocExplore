@@ -64,8 +64,12 @@ class StitchEditorMenu extends JMenuBar
 		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK));}});
 		tools.add(new JMenuItem(new AbstractAction("Detect group") {@Override public void actionPerformed(ActionEvent e)
 		{
-			editor.toolkit.detectGroup();
+			editor.toolkit.detectGroup(false);
 		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));}});
+		tools.add(new JMenuItem(new AbstractAction("Force detect group") {@Override public void actionPerformed(ActionEvent e)
+		{
+			editor.toolkit.detectGroup(true);
+		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK));}});
 		tools.add(new JMenuItem(new AbstractAction("Associate") {@Override public void actionPerformed(ActionEvent e)
 		{
 			if (editor.left.selected != null && editor.right.selected != null)
@@ -87,9 +91,5 @@ class StitchEditorMenu extends JMenuBar
 				editor.right.repaint();
 			}
 		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK));}});
-		tools.add(new JMenuItem(new AbstractAction("Compute distortion") {@Override public void actionPerformed(ActionEvent e)
-		{
-			new FragmentDistortion(editor.map);
-		}}));
 	}
 }

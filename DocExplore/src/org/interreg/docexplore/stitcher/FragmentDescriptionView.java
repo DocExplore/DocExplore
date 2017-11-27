@@ -12,6 +12,9 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
+import org.interreg.docexplore.gui.image.NavView;
+import org.interreg.docexplore.gui.image.NavViewInputListener;
+
 @SuppressWarnings("serial")
 public class FragmentDescriptionView extends NavView
 {
@@ -23,7 +26,7 @@ public class FragmentDescriptionView extends NavView
 	{
 		super();
 		this.editor = editor;
-		this.scale = 1;
+		this.setView(0, 0, 1);
 		this.defaultStrokeWidth = 2;
 	}
 	@Override protected NavViewInputListener createInputListener() {return new FragmentDescriptionViewInputListener(this);}
@@ -109,12 +112,6 @@ public class FragmentDescriptionView extends NavView
 				}
 			}
 			
-			g.setColor(rectCol);
-			double rx = desc.fragment.fromLocalToImageX(desc.rect.getX());
-			double ry = desc.fragment.fromLocalToImageY(desc.rect.getY());
-			rect.setRect(rx, ry, desc.fragment.fromLocalToImageX(desc.rect.getX()+desc.rect.getWidth())-rx, desc.fragment.fromLocalToImageY(desc.rect.getY()+desc.rect.getHeight())-ry);
-			g.draw(rect);
-			
 			if (editor.showAssociations)
 			{
 				FragmentDescriptionView opp = editor.left == this ? editor.right : editor.left;
@@ -164,24 +161,24 @@ public class FragmentDescriptionView extends NavView
 				}
 			}
 			
-			if (desc.fa.distortion != null)
+			if (desc.fragment.distortion != null)
 			{
 				g.setColor(distortionCol);
-				double step = Math.min(desc.fragment.imagew, desc.fragment.imageh)/(scale*40);
+				double step = Math.min(desc.fragment.imagew, desc.fragment.imageh)/(getScale()*40);
 				for (double x=toViewX(0);x<toViewX(getWidth());x+=step)
 					for (double y=toViewY(0);y<toViewY(getHeight());y+=step)
-						if (x >= 0 && y >= 0 && x < desc.fragment.imagew && y < desc.fragment.imageh && desc.distortionFactor(x, y) >= 0)
+						if (x >= 0 && y >= 0 && x < desc.fragment.imagew && y < desc.fragment.imageh)
 				{
 					if (!editor.showAlpha)
 					{
-						line.setLine(x, y, desc.getDistortedImageX(x, y), desc.getDistortedImageY(x, y));
+						line.setLine(x, y, x+desc.fragment.distortion.getDist(x, y, 0), y+desc.fragment.distortion.getDist(x, y, 1));
 						g.draw(line);
 					}
 					else
 					{
-						double a = desc.distortionAlpha(x, y);
-						line.setLine(x-a, y-a, x+a, y+a);
-						g.draw(line);
+//						double a = desc.distortionAlpha(x, y);
+//						line.setLine(x-a, y-a, x+a, y+a);
+//						g.draw(line);
 					}
 				}
 			}

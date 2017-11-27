@@ -64,7 +64,7 @@ public class StitchEditorToolkit
 		editor.repaint();
 	}
 	
-	public void detectGroup()
+	public void detectGroup(final boolean force)
 	{
 		if (editor.map == null)
 			return;
@@ -75,11 +75,11 @@ public class StitchEditorToolkit
 			{
 				try
 				{
-//					editor.map.refreshFeatures();
-//					FragmentAssociationUtils.match(editor.map, progress, 0f, .9f);
+					editor.map.refreshFeatures();
+					FragmentAssociationUtils.match(editor.map, progress, 0f, .9f);
 					
 					List<Association> res = new ArrayList<Association>();
-					new GroupDetector().detect(editor.map, res);
+					new GroupDetector().detect(editor.map, res, force);
 					editor.map.associations = res;
 					editor.map.resetAssociationsByPOI();
 				}
