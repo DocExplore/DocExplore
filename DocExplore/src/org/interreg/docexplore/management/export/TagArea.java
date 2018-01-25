@@ -26,10 +26,10 @@ import javax.swing.border.BevelBorder;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.annotate.TagHolder;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 
 @SuppressWarnings("serial")
@@ -42,8 +42,8 @@ public class TagArea extends JPanel
 	{
 		super(new LooseGridLayout(0, 1, 10, 10, true, false));
 		
-		this.anyButton = new JRadioButton(XMLResourceBundle.getBundledString("exportAnyTagLabel"));
-		this.allButton = new JRadioButton(XMLResourceBundle.getBundledString("exportAllTagsLabel"));
+		this.anyButton = new JRadioButton(Lang.s("exportAnyTagLabel"));
+		this.allButton = new JRadioButton(Lang.s("exportAllTagsLabel"));
 		this.tagArea = new JTextArea(3, 40);
 		
 		add(anyButton);

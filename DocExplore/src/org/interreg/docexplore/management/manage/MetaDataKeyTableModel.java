@@ -26,8 +26,8 @@ import javax.swing.table.TableModel;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 
 public class MetaDataKeyTableModel implements TableModel
@@ -77,7 +77,7 @@ public class MetaDataKeyTableModel implements TableModel
 	{
 		if (columnIndex < langs.size())
 			return langs.get(columnIndex);
-		else return XMLResourceBundle.getBundledString("keyCountLabel");
+		else return Lang.s("keyCountLabel");
 	}
 	public int getRowCount() {return keys.size();}
 	public Object getValueAt(int rowIndex, int columnIndex)
@@ -103,14 +103,14 @@ public class MetaDataKeyTableModel implements TableModel
 			String name = aValue.toString().trim();
 			if (name.trim().length() == 0)
 			{
-				JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), XMLResourceBundle.getBundledString("keyEmptyMessage"));
+				JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), Lang.s("keyEmptyMessage"));
 				return;
 			}
 			MetaDataKey key = keys.get(rowIndex);
 			MetaDataKey prev = link.getKey(name, langs.get(columnIndex));
 			if (prev != null && prev != key && prev.getBestName().equals(name))
 			{
-				JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), XMLResourceBundle.getBundledString("keyUsedMessage"));
+				JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), Lang.s("keyUsedMessage"));
 				return;
 			}
 			key.setName(name, langs.get(columnIndex));

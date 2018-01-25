@@ -43,7 +43,7 @@ import org.interreg.docexplore.datalink.DataLink;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.datalink.fs2.DataLinkFS2Source;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.MainWindow;
 import org.interreg.docexplore.management.merge.BookExporter;
 import org.interreg.docexplore.manuscript.Book;
@@ -207,8 +207,8 @@ public class ManageComponent extends JPanel
 					boolean cancel = false;
 					if (selected != null && selected.getLastPageNumber() == remote.getLastPageNumber())
 					{
-						int res = JOptionPane.showConfirmDialog(win, XMLResourceBundle.getBundledString("manageMergeMessage").replace("%name", selected.getName()), 
-							XMLResourceBundle.getBundledString("manageMergeLabel"), JOptionPane.YES_NO_CANCEL_OPTION);
+						int res = JOptionPane.showConfirmDialog(win, Lang.s("manageMergeMessage").replace("%name", selected.getName()), 
+							Lang.s("manageMergeLabel"), JOptionPane.YES_NO_CANCEL_OPTION);
 						if (res == JOptionPane.CANCEL_OPTION)
 							cancel = true;
 						else if (res == JOptionPane.YES_OPTION)
@@ -219,8 +219,8 @@ public class ManageComponent extends JPanel
 						Book found = findTitle(remote.getName());
 						if (found != null && found != selected && found.getLastPageNumber() == remote.getLastPageNumber())
 						{
-							int res = JOptionPane.showConfirmDialog(win, XMLResourceBundle.getBundledString("manageMergeMessage").replace("%name", found.getName()), 
-								XMLResourceBundle.getBundledString("manageMergeLabel"), JOptionPane.YES_NO_CANCEL_OPTION);
+							int res = JOptionPane.showConfirmDialog(win, Lang.s("manageMergeMessage").replace("%name", found.getName()), 
+								Lang.s("manageMergeLabel"), JOptionPane.YES_NO_CANCEL_OPTION);
 							if (res == JOptionPane.CANCEL_OPTION)
 								cancel = true;
 							else if (res == JOptionPane.YES_OPTION)
@@ -233,7 +233,7 @@ public class ManageComponent extends JPanel
 					{
 						String title = remote.getName();
 						while (findTitle(title) != null)
-							if ((title = JOptionPane.showInputDialog(XMLResourceBundle.getBundledString("manageExistsMessage").replace("%name", title), 
+							if ((title = JOptionPane.showInputDialog(Lang.s("manageExistsMessage").replace("%name", title), 
 								title)) == null)
 									{cancel = true; break;}
 						newTitle = title;

@@ -38,7 +38,7 @@ import javax.swing.SwingUtilities;
 import org.interreg.docexplore.authoring.AT;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.MMT;
 import org.interreg.docexplore.reader.ReaderApp;
 import org.interreg.docexplore.util.GuiUtils;
@@ -109,7 +109,7 @@ public class DocExplore extends DocExploreTool
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e); System.exit(0);}
 			}}.start();
 		}}));
-		panel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("mmtLabel")+"</b><br>"+XMLResourceBundle.getBundledString("mmtMessage")+"</html>"));
+		panel.add(new JLabel("<html><b>"+Lang.s("mmtLabel")+"</b><br>"+Lang.s("mmtMessage")+"</html>"));
 		
 		panel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("at-logo.png")) {public void actionPerformed(ActionEvent arg0)
 		{
@@ -120,7 +120,7 @@ public class DocExplore extends DocExploreTool
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e); System.exit(0);}
 			}}.start();
 		}}));
-		panel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("atLabel")+"</b><br>"+XMLResourceBundle.getBundledString("atMessage")+"</html>"));
+		panel.add(new JLabel("<html><b>"+Lang.s("atLabel")+"</b><br>"+Lang.s("atMessage")+"</html>"));
 		
 		panel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("reader-logo.png")) {public void actionPerformed(ActionEvent arg0)
 		{
@@ -131,7 +131,7 @@ public class DocExplore extends DocExploreTool
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e); System.exit(0);}
 			}}.start();
 		}}));
-		panel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("readerLabel")+"</b><br>"+XMLResourceBundle.getBundledString("readerMessage")+"</html>"));
+		panel.add(new JLabel("<html><b>"+Lang.s("readerLabel")+"</b><br>"+Lang.s("readerMessage")+"</html>"));
 		
 //		panel.add(new JLabel(" ")); panel.add(new JLabel(" ")); panel.add(new JLabel(" ")); panel.add(new JLabel(" "));
 //		
@@ -155,7 +155,7 @@ public class DocExplore extends DocExploreTool
 		
 		panel.add(new JLabel(" "));
 		JPanel configPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		configPanel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("confLabel")+"</b><br>"));
+		configPanel.add(new JLabel("<html><b>"+Lang.s("confLabel")+"</b><br>"));
 		configPanel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("gears-24x24.png")) {public void actionPerformed(ActionEvent arg0)
 		{
 			//win.setVisible(false);
@@ -177,7 +177,7 @@ public class DocExplore extends DocExploreTool
 		panel.add(new JLabel(" "));
 		JPanel homePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		JPanel rootPanel = new JPanel(new LooseGridLayout(0, 1, 5, 2, false, false, SwingConstants.RIGHT, SwingConstants.CENTER, false, false));
-		rootPanel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("homeLabel")+"</b><br>"));
+		rootPanel.add(new JLabel("<html><b>"+Lang.s("homeLabel")+"</b><br>"));
 		rootPanel.add(new JLabel(getHomeDir().getAbsolutePath()));
 		homePanel.add(rootPanel);
 		homePanel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("home-24x24.png")) {public void actionPerformed(ActionEvent e)
@@ -201,9 +201,9 @@ public class DocExplore extends DocExploreTool
 					}}) {{setEnabled(!home.equals(current[0]));}});
 			if (menu.getComponentCount() > 0)
 				menu.addSeparator();
-			menu.add(new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("switchHomeLabel")) {public void actionPerformed(ActionEvent arg0)
+			menu.add(new JMenuItem(new AbstractAction(Lang.s("switchHomeLabel")) {public void actionPerformed(ActionEvent arg0)
 			{
-				File where = askForHome(XMLResourceBundle.getBundledString("switchHomeMessage"));
+				File where = askForHome(Lang.s("switchHomeMessage"));
 				if (where == null)
 					return;
 				try
@@ -219,7 +219,7 @@ public class DocExplore extends DocExploreTool
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		win.add(buttonPanel, BorderLayout.SOUTH);
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("exitLabel")) {
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("exitLabel")) {
 			public void actionPerformed(ActionEvent e) {System.exit(0);}}));
 		
 		win.pack();
@@ -231,13 +231,13 @@ public class DocExplore extends DocExploreTool
 	@SuppressWarnings("serial")
 	private static void relaunch(Component comp)
 	{
-		final JDialog dialog = new JDialog((Frame)null, XMLResourceBundle.getBundledString("restartLabel"), true);
+		final JDialog dialog = new JDialog((Frame)null, Lang.s("restartLabel"), true);
 		JPanel content = new JPanel(new LooseGridLayout(0, 1, 10, 10, false, false, SwingConstants.CENTER, SwingConstants.TOP, true, false));
 		content.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
-		JLabel message = new JLabel(XMLResourceBundle.getBundledString("restartMessage"), ImageUtils.getIcon("free-32x32.png"), SwingConstants.LEFT);
+		JLabel message = new JLabel(Lang.s("restartMessage"), ImageUtils.getIcon("free-32x32.png"), SwingConstants.LEFT);
 		message.setIconTextGap(20);
 		content.add(message);
-		content.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("quitLabel")) {public void actionPerformed(ActionEvent arg0)
+		content.add(new JButton(new AbstractAction(Lang.s("quitLabel")) {public void actionPerformed(ActionEvent arg0)
 		{
 			System.exit(0);
 		}}));

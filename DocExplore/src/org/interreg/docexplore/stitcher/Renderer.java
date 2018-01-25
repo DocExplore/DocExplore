@@ -43,7 +43,7 @@ public class Renderer
 		return img.getRGB(i, j);
 	}
 	
-	int imageSizeLim = 8192;
+	int imageSizeLim = 2048;
 	public void render(FragmentSet set, String baseName, File renderDir, float [] progress)
 	{
 		double ppu = 0;

@@ -22,12 +22,12 @@ import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
-import org.interreg.docexplore.management.image.PosterUtils;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
+import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.util.ImageUtils;
 import org.interreg.docexplore.util.MemoryImageSource;
 import org.interreg.docexplore.util.history.ReversibleAction;
@@ -44,7 +44,7 @@ public class NameDialog extends JDialog
 	
 	public NameDialog(AuthoringToolFrame win)
 	{
-		super((Frame)null, XMLResourceBundle.getBundledString("generalTitle"), true);
+		super((Frame)null, Lang.s("generalTitle"), true);
 		
 		this.win = win;
 		
@@ -52,12 +52,12 @@ public class NameDialog extends JDialog
 		setContentPane(top);
 		top.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
-		top.add(new JLabel(XMLResourceBundle.getBundledString("collectionAddBookMessage")));
+		top.add(new JLabel(Lang.s("collectionAddBookMessage")));
 		top.add(title = new JTextField());
 		title.setPreferredSize(new Dimension(320, title.getPreferredSize().height));
 		top.add(new JLabel(" "));
 		
-		top.add(new JLabel(XMLResourceBundle.getBundledString("generalDescription")));
+		top.add(new JLabel(Lang.s("generalDescription")));
 		top.add(desc = new JTextArea());
 		desc.setPreferredSize(new Dimension(title.getPreferredSize().width, 64));
 		desc.setFont(title.getFont());
@@ -65,12 +65,12 @@ public class NameDialog extends JDialog
 		top.add(new JLabel(" "));
 		
 		JPanel bookPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		bookPanel.add(isBookBox = new JRadioButton(XMLResourceBundle.getBundledString("collectionBookDisplayLabel")));
 		bookPanel.add(new JLabel(ImageUtils.getIcon("book-64x64.png")));
+		bookPanel.add(isBookBox = new JRadioButton(Lang.s("collectionBookDisplayLabel")));
 		top.add(bookPanel);
 		JPanel posterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		posterPanel.add(isPosterBox = new JRadioButton(XMLResourceBundle.getBundledString("collectionPosterDisplayLabel")));
 		posterPanel.add(new JLabel(ImageUtils.getIcon("scroll-64x64.png")));
+		posterPanel.add(isPosterBox = new JRadioButton(Lang.s("collectionPosterDisplayLabel")));
 		top.add(posterPanel);
 		ButtonGroup group = new ButtonGroup();
 		group.add(isBookBox);
@@ -80,12 +80,12 @@ public class NameDialog extends JDialog
 		top.add(new JLabel(" "));
 		
 		JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		buttons.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalOkLabel")) {@Override public void actionPerformed(ActionEvent e)
+		buttons.add(new JButton(new AbstractAction(Lang.s("generalOkLabel")) {@Override public void actionPerformed(ActionEvent e)
 		{
 			okayed = true;
 			setVisible(false);
 		}}));
-		buttons.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCancelLabel")) {@Override public void actionPerformed(ActionEvent e)
+		buttons.add(new JButton(new AbstractAction(Lang.s("generalCancelLabel")) {@Override public void actionPerformed(ActionEvent e)
 		{
 			okayed = false;
 			setVisible(false);
@@ -112,7 +112,7 @@ public class NameDialog extends JDialog
 			isPosterBox.setSelected(isPoster);
 			isBookBox.setEnabled(isEmpty);
 			isPosterBox.setEnabled(isEmpty);
-			displayLocked.setText(isEmpty ? "" : XMLResourceBundle.getBundledString("collectionBookDisplayLockedMsg"));
+			displayLocked.setText(isEmpty ? "" : Lang.s("collectionBookDisplayLockedMsg"));
 		}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e); return false;}
 		setVisible(true);
@@ -142,14 +142,14 @@ public class NameDialog extends JDialog
 						{
 							@Override public void doAction() throws Exception {toPoster(link, book);}
 							@Override public void undoAction() throws Exception {toBook(link, book);}
-							@Override public String description() {return XMLResourceBundle.getBundledString("collectionToPosterDisplayLabel");}
+							@Override public String description() {return Lang.s("collectionToPosterDisplayLabel");}
 						});
 					else 
 						win.historyManager.submit(new ReversibleAction()
 						{
 							@Override public void doAction() throws Exception {toBook(link, book);}
 							@Override public void undoAction() throws Exception {toPoster(link, book);}
-							@Override public String description() {return XMLResourceBundle.getBundledString("collectionToBookDisplayLabel");}
+							@Override public String description() {return Lang.s("collectionToBookDisplayLabel");}
 						});
 				}
 				catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}

@@ -21,11 +21,11 @@ import javax.swing.KeyStroke;
 
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 
-import com.sun.glass.events.KeyEvent;
+import java.awt.event.KeyEvent;
 
 @SuppressWarnings("serial")
 public class StitcherMenu extends JMenuBar
@@ -42,15 +42,15 @@ public class StitcherMenu extends JMenuBar
 		
 		this.recent = new LinkedList<String>();
 		readRecent();
-		this.file = new JMenu(XMLResourceBundle.getBundledString("generalMenuFile"));
+		this.file = new JMenu(Lang.s("generalMenuFile"));
 		add(file);
 		
-		newItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuNew")) {public void actionPerformed(ActionEvent arg0) {newFile();}});
-		loadItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuLoad")) {public void actionPerformed(ActionEvent arg0) {load();}});
-		saveItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuSave")) {public void actionPerformed(ActionEvent arg0) {save();}});
-		saveAsItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuSaveAs")) {public void actionPerformed(ActionEvent arg0) {saveAs();}});
-		importItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuImport")) {public void actionPerformed(ActionEvent arg0) {importImages();}});
-		quitItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuQuit")) {public void actionPerformed(ActionEvent arg0)
+		newItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuNew")) {public void actionPerformed(ActionEvent arg0) {newFile();}});
+		loadItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuLoad")) {public void actionPerformed(ActionEvent arg0) {load();}});
+		saveItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuSave")) {public void actionPerformed(ActionEvent arg0) {save();}});
+		saveAsItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuSaveAs")) {public void actionPerformed(ActionEvent arg0) {saveAs();}});
+		importItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuImport")) {public void actionPerformed(ActionEvent arg0) {importImages();}});
+		quitItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuQuit")) {public void actionPerformed(ActionEvent arg0)
 			{stitcher.quit();}});
 		buildFileMenu();
 		
@@ -95,7 +95,10 @@ public class StitcherMenu extends JMenuBar
 				float [] progress = {0};
 				@Override public void run()
 				{
-					new Renderer().render(stitcher.fragmentSet, "render", new File("C:\\Users\\aburn\\Desktop\\tmp"), progress);
+					File renderDir = curFile != null ? new File(curFile.getParent(), "render") : new File("C:\\Users\\aburn\\Desktop\\tmp");
+					if (!renderDir.exists())
+						renderDir.mkdirs();
+					new Renderer().render(stitcher.fragmentSet, "render", renderDir, progress);
 				}
 				@Override public float getProgress() {return progress[0];}
 			}, stitcher.view);
@@ -226,8 +229,8 @@ public class StitcherMenu extends JMenuBar
 			return true;
 		
 		int res = JOptionPane.showConfirmDialog(stitcher.win, 
-			XMLResourceBundle.getBundledString("generalSaveMessage"), 
-			XMLResourceBundle.getBundledString("generalMenuSave"), 
+			Lang.s("generalSaveMessage"), 
+			Lang.s("generalMenuSave"), 
 			JOptionPane.YES_NO_CANCEL_OPTION);
 		
 		if (res == JOptionPane.CANCEL_OPTION)

@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.nfd.JNativeFileDialog;
 
 public class FileDialogs
@@ -124,7 +124,7 @@ public class FileDialogs
 		fileDialog.acceptFiles = true;
 		fileDialog.acceptFolders = false;
 		fileDialog.multipleSelection = false;
-		fileDialog.title = title != null ? title : XMLResourceBundle.getBundledString("fileOpen")+" "+category.name;
+		fileDialog.title = title != null ? title : Lang.s("fileOpen")+" "+category.name;
 		fileDialog.setCurrentFile(category.current.exists() ? category.current : getDefaultDocumentDir());
 		fileDialog.setFileFilter(category.filterLabel(), category.filters);
 		if (!fileDialog.showOpenDialog())
@@ -144,7 +144,7 @@ public class FileDialogs
 		fileDialog.acceptFiles = true;
 		fileDialog.acceptFolders = false;
 		fileDialog.multipleSelection = false;
-		fileDialog.title = title != null ? title : XMLResourceBundle.getBundledString("fileSave")+" "+category.name;
+		fileDialog.title = title != null ? title : Lang.s("fileSave")+" "+category.name;
 		fileDialog.setCurrentFile(category.current.exists() ? category.current : getDefaultDocumentDir());
 		fileDialog.setFileFilter(category.filterLabel(), category.filters);
 		if (!fileDialog.showSaveDialog())
@@ -165,7 +165,7 @@ public class FileDialogs
 		fileDialog.acceptFiles = true;
 		fileDialog.acceptFolders = false;
 		fileDialog.multipleSelection = true;
-		fileDialog.title = title != null ? title : XMLResourceBundle.getBundledString("fileOpen")+" "+category.name;
+		fileDialog.title = title != null ? title : Lang.s("fileOpen")+" "+category.name;
 		fileDialog.setCurrentFile(category.current.exists() ? category.current : getDefaultDocumentDir());
 		fileDialog.setFileFilter(category.filterLabel(), category.filters);
 		if (!fileDialog.showOpenDialog())

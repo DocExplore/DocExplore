@@ -14,78 +14,20 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.management.image;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.image.ImageView;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
 import org.interreg.docexplore.manuscript.Region;
 
-public class RectROIOperation implements ImageView.Operation<PageEditor>
+public class RectROIOperation extends RectOperation
 {
-	public Point first, second, next;
-	
-	public RectROIOperation()
+	@Override public void rectDrawn(ImageView _view, Point first, Point second, int modifiers)
 	{
-		this.first = new Point(-1, -1);
-		this.second = new Point(-1, -1);
-		this.next = new Point(-1, -1);
-	}
-	
-	public void pointClicked(PageEditor view, int cx, int cy, double vx, double vy, int modifiers, int clickCount) {}
-
-	public void pointHovered(PageEditor view, int cx, int cy, double vx, double vy, int modifiers)
-	{
-		next.setLocation(Math.max(0, Math.min(view.getImage().getWidth()-1, (int)(vx+.5))), Math.max(0, Math.min(view.getImage().getHeight()-1, (int)(vy+.5))));
-		view.repaint();
-	}
-	
-	public void pointGrabbed(PageEditor view, int cx, int cy, double vx, double vy, int modifiers)
-	{
-		first.setLocation(Math.max(0, Math.min(view.getImage().getWidth()-1, (int)(vx+.5))), Math.max(0, Math.min(view.getImage().getHeight()-1, (int)(vy+.5))));
-		view.repaint();
-	}
-	public void pointDragged(PageEditor view, int cx, int cy, double vx, double vy, int downw, int downy, int deltax, int deltay, int modifiers)
-	{
-		next.setLocation(Math.max(0, Math.min(view.getImage().getWidth()-1, (int)(vx+.5))), Math.max(0, Math.min(view.getImage().getHeight()-1, (int)(vy+.5))));
-		view.repaint();
-	}
-	public void pointDropped(PageEditor view, int cx, int cy, double vx, double vy, int downw, int downy, int deltax, int deltay, int modifiers)
-	{
-		second.setLocation(Math.max(0, Math.min(view.getImage().getWidth()-1, (int)(vx+.5))), Math.max(0, Math.min(view.getImage().getHeight()-1, (int)(vy+.5))));
+		PageEditor view = (PageEditor)_view;
 		Region region = view.getHost().getActionListener().onAddRegionRequest(view.page, new Point [] {new Point(first), new Point(first.x, second.y), new Point(second), new Point(second.x, first.y)});
 		if (region != null)
 			try {view.switchDocument(region);}
 			catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-		view.repaint();
 	}
-	
-	public void render(PageEditor ic, Graphics2D g, double pixelSize)
-	{
-		if (next.x < 0)
-			return;
-		
-		Rectangle bounds = g.getClipBounds();
-		g.setColor(Color.blue);
-		g.drawLine((int)bounds.getMinX(), next.y, (int)bounds.getMaxX(), next.y);
-		g.drawLine(next.x, (int)bounds.getMinY(), next.x, (int)bounds.getMaxY());
-		
-		if (first.x < 0)
-			return;
-		
-		g.setColor(RegionOverlay.regionOutlineColor);
-		Point p = second.x < 0 ? next : second;
-		int x = Math.min(first.x, p.x), y = Math.min(first.y, p.y);
-		int w = Math.abs(first.x-p.x), h = Math.abs(first.y-p.y);
-		g.drawRect(x, y, w, h);
-	}
-	
-	public String getMessage() {return XMLResourceBundle.getBundledString("statusFreeMessage");}
-
-	public boolean completed() {return second.x >= 0;}
-
-	public void contextMenuRequested(PageEditor view, int cx, int cy, double vx, double vy, int modifiers) {}
 }

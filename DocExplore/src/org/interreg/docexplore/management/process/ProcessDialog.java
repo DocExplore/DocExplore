@@ -44,7 +44,7 @@ import javax.swing.JSplitPane;
 import javax.swing.border.BevelBorder;
 
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -61,7 +61,7 @@ public class ProcessDialog extends JDialog
 	
 	public ProcessDialog()
 	{
-		super(JOptionPane.getRootFrame(), XMLResourceBundle.getBundledString("processTitleLabel"), true);
+		super(JOptionPane.getRootFrame(), Lang.s("processTitleLabel"), true);
 		
 		this.pages = null;
 		this.currentPage = 0;
@@ -80,29 +80,29 @@ public class ProcessDialog extends JDialog
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		viewPanel.add(buttonPanel, BorderLayout.SOUTH);
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("processPreviewLabel")) {public void actionPerformed(ActionEvent e)
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("processPreviewLabel")) {public void actionPerformed(ActionEvent e)
 			{viewPanel.updatePreview(filterPanel);}}));
 		
-		JButton processButton = new JButton(XMLResourceBundle.getBundledString("processProcessLabel"), 
+		JButton processButton = new JButton(Lang.s("processProcessLabel"), 
 			ImageUtils.getIcon("down-11x11.png"));
 		processButton.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
 		{
 			JPopupMenu whichMenu = new JPopupMenu();
 			
-			JMenu allImages = new JMenu(XMLResourceBundle.getBundledString("processAllLabel"));
-			allImages.add(new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("processInFilesLabel")) {public void actionPerformed(ActionEvent arg0)
+			JMenu allImages = new JMenu(Lang.s("processAllLabel"));
+			allImages.add(new JMenuItem(new AbstractAction(Lang.s("processInFilesLabel")) {public void actionPerformed(ActionEvent arg0)
 			{
 				
 			}}));
-			allImages.add(new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("processInMetadataLabel")) {public void actionPerformed(ActionEvent arg0)
+			allImages.add(new JMenuItem(new AbstractAction(Lang.s("processInMetadataLabel")) {public void actionPerformed(ActionEvent arg0)
 				{try {MetaDataExport.exportAll(ProcessDialog.this);} catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}}}));
 			
-			JMenu currentImage = new JMenu(XMLResourceBundle.getBundledString("processCurrentLabel"));
-			currentImage.add(new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("processInFileLabel")) {public void actionPerformed(ActionEvent arg0)
+			JMenu currentImage = new JMenu(Lang.s("processCurrentLabel"));
+			currentImage.add(new JMenuItem(new AbstractAction(Lang.s("processInFileLabel")) {public void actionPerformed(ActionEvent arg0)
 			{
 				
 			}}));
-			currentImage.add(new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("processInMetadataLabel")) {public void actionPerformed(ActionEvent arg0)
+			currentImage.add(new JMenuItem(new AbstractAction(Lang.s("processInMetadataLabel")) {public void actionPerformed(ActionEvent arg0)
 				{try {MetaDataExport.export(ProcessDialog.this, currentPage);} catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}}}));
 			
 			whichMenu.add(allImages);
@@ -112,7 +112,7 @@ public class ProcessDialog extends JDialog
 		}});
 		buttonPanel.add(processButton);
 		
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCloseLabel")) {public void actionPerformed(ActionEvent e)
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalCloseLabel")) {public void actionPerformed(ActionEvent e)
 			{ProcessDialog.this.setVisible(false);}}));
 		
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, filterPanel, viewPanel);

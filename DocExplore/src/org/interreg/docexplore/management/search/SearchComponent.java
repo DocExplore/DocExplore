@@ -42,7 +42,7 @@ import javax.swing.SwingConstants;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.annotate.TagHolder;
 import org.interreg.docexplore.management.search.SearchHandler.MetaDataKeyEntry;
 import org.interreg.docexplore.management.search.SearchHandler.SearchSummary;
@@ -178,7 +178,7 @@ public class SearchComponent extends JPanel
 		{
 			if (lastTerm == null || !lastTerm.equals(term))
 			{
-				animLabel.setText(XMLResourceBundle.getBundledString("searchingMsg"));
+				animLabel.setText(Lang.s("searchingMsg"));
 				final SearchSummary [] pointer = new SearchSummary [1];
 				lastTerm = term;
 				
@@ -217,12 +217,12 @@ public class SearchComponent extends JPanel
 	public void doSearchByAnnotationName() throws DataLinkException
 	{
 		final boolean [] ok = {false};
-		final JDialog dialog = new JDialog(handler.win, XMLResourceBundle.getBundledString("annotateKeyLabel"), true);
+		final JDialog dialog = new JDialog(handler.win, Lang.s("annotateKeyLabel"), true);
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		dialog.add(mainPanel);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
-		mainPanel.add(new JLabel(XMLResourceBundle.getBundledString("searchKeyLabel")), BorderLayout.NORTH);
+		mainPanel.add(new JLabel(Lang.s("searchKeyLabel")), BorderLayout.NORTH);
 		
 		Collection<MetaDataKey> allKeys = handler.win.getDocExploreLink().getAllKeys();
 		Set<MetaDataKeyEntry> keys = new TreeSet<MetaDataKeyEntry>(new Comparator<MetaDataKeyEntry>()
@@ -236,9 +236,9 @@ public class SearchComponent extends JPanel
 		mainPanel.add(keyBox, BorderLayout.CENTER);
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 		final JButton okButton, cancelButton;
-		buttonPanel.add(okButton = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalOkLabel")) {
+		buttonPanel.add(okButton = new JButton(new AbstractAction(Lang.s("generalOkLabel")) {
 			public void actionPerformed(ActionEvent e) {ok[0] = true; dialog.setVisible(false);}}));
-		buttonPanel.add(cancelButton = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCancelLabel")) {
+		buttonPanel.add(cancelButton = new JButton(new AbstractAction(Lang.s("generalCancelLabel")) {
 			public void actionPerformed(ActionEvent e) {dialog.setVisible(false);}}));
 		okButton.setDefaultCapable(true);
 		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -262,7 +262,7 @@ public class SearchComponent extends JPanel
 		
 		GuiUtils.blockUntilComplete(new Runnable() {public void run()
 		{
-			animLabel.setText(XMLResourceBundle.getBundledString("searchingMsg"));
+			animLabel.setText(Lang.s("searchingMsg"));
 			final SearchSummary [] pointer = new SearchSummary [1];
 				
 			Thread searchThread = new Thread() {@SuppressWarnings("unchecked")
@@ -299,12 +299,12 @@ public class SearchComponent extends JPanel
 	public void doSearchByTag() throws DataLinkException
 	{
 		final boolean [] ok = {false};
-		final JDialog dialog = new JDialog(handler.win, XMLResourceBundle.getBundledString("tagTagLabel"), true);
+		final JDialog dialog = new JDialog(handler.win, Lang.s("tagTagLabel"), true);
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		dialog.add(mainPanel);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
-		mainPanel.add(new JLabel(XMLResourceBundle.getBundledString("searchTagLabel")), BorderLayout.NORTH);
+		mainPanel.add(new JLabel(Lang.s("searchTagLabel")), BorderLayout.NORTH);
 		
 		Collection<MetaData> allTags = handler.win.getDocExploreLink().tagKey.getMetaData(MetaData.textType);
 		Set<TagHolder> keys = new TreeSet<TagHolder>(new Comparator<TagHolder>()
@@ -318,9 +318,9 @@ public class SearchComponent extends JPanel
 		mainPanel.add(tagBox, BorderLayout.CENTER);
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 		final JButton okButton, cancelButton;
-		buttonPanel.add(okButton = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalOkLabel")) {
+		buttonPanel.add(okButton = new JButton(new AbstractAction(Lang.s("generalOkLabel")) {
 			public void actionPerformed(ActionEvent e) {ok[0] = true; dialog.setVisible(false);}}));
-		buttonPanel.add(cancelButton = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCancelLabel")) {
+		buttonPanel.add(cancelButton = new JButton(new AbstractAction(Lang.s("generalCancelLabel")) {
 			public void actionPerformed(ActionEvent e) {dialog.setVisible(false);}}));
 		okButton.setDefaultCapable(true);
 		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -344,7 +344,7 @@ public class SearchComponent extends JPanel
 		
 		GuiUtils.blockUntilComplete(new Runnable() {public void run()
 		{
-			animLabel.setText(XMLResourceBundle.getBundledString("searchingMsg"));
+			animLabel.setText(Lang.s("searchingMsg"));
 			final SearchSummary [] pointer = new SearchSummary [1];
 				
 			Thread searchThread = new Thread() {@SuppressWarnings("unchecked")

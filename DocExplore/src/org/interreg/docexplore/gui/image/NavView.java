@@ -56,10 +56,13 @@ public class NavView extends JPanel
 		setView(.5*(maxx+minx), .5*(maxy+miny), Math.min(getWidth()/w, getHeight()/h));
 	}
 	
+	protected void constrain() {}
+	
 	public void scrollPixels(double px, double py)
 	{
 		x0 -= px/scale;
 		y0 -= py/scale;
+		constrain();
 		onViewChange();
 		repaint();
 	}
@@ -67,6 +70,7 @@ public class NavView extends JPanel
 	public void setScale(double scale)
 	{
 		this.scale = scale;
+		constrain();
 		onViewChange();
 		repaint();
 	}
@@ -75,6 +79,7 @@ public class NavView extends JPanel
 		this.x0 = x0;
 		this.y0 = y0;
 		this.scale = scale;
+		//constrain();
 		onViewChange();
 		repaint();
 	}
@@ -87,7 +92,7 @@ public class NavView extends JPanel
 	public double fromViewY(double y) {return scale*(y-y0)+getHeight()/2;}
 	
 	protected float defaultStrokeWidth = 2;
-	protected AffineTransform defaultTransform = new AffineTransform();
+	protected AffineTransform defaultTransform = new AffineTransform(), viewTransform = new AffineTransform();
 	BasicStroke stroke = new BasicStroke(1);
 	@Override protected void paintChildren(Graphics _g)
 	{
@@ -98,11 +103,11 @@ public class NavView extends JPanel
 		
 		Graphics2D g = (Graphics2D)_g;
 		
-		AffineTransform transform = g.getTransform();
-		defaultTransform.setTransform(transform);
-		transform.translate(getWidth()/2-scale*x0, getHeight()/2-scale*y0);
-		transform.scale(scale, scale);
-		g.setTransform(transform);
+		viewTransform = g.getTransform();
+		defaultTransform.setTransform(viewTransform);
+		viewTransform.translate(getWidth()/2-scale*x0, getHeight()/2-scale*y0);
+		viewTransform.scale(scale, scale);
+		g.setTransform(viewTransform);
 		
 		BasicStroke stroke = new BasicStroke((float)(defaultStrokeWidth/scale));
 		g.setStroke(stroke);
@@ -110,9 +115,7 @@ public class NavView extends JPanel
 		drawView(g, scale);
 		
 		g.setTransform(defaultTransform);
-		drawComponent(g);
 	}
 	
 	protected void drawView(Graphics2D g, double pixelSize) {}
-	protected void drawComponent(Graphics2D g) {}
 }

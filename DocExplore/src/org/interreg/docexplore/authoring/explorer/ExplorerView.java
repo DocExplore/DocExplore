@@ -16,6 +16,7 @@ package org.interreg.docexplore.authoring.explorer;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
@@ -47,7 +48,7 @@ public abstract class ExplorerView extends JPanel
 	{
 		super(new WrapLayout());
 		((WrapLayout)getLayout()).setHgap(10);
-		((WrapLayout)getLayout()).setAlignOnBaseline(true);
+		//((WrapLayout)getLayout()).setAlignOnBaseline(true);
 		setBackground(Color.white);
 		
 		this.explorer = explorer;
@@ -153,7 +154,7 @@ public abstract class ExplorerView extends JPanel
 		{
 			setLayout(new WrapLayout());
 			((WrapLayout)getLayout()).setHgap(10);
-			((WrapLayout)getLayout()).setAlignOnBaseline(true);
+			//((WrapLayout)getLayout()).setAlignOnBaseline(true);
 			for (ViewItem item : items)
 				item.setForIcon(this);
 		}

@@ -45,9 +45,9 @@ import org.interreg.docexplore.authoring.BookImporter;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.gui.WrapLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.manuscript.Page;
@@ -76,9 +76,9 @@ public class ImportOptions implements BookImporter.PresentationFilter
 			this.importPanel = importPanel;
 			this.annotationName = annotationName;
 			
-			add(new JLabel(XMLResourceBundle.getBundledString("importAnnotationFilter").replace("%name", annotationName)));
-			add(shouldImportBox = new JComboBox(new Object [] {XMLResourceBundle.getBundledString("importImported"), XMLResourceBundle.getBundledString("importDiscarded")}));
-			final JLabel textStyleLabel = new JLabel(XMLResourceBundle.getBundledString("importTextStyle"));
+			add(new JLabel(Lang.s("importAnnotationFilter").replace("%name", annotationName)));
+			add(shouldImportBox = new JComboBox(new Object [] {Lang.s("importImported"), Lang.s("importDiscarded")}));
+			final JLabel textStyleLabel = new JLabel(Lang.s("importTextStyle"));
 			add(textStyleLabel);
 			Object [] styles = new Object [importPanel.importOptions.tool.styleManager.styleDialog.styles.length];
 			for (int i=0;i<styles.length;i++)
@@ -133,10 +133,10 @@ public class ImportOptions implements BookImporter.PresentationFilter
 			for (Page page : pages)
 				for (MetaData tag : page.getMetaDataListForKey(sourceLink.tagKey))
 					pageTags.add(DocExploreDataLink.getBestTagName(tag));
-			pagesPanel.add(this.emptyPageBox = new JCheckBox(XMLResourceBundle.getBundledString("importPageRegions")));
+			pagesPanel.add(this.emptyPageBox = new JCheckBox(Lang.s("importPageRegions")));
 			if (!pageTags.isEmpty())
 			{
-				pagesPanel.add(this.usePageTagsBox = new JCheckBox(XMLResourceBundle.getBundledString("importPageTags")));
+				pagesPanel.add(this.usePageTagsBox = new JCheckBox(Lang.s("importPageTags")));
 				JPanel tagPanel = new JPanel(new WrapLayout(WrapLayout.LEFT));
 				tagPanel.add(this.pageTagField = new JTextField(30));
 				Object [] availableTags = new Object [pageTags.size()+1];
@@ -158,7 +158,7 @@ public class ImportOptions implements BookImporter.PresentationFilter
 				};});}});
 				pagesPanel.add(tagPanel);
 			}
-			pagesPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("importPages")));
+			pagesPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("importPages")));
 			add(pagesPanel);
 			
 			JPanel regionsPanel = new JPanel(new LooseGridLayout(0, 1, 5, 5, false, false, SwingConstants.LEFT, SwingConstants.TOP, true, false));
@@ -167,10 +167,10 @@ public class ImportOptions implements BookImporter.PresentationFilter
 				for (Region region : page.getRegions())
 					for (MetaData tag : region.getMetaDataListForKey(sourceLink.tagKey))
 						regionTags.add(DocExploreDataLink.getBestTagName(tag));
-			regionsPanel.add(this.emptyRegionBox = new JCheckBox(XMLResourceBundle.getBundledString("importRegionAnnotations")));
+			regionsPanel.add(this.emptyRegionBox = new JCheckBox(Lang.s("importRegionAnnotations")));
 			if (!regionTags.isEmpty())
 			{
-				regionsPanel.add(this.useRegionTagsBox = new JCheckBox(XMLResourceBundle.getBundledString("importRegionTags")));
+				regionsPanel.add(this.useRegionTagsBox = new JCheckBox(Lang.s("importRegionTags")));
 				JPanel tagPanel = new JPanel(new WrapLayout(WrapLayout.LEFT));
 				tagPanel.add(this.regionTagField = new JTextField(30));
 				Object [] availableTags = new Object [regionTags.size()+1];
@@ -192,7 +192,7 @@ public class ImportOptions implements BookImporter.PresentationFilter
 				};});}});
 				regionsPanel.add(tagPanel);
 			}
-			regionsPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("importRegions")));
+			regionsPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("importRegions")));
 			add(regionsPanel);
 			
 			Set<String> keyStrings = new TreeSet<String>();
@@ -211,7 +211,7 @@ public class ImportOptions implements BookImporter.PresentationFilter
 					annotationPanels.put(annotationName, annotationPanel);
 				}
 				JScrollPane scrollPane = new JScrollPane(annotationsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-				scrollPane.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("importAnnotations")));
+				scrollPane.setBorder(BorderFactory.createTitledBorder(Lang.s("importAnnotations")));
 				scrollPane.setPreferredSize(new Dimension(800, 320));
 				add(scrollPane);
 			}
@@ -251,7 +251,7 @@ public class ImportOptions implements BookImporter.PresentationFilter
 					annotationsPanel.add(annotationPanel);
 					annotationPanels.put(annotationName, annotationPanel);
 				}
-				annotationsPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("importAnnotations")));
+				annotationsPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("importAnnotations")));
 				add(annotationsPanel);
 			}
 		}
@@ -298,16 +298,16 @@ public class ImportOptions implements BookImporter.PresentationFilter
 	public boolean showOptions(Frame parent, DocExploreDataLink sourceLink, List<Page> pages, List<Region> regions) throws DataLinkException
 	{
 		this.link = sourceLink;
-		final JDialog dialog = new JDialog(parent, XMLResourceBundle.getBundledString("importTitle"), true);
+		final JDialog dialog = new JDialog(parent, Lang.s("importTitle"), true);
 		dialog.getContentPane().setLayout(new BorderLayout());
 		if (pages != null)
 			dialog.getContentPane().add(this.importPanel = new ImportPanel(sourceLink, pages, this), BorderLayout.CENTER);
 		else dialog.getContentPane().add(this.importPanel = new ImportPanel(sourceLink, this, regions), BorderLayout.CENTER);
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		final boolean [] ok = {false};
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalOkLabel")) 
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalOkLabel")) 
 			{public void actionPerformed(ActionEvent arg0) {ok[0] = true; dialog.setVisible(false);}}));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCancelLabel")) 
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalCancelLabel")) 
 			{public void actionPerformed(ActionEvent arg0) {dialog.setVisible(false);}}));
 		dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		dialog.pack();
@@ -339,7 +339,7 @@ public class ImportOptions implements BookImporter.PresentationFilter
 
 	public boolean keepAnnotation(AnnotatedObject from, AnnotatedObject to, MetaData annotation) throws DataLinkException
 	{
-		if (from instanceof Page && annotation.getKey() == link.miniKey)
+		if (((DocExploreDataLink)from.getLink()).readOnlyKeys.contains(annotation.getKey()))
 			return true;
 		if (from instanceof MetaData && annotation.getKey().getBestName().equals("source-uri"))
 			return true;

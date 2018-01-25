@@ -60,7 +60,7 @@ import org.apache.commons.io.FileUtils;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.gui.text.TextToolbar;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 import org.interreg.docexplore.util.StringUtils;
@@ -119,7 +119,7 @@ public class ServerConfigPanel extends JPanel
 		this.bookList = new JList(new DefaultListModel());
 		
 		JPanel listPanel = new JPanel(new BorderLayout());
-		listPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("cfgBooksLabel")));
+		listPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("cfgBooksLabel")));
 		bookList.setOpaque(false);
 		bookList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		bookList.setCellRenderer(new ListCellRenderer()
@@ -156,7 +156,7 @@ public class ServerConfigPanel extends JPanel
 		listPanel.add(scrollPane, BorderLayout.CENTER);
 		
 		JPanel importPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		importPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("cfgImportLabel"))
+		importPanel.add(new JButton(new AbstractAction(Lang.s("cfgImportLabel"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -199,8 +199,8 @@ public class ServerConfigPanel extends JPanel
 		add(listPanel);
 		
 		JPanel setupPanel = new JPanel(new LooseGridLayout(0, 1, 5, 5, true, false, SwingConstants.LEFT, SwingConstants.TOP, true, false));
-		setupPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("cfgBookInfoLabel")));
-		usedBox = new JCheckBox(XMLResourceBundle.getBundledString("cfgUseLabel"));
+		setupPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("cfgBookInfoLabel")));
+		usedBox = new JCheckBox(Lang.s("cfgUseLabel"));
 		usedBox.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -216,7 +216,7 @@ public class ServerConfigPanel extends JPanel
 		setupPanel.add(usedBox);
 		
 		JPanel fieldPanel = new JPanel(new LooseGridLayout(0, 2, 5, 5, false, false, SwingConstants.LEFT, SwingConstants.TOP, true, false));
-		fieldPanel.add(new JLabel(XMLResourceBundle.getBundledString("cfgTitleLabel")));
+		fieldPanel.add(new JLabel(Lang.s("cfgTitleLabel")));
 		nameField = new JTextField(50);
 		nameField.getDocument().addDocumentListener(new DocumentListener()
 		{
@@ -233,7 +233,7 @@ public class ServerConfigPanel extends JPanel
 		});
 		fieldPanel.add(nameField);
 		
-		fieldPanel.add(new JLabel(XMLResourceBundle.getBundledString("cfgDescriptionLabel")));
+		fieldPanel.add(new JLabel(Lang.s("cfgDescriptionLabel")));
 		descField = new JTextPane();
 		//descField.setWrapStyleWord(true);
 		descField.getDocument().addDocumentListener(new DocumentListener()
@@ -255,7 +255,7 @@ public class ServerConfigPanel extends JPanel
 		
 		setupPanel.add(fieldPanel);
 		
-		exportButton = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("cfgExportLabel"))
+		exportButton = new JButton(new AbstractAction(Lang.s("cfgExportLabel"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -289,7 +289,7 @@ public class ServerConfigPanel extends JPanel
 					indexFile.delete();
 			}
 		});
-		deleteButton = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("cfgDeleteRestoreLabel"))
+		deleteButton = new JButton(new AbstractAction(Lang.s("cfgDeleteRestoreLabel"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -309,11 +309,11 @@ public class ServerConfigPanel extends JPanel
 		add(setupPanel);
 		
 		JPanel optionsPanel = new JPanel(new LooseGridLayout(0, 2, 5, 5, false, false, SwingConstants.LEFT, SwingConstants.TOP, true, false));
-		optionsPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("cfgOptionsLabel")));
+		optionsPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("cfgOptionsLabel")));
 		JPanel timeoutPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		timeoutField = new JTextField(5);
 		timeoutPanel.add(timeoutField);
-		timeoutPanel.add(new JLabel(XMLResourceBundle.getBundledString("cfgTimeoutLabel")));
+		timeoutPanel.add(new JLabel(Lang.s("cfgTimeoutLabel")));
 		optionsPanel.add(timeoutPanel);
 		add(optionsPanel);
 		

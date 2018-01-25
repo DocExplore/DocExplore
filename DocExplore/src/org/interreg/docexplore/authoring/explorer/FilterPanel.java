@@ -43,9 +43,9 @@ import javax.swing.SwingUtilities;
 import org.interreg.docexplore.authoring.BookImporter;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.manuscript.Page;
@@ -76,7 +76,7 @@ public class FilterPanel extends JButton implements BookImporter.PresentationFil
 	public FilterPanel(DocExploreDataLink link) throws DataLinkException
 	{
 		super(ImageUtils.getIcon("filter-off-24x24.png"));
-		setToolTipText(XMLResourceBundle.getBundledString("filterConfig"));
+		setToolTipText(Lang.s("filterConfig"));
 		
 		this.link = link;
 		
@@ -100,20 +100,20 @@ public class FilterPanel extends JButton implements BookImporter.PresentationFil
 		}
 		keys.addAll(keySet);
 		
-		types.add(new Pair<String, String>(XMLResourceBundle.getBundledString("filterText"), "txt") {public String toString() {return first;}});
-		types.add(new Pair<String, String>(XMLResourceBundle.getBundledString("filterImage"), "img") {public String toString() {return first;}});
-		types.add(new Pair<String, String>(XMLResourceBundle.getBundledString("filterMedia"), "vid") {public String toString() {return first;}});
+		types.add(new Pair<String, String>(Lang.s("filterText"), "txt") {public String toString() {return first;}});
+		types.add(new Pair<String, String>(Lang.s("filterImage"), "img") {public String toString() {return first;}});
+		types.add(new Pair<String, String>(Lang.s("filterMedia"), "vid") {public String toString() {return first;}});
 		
-		this.filterDialog = new JDialog(JOptionPane.getRootFrame(), XMLResourceBundle.getBundledString("filterConfig"), false);
+		this.filterDialog = new JDialog(JOptionPane.getRootFrame(), Lang.s("filterConfig"), false);
 		JPanel content = new JPanel(new LooseGridLayout(0, 1, 5, 5, false, false, SwingConstants.LEFT, SwingConstants.TOP, false, false));
 		content.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		
 		JPanel pagePanel = new JPanel(new LooseGridLayout(0, 1, 5, 5, false, false, SwingConstants.LEFT, SwingConstants.TOP, true, false));
-		pagePanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("filterPages")));
-		seeAll = new JRadioButton(XMLResourceBundle.getBundledString("filterAllPages"));
-		seeAnnotated = new JRadioButton(XMLResourceBundle.getBundledString("filterRoiPages"));
-		seeType = new JRadioButton(XMLResourceBundle.getBundledString("filterAnnotPages"));
-		seeTag = new JRadioButton(XMLResourceBundle.getBundledString("filterTagPages"));
+		pagePanel.setBorder(BorderFactory.createTitledBorder(Lang.s("filterPages")));
+		seeAll = new JRadioButton(Lang.s("filterAllPages"));
+		seeAnnotated = new JRadioButton(Lang.s("filterRoiPages"));
+		seeType = new JRadioButton(Lang.s("filterAnnotPages"));
+		seeTag = new JRadioButton(Lang.s("filterTagPages"));
 		seeAll.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) {updateButton(); notifyFilterChanged();}});
 		seeAnnotated.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) {updateButton(); notifyFilterChanged();}});
 		seeType.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) {updateButton(); notifyFilterChanged();}});
@@ -145,10 +145,10 @@ public class FilterPanel extends JButton implements BookImporter.PresentationFil
 		pagePanel.add(tagPanel);
 		
 		JPanel regionPanel = new JPanel(new LooseGridLayout(0, 1, 5, 5, false, false, SwingConstants.LEFT, SwingConstants.TOP, true, false));
-		regionPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("filterRois")));
-		importNotEmpty = new JCheckBox(XMLResourceBundle.getBundledString("filterAnnotRois"));
+		regionPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("filterRois")));
+		importNotEmpty = new JCheckBox(Lang.s("filterAnnotRois"));
 		importNotEmpty.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) {updateButton();}});
-		importKey = new JCheckBox(XMLResourceBundle.getBundledString("filterTagRois"));
+		importKey = new JCheckBox(Lang.s("filterTagRois"));
 		importKey.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) {
 			if (!seeAll.isSelected()) notifyFilterChanged(); updateButton();}});
 		

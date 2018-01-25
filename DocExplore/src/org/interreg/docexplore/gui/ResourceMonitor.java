@@ -28,7 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 
 @SuppressWarnings("serial")
 public class ResourceMonitor extends JDialog
@@ -81,7 +81,7 @@ public class ResourceMonitor extends JDialog
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		buttonPanel.add(new JButton(new AbstractAction("GC") {public void actionPerformed(ActionEvent e) 
 			{System.gc();}}));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("dialogCloseLabel")) {public void actionPerformed(ActionEvent e) 
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("dialogCloseLabel")) {public void actionPerformed(ActionEvent e) 
 			{setVisible(false);}}));
 		add(buttonPanel, BorderLayout.SOUTH);
 		

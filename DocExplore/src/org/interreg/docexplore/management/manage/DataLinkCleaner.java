@@ -22,11 +22,11 @@ import java.util.TreeSet;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.MainWindow;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.manuscript.Page;
@@ -48,7 +48,7 @@ public class DataLinkCleaner implements ProgressRunnable
 		{
 			DocExploreDataLink link = win.getDocExploreLink();
 			if (link == null || link.getLink() == null)
-				throw new Exception(XMLResourceBundle.getBundledString("cleanLinkNoConnection"));
+				throw new Exception(Lang.s("cleanLinkNoConnection"));
 			
 			Set<Integer> referencedIds = getAllReferencedMetaDataIds(link);
 			Set<Integer> allIds = new TreeSet<Integer>();

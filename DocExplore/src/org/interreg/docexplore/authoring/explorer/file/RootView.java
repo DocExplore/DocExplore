@@ -23,7 +23,7 @@ import javax.swing.Icon;
 import org.interreg.docexplore.authoring.explorer.Explorer;
 import org.interreg.docexplore.authoring.explorer.ExplorerView;
 import org.interreg.docexplore.authoring.explorer.ViewItem;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.ImageUtils;
 
 @SuppressWarnings("serial")
@@ -34,7 +34,7 @@ public class RootView extends ExplorerView
 	{
 		super(explorer);
 		
-		msg = XMLResourceBundle.getBundledString("helpLocalMsg");
+		msg = Lang.s("helpLocalMsg");
 	}
 
 	public boolean canHandle(String path) throws Exception

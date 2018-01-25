@@ -43,7 +43,7 @@ import org.apache.commons.io.FileUtils;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.FileDialogs;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.nfd.JNativeFileDialog;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
@@ -98,7 +98,7 @@ public class DocExploreTool
 		if (file[0] == null)
 		{
 			//JOptionPane.showMessageDialog(null, "Test the default font too see the difference.\nAnd the line spacing.");
-			file[0] = askForHome(XMLResourceBundle.getBundledString("chooseHomeMessage"));
+			file[0] = askForHome(Lang.s("chooseHomeMessage"));
 			if (file[0] == null)
 				System.exit(0);
 		}
@@ -171,7 +171,7 @@ public class DocExploreTool
 	protected static File askForHome(String text)
 	{
 		final File [] file = {null};
-		final JDialog dialog = new JDialog((Frame)null, XMLResourceBundle.getBundledString("homeLabel"), true);
+		final JDialog dialog = new JDialog((Frame)null, Lang.s("homeLabel"), true);
 		JPanel content = new JPanel(new LooseGridLayout(0, 1, 10, 10, true, false, SwingConstants.CENTER, SwingConstants.TOP, true, false));
 		content.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 		JLabel message = new JLabel(text, ImageUtils.getIcon("free-64x64.png"), SwingConstants.LEFT);
@@ -180,10 +180,10 @@ public class DocExploreTool
 		content.add(message);
 		
 		final JPanel pathPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-		pathPanel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("homeLabel")+":</b></html>"));
+		pathPanel.add(new JLabel("<html><b>"+Lang.s("homeLabel")+":</b></html>"));
 		final JTextField pathField = new JTextField(System.getProperty("user.home")+File.separator+"DocExplore", 40);
 		pathPanel.add(pathField);
-		pathPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("browseLabel"))
+		pathPanel.add(new JButton(new AbstractAction(Lang.s("browseLabel"))
 		{
 			JNativeFileDialog nfd = null;
 			public void actionPerformed(ActionEvent arg0)
@@ -194,7 +194,7 @@ public class DocExploreTool
 					nfd.acceptFiles = false;
 					nfd.acceptFolders = true;
 					nfd.multipleSelection = false;
-					nfd.title = XMLResourceBundle.getBundledString("homeLabel");
+					nfd.title = Lang.s("homeLabel");
 				}
 				nfd.setCurrentFile(new File(pathField.getText()));
 				if (nfd.showOpenDialog())
@@ -204,18 +204,18 @@ public class DocExploreTool
 		content.add(pathPanel);
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("cfgOkLabel")) {public void actionPerformed(ActionEvent e)
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("cfgOkLabel")) {public void actionPerformed(ActionEvent e)
 		{
 			File res = new File(pathField.getText());
 			if (res.exists() && !res.isDirectory() || !res.exists() && !res.mkdirs())
-				JOptionPane.showMessageDialog(dialog, XMLResourceBundle.getBundledString("homeErrorMessage"), XMLResourceBundle.getBundledString("errorLabel"), JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(dialog, Lang.s("homeErrorMessage"), Lang.s("errorLabel"), JOptionPane.ERROR_MESSAGE);
 			else
 			{
 				file[0] = res;
 				dialog.setVisible(false);
 			}
 		}}));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("cfgCancelLabel")) {public void actionPerformed(ActionEvent e) {dialog.setVisible(false);}}));
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("cfgCancelLabel")) {public void actionPerformed(ActionEvent e) {dialog.setVisible(false);}}));
 		content.add(buttonPanel);
 		
 		dialog.getContentPane().add(content);

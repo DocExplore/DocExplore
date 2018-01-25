@@ -25,7 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.interreg.docexplore.gui.WrapLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 
 @SuppressWarnings("serial")
 public class PluginParameterPanel extends JPanel
@@ -36,8 +36,8 @@ public class PluginParameterPanel extends JPanel
 		
 		add(new JScrollPane(area = new JTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
 		JPanel helpPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
-		helpPanel.add(new JLabel(XMLResourceBundle.getBundledString("pluginParameterFirstMessage")));
-		helpPanel.add(new JLabel(XMLResourceBundle.getBundledString("pluginParameterSecondMessage")));
+		helpPanel.add(new JLabel(Lang.s("pluginParameterFirstMessage")));
+		helpPanel.add(new JLabel(Lang.s("pluginParameterSecondMessage")));
 		add(helpPanel, BorderLayout.SOUTH);
 	}
 	

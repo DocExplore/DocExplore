@@ -45,9 +45,9 @@ import javax.swing.border.BevelBorder;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.process.MetaDataKeyBox;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.util.GuiUtils;
 
@@ -79,7 +79,7 @@ public class ExportDialog extends JDialog
 	
 	public ExportDialog(DocExploreDataLink link) throws DataLinkException
 	{
-		super((Frame)null, XMLResourceBundle.getBundledString("exportTitleLabel"), true);
+		super((Frame)null, Lang.s("exportTitleLabel"), true);
 		
 		setLayout(new BorderLayout());
 		this.pages = null;
@@ -89,14 +89,14 @@ public class ExportDialog extends JDialog
 		//JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		
 		JPanel areaPanel = new JPanel(new LooseGridLayout(0, 1, 10, 10, true, false));
-		areaPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("exportAreaLabel")));
-		areaPanel.add(areaPage = new JRadioButton(XMLResourceBundle.getBundledString("exportAreaPageLabel")));
-		areaPanel.add(areaRoi = new JRadioButton(XMLResourceBundle.getBundledString("exportAreaRoiLabel")));
+		areaPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("exportAreaLabel")));
+		areaPanel.add(areaPage = new JRadioButton(Lang.s("exportAreaPageLabel")));
+		areaPanel.add(areaRoi = new JRadioButton(Lang.s("exportAreaRoiLabel")));
 		JPanel areaRoiPanel = new JPanel(new LooseGridLayout(0, 1, 10, 10, true, false));
 		//areaRoiPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
 		areaRoiPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-		areaRoiPanel.add(areaAllRois = new JRadioButton(XMLResourceBundle.getBundledString("exportAllRoisLabel")));
-		areaRoiPanel.add(areaTaggedRois = new JRadioButton(XMLResourceBundle.getBundledString("exportTaggedRoisLabel")));
+		areaRoiPanel.add(areaAllRois = new JRadioButton(Lang.s("exportAllRoisLabel")));
+		areaRoiPanel.add(areaTaggedRois = new JRadioButton(Lang.s("exportTaggedRoisLabel")));
 		areaTaggedRois.setEnabled(false);
 		areaRoiTags = new TagArea();
 		//areaRoiTags.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
@@ -105,17 +105,17 @@ public class ExportDialog extends JDialog
 		mainPanel.add(areaPanel);
 		
 		JPanel contentPanel = new JPanel(new LooseGridLayout(0, 1, 10, 10, true, false));
-		contentPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("exportContentLabel")));
-		contentPanel.add(contentPage = new JRadioButton(XMLResourceBundle.getBundledString("exportContentPageLabel")));
-		contentPanel.add(contentAnnotation = new JRadioButton(XMLResourceBundle.getBundledString("exportContentAnnotationLabel")));
+		contentPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("exportContentLabel")));
+		contentPanel.add(contentPage = new JRadioButton(Lang.s("exportContentPageLabel")));
+		contentPanel.add(contentAnnotation = new JRadioButton(Lang.s("exportContentAnnotationLabel")));
 		JPanel contentAnnotationPanel = new JPanel(new LooseGridLayout(0, 1, 10, 10, true, false));
 		//contentAnnotationPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
 		contentAnnotationPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
 		JPanel contentFieldPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		contentFieldPanel.add(contentAnnotationField = new JRadioButton(XMLResourceBundle.getBundledString("exportAnnotationFieldNameLabel")));
+		contentFieldPanel.add(contentAnnotationField = new JRadioButton(Lang.s("exportAnnotationFieldNameLabel")));
 		contentFieldPanel.add(contentAnnotationFieldName = new MetaDataKeyBox(link, true));
 		contentAnnotationPanel.add(contentFieldPanel);
-		contentAnnotationPanel.add(contentAnnotationTag = new JRadioButton(XMLResourceBundle.getBundledString("exportAnnotationTagLabel")));
+		contentAnnotationPanel.add(contentAnnotationTag = new JRadioButton(Lang.s("exportAnnotationTagLabel")));
 		contentAnnotationTags = new TagArea();
 		//contentAnnotationTags.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
 		contentAnnotationPanel.add(contentAnnotationTags);
@@ -123,24 +123,24 @@ public class ExportDialog extends JDialog
 		mainPanel.add(contentPanel);
 		
 		JPanel labelPanel = new JPanel(new LooseGridLayout(0, 1, 10, 10, true, false));
-		labelPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("exportLabelLabel")));
-		labelPanel.add(labelNone = new JRadioButton(XMLResourceBundle.getBundledString("exportLabelNoneLabel")));
+		labelPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("exportLabelLabel")));
+		labelPanel.add(labelNone = new JRadioButton(Lang.s("exportLabelNoneLabel")));
 		JPanel labelFilePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		labelFilePanel.add(labelFile = new JRadioButton(XMLResourceBundle.getBundledString("exportLabelFileLabel")));
+		labelFilePanel.add(labelFile = new JRadioButton(Lang.s("exportLabelFileLabel")));
 		labelFilePanel.add(labelFileName = new JTextField(20));
 		labelPanel.add(labelFilePanel);
 		JPanel labelSourcePanel = new JPanel(new LooseGridLayout(0, 1, 10, 10, true, false));
 		//labelSourcePanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
 		labelSourcePanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-		labelSourcePanel.add(labelTranscription = new JRadioButton(XMLResourceBundle.getBundledString("exportTranscriptionLabelsLabel")));
+		labelSourcePanel.add(labelTranscription = new JRadioButton(Lang.s("exportTranscriptionLabelsLabel")));
 		labelTranscriptionTags = new TagArea();
 		//labelTranscriptionTags.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
 		labelSourcePanel.add(labelTranscriptionTags);
 		JPanel labelAnnotationFieldPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		labelAnnotationFieldPanel.add(labelAnnotationField = new JRadioButton(XMLResourceBundle.getBundledString("exportAnnotationFieldLabelsLabel")));
+		labelAnnotationFieldPanel.add(labelAnnotationField = new JRadioButton(Lang.s("exportAnnotationFieldLabelsLabel")));
 		labelAnnotationFieldPanel.add(labelAnnotationFieldName = new MetaDataKeyBox(link, true));
 		labelSourcePanel.add(labelAnnotationFieldPanel);
-		labelSourcePanel.add(labelAnnotationTag = new JRadioButton(XMLResourceBundle.getBundledString("exportAnnotationTagLabelsLabel")));
+		labelSourcePanel.add(labelAnnotationTag = new JRadioButton(Lang.s("exportAnnotationTagLabelsLabel")));
 		labelAnnotationTags = new TagArea();
 		//labelAnnotationTags.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
 		labelSourcePanel.add(labelAnnotationTags);
@@ -148,11 +148,11 @@ public class ExportDialog extends JDialog
 		mainPanel.add(labelPanel);
 		
 		JPanel generalPanel = new JPanel(new LooseGridLayout(0, 1, 10, 10, true, false));
-		generalPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("exportGeneralLabel")));
+		generalPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("exportGeneralLabel")));
 		JPanel generalFolderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		generalFolderPanel.add(new JLabel(XMLResourceBundle.getBundledString("exportFolderLabel")));
+		generalFolderPanel.add(new JLabel(Lang.s("exportFolderLabel")));
 		generalFolderPanel.add(folderName = new JTextField(30));
-		generalFolderPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalBrowseLabel"))
+		generalFolderPanel.add(new JButton(new AbstractAction(Lang.s("generalBrowseLabel"))
 		{
 			JFileChooser chooser = new JFileChooser() {public boolean accept(File f) {return f.isDirectory();}};
 			public void actionPerformed(ActionEvent arg0)
@@ -168,18 +168,18 @@ public class ExportDialog extends JDialog
 		}));
 		generalPanel.add(generalFolderPanel);
 		JPanel generalFormatPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		generalFormatPanel.add(new JLabel(XMLResourceBundle.getBundledString("exportFormatLabel")));
+		generalFormatPanel.add(new JLabel(Lang.s("exportFormatLabel")));
 		generalFormatPanel.add(imageFormat = new JComboBox(new Object [] {"PNG", "JPG"}));
 		generalPanel.add(generalFormatPanel);
 		JPanel generalFillPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		generalFillPanel.add(new JLabel(XMLResourceBundle.getBundledString("exportFillLabel")));
-		generalFillPanel.add(fillBlack = new JRadioButton(XMLResourceBundle.getBundledString("exportFillBlackLabel")));
-		generalFillPanel.add(fillWhite = new JRadioButton(XMLResourceBundle.getBundledString("exportFillWhiteLabel")));
+		generalFillPanel.add(new JLabel(Lang.s("exportFillLabel")));
+		generalFillPanel.add(fillBlack = new JRadioButton(Lang.s("exportFillBlackLabel")));
+		generalFillPanel.add(fillWhite = new JRadioButton(Lang.s("exportFillWhiteLabel")));
 		generalPanel.add(generalFillPanel);
 		mainPanel.add(generalPanel);
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("exportExportLabel")) {
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("exportExportLabel")) {
 			public void actionPerformed(ActionEvent e)
 			{
 				if (pages == null)
@@ -187,7 +187,7 @@ public class ExportDialog extends JDialog
 				
 				final JDialog dialog = new JDialog(JOptionPane.getRootFrame(), true);
 				dialog.setUndecorated(true);
-				dialog.add(new JLabel(XMLResourceBundle.getBundledString("exportExportingLabel")), BorderLayout.NORTH);
+				dialog.add(new JLabel(Lang.s("exportExportingLabel")), BorderLayout.NORTH);
 				final JProgressBar progress = new JProgressBar(JProgressBar.HORIZONTAL, 0, 100);
 				dialog.add(progress, BorderLayout.SOUTH);
 				dialog.pack();
@@ -218,7 +218,7 @@ public class ExportDialog extends JDialog
 				
 				dialog.setVisible(true);
 			}}));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCloseLabel")) {
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalCloseLabel")) {
 			public void actionPerformed(ActionEvent e)
 				{setVisible(false);}}));
 		

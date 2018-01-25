@@ -186,7 +186,10 @@ public class TextElement extends InfoElement
 			return;
 		textPane.setPreferredSize(new Dimension(textPane.getWidth(), preferredHeight())); 
 		if (getParent() != null)
+		{
 			getParent().validate();
+			repaint();
+		}
 	}
 	
 	static Java2DRenderer jr = new Java2DRenderer();

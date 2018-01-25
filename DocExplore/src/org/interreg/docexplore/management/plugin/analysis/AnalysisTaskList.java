@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.StringUtils;
 
@@ -55,17 +55,17 @@ public class AnalysisTaskList extends JPanel
 			setBorder(BorderFactory.createLineBorder(Color.black, 2));
 			
 			JPanel infoPanel = new JPanel(new LooseGridLayout(0, 2, 5, 5, false, false, SwingConstants.LEFT, SwingConstants.LEFT, false, false));
-			infoPanel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("pluginTaskPluginLabel")+"</b></html>"));
+			infoPanel.add(new JLabel("<html><b>"+Lang.s("pluginTaskPluginLabel")+"</b></html>"));
 			infoPanel.add(new JLabel(task.plugin.getName()));
-			infoPanel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("pluginTaskTaskLabel")+"</b></html>"));
+			infoPanel.add(new JLabel("<html><b>"+Lang.s("pluginTaskTaskLabel")+"</b></html>"));
 			infoPanel.add(new JLabel(task.plugin.getTasks()[task.task]));
-			infoPanel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("pluginTaskStatusLabel")+"</b></html>"));
+			infoPanel.add(new JLabel("<html><b>"+Lang.s("pluginTaskStatusLabel")+"</b></html>"));
 			infoPanel.add(status = new JLabel());
-			infoPanel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("pluginTaskTimeLabel")+"</b></html>"));
+			infoPanel.add(new JLabel("<html><b>"+Lang.s("pluginTaskTimeLabel")+"</b></html>"));
 			infoPanel.add(time = new JLabel());
 			
 			JPanel resultPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			results = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("pluginResultLabel"))
+			results = new JButton(new AbstractAction(Lang.s("pluginResultLabel"))
 			{
 				public void actionPerformed(ActionEvent e)
 				{
@@ -84,7 +84,7 @@ public class AnalysisTaskList extends JPanel
 			});
 			results.setEnabled(false);
 			resultPanel.add(results);
-			resultPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCloseLabel"))
+			resultPanel.add(new JButton(new AbstractAction(Lang.s("generalCloseLabel"))
 			{
 				public void actionPerformed(ActionEvent e)
 				{
@@ -101,10 +101,10 @@ public class AnalysisTaskList extends JPanel
 		public void update()
 		{
 			String customStatus = task.customStatus;
-			status.setText(!task.started ? XMLResourceBundle.getBundledString("pluginTaskPendingLabel") : 
-				!task.completed ? (customStatus != null ? customStatus : XMLResourceBundle.getBundledString("pluginTaskRunningLabel")) : 
-				!task.success ? XMLResourceBundle.getBundledString("pluginTaskCanceledLabel") : 
-				XMLResourceBundle.getBundledString("pluginTaskCompletedLabel"));
+			status.setText(!task.started ? Lang.s("pluginTaskPendingLabel") : 
+				!task.completed ? (customStatus != null ? customStatus : Lang.s("pluginTaskRunningLabel")) : 
+				!task.success ? Lang.s("pluginTaskCanceledLabel") : 
+				Lang.s("pluginTaskCompletedLabel"));
 			long timeVal = !task.started ? -1 : !task.completed ? System.currentTimeMillis()-task.startTime : task.endTime-task.startTime;
 			time.setText(timeVal < 0 ? "" : StringUtils.formatMillis(timeVal, true));
 			results.setEnabled(task.completed);

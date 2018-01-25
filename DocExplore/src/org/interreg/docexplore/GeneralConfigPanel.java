@@ -46,7 +46,7 @@ import javax.swing.SwingConstants;
 import org.apache.commons.io.FileUtils;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.plugin.analysis.AnalysisPlugin;
 import org.interreg.docexplore.management.plugin.metadata.MetaDataPlugin;
 import org.interreg.docexplore.reader.plugin.ClientPlugin;
@@ -78,7 +78,7 @@ public class GeneralConfigPanel extends JPanel
 			this.jarName = jarName;
 			setBorder(BorderFactory.createEtchedBorder());
 			boolean exists = new File(DocExploreTool.getPluginDir(), jarName).exists();
-			usePlugin = new JCheckBox(jarName+(exists ? "" : " ("+XMLResourceBundle.getBundledString("cfgMissingFileLabel")+")"));
+			usePlugin = new JCheckBox(jarName+(exists ? "" : " ("+Lang.s("cfgMissingFileLabel")+")"));
 			usePlugin.setEnabled(exists);
 			add(usePlugin);
 //			add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("cfgRemoveLabel")) {public void actionPerformed(ActionEvent e)
@@ -184,19 +184,19 @@ public class GeneralConfigPanel extends JPanel
 //		}
 		
 		JPanel display = new JPanel(new LooseGridLayout(0, 1, 5, 5, false, true, SwingConstants.LEFT, SwingConstants.TOP));
-		display.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("cfgDisplayLabel")));
+		display.setBorder(BorderFactory.createTitledBorder(Lang.s("cfgDisplayLabel")));
 		JPanel displayDims = new JPanel(new LooseGridLayout(0, 2, 5, 5, false, true, SwingConstants.LEFT, SwingConstants.TOP));
-		displayDims.add(new JLabel(XMLResourceBundle.getBundledString("cfgWidthLabel"))); displayDims.add(displayWidth = new JTextField(5));
-		displayDims.add(new JLabel(XMLResourceBundle.getBundledString("cfgHeightLabel"))); displayDims.add(displayHeight = new JTextField(5));
-		displayDims.add(new JLabel(XMLResourceBundle.getBundledString("cfgLanguageLabel"))); displayDims.add(displayLang = new JComboBox(new Object [] {
-			XMLResourceBundle.getBundledString("cfgEnglishLabel"), XMLResourceBundle.getBundledString("cfgFrenchLabel")}));
-		display.add(displayHelp = new JCheckBox(XMLResourceBundle.getBundledString("cfgHelpLabel")));
-		display.add(displayFullscreen = new JCheckBox(XMLResourceBundle.getBundledString("cfgFullscreenLabel")));
-		display.add(displayNativeCursor = new JCheckBox(XMLResourceBundle.getBundledString("cfgUseCursorLabel")));
+		displayDims.add(new JLabel(Lang.s("cfgWidthLabel"))); displayDims.add(displayWidth = new JTextField(5));
+		displayDims.add(new JLabel(Lang.s("cfgHeightLabel"))); displayDims.add(displayHeight = new JTextField(5));
+		displayDims.add(new JLabel(Lang.s("cfgLanguageLabel"))); displayDims.add(displayLang = new JComboBox(new Object [] {
+			Lang.s("cfgEnglishLabel"), Lang.s("cfgFrenchLabel")}));
+		display.add(displayHelp = new JCheckBox(Lang.s("cfgHelpLabel")));
+		display.add(displayFullscreen = new JCheckBox(Lang.s("cfgFullscreenLabel")));
+		display.add(displayNativeCursor = new JCheckBox(Lang.s("cfgUseCursorLabel")));
 		display.add(displayDims);
 		
 		JPanel topPluginsPanel = new JPanel(new LooseGridLayout(0, 1, 5, 5, true, true, SwingConstants.LEFT, SwingConstants.TOP));
-		topPluginsPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("cfgPluginsLabel")));
+		topPluginsPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("cfgPluginsLabel")));
 		pluginsPanel = new JPanel(new LooseGridLayout(0, 1, 5, 5, true, false, SwingConstants.LEFT, SwingConstants.TOP, true, false));
 		JScrollPane scrollPane = new JScrollPane(pluginsPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setPreferredSize(new Dimension(500, 300));
@@ -204,11 +204,11 @@ public class GeneralConfigPanel extends JPanel
 		topPluginsPanel.add(scrollPane);
 		
 		JPanel addPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		addPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("cfgAddPluginLabel")) {public void actionPerformed(ActionEvent e)
+		addPanel.add(new JButton(new AbstractAction(Lang.s("cfgAddPluginLabel")) {public void actionPerformed(ActionEvent e)
 		{
 			try
 			{
-				JOptionPane.showMessageDialog(GeneralConfigPanel.this, XMLResourceBundle.getBundledString("cfgAddPluginMessage").replace("%pdir", DocExploreTool.getPluginDir().getAbsolutePath()));
+				JOptionPane.showMessageDialog(GeneralConfigPanel.this, Lang.s("cfgAddPluginMessage").replace("%pdir", DocExploreTool.getPluginDir().getAbsolutePath()));
 				if (System.getProperty("os.name").toLowerCase().contains("win"))
 					Runtime.getRuntime().exec(new String [] {"explorer", DocExploreTool.getPluginDir().getAbsolutePath()});
 				else if (System.getProperty("os.name").toLowerCase().contains("mac"))
@@ -223,7 +223,7 @@ public class GeneralConfigPanel extends JPanel
 //			pluginsPanel.add(pluginPanel);
 //			((Window)getTopLevelAncestor()).pack();
 		}}));
-		addPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("cfgRefreshPluginsLabel")) {public void actionPerformed(ActionEvent e)
+		addPanel.add(new JButton(new AbstractAction(Lang.s("cfgRefreshPluginsLabel")) {public void actionPerformed(ActionEvent e)
 		{
 			refreshPlugins(xml);
 			((Window)getTopLevelAncestor()).pack();
@@ -236,7 +236,7 @@ public class GeneralConfigPanel extends JPanel
 		add(display);
 		add(topPluginsPanel);
 		
-		add(safeMode = new JCheckBox(XMLResourceBundle.getBundledString("cfgSafeModeLabel")));
+		add(safeMode = new JCheckBox(Lang.s("cfgSafeModeLabel")));
 		
 //		autoConnectType.addItemListener(new ItemListener() {public void itemStateChanged(ItemEvent e)
 //		{
@@ -357,7 +357,7 @@ public class GeneralConfigPanel extends JPanel
 					break;
 				dest = new File(pluginDir, file.getName());
 				if (!dest.exists() || file.equals(dest) || JOptionPane.showConfirmDialog(this, 
-					XMLResourceBundle.getBundledString("cfgReplacePluginMessage"), XMLResourceBundle.getBundledString("cfgAddPluginLabel"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+					Lang.s("cfgReplacePluginMessage"), Lang.s("cfgAddPluginLabel"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
 						from = file;
 			}
 			if (from == null)
@@ -439,11 +439,11 @@ public class GeneralConfigPanel extends JPanel
 			if (width != null) displayWidth.setText(width);
 			if (height != null) displayHeight.setText(height);
 			if (lang != null && lang.toLowerCase().contains("fr"))
-				displayLang.setSelectedItem(XMLResourceBundle.getBundledString("cfgFrenchLabel"));
+				displayLang.setSelectedItem(Lang.s("cfgFrenchLabel"));
 			else
 			{
-				displayLang.setSelectedItem(Locale.getDefault().getLanguage().toLowerCase().contains("fr") ? XMLResourceBundle.getBundledString("cfgFrenchLabel") :
-					XMLResourceBundle.getBundledString("cfgEnglishLabel"));
+				displayLang.setSelectedItem(Locale.getDefault().getLanguage().toLowerCase().contains("fr") ? Lang.s("cfgFrenchLabel") :
+					Lang.s("cfgEnglishLabel"));
 			}
 			displayHelp.setSelected(help != null && StringUtils.getBoolean(help));
 			displayFullscreen.setSelected(fs != null && StringUtils.getBoolean(fs));
@@ -452,8 +452,8 @@ public class GeneralConfigPanel extends JPanel
 		else
 		{
 			displayNativeCursor.setSelected(true);
-			displayLang.setSelectedItem(Locale.getDefault().getLanguage().toLowerCase().contains("fr") ? XMLResourceBundle.getBundledString("cfgFrenchLabel") :
-				XMLResourceBundle.getBundledString("cfgEnglishLabel"));
+			displayLang.setSelectedItem(Locale.getDefault().getLanguage().toLowerCase().contains("fr") ? Lang.s("cfgFrenchLabel") :
+				Lang.s("cfgEnglishLabel"));
 		}
 		
 		refreshPlugins(xml);
@@ -496,7 +496,7 @@ public class GeneralConfigPanel extends JPanel
 		sb.append(StringUtils.getTagContent(xml, "autoconnect"));
 		sb.append("</autoconnect>\n");
 		
-		sb.append("\n\t<display>\n\t\t<lang>").append(displayLang.getSelectedItem().equals(XMLResourceBundle.getBundledString("cfgEnglishLabel")) ? "en" : "fr").append("</lang>\n\t\t<width>").
+		sb.append("\n\t<display>\n\t\t<lang>").append(displayLang.getSelectedItem().equals(Lang.s("cfgEnglishLabel")) ? "en" : "fr").append("</lang>\n\t\t<width>").
 			append(displayWidth.getText()).append("</width>\n\t\t<height>").
 			append(displayHeight.getText()).append("</height>\n\t\t<help>").
 			append(displayHelp.isSelected() ? "yes" : "no").append("</help>\n\t\t<fullscreen>").

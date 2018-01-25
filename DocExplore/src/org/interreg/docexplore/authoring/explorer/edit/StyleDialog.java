@@ -58,7 +58,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.gui.text.TextToolbar;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -81,7 +81,7 @@ public class StyleDialog extends JDialog
 	boolean sendEvents = true, sizeEditing = false;
 	public StyleDialog(Style [] styles)
 	{
-		super((Frame)null, XMLResourceBundle.getBundledString("styleEdit"), true);
+		super((Frame)null, Lang.s("styleEdit"), true);
 		setLayout(new BorderLayout());
 		
 		preview = new JLabel("", SwingConstants.CENTER);
@@ -89,11 +89,11 @@ public class StyleDialog extends JDialog
 		preview.setOpaque(true);
 		preview.setBackground(Color.black);
 		JPanel previewPanel = new JPanel(new BorderLayout());
-		previewPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("stylePreview")));
+		previewPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("stylePreview")));
 		previewPanel.add(preview);
 		
 		JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		namePanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("styleName")));
+		namePanel.setBorder(BorderFactory.createTitledBorder(Lang.s("styleName")));
 		name = new JTextField(40);
 		name.getDocument().addDocumentListener(new DocumentListener()
 		{
@@ -114,7 +114,7 @@ public class StyleDialog extends JDialog
 		colorPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.colorChooser = new JColorChooser();
 		final JDialog colorDialog = JColorChooser.createDialog(StyleDialog.this, 
-			XMLResourceBundle.getBundledString("bgcolorPropertyName"), true, colorChooser, 
+			Lang.s("bgcolorPropertyName"), true, colorChooser, 
 			new ActionListener() {public void actionPerformed(ActionEvent e) 
 				{colorPanel.setBackground(colorChooser.getColor()); synchronizeStyle((Style)styleList.getSelectedValue());}}, 
 			new ActionListener() {public void actionPerformed(ActionEvent e) {}});
@@ -130,7 +130,7 @@ public class StyleDialog extends JDialog
 		});
 		
 		JPanel fontPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		fontPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("styleFont")));
+		fontPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("styleFont")));
 		this.fontBox = new JComboBox(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
 		fontBox.addItemListener(new ItemListener() {public void itemStateChanged(ItemEvent e) 
 			{if (e.getStateChange() != ItemEvent.SELECTED) return; synchronizeStyle((Style)styleList.getSelectedValue());}});
@@ -155,7 +155,7 @@ public class StyleDialog extends JDialog
 		fontPanel.add(colorPanel);
 		
 		JPanel settingsPanel = new JPanel(new LooseGridLayout(0, 1, 5, 5, true, false, SwingConstants.LEFT, SwingConstants.TOP, false, false));
-		settingsPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("styleSettings")));
+		settingsPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("styleSettings")));
 		settingsPanel.add(namePanel);
 		settingsPanel.add(fontPanel);
 		
@@ -186,7 +186,7 @@ public class StyleDialog extends JDialog
 				Style style = (Style)styleList.getSelectedValue();
 				if (style == null)
 					return;
-				preview.setText(style.apply(XMLResourceBundle.getBundledString("styleTest")));
+				preview.setText(style.apply(Lang.s("styleTest")));
 				
 				sendEvents = false;
 				name.setText(style.name);
@@ -225,14 +225,14 @@ public class StyleDialog extends JDialog
 //		}}));
 		
 		JPanel stylePanel = new JPanel(new BorderLayout());
-		stylePanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("styleStyles")));
+		stylePanel.setBorder(BorderFactory.createTitledBorder(Lang.s("styleStyles")));
 		JScrollPane scrollPane = new JScrollPane(styleList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setPreferredSize(new Dimension(200, 300));
 		stylePanel.add(scrollPane, BorderLayout.NORTH);
 //		stylePanel.add(styleButtonPanel, BorderLayout.SOUTH);
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("styleClose")) {public void actionPerformed(ActionEvent e)
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("styleClose")) {public void actionPerformed(ActionEvent e)
 		{
 			StyleDialog.this.setVisible(false);
 			notifyListeners();
@@ -321,7 +321,7 @@ public class StyleDialog extends JDialog
 		styleList.setFixedCellHeight(0); styleList.setFixedCellWidth(0);
 		styleList.setFixedCellHeight(-1); styleList.setFixedCellWidth(-1);
 		pack();
-		preview.setText(style.apply(XMLResourceBundle.getBundledString("styleTest")));
+		preview.setText(style.apply(Lang.s("styleTest")));
 	}
 	
 	public static Style [] editStyles(Component owner, Style [] styles)

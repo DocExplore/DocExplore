@@ -23,7 +23,7 @@ import javax.swing.JTextArea;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -58,7 +58,7 @@ public class FreeTextEditor extends AnnotationEditor
 			JPanel contentPanel = new JPanel(new BorderLayout());
 			contentPanel.setOpaque(false);
 			contentPanel.setBorder(BorderFactory.createTitledBorder(
-				XMLResourceBundle.getBundledString("transcriptEditorContentLabel")));
+				Lang.s("transcriptEditorContentLabel")));
 			contentArea.setLineWrap(true);
 			contentArea.setEditable(!readOnly);
 			contentPanel.add(new JScrollPane(contentArea, 

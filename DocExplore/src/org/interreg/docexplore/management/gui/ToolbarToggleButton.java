@@ -20,8 +20,8 @@ import java.awt.event.ActionListener;
 import javax.swing.Icon;
 
 import org.interreg.docexplore.gui.IconToggleButton;
-import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.util.ImageUtils;
 
 public class ToolbarToggleButton extends IconToggleButton implements MainWindow.MainWindowListener

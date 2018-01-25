@@ -33,7 +33,7 @@ import javax.swing.SwingConstants;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.search.SearchHandler.SearchSummary;
 
 public class ResultPanel extends JPanel
@@ -78,7 +78,7 @@ public class ResultPanel extends JPanel
 		
 		JPanel buttonPanel = new JPanel(new LooseGridLayout(1, 2, 5, 5, false, false, 
 			SwingConstants.LEFT, SwingConstants.TOP, false, false));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCloseLabel")) {
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalCloseLabel")) {
 			private static final long serialVersionUID = 1L;
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -87,7 +87,7 @@ public class ResultPanel extends JPanel
 			}
 		}));
 		navigationPanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-		linePanel.add(new JLabel(XMLResourceBundle.getBundledString("noResultsMsg")));
+		linePanel.add(new JLabel(Lang.s("noResultsMsg")));
 		
 		add(linePanel);
 		add(navigationPanel);
@@ -181,7 +181,7 @@ public class ResultPanel extends JPanel
 		this.offset = offset;
 		
 		if (results == null)
-			linePanel.add(new JLabel(XMLResourceBundle.getBundledString("noResultsMsg")));
+			linePanel.add(new JLabel(Lang.s("noResultsMsg")));
 		else for (int i=offset;i<offset+limit;i++)
 			if (i < results.size())
 		{

@@ -34,7 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.ImageUtils;
 
 public class DockableDialog extends JDialog
@@ -63,7 +63,7 @@ public class DockableDialog extends JDialog
 		dockPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
 		dockPanel.setOpaque(false);
 		final JToggleButton dockButton = new JToggleButton(ImageUtils.getIcon("pin-16x18.png"));
-		dockButton.setToolTipText(XMLResourceBundle.getBundledString("dialogDockingLabel"));
+		dockButton.setToolTipText(Lang.s("dialogDockingLabel"));
 		dockButton.setSelected(true);
 		dockButton.addActionListener(new ActionListener()
 		{

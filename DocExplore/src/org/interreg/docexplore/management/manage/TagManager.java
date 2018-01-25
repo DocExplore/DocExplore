@@ -35,11 +35,11 @@ import javax.swing.event.ListSelectionListener;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.MainWindow;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
@@ -79,8 +79,8 @@ public class TagManager extends JPanel
 				{
 					final MetaData mergeTo = model.tags.get(table.getSelectedRow());
 					if (JOptionPane.showConfirmDialog(TagManager.this, 
-						"<html>"+XMLResourceBundle.getBundledString("tagMergeMessage").replace("%from", DocExploreDataLink.getBestTagName(merging)).replace("%to", DocExploreDataLink.getBestTagName(mergeTo))+"</html>", 
-						XMLResourceBundle.getBundledString("keyMergeLabel"), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
+						"<html>"+Lang.s("tagMergeMessage").replace("%from", DocExploreDataLink.getBestTagName(merging)).replace("%to", DocExploreDataLink.getBestTagName(mergeTo))+"</html>", 
+						Lang.s("keyMergeLabel"), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
 					{
 						deleteButton.setEnabled(table.getSelectedRow() >= 0);
 						mergeButton.setEnabled(table.getSelectedRow() >= 0);
@@ -124,14 +124,14 @@ public class TagManager extends JPanel
 		add(scrollPane);
 		
 		JPanel mergePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		mergePanel.add(deleteButton = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("keyDeleteLabel")) {public void actionPerformed(ActionEvent arg0)
+		mergePanel.add(deleteButton = new JButton(new AbstractAction(Lang.s("keyDeleteLabel")) {public void actionPerformed(ActionEvent arg0)
 		{
 			try
 			{
 				final MetaData tag = model.tags.get(table.getSelectedRow());
 				if (JOptionPane.showConfirmDialog(TagManager.this, 
-					"<html>"+XMLResourceBundle.getBundledString("tagDeleteMessage").replace("%from", DocExploreDataLink.getBestTagName(tag))+"</html>", 
-					XMLResourceBundle.getBundledString("keyMergeLabel"), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
+					"<html>"+Lang.s("tagDeleteMessage").replace("%from", DocExploreDataLink.getBestTagName(tag))+"</html>", 
+					Lang.s("keyMergeLabel"), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
 				{
 					deleteButton.setEnabled(table.getSelectedRow() >= 0);
 					mergeButton.setEnabled(table.getSelectedRow() >= 0);
@@ -163,12 +163,12 @@ public class TagManager extends JPanel
 			}
 			catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 		}}));
-		mergePanel.add(mergeButton = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("keyMergeLabel")) {public void actionPerformed(ActionEvent arg0)
+		mergePanel.add(mergeButton = new JButton(new AbstractAction(Lang.s("keyMergeLabel")) {public void actionPerformed(ActionEvent arg0)
 		{
 			if (merging == null)
 			{
 				merging = model.tags.get(table.getSelectedRow());
-				try {mergeText.setText("<html>"+XMLResourceBundle.getBundledString("tagSelectMessage").replace("%from", DocExploreDataLink.getBestTagName(merging))+"</html>");}
+				try {mergeText.setText("<html>"+Lang.s("tagSelectMessage").replace("%from", DocExploreDataLink.getBestTagName(merging))+"</html>");}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 				deleteButton.setEnabled(false);
 			}
@@ -265,11 +265,11 @@ public class TagManager extends JPanel
 	
 	public static void show(final MainWindow win) throws DataLinkException
 	{
-		final JDialog dialog = new JDialog(win, XMLResourceBundle.getBundledString("tagManagerLabel"), true);
+		final JDialog dialog = new JDialog(win, Lang.s("tagManagerLabel"), true);
 		
 		TagManager manager = new TagManager(win);
 		JPanel closePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		closePanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCloseLabel")) 
+		closePanel.add(new JButton(new AbstractAction(Lang.s("generalCloseLabel")) 
 			{public void actionPerformed(java.awt.event.ActionEvent arg0) {dialog.setVisible(false);}}));
 		manager.add(closePanel);
 		dialog.add(manager);

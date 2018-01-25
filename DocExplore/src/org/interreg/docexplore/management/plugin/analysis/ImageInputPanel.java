@@ -33,7 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 
 import org.interreg.docexplore.gui.WrapLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.ImageUtils;
 
 @SuppressWarnings("serial")
@@ -80,13 +80,13 @@ public class ImageInputPanel extends JPanel
 		JPanel infoPanel = new JPanel(new BorderLayout());
 		
 		JPanel helpPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
-		helpPanel.add(new JLabel(XMLResourceBundle.getBundledString("pluginAnalysisInputFirstMessage")));
+		helpPanel.add(new JLabel(Lang.s("pluginAnalysisInputFirstMessage")));
 		helpPanel.add(new JLabel(ImageUtils.getIcon("analysis-24x24.png")));
-		helpPanel.add(new JLabel(XMLResourceBundle.getBundledString("pluginAnalysisInputSecondMessage")));
+		helpPanel.add(new JLabel(Lang.s("pluginAnalysisInputSecondMessage")));
 		infoPanel.add(helpPanel, BorderLayout.NORTH);
 		
 		JPanel autoPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
-		autoPanel.add(autoOpen = new JCheckBox(XMLResourceBundle.getBundledString("pluginAutoOpenLabel"), true));
+		autoPanel.add(autoOpen = new JCheckBox(Lang.s("pluginAutoOpenLabel"), true));
 		infoPanel.add(autoPanel, BorderLayout.SOUTH);
 		
 		add(infoPanel, BorderLayout.SOUTH);

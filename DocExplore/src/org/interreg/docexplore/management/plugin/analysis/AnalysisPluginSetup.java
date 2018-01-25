@@ -29,7 +29,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.MainWindow;
 import org.interreg.docexplore.management.plugin.PluginManager;
 
@@ -44,7 +44,7 @@ public class AnalysisPluginSetup extends JFrame
 	
 	public AnalysisPluginSetup(final PluginManager manager)
 	{
-		super(XMLResourceBundle.getBundledString("pluginAnalysisLabel"));
+		super(Lang.s("pluginAnalysisLabel"));
 		
 		this.manager = manager;
 		
@@ -120,7 +120,7 @@ public class AnalysisPluginSetup extends JFrame
 //				addTask(task);
 //			}
 //		}));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCloseLabel"))
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalCloseLabel"))
 			{public void actionPerformed(ActionEvent arg0) {setVisible(false);}}));
 //		pluginPanel.add(buttonPanel, BorderLayout.SOUTH);
 //		
@@ -132,7 +132,7 @@ public class AnalysisPluginSetup extends JFrame
 		taskList.setPreferredSize(new Dimension(480, 640));
 		JPanel taskPanel = new JPanel(new BorderLayout());
 		taskPanel.add(new JScrollPane(taskList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
-		taskPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("pluginTasksLabel")));
+		taskPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("pluginTasksLabel")));
 		add(taskPanel, BorderLayout.CENTER);
 		add(buttonPanel, BorderLayout.SOUTH);
 		

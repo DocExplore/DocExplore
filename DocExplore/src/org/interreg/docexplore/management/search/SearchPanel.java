@@ -32,7 +32,7 @@ import javax.swing.SwingConstants;
 import org.interreg.docexplore.gui.ExpandingPanel;
 import org.interreg.docexplore.gui.IconButton;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 
 public class SearchPanel extends ExpandingPanel
 {
@@ -98,11 +98,11 @@ public class SearchPanel extends ExpandingPanel
 	
 	public SearchPanel(SearchHandler handler)
 	{
-		super(XMLResourceBundle.getBundledString("searchLabel"));
+		super(Lang.s("searchLabel"));
 		
 		this.handler = handler;
 		this.searchLines = new Vector<SearchLine>();
-		this.searchButton = new JButton(XMLResourceBundle.getBundledString("searchLabel"));
+		this.searchButton = new JButton(Lang.s("searchLabel"));
 		this.linePanel = new JPanel(new LooseGridLayout(0, 1, 5, 5, true, false));
 		
 		getContentPane().setLayout(new LooseGridLayout(2, 1, 5, 5, false, false));
@@ -110,7 +110,7 @@ public class SearchPanel extends ExpandingPanel
 			SwingConstants.LEFT, SwingConstants.TOP, true, false));
 		buttonPanel.add(searchButton);
 		buttonPanel.add(new JButton(new AbstractAction(
-			XMLResourceBundle.getBundledString("clearLabel"))
+			Lang.s("clearLabel"))
 		{
 			private static final long serialVersionUID = 1L;
 			public void actionPerformed(ActionEvent arg0)
@@ -123,17 +123,17 @@ public class SearchPanel extends ExpandingPanel
 		
 		JPanel typePanel = new JPanel(new BorderLayout());
 		JPanel typeBoxPanel = new JPanel(new FlowLayout());
-		typePanel.add(new JLabel(XMLResourceBundle.getBundledString("searchTypeLabel")), BorderLayout.NORTH);
-		typeBoxPanel.add(this.bookBox = new JCheckBox(XMLResourceBundle.getBundledString("searchBooksLabel"), true));
-		typeBoxPanel.add(this.pageBox = new JCheckBox(XMLResourceBundle.getBundledString("searchPagesLabel"), true));
-		typeBoxPanel.add(this.regionBox = new JCheckBox(XMLResourceBundle.getBundledString("searchRoisLabel"), true));
+		typePanel.add(new JLabel(Lang.s("searchTypeLabel")), BorderLayout.NORTH);
+		typeBoxPanel.add(this.bookBox = new JCheckBox(Lang.s("searchBooksLabel"), true));
+		typeBoxPanel.add(this.pageBox = new JCheckBox(Lang.s("searchPagesLabel"), true));
+		typeBoxPanel.add(this.regionBox = new JCheckBox(Lang.s("searchRoisLabel"), true));
 		//typeBoxPanel.add(this.metaDataBox = new JCheckBox(XMLResourceBundle.getBundledString("searchMetaDataLabel"), true));
 		typePanel.add(typeBoxPanel, BorderLayout.SOUTH);
 		
 		JPanel methodPanel = new JPanel(new BorderLayout());
 		ButtonGroup methodGroup = new ButtonGroup();
-		methodPanel.add(this.allMethod = new JRadioButton(XMLResourceBundle.getBundledString("searchMethodAllLabel"), true), BorderLayout.NORTH);
-		methodPanel.add(this.anyMethod = new JRadioButton(XMLResourceBundle.getBundledString("searchMethodAnyLabel"), false), BorderLayout.SOUTH);
+		methodPanel.add(this.allMethod = new JRadioButton(Lang.s("searchMethodAllLabel"), true), BorderLayout.NORTH);
+		methodPanel.add(this.anyMethod = new JRadioButton(Lang.s("searchMethodAnyLabel"), false), BorderLayout.SOUTH);
 		methodGroup.add(allMethod);
 		methodGroup.add(anyMethod);
 		

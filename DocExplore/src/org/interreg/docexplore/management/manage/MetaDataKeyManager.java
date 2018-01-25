@@ -37,9 +37,9 @@ import javax.swing.event.ListSelectionListener;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.MainWindow;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
@@ -84,8 +84,8 @@ public class MetaDataKeyManager extends JPanel
 				{
 					final MetaDataKey mergeTo = model.keys.get(table.getSelectedRow());
 					if (JOptionPane.showConfirmDialog(MetaDataKeyManager.this, 
-						"<html>"+XMLResourceBundle.getBundledString("keyMergeMessage").replace("%from", merging.getBestName()).replace("%to", mergeTo.getBestName())+"</html>", 
-						XMLResourceBundle.getBundledString("keyMergeLabel"), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
+						"<html>"+Lang.s("keyMergeMessage").replace("%from", merging.getBestName()).replace("%to", mergeTo.getBestName())+"</html>", 
+						Lang.s("keyMergeLabel"), JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
 					{
 						deleteButton.setEnabled(table.getSelectedRow() >= 0);
 						mergeButton.setEnabled(table.getSelectedRow() >= 0);
@@ -136,10 +136,10 @@ public class MetaDataKeyManager extends JPanel
 		add(scrollPane);
 		
 		JPanel mergePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		mergePanel.add(deleteButton = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("keyDeleteLabel")) {public void actionPerformed(ActionEvent arg0)
+		mergePanel.add(deleteButton = new JButton(new AbstractAction(Lang.s("keyDeleteLabel")) {public void actionPerformed(ActionEvent arg0)
 		{
 			if (model.counts.get(table.getSelectedRow()) > 0)
-				JOptionPane.showMessageDialog(MetaDataKeyManager.this, XMLResourceBundle.getBundledString("keyUsedMessage"), "", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(MetaDataKeyManager.this, Lang.s("keyUsedMessage"), "", JOptionPane.ERROR_MESSAGE);
 			else
 			{
 				final MetaDataKey key = model.keys.get(table.getSelectedRow());
@@ -159,12 +159,12 @@ public class MetaDataKeyManager extends JPanel
 				mergeButton.setEnabled(table.getSelectedRow() >= 0);
 			}
 		}}));
-		mergePanel.add(mergeButton = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("keyMergeLabel")) {public void actionPerformed(ActionEvent arg0)
+		mergePanel.add(mergeButton = new JButton(new AbstractAction(Lang.s("keyMergeLabel")) {public void actionPerformed(ActionEvent arg0)
 		{
 			if (merging == null)
 			{
 				merging = model.keys.get(table.getSelectedRow());
-				try {mergeText.setText("<html>"+XMLResourceBundle.getBundledString("keySelectMessage").replace("%from", merging.getBestName())+"</html>");}
+				try {mergeText.setText("<html>"+Lang.s("keySelectMessage").replace("%from", merging.getBestName())+"</html>");}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 				deleteButton.setEnabled(false);
 			}
@@ -182,11 +182,11 @@ public class MetaDataKeyManager extends JPanel
 	
 	public static void show(final MainWindow win, float [] progress) throws DataLinkException
 	{
-		final JDialog dialog = new JDialog(win, XMLResourceBundle.getBundledString("keyManagerLabel"), true);
+		final JDialog dialog = new JDialog(win, Lang.s("keyManagerLabel"), true);
 		
 		MetaDataKeyManager manager = new MetaDataKeyManager(win, progress);
 		JPanel closePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		closePanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCloseLabel")) 
+		closePanel.add(new JButton(new AbstractAction(Lang.s("generalCloseLabel")) 
 			{public void actionPerformed(java.awt.event.ActionEvent arg0) {dialog.setVisible(false);}}));
 		manager.add(closePanel);
 		dialog.add(manager);

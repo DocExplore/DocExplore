@@ -47,7 +47,7 @@ import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.Startup;
 import org.interreg.docexplore.Startup.PluginConfig;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.reader.book.BookEngine;
 import org.interreg.docexplore.reader.book.BookSpecification;
 import org.interreg.docexplore.reader.book.ParchmentEngine;
@@ -174,7 +174,7 @@ public class ReaderApp extends DocExploreTool implements ApplicationListener
 				BookSpecification.class.getPackage().getName().replace('.', '/')+"/emptyPageTex.png")), false);
 			
 			waitDialog = new Dialog(this);
-			waitDialog.set(XMLResourceBundle.getBundledString("waitLabel"), XMLResourceBundle.getBundledString("imagesLabel"));
+			waitDialog.set(Lang.s("waitLabel"), Lang.s("imagesLabel"));
 			gui.addWidget(waitDialog);
 			
 			this.logger = new ActivityLogger(new File(DocExploreTool.getHomeDir(), "activity.log"), 10000);

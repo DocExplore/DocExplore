@@ -35,7 +35,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 
 public class GuiUtils
 {
@@ -69,7 +69,7 @@ public class GuiUtils
 	static Color progressCol = Color.lightGray;
 	
 	public static void blockUntilComplete(final Runnable runnable, Component component)
-		{blockUntilComplete(runnable, component, XMLResourceBundle.getString("gui-lrb", "dialogWaitLabel"));}
+		{blockUntilComplete(runnable, component, Lang.s("gui-lrb", "dialogWaitLabel"));}
 	public static void blockUntilComplete(final Runnable runnable, Component component, String message)
 	{
 		//Window win = component != null ? (Window)component.getTopLevelAncestor() : null;

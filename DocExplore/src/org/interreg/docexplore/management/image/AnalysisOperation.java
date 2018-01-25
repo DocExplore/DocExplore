@@ -14,30 +14,28 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.management.image;
 
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.gui.image.ImageView;
+import org.interreg.docexplore.internationalization.Lang;
+import org.interreg.docexplore.management.gui.DocumentEditorHost;
 
-public class AnalysisOperation extends RectROIOperation
+public class AnalysisOperation extends RectOperation
 {
-	public AnalysisOperation()
+	@Override public void rectDrawn(ImageView view, Point first, Point second, int modifiers)
 	{
-		super();
-	}
-	
-	@Override public void pointDropped(PageEditor view, int cx, int cy, double vx, double vy, int downw, int downy, int deltax, int deltay, int modifiers)
-	{
-		second.setLocation(Math.max(0, Math.min(view.getImage().getWidth()-1, (int)(vx+.5))), Math.max(0, Math.min(view.getImage().getHeight()-1, (int)(vy+.5))));
+		DocumentEditorHost host = view instanceof PageEditor ? ((PageEditor)view).getHost() : view instanceof ImageMetaDataEditor ? ((ImageMetaDataEditor)view).getHost() : null;
 		
 		int x = Math.min(first.x, second.x), y = Math.min(first.y, second.y);
 		int w = Math.abs(first.x-second.x), h = Math.abs(first.y-second.y);
 		BufferedImage area = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
-		area.createGraphics().drawImage(view.getImage().getSubimage(x, y, w, h), 0, 0, null);
-		view.getHost().onAnalysisRequest(area);
+		area.createGraphics().drawImage(view.getSubImage(x, y, w, h), 0, 0, null);
+		host.onAnalysisRequest(area);
 		
 		this.first = null;
 		this.second = null;
 	}
 	
-	public String getMessage() {return XMLResourceBundle.getBundledString("statusAnalysisMessage");}
+	public String getMessage() {return Lang.s("statusAnalysisMessage");}
 }

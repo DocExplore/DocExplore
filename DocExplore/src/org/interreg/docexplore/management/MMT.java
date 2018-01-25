@@ -25,7 +25,7 @@ import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.Startup;
 import org.interreg.docexplore.DocExplore;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.MainWindow;
 import org.interreg.docexplore.management.plugin.PluginManager;
 import org.interreg.docexplore.util.GuiUtils;
@@ -35,7 +35,7 @@ public class MMT extends DocExploreTool
 {
 	public static void main(final String [] args)
 	{
-		final Startup startup = new Startup(XMLResourceBundle.getBundledString("frameTitle"), "logoMMT.png", true, true, true, true);
+		final Startup startup = new Startup(Lang.s("frameTitle"), "logoMMT.png", true, true, true, true);
 		
 		try
 		{

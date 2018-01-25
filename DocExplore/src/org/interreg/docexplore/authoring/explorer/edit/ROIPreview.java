@@ -42,7 +42,7 @@ import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.Pair;
 
 @SuppressWarnings("serial")
@@ -61,7 +61,7 @@ public class ROIPreview extends JDialog
 	public ROIPreview(int width)
 	{
 		//super(new LooseGridLayout(0, 1, 0, 5, true, false, SwingConstants.CENTER, SwingConstants.TOP, true, false));
-		super(JOptionPane.getRootFrame(), XMLResourceBundle.getBundledString("previewTitle"), false);
+		super(JOptionPane.getRootFrame(), Lang.s("previewTitle"), false);
 		
 		setAlwaysOnTop(true);
 		getContentPane().setLayout(new BorderLayout(0, 0));
@@ -80,7 +80,7 @@ public class ROIPreview extends JDialog
 		topPanel.setBackground(Color.gray);
 		ratioPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		ratioPanel.setOpaque(false);
-		ratioPanel.add(new JLabel("<html><font color=\"#ffffff\">"+XMLResourceBundle.getBundledString("previewRatio")+":</font></html>"));
+		ratioPanel.add(new JLabel("<html><font color=\"#ffffff\">"+Lang.s("previewRatio")+":</font></html>"));
 		ratioPanel.add(buildRatioButton(16, 9).first);
 		ratioPanel.add(buildRatioButton(16, 10).first);
 		ratioPanel.add(buildRatioButton(4, 3).first);
@@ -88,7 +88,7 @@ public class ROIPreview extends JDialog
 		topPanel.add(ratioPanel, BorderLayout.WEST);
 		JPanel warningPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		warningPanel.setOpaque(false);
-		warningPanel.add(new JLabel("<html><font color=\"#ff8080\"><b>"+XMLResourceBundle.getBundledString("previewWarning")+"</b></font></html>"));
+		warningPanel.add(new JLabel("<html><font color=\"#ff8080\"><b>"+Lang.s("previewWarning")+"</b></font></html>"));
 		topPanel.add(warningPanel, BorderLayout.EAST);
 		getContentPane().add(topPanel, BorderLayout.NORTH);
 		

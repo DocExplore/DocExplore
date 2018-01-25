@@ -29,7 +29,7 @@ import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.datalink.fs2.DataLinkFS2Source;
 import org.interreg.docexplore.datalink.mysql.DataLinkMySQLSource;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.connect.ConnectionHandler.ConnectionHandlerListener;
 
 @SuppressWarnings("serial")
@@ -43,7 +43,7 @@ public abstract class ConnectionBasedMenu extends JMenu implements ConnectionHan
 		
 		this.recentConnections = new LinkedList<JMenuItem>();
 		
-		add(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuFileConnectMySQL"))
+		add(new AbstractAction(Lang.s("generalMenuFileConnectMySQL"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -52,7 +52,7 @@ public abstract class ConnectionBasedMenu extends JMenu implements ConnectionHan
 				catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}
 		});
-		add(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuFileConnectFile"))
+		add(new AbstractAction(Lang.s("generalMenuFileConnectFile"))
 		{
 			File current = null;
 			public void actionPerformed(ActionEvent e)

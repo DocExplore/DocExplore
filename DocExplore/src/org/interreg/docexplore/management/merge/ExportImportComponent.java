@@ -33,12 +33,12 @@ import javax.swing.SwingConstants;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.MainWindow;
 import org.interreg.docexplore.management.manage.ManageComponent;
 import org.interreg.docexplore.management.manage.ManageHandler;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -80,7 +80,7 @@ public class ExportImportComponent extends JPanel
 		rightCompPanel.setPreferredSize(new Dimension(screen.width/4, screen.height/2));
 		
 		JPanel buttonPanel = new JPanel(new LooseGridLayout(0, 1));
-		JButton importButton = new JButton(XMLResourceBundle.getBundledString("importImportFromLabel"), ImageUtils.getIcon("previous-24x24.png"));
+		JButton importButton = new JButton(Lang.s("importImportFromLabel"), ImageUtils.getIcon("previous-24x24.png"));
 		importButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -92,7 +92,7 @@ public class ExportImportComponent extends JPanel
 		importButton.setHorizontalTextPosition(SwingConstants.RIGHT);
 		buttonPanel.add(importButton);
 		
-		JButton exportButton = new JButton(XMLResourceBundle.getBundledString("importExportToLabel"), ImageUtils.getIcon("next-24x24.png"));
+		JButton exportButton = new JButton(Lang.s("importExportToLabel"), ImageUtils.getIcon("next-24x24.png"));
 		exportButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -121,21 +121,21 @@ public class ExportImportComponent extends JPanel
 		final JDialog confirm = new JDialog(win, true);
 		confirm.setLayout(new BorderLayout());
 		
-		confirm.add(new JLabel(XMLResourceBundle.getBundledString("importActionMessage")), BorderLayout.NORTH);
+		confirm.add(new JLabel(Lang.s("importActionMessage")), BorderLayout.NORTH);
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 		final int [] choice = {0};
 		buttonPanel.add(new JButton(
-			new AbstractAction("<html>"+XMLResourceBundle.getBundledString("importAddMessage").replace("%b", from.getName())+"</html>") {
+			new AbstractAction("<html>"+Lang.s("importAddMessage").replace("%b", from.getName())+"</html>") {
 				public void actionPerformed(ActionEvent arg0)
 					{choice[0] = 1; confirm.setVisible(false);}}));
 		if (to != null)
 			buttonPanel.add(new JButton(
 				new AbstractAction("<html>"+
-					XMLResourceBundle.getBundledString("importMergeMessage").replace("%b1", from.getName()).replace("%b2", to.getName())+"</html>") {
+					Lang.s("importMergeMessage").replace("%b1", from.getName()).replace("%b2", to.getName())+"</html>") {
 						public void actionPerformed(ActionEvent e)
 							{choice[0] = 2; confirm.setVisible(false);}}));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCancelLabel")) {
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalCancelLabel")) {
 			public void actionPerformed(ActionEvent arg0)
 				{confirm.setVisible(false);}}));
 		confirm.add(buttonPanel, BorderLayout.SOUTH);

@@ -25,8 +25,8 @@ import javax.swing.table.TableModel;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 
 public class TagTableModel implements TableModel
@@ -83,14 +83,14 @@ public class TagTableModel implements TableModel
 			String name = aValue.toString().trim();
 			if (name.trim().length() == 0)
 			{
-				JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), XMLResourceBundle.getBundledString("keyEmptyMessage"));
+				JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), Lang.s("keyEmptyMessage"));
 				return;
 			}
 			MetaData tag = tags.get(rowIndex);
 			for (MetaData prev : tags)
 				if (prev != tag && DocExploreDataLink.getBestTagName(prev).equals(name))
 				{
-					JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), XMLResourceBundle.getBundledString("keyUsedMessage"));
+					JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), Lang.s("keyUsedMessage"));
 					return;
 				}
 			DocExploreDataLink.setTagName(tag, aValue.toString(), langs.get(columnIndex));

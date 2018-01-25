@@ -30,8 +30,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.interreg.docexplore.datalink.DataLinkException;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.util.GuiUtils;
 
@@ -97,9 +97,9 @@ public class MetaDataKeyBox extends JPanel
 		
 		final boolean [] res = {false};
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalOkLabel"))
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalOkLabel"))
 			{public void actionPerformed(ActionEvent arg0) {res[0] = true; dialog.setVisible(false);}}));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCancelLabel"))
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalCancelLabel"))
 			{public void actionPerformed(ActionEvent arg0) {res[0] = false; dialog.setVisible(false);}}));
 		
 		dialog.add(boxPanel, BorderLayout.NORTH);

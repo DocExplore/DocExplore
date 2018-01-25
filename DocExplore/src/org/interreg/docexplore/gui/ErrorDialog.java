@@ -34,7 +34,7 @@ import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -49,7 +49,7 @@ public class ErrorDialog extends JDialog
 	
 	public ErrorDialog()
 	{
-		super(JOptionPane.getRootFrame(), XMLResourceBundle.getBundledString("errorGenericTitle"), true);
+		super(JOptionPane.getRootFrame(), Lang.s("errorGenericTitle"), true);
 		
 		getContentPane().setLayout(new BorderLayout(20, 20));
 		JPanel messagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
@@ -59,11 +59,11 @@ public class ErrorDialog extends JDialog
 		getContentPane().add(messagePanel, BorderLayout.NORTH);
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("dialogCloseLabel")) {public void actionPerformed(ActionEvent e)
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("dialogCloseLabel")) {public void actionPerformed(ActionEvent e)
 		{
 			ErrorDialog.this.setVisible(false);
 		}}));
-		buttonPanel.add(detailsButton = new JToggleButton(new AbstractAction(XMLResourceBundle.getBundledString("errorDetailsLabel")) {public void actionPerformed(ActionEvent e)
+		buttonPanel.add(detailsButton = new JToggleButton(new AbstractAction(Lang.s("errorDetailsLabel")) {public void actionPerformed(ActionEvent e)
 		{
 			if (detailsButton.isSelected())
 			{
@@ -90,7 +90,7 @@ public class ErrorDialog extends JDialog
 	public void show(Throwable ex)
 	{
 		this.ex = ex;
-		message.setText(XMLResourceBundle.getBundledString("errorGenericMessage"));
+		message.setText(Lang.s("errorGenericMessage"));
 		StringWriter out = new StringWriter();
 		ex.printStackTrace(new PrintWriter(out, true));
 		detailsPane.setText(out.toString());

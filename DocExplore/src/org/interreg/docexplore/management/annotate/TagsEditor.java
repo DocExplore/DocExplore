@@ -34,7 +34,7 @@ import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.IconButton;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -57,7 +57,7 @@ public class TagsEditor extends AnnotationEditor
 		JPanel tagPanel = new JPanel(new BorderLayout());
 		tagPanel.setOpaque(false);
 		tagPanel.setBorder(BorderFactory.createTitledBorder(
-			XMLResourceBundle.getBundledString("tagTagLabel")));
+			Lang.s("tagTagLabel")));
 		tagPanel.add(new JScrollPane(tagArea, 
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.NORTH);
@@ -97,17 +97,17 @@ public class TagsEditor extends AnnotationEditor
 		try {fillTagsArea();}
 		catch (Exception e) {e.printStackTrace();}
 		
-		tagBoxPanel.add(new JLabel(XMLResourceBundle.getBundledString("tagAddTagLabel")));
+		tagBoxPanel.add(new JLabel(Lang.s("tagAddTagLabel")));
 		tagBoxPanel.add(predefinedTags);
 		tagHelpPanel.add(new IconButton("help-24x24.png", 
-			XMLResourceBundle.getBundledString("tagTagTooltip")));
+			Lang.s("tagTagTooltip")));
 		
 		bottomPanel.add(tagBoxPanel, BorderLayout.WEST);
 		bottomPanel.add(tagHelpPanel, BorderLayout.EAST);
 		tagPanel.add(bottomPanel, BorderLayout.CENTER);
 		add(tagPanel, BorderLayout.CENTER);
 		
-		add(new JLabel("<html><big>"+XMLResourceBundle.getBundledString("tagTagLabel")+"</big></html>", 
+		add(new JLabel("<html><big>"+Lang.s("tagTagLabel")+"</big></html>", 
 				ImageUtils.getIcon("tag-64x64.png"), 
 			SwingConstants.LEFT), BorderLayout.NORTH);
 	}

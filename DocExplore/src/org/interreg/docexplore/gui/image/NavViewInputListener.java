@@ -33,7 +33,7 @@ public class NavViewInputListener implements MouseListener, MouseMotionListener,
 	int panDownX = 0, panDownY = 0, panCurX = 0, panCurY = 0;
 	@Override public void mousePressed(MouseEvent e)
 	{
-		//if ((e.getModifiers() & panningButton) != 0)
+		if ((e.getModifiers() & panningButton) != 0)
 		{
 			panning = true;
 			panDownX = panCurX = e.getX();
@@ -43,7 +43,7 @@ public class NavViewInputListener implements MouseListener, MouseMotionListener,
 	}
 	@Override public void mouseReleased(MouseEvent e)
 	{
-		//if ((e.getModifiers() & panningButton) != 0)
+		if ((e.getModifiers() & panningButton) != 0)
 			panning = false;
 	}
 

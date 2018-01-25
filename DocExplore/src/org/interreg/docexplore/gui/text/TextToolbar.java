@@ -52,7 +52,7 @@ import javax.swing.text.html.HTML;
 import org.interreg.docexplore.authoring.explorer.edit.Style;
 import org.interreg.docexplore.authoring.explorer.edit.StyleDialog;
 import org.interreg.docexplore.gui.WrapLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.ImageUtils;
 
 public class TextToolbar extends JPanel
@@ -187,7 +187,7 @@ public class TextToolbar extends JPanel
 			notifyAttributesChanged();
 		}};
 		final JDialog colorDialog = JColorChooser.createDialog(getTopLevelAncestor(), 
-			XMLResourceBundle.getBundledString("bgcolorPropertyName"), true, colorChooser, 
+			Lang.s("bgcolorPropertyName"), true, colorChooser, 
 			new ActionListener() {public void actionPerformed(ActionEvent e)
 			{
 				colorSelect.actionPerformed(e);

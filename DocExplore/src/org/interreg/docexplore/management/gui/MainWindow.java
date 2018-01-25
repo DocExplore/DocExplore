@@ -47,9 +47,8 @@ import org.interreg.docexplore.Startup;
 import org.interreg.docexplore.datalink.DataLink;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.Clipboard;
-import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.management.manage.ManageComponent;
 import org.interreg.docexplore.management.manage.ManageHandler;
 import org.interreg.docexplore.management.plugin.PluginManager;
@@ -57,6 +56,8 @@ import org.interreg.docexplore.management.search.SearchComponent;
 import org.interreg.docexplore.management.search.SearchHandler;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
+import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.manuscript.actions.ActionProvider;
@@ -105,7 +106,7 @@ public class MainWindow extends JFrame
 	@SuppressWarnings("serial")
 	public MainWindow(Startup startup, PluginManager pluginManager) throws FileNotFoundException, IOException, ClassNotFoundException
 	{
-		super(XMLResourceBundle.getBundledString("frameTitle"));
+		super(Lang.s("frameTitle"));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.listeners = new LinkedList<MainWindowListener>();
 		this.link = new DocExploreDataLink();
@@ -122,7 +123,7 @@ public class MainWindow extends JFrame
 		
 		startup.screen.setText("Initializing history");
 		this.historyManager = new HistoryManager(50, new File(DocExploreTool.getHomeDir(), ".mmt-cache"));
-		this.historyDialog = new JDialog(this, XMLResourceBundle.getBundledString("generalHistory"));
+		this.historyDialog = new JDialog(this, Lang.s("generalHistory"));
 		historyDialog.add(new HistoryPanel(historyManager));
 		historyDialog.pack();
 		
@@ -369,6 +370,8 @@ public class MainWindow extends JFrame
 		}
 		else if (document instanceof Book)
 			title = ((Book)document).getName();
+		else if (document instanceof MetaData)
+			title = "MetaData "+document.getId();
 		return title;
 	}
 	
@@ -499,19 +502,28 @@ public class MainWindow extends JFrame
 			DocumentPanel panel = (DocumentPanel)tabbedPane.getComponentAt(i);
 			if (panel.getDocument() instanceof Page && panel.getDocument().getId() == region.getPage().getId() || 
 				panel.getDocument() instanceof Region && ((Region)panel.getDocument()).getId() == region.getId())
-				panel.refresh();
+					panel.refresh();
 		}
 	}
-	public void onMetaDataAdded(AnnotatedObject object) {onMetaDataChanged(object);}
-	public void onMetaDataDeleted(AnnotatedObject object) {onMetaDataChanged(object);}
-	public void onMetaDataChanged(AnnotatedObject object)
+	public void onAnnotationAdded(AnnotatedObject object, MetaData annotation) {onMetaDataChanged(object, annotation);}
+	public void onAnnotationDeleted(AnnotatedObject object, MetaData annotation) {onMetaDataChanged(object, annotation);}
+	public void onMetaDataChanged(AnnotatedObject object, MetaData annotation)
 	{
 		for (int i=0;i<tabbedPane.getTabCount();i++)
 		{
 			DocumentPanel panel = (DocumentPanel)tabbedPane.getComponentAt(i);
-			if (panel.getDocument().getClass() == object.getClass() && panel.getDocument().getId() == object.getId())
+			if (object != null && panel.getDocument().getClass() == object.getClass() && panel.getDocument().getId() == object.getId())
 				try {panel.annotationPanel.setDocument(object);}
 				catch (DataLinkException e) {ErrorHandler.defaultHandler.submit(e);}
+			else if (panel.getDocument() instanceof MetaData && panel.getDocument().getId() == annotation.getId())
+				panel.refresh();	
 		}
+		try
+		{
+			String bookId = annotation.getMetaDataString(link.bookKey);
+			if (bookId != null)
+				onBookChanged(link.getBook(Integer.parseInt(bookId)));
+		}
+		catch (DataLinkException e) {ErrorHandler.defaultHandler.submit(e);}
 	}
 }

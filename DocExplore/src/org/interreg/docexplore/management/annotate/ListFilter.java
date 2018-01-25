@@ -41,8 +41,8 @@ import javax.swing.event.DocumentListener;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 
@@ -65,7 +65,7 @@ public class ListFilter extends JPanel
 	public ListFilter(DocExploreDataLink link)
 	{
 		super(new FlowLayout(FlowLayout.LEFT));
-		setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("annotateFilterLabel")));
+		setBorder(BorderFactory.createTitledBorder(Lang.s("annotateFilterLabel")));
 		
 		this.useFilter = false;
 		this.valueType = 0;
@@ -74,18 +74,18 @@ public class ListFilter extends JPanel
 		
 		JPanel mainPanel = new JPanel(new LooseGridLayout(0, 2, 5, 5, SwingConstants.LEFT, SwingConstants.CENTER));
 		
-		mainPanel.add(new JLabel(XMLResourceBundle.getBundledString("annotateUseFilterLabel")));
+		mainPanel.add(new JLabel(Lang.s("annotateUseFilterLabel")));
 		((JCheckBox)mainPanel.add(new JCheckBox())).addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
 		{
 			useFilter = ((JCheckBox)e.getSource()).isSelected();
 			notifyFilterChanged();
 		}});
 		
-		mainPanel.add(new JLabel(XMLResourceBundle.getBundledString("annotateValueTypeLabel")));
+		mainPanel.add(new JLabel(Lang.s("annotateValueTypeLabel")));
 		((JComboBox)mainPanel.add(new JComboBox(new Object [] {
-			XMLResourceBundle.getBundledString("annotateAnyValueLabel"), 
-			XMLResourceBundle.getBundledString("annotateTypeText"), 
-			XMLResourceBundle.getBundledString("annotateTypeImage")}))).addItemListener(
+			Lang.s("annotateAnyValueLabel"), 
+			Lang.s("annotateTypeText"), 
+			Lang.s("annotateTypeImage")}))).addItemListener(
 				new ItemListener() {public void itemStateChanged(ItemEvent e)
 		{
 			if (e.getStateChange() != ItemEvent.SELECTED)
@@ -94,7 +94,7 @@ public class ListFilter extends JPanel
 			notifyFilterChanged();
 		}});
 		
-		mainPanel.add(new JLabel(XMLResourceBundle.getBundledString("annotateKeyTypeLabel")));
+		mainPanel.add(new JLabel(Lang.s("annotateKeyTypeLabel")));
 		this.keys = (JComboBox)mainPanel.add(new JComboBox(new DefaultComboBoxModel()));
 		refreshKeys(link);
 		keys.addItemListener(
@@ -106,7 +106,7 @@ public class ListFilter extends JPanel
 			notifyFilterChanged();
 		}});
 		
-		mainPanel.add(new JLabel(XMLResourceBundle.getBundledString("annotateContentLabel")));
+		mainPanel.add(new JLabel(Lang.s("annotateContentLabel")));
 		final JTextField contentsField = new JTextField(40);
 		contentsField.getDocument().addDocumentListener(new DocumentListener()
 		{
@@ -167,7 +167,7 @@ public class ListFilter extends JPanel
 		try
 		{
 			keys.removeAllItems();
-			((DefaultComboBoxModel)keys.getModel()).addElement(XMLResourceBundle.getBundledString("annotateAnyKeyLabel"));
+			((DefaultComboBoxModel)keys.getModel()).addElement(Lang.s("annotateAnyKeyLabel"));
 			Set<String> keyNames = new TreeSet<String>(new Comparator<String>()
 				{Collator collator = Collator.getInstance(Locale.getDefault());
 				public int compare(String o1, String o2) {return collator.compare(o1, o2);}});

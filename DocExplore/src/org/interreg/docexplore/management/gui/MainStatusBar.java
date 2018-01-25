@@ -24,9 +24,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 
 @SuppressWarnings("serial")
 public class MainStatusBar extends JPanel implements MainWindow.MainWindowListener
@@ -62,6 +62,6 @@ public class MainStatusBar extends JPanel implements MainWindow.MainWindowListen
 	public void setMessage(String s) {message.setText(s); repaint();}
 
 	public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document) {}
-	public void dataLinkChanged(DocExploreDataLink link) {setConnectionStatus(!link.isLinked() ? XMLResourceBundle.getBundledString("generalNoLinkStatus") : 
+	public void dataLinkChanged(DocExploreDataLink link) {setConnectionStatus(!link.isLinked() ? Lang.s("generalNoLinkStatus") : 
 		link.getWrappedSource().getDescription());}
 }

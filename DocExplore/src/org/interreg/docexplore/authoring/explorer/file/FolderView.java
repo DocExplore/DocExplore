@@ -30,7 +30,7 @@ import org.interreg.docexplore.authoring.explorer.Explorer;
 import org.interreg.docexplore.authoring.explorer.ExplorerView;
 import org.interreg.docexplore.authoring.explorer.ViewItem;
 import org.interreg.docexplore.authoring.preview.PreviewPanel;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -74,7 +74,7 @@ public class FolderView extends ExplorerView
 			}
 		});
 		
-		msg = XMLResourceBundle.getBundledString("helpFolderMsg");
+		msg = Lang.s("helpFolderMsg");
 	}
 
 	public boolean canHandle(String path) throws Exception

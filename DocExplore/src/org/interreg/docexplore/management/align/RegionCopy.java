@@ -35,9 +35,9 @@ import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.manuscript.Page;
@@ -80,7 +80,7 @@ public class RegionCopy
 		dialog.add(bookPanel, BorderLayout.CENTER);
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalOkLabel"))
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalOkLabel"))
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -147,7 +147,7 @@ public class RegionCopy
 				pdialog.setVisible(true);
 			}
 		}));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCancelLabel"))
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalCancelLabel"))
 		{
 			public void actionPerformed(ActionEvent arg0) {dialog.setVisible(false);}
 		}));

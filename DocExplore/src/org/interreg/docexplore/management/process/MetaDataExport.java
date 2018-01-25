@@ -30,8 +30,8 @@ import javax.swing.JProgressBar;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.manuscript.Page;
@@ -43,8 +43,8 @@ public class MetaDataExport
 	public static void export(final ProcessDialog dialog, final int pageNum) throws DataLinkException
 	{
 		final MetaDataKey key = MetaDataKeyBox.showDialog((DocExploreDataLink)dialog.pages.get(0).getLink(), 
-			XMLResourceBundle.getBundledString("processFieldNameTitle"), 
-			XMLResourceBundle.getBundledString("processFieldNameLabel"), true);
+			Lang.s("processFieldNameTitle"), 
+			Lang.s("processFieldNameLabel"), true);
 		if (key == null)
 			return;
 		
@@ -83,8 +83,8 @@ public class MetaDataExport
 	public static void exportAll(final ProcessDialog dialog) throws DataLinkException
 	{
 		final MetaDataKey key = MetaDataKeyBox.showDialog((DocExploreDataLink)dialog.pages.get(0).getLink(), 
-			XMLResourceBundle.getBundledString("processFieldNameTitle"), 
-			XMLResourceBundle.getBundledString("processFieldNameLabel"), true);
+			Lang.s("processFieldNameTitle"), 
+			Lang.s("processFieldNameLabel"), true);
 		if (key == null)
 			return;
 		

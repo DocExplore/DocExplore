@@ -24,7 +24,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 
 @SuppressWarnings("serial")
@@ -34,7 +34,7 @@ public class PluginResultFrame extends JDialog
 	
 	public PluginResultFrame(Frame win)
 	{
-		super(win, XMLResourceBundle.getBundledString("pluginResultLabel"));
+		super(win, Lang.s("pluginResultLabel"));
 		GuiUtils.centerOnComponent(this, win);
 		setLayout(new BorderLayout());
 		

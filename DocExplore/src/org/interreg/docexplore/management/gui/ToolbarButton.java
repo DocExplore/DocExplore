@@ -20,8 +20,8 @@ import java.awt.event.ActionListener;
 import javax.swing.Icon;
 
 import org.interreg.docexplore.gui.IconButton;
-import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 
 public class ToolbarButton extends IconButton implements MainWindow.MainWindowListener
 {

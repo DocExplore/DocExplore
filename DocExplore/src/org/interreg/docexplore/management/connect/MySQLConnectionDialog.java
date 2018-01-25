@@ -30,30 +30,30 @@ import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.datalink.mysql.DataLinkMySQLSource;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 
 public class MySQLConnectionDialog
 {
 	@SuppressWarnings("serial")
 	public static DataLinkMySQLSource show()
 	{
-		final JDialog dialog = new JDialog(JOptionPane.getRootFrame(), XMLResourceBundle.getBundledString("databaseTitle"), true);
+		final JDialog dialog = new JDialog(JOptionPane.getRootFrame(), Lang.s("databaseTitle"), true);
 		JPanel fields = new JPanel(new LooseGridLayout(4, 2, 5, 5, SwingConstants.LEFT, SwingConstants.LEFT));
-		fields.add(new JLabel(XMLResourceBundle.getBundledString("databaseUrlLabel")));
+		fields.add(new JLabel(Lang.s("databaseUrlLabel")));
 		JTextField urlField = (JTextField)fields.add(new JTextField(40));
-		fields.add(new JLabel(XMLResourceBundle.getBundledString("databaseDatabaseLabel")));
+		fields.add(new JLabel(Lang.s("databaseDatabaseLabel")));
 		JTextField dbField = (JTextField)fields.add(new JTextField(40));
-		fields.add(new JLabel(XMLResourceBundle.getBundledString("databaseUserLabel")));
+		fields.add(new JLabel(Lang.s("databaseUserLabel")));
 		JTextField userField = (JTextField)fields.add(new JTextField(40));
-		fields.add(new JLabel(XMLResourceBundle.getBundledString("databasePasswordLabel")));
+		fields.add(new JLabel(Lang.s("databasePasswordLabel")));
 		JPasswordField passField = (JPasswordField)fields.add(new JPasswordField(40));
 		dialog.add(fields, BorderLayout.CENTER);
 		
 		final boolean [] ok = {false};
 		JPanel buttons = new JPanel(new FlowLayout(SwingConstants.CENTER));
-		buttons.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalOkLabel"))
+		buttons.add(new JButton(new AbstractAction(Lang.s("generalOkLabel"))
 			{public void actionPerformed(ActionEvent e) {ok[0] = true; dialog.setVisible(false);}}));
-		buttons.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCancelLabel"))
+		buttons.add(new JButton(new AbstractAction(Lang.s("generalCancelLabel"))
 			{public void actionPerformed(ActionEvent e) {dialog.setVisible(false);}}));
 		dialog.add(buttons, BorderLayout.SOUTH);
 		

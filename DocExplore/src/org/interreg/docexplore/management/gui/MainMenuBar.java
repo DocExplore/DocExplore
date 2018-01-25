@@ -36,8 +36,7 @@ import org.interreg.docexplore.SplashScreen;
 import org.interreg.docexplore.datalink.DataLink.DataLinkSource;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.connect.ConnectionBasedMenu;
 import org.interreg.docexplore.management.connect.ConnectionHandler;
 import org.interreg.docexplore.management.manage.DataLinkCleaner;
@@ -46,6 +45,7 @@ import org.interreg.docexplore.management.manage.TagManager;
 import org.interreg.docexplore.management.merge.ExportImportComponent;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 import org.interreg.docexplore.util.history.HistoryManager;
@@ -63,19 +63,19 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 	{
 		this.win = win;
 		
-		JMenu fileMenu = new JMenu(XMLResourceBundle.getBundledString("generalMenuFile"));
+		JMenu fileMenu = new JMenu(Lang.s("generalMenuFile"));
 		this.connectionHandler = new ConnectionHandler();
-		this.connectMenu = new ConnectionBasedMenu(connectionHandler, XMLResourceBundle.getBundledString("generalMenuFileConnect")) {
+		this.connectMenu = new ConnectionBasedMenu(connectionHandler, Lang.s("generalMenuFileConnect")) {
 			public void connectionSelected(DataLinkSource source) throws DataLinkException {MainMenuBar.this.win.setLink(source.getDataLink());}};
 //		fileMenu.add(connectMenu);
-		this.importMenu = new ConnectionBasedMenu(connectionHandler, XMLResourceBundle.getBundledString("generalMenuFileImport")) {
+		this.importMenu = new ConnectionBasedMenu(connectionHandler, Lang.s("generalMenuFileImport")) {
 			public void connectionSelected(DataLinkSource source) throws DataLinkException
 			{
 //				MergeComponent mergeComp = new MergeComponent(MainMenuBar.this.win, source);
 //				mergeComp.setVisible(true);
 //				if (mergeComp.wasMerged())
 //					MainMenuBar.this.win.resetComponents();
-				JDialog importDialog = new JDialog((Frame)null, XMLResourceBundle.getBundledString("importTitle"), true);
+				JDialog importDialog = new JDialog((Frame)null, Lang.s("importTitle"), true);
 				DocExploreDataLink right = new DocExploreDataLink();
 				right.setLink(source.getDataLink());
 				ExportImportComponent ieComp = new ExportImportComponent(win, win.getDocExploreLink(), right);
@@ -96,7 +96,7 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 			}};
 //		fileMenu.add(importMenu);
 		
-		this.disconnect = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuFileDisconnect"))
+		this.disconnect = new JMenuItem(new AbstractAction(Lang.s("generalMenuFileDisconnect"))
 		{
 			public void actionPerformed(ActionEvent e)
 				{try {MainMenuBar.this.win.setLink(null);} catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}}
@@ -118,7 +118,7 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 //		
 //		fileMenu.addSeparator();
 		
-		fileMenu.add(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuFileQuit"))
+		fileMenu.add(new AbstractAction(Lang.s("generalMenuFileQuit"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -127,7 +127,7 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 		});
 		add(fileMenu);
 
-		JMenu editMenu = new JMenu(XMLResourceBundle.getBundledString("generalMenuEdit"));
+		JMenu editMenu = new JMenu(Lang.s("generalMenuEdit"));
 		this.undoItem = new JMenuItem();
 		undoItem.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
 		{
@@ -142,7 +142,7 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 			catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 		}});
 		editMenu.add(redoItem);
-		JMenuItem viewHistory = new JMenuItem(XMLResourceBundle.getBundledString("generalMenuEditViewHistory"));
+		JMenuItem viewHistory = new JMenuItem(Lang.s("generalMenuEditViewHistory"));
 		viewHistory.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
 		{
 			win.historyDialog.setVisible(true);
@@ -150,7 +150,7 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 		editMenu.add(viewHistory);
 		add(editMenu);
 		
-		JMenu toolsMenu = new JMenu(XMLResourceBundle.getBundledString("generalMenuTools"));
+		JMenu toolsMenu = new JMenu(Lang.s("generalMenuTools"));
 //		JMenuItem alignItem = new JMenuItem(new AbstractAction("Alignement") {
 //			public void actionPerformed(ActionEvent e)
 //			{
@@ -179,25 +179,25 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 //		toolsMenu.add(alignItem);
 		
 		if (!win.pluginManager.analysisPlugins.isEmpty())
-			toolsMenu.add(new AbstractAction(XMLResourceBundle.getBundledString("pluginAnalysisLabel"))
+			toolsMenu.add(new AbstractAction(Lang.s("pluginAnalysisLabel"))
 			{
 				public void actionPerformed(ActionEvent e)
 				{
 					win.pluginManager.analysisPluginSetup.setVisible(true);
 				}
 			});
-		toolsMenu.add(new AbstractAction(XMLResourceBundle.getBundledString("cleanLinkLabel"))
+		toolsMenu.add(new AbstractAction(Lang.s("cleanLinkLabel"))
 		{
 			public void actionPerformed(ActionEvent e)
 			{
 				if (JOptionPane.showConfirmDialog(win, 
-					XMLResourceBundle.getBundledString("cleanLinkWarning"),
-					XMLResourceBundle.getBundledString("cleanLinkLabel"),
+					Lang.s("cleanLinkWarning"),
+					Lang.s("cleanLinkLabel"),
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
 						GuiUtils.blockUntilComplete(new DataLinkCleaner(win), win);
 			}
 		});
-		toolsMenu.add(new AbstractAction(XMLResourceBundle.getBundledString("keyManagerLabel")+"...")
+		toolsMenu.add(new AbstractAction(Lang.s("keyManagerLabel")+"...")
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -214,7 +214,7 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 				win.refreshTabs();
 			}
 		});
-		toolsMenu.add(new AbstractAction(XMLResourceBundle.getBundledString("tagManagerLabel")+"...")
+		toolsMenu.add(new AbstractAction(Lang.s("tagManagerLabel")+"...")
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -304,13 +304,13 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 //		});
 //		add(toolsMenu);
 		
-		JMenu helpMenu = new JMenu(XMLResourceBundle.getBundledString("generalMenuHelp"));
+		JMenu helpMenu = new JMenu(Lang.s("generalMenuHelp"));
 		if (Desktop.isDesktopSupported())
 		{
 			final Desktop desktop = Desktop.getDesktop();
 			if (desktop.isSupported(Desktop.Action.OPEN))
 			{
-				helpMenu.add(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuHelpContents")) {
+				helpMenu.add(new AbstractAction(Lang.s("generalMenuHelpContents")) {
 					public void actionPerformed(ActionEvent e)
 					{
 						try
@@ -320,7 +320,7 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 						}
 						catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex, true);}
 					}});
-				helpMenu.add(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuHelpWebsite")) {
+				helpMenu.add(new AbstractAction(Lang.s("generalMenuHelpWebsite")) {
 					public void actionPerformed(ActionEvent e)
 					{
 						try
@@ -332,7 +332,7 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 					}});
 			}
 		}
-		helpMenu.add(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuHelpAbout")) {
+		helpMenu.add(new AbstractAction(Lang.s("generalMenuHelpAbout")) {
 			public void actionPerformed(ActionEvent e)
 			{
 				final JDialog splash = new JDialog((Frame)null, true);
@@ -359,8 +359,8 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 
 	public void historyChanged(HistoryManager manager)
 	{
-		String undoLabel = XMLResourceBundle.getBundledString("generalMenuEditUndo");
-		String redoLabel = XMLResourceBundle.getBundledString("generalMenuEditRedo");
+		String undoLabel = Lang.s("generalMenuEditUndo");
+		String redoLabel = Lang.s("generalMenuEditRedo");
 		
 		if (manager.canUndo())
 			undoLabel += " "+manager.getUndoableAction().description();

@@ -36,17 +36,18 @@ import javax.swing.border.BevelBorder;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.WrapLayout;
 import org.interreg.docexplore.gui.image.EditorView;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.image.AnalysisOperation;
 import org.interreg.docexplore.management.image.CropOperation;
 import org.interreg.docexplore.management.image.FreeShapeROIOperation;
+import org.interreg.docexplore.management.image.ImageMetaDataEditor;
 import org.interreg.docexplore.management.image.PageEditor;
-import org.interreg.docexplore.management.image.PosterUtils;
 import org.interreg.docexplore.management.image.RectROIOperation;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.Page;
+import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -69,7 +70,7 @@ public class MainToolBar extends JPanel implements ToolbarButton.ToolbarButtonLi
 		
 		toolPanel = new JPanel(new WrapLayout(WrapLayout.LEFT));
 		
-		this.browseButton = new JButton(XMLResourceBundle.getBundledString("manageCollectionLabel"), ImageUtils.getIcon("down-11x11.png"));
+		this.browseButton = new JButton(Lang.s("manageCollectionLabel"), ImageUtils.getIcon("down-11x11.png"));
 		toolPanel.add(browseButton);
 		
 		browseButton.addActionListener(new ActionListener() { public void actionPerformed(ActionEvent e) 
@@ -94,7 +95,7 @@ public class MainToolBar extends JPanel implements ToolbarButton.ToolbarButtonLi
 		//toolPanel.add(new JSeparator(SwingConstants.VERTICAL));
 		toolPanel.add(new JLabel(" "));
 		
-		addButton(this.prev = new ToolbarButton(this, "prev", "previous-24x24.png", XMLResourceBundle.getBundledString("imageToolbarPreviousHistoric"))
+		addButton(this.prev = new ToolbarButton(this, "prev", "previous-24x24.png", Lang.s("imageToolbarPreviousHistoric"))
 		{
 			public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
@@ -108,7 +109,7 @@ public class MainToolBar extends JPanel implements ToolbarButton.ToolbarButtonLi
 				else setEnabled(false);
 			}
 		});
-		addButton(this.up = new ToolbarButton(this, "up", "up-24x24.png", XMLResourceBundle.getBundledString("imageToolbarUp"))
+		addButton(this.up = new ToolbarButton(this, "up", "up-24x24.png", Lang.s("imageToolbarUp"))
 		{
 			public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
@@ -119,7 +120,7 @@ public class MainToolBar extends JPanel implements ToolbarButton.ToolbarButtonLi
 				else setEnabled(false);
 			}
 		});
-		addButton(this.next = new ToolbarButton(this, "next", "next-24x24.png", XMLResourceBundle.getBundledString("imageToolbarNextHistoric"))
+		addButton(this.next = new ToolbarButton(this, "next", "next-24x24.png", Lang.s("imageToolbarNextHistoric"))
 		{
 			public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
@@ -138,7 +139,7 @@ public class MainToolBar extends JPanel implements ToolbarButton.ToolbarButtonLi
 		
 		addGap();
 		
-		addButton(new ToolbarButton(this, "fit", "fit-24x24.png", XMLResourceBundle.getBundledString("imageToolbarFit"))
+		addButton(new ToolbarButton(this, "fit", "fit-24x24.png", Lang.s("imageToolbarFit"))
 		{
 			@Override public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
@@ -148,14 +149,14 @@ public class MainToolBar extends JPanel implements ToolbarButton.ToolbarButtonLi
 		
 		addGap();
 		
-		addButton(new ToolbarButton(this, "add-pages", "add-file-24x24.png", XMLResourceBundle.getBundledString("manageAppendPagesLabel"))
+		addButton(new ToolbarButton(this, "add-pages", "add-file-24x24.png", Lang.s("manageAppendPagesLabel"))
 		{
 			@Override public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
 				setEnabled(document != null && document instanceof Book);
 			}
 		});
-		addButton(new ToolbarButton(this, "remove-pages", "delete-file-24x24.png", XMLResourceBundle.getBundledString("manageDeletePageLabel"))
+		addButton(new ToolbarButton(this, "remove-pages", "delete-file-24x24.png", Lang.s("manageDeletePageLabel"))
 		{
 			@Override public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
@@ -166,9 +167,9 @@ public class MainToolBar extends JPanel implements ToolbarButton.ToolbarButtonLi
 		
 		addGap();
 		
-		addPageEditorOperationButton("add-free-roi", "add-free-roi-24x24.png", XMLResourceBundle.getBundledString("imageToolbarAddFreeRoi"), FreeShapeROIOperation.class);
-		addPageEditorOperationButton("add-rect-roi", "add-rect-roi-24x24.png", XMLResourceBundle.getBundledString("imageToolbarAddRectRoi"), RectROIOperation.class);
-		addButton(new ToolbarButton(this, "remove-roi", "del-roi-24x24.png", XMLResourceBundle.getBundledString("imageToolbarDelRoi"))
+		addPageEditorOperationButton("add-free-roi", "add-free-roi-24x24.png", Lang.s("imageToolbarAddFreeRoi"), FreeShapeROIOperation.class);
+		addPageEditorOperationButton("add-rect-roi", "add-rect-roi-24x24.png", Lang.s("imageToolbarAddRectRoi"), RectROIOperation.class);
+		addButton(new ToolbarButton(this, "remove-roi", "del-roi-24x24.png", Lang.s("imageToolbarDelRoi"))
 		{
 			public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
@@ -176,11 +177,11 @@ public class MainToolBar extends JPanel implements ToolbarButton.ToolbarButtonLi
 			}
 		});
 		
-		addPageEditorOperationButton("crop", "resize-page-24x24.png", XMLResourceBundle.getBundledString("imageToolbarCrop"), CropOperation.class);
+		addPageEditorOperationButton("crop", "resize-page-24x24.png", Lang.s("imageToolbarCrop"), CropOperation.class, true);
 		
 		addGap();
 		
-		addButton(new ToolbarButton(this, "transpose", "transpose-24x24.png", XMLResourceBundle.getBundledString("imageToolbarTranspose"))
+		addButton(new ToolbarButton(this, "transpose", "transpose-24x24.png", Lang.s("imageToolbarTranspose"))
 		{
 			public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
@@ -194,7 +195,7 @@ public class MainToolBar extends JPanel implements ToolbarButton.ToolbarButtonLi
 		addGap();
 		
 		if (win.pluginManager.analysisPlugins.size() > 0)
-			addPageEditorOperationButton("analysis", "analysis-24x24.png", XMLResourceBundle.getBundledString("imageAnalysis"), AnalysisOperation.class);
+			addPageEditorOperationButton("analysis", "analysis-24x24.png", Lang.s("imageAnalysis"), AnalysisOperation.class);
 		
 		add(toolPanel, BorderLayout.WEST);
 		
@@ -207,7 +208,7 @@ public class MainToolBar extends JPanel implements ToolbarButton.ToolbarButtonLi
 			if (term.length() == 0)
 				return;
 			win.searchComponent.doSearch(term);
-		}}) {{setPreferredSize(new Dimension(36, 36)); setToolTipText(XMLResourceBundle.getBundledString("searchLabel"));}};
+		}}) {{setPreferredSize(new Dimension(36, 36)); setToolTipText(Lang.s("searchLabel"));}};
 		searchArea.addKeyListener(new KeyAdapter() {public void keyReleased(KeyEvent e)
 		{
 			if (e.getKeyCode() == KeyEvent.VK_ENTER)
@@ -217,18 +218,18 @@ public class MainToolBar extends JPanel implements ToolbarButton.ToolbarButtonLi
 		rightPanel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("advanced-search-24x24.png")) {public void actionPerformed(ActionEvent e)
 		{
 			JPopupMenu menu = new JPopupMenu();
-			menu.add(new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("searcByTag")) {public void actionPerformed(ActionEvent arg0)
+			menu.add(new JMenuItem(new AbstractAction(Lang.s("searcByTag")) {public void actionPerformed(ActionEvent arg0)
 			{
 				try {win.searchComponent.doSearchByTag();}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 			}}));
-			menu.add(new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("searcByMD")) {public void actionPerformed(ActionEvent arg0)
+			menu.add(new JMenuItem(new AbstractAction(Lang.s("searcByMD")) {public void actionPerformed(ActionEvent arg0)
 			{
 				try {win.searchComponent.doSearchByAnnotationName();}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 			}}));
 			menu.show((JButton)e.getSource(), 0, 0);
-		}}) {{setPreferredSize(new Dimension(36, 36)); setToolTipText(XMLResourceBundle.getBundledString("advancedLabel"));}});
+		}}) {{setPreferredSize(new Dimension(36, 36)); setToolTipText(Lang.s("advancedLabel"));}});
 		add(rightPanel, BorderLayout.EAST);
 	}
 	
@@ -236,17 +237,25 @@ public class MainToolBar extends JPanel implements ToolbarButton.ToolbarButtonLi
 	{
 		addPageEditorOperationButton(action, ImageUtils.getIcon(iconName), tooltip, clazz);
 	}
-	@SuppressWarnings("serial")
+	public void addPageEditorOperationButton(String action, String iconName, String tooltip, final Class<? extends EditorView.Operation<?>> clazz, boolean worksForMetaData)
+	{
+		addPageEditorOperationButton(action, ImageUtils.getIcon(iconName), tooltip, clazz, worksForMetaData);
+	}
 	public void addPageEditorOperationButton(String action, Icon icon, String tooltip, final Class<? extends EditorView.Operation<?>> clazz)
+	{
+		addPageEditorOperationButton(action, icon, tooltip, clazz, false);
+	}
+	@SuppressWarnings("serial")
+	public void addPageEditorOperationButton(String action, Icon icon, String tooltip, final Class<? extends EditorView.Operation<?>> clazz, final boolean worksForMetaData)
 	{
 		ToolbarToggleButton button = new ToolbarToggleButton(this, action, icon, tooltip)
 		{
 			@Override public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
-				if (panel != null && panel.getEditor() instanceof PageEditor)
+				if (panel != null && (panel.getEditor() instanceof PageEditor || worksForMetaData && panel.getEditor() instanceof ImageMetaDataEditor))
 				{
 					setEnabled(true);
-					setSelected(((PageEditor)panel.getEditor()).getOperation().getClass() == clazz);
+					setSelected(((EditorView)panel.getEditor()).getOperation() != null && ((EditorView)panel.getEditor()).getOperation().getClass() == clazz);
 				}
 				else setEnabled(false);
 			}

@@ -83,7 +83,7 @@ public class XMLBundleControl extends ResourceBundle.Control
 			if (stream != null)
 			{
 				BufferedInputStream bis = new BufferedInputStream(stream);
-				bundle = new XMLResourceBundle(bis);
+				bundle = new Lang(bis);
 				bis.close();
 			}
 		}

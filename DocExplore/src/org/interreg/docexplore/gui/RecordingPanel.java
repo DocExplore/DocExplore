@@ -43,7 +43,7 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 
 @SuppressWarnings("serial")
 public class RecordingPanel extends JPanel
@@ -88,7 +88,7 @@ public class RecordingPanel extends JPanel
 		this.recording = new AtomicBoolean(false);
 		this.playing = new AtomicBoolean(false);
 		this.stopped = new AtomicBoolean(true);
-		this.status = new JLabel(XMLResourceBundle.getBundledString("recordStoppedLabel"));
+		this.status = new JLabel(Lang.s("recordStoppedLabel"));
 		this.slider = new JSlider(0, 100);
 		this.listeners = new LinkedList<RecordingListener>();
 		refreshDevices();

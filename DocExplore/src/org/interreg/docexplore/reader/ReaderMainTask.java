@@ -17,7 +17,7 @@ package org.interreg.docexplore.reader;
 import java.awt.image.BufferedImage;
 
 import org.imgscalr.Scalr;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.reader.book.BookSpecification;
 import org.interreg.docexplore.reader.book.BookSpecificationParser;
 import org.interreg.docexplore.reader.gui.Button;
@@ -90,11 +90,11 @@ public class ReaderMainTask extends Thread
 		{
 			BufferedImage finger = ImageUtils.read(Thread.currentThread().getContextClassLoader().getResource(Widget.class.getPackage().getName().replace('.', '/')+"/finger.png"));
 			finger = Scalr.resize(finger, (int)(.05f*Gdx.graphics.getWidth()));
-			this.helpShelf = new Label(app, Widget.renderText(finger, XMLResourceBundle.getBundledString("helpShelf1")+"<br>"+XMLResourceBundle.getBundledString("helpShelf2"), 
+			this.helpShelf = new Label(app, Widget.renderText(finger, Lang.s("helpShelf1")+"<br>"+Lang.s("helpShelf2"), 
 				Gdx.graphics.getWidth()/2), true, false);
-			this.helpBook = new Label(app, Widget.renderText(finger, XMLResourceBundle.getBundledString("helpBook1")+"<br>"+XMLResourceBundle.getBundledString("helpBook2"), 
+			this.helpBook = new Label(app, Widget.renderText(finger, Lang.s("helpBook1")+"<br>"+Lang.s("helpBook2"), 
 				Gdx.graphics.getWidth()/2), true, false);
-			this.helpRoi = new Label(app, Widget.renderText(finger, XMLResourceBundle.getBundledString("helpRoi1")+"<br>"+XMLResourceBundle.getBundledString("helpRoi2"), 
+			this.helpRoi = new Label(app, Widget.renderText(finger, Lang.s("helpRoi1")+"<br>"+Lang.s("helpRoi2"), 
 				Gdx.graphics.getWidth()/2), true, false);
 			
 			float maxw = .75f*Gdx.graphics.getWidth();
@@ -157,7 +157,7 @@ public class ReaderMainTask extends Thread
 		try
 		{
 			//Thread.sleep(1000);
-			dialog.set(XMLResourceBundle.getBundledString("waitLabel"), XMLResourceBundle.getBundledString("loadingLabel"));
+			dialog.set(Lang.s("waitLabel"), Lang.s("loadingLabel"));
 			dialog.activate(true);
 			Thread.sleep(1000);
 			
@@ -211,8 +211,8 @@ public class ReaderMainTask extends Thread
 							entry = (ShelfSpecification.Entry)pair.second;//app.shelf.selectedEntry();
 							app.logger.addEntry("Shelf entry selected: "+entry.title+ "("+entry.src+")");
 						
-							dialog.set(XMLResourceBundle.getBundledString("confirmLabel"), XMLResourceBundle.getBundledString("readLabel").replace("%s", entry.title), 
-								XMLResourceBundle.getBundledString("yesLabel"), XMLResourceBundle.getBundledString("noLabel"));
+							dialog.set(Lang.s("confirmLabel"), Lang.s("readLabel").replace("%s", entry.title), 
+								Lang.s("yesLabel"), Lang.s("noLabel"));
 							app.input.addListener(dialog);
 							dialog.activate(true);
 							if (dialog.waitForClick() != 0)
@@ -236,7 +236,7 @@ public class ReaderMainTask extends Thread
 					{
 						app.logger.addEntry("Shelf refresh");
 						reload.activate(false);
-						dialog.set(XMLResourceBundle.getBundledString("waitLabel"), XMLResourceBundle.getBundledString("loadingLabel"));
+						dialog.set(Lang.s("waitLabel"), Lang.s("loadingLabel"));
 						dialog.activate(true);
 						Thread.sleep(1000);
 						

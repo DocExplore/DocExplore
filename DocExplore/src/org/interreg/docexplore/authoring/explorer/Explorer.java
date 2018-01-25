@@ -35,7 +35,7 @@ import javax.swing.SwingUtilities;
 import org.interreg.docexplore.authoring.AuthoringToolFrame;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.WrapLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -68,7 +68,7 @@ public class Explorer extends JPanel
 		this.curView = null;
 		
 		this.toolPanel = new JPanel(new WrapLayout(FlowLayout.LEFT));
-		toolPanel.add(titleLabel = new JLabel(XMLResourceBundle.getBundledString("generalPathLabel")));
+		toolPanel.add(titleLabel = new JLabel(Lang.s("generalPathLabel")));
 		toolPanel.add(pathField = new JTextField(40));
 		pathField.addKeyListener(new KeyAdapter()
 		{
@@ -86,7 +86,7 @@ public class Explorer extends JPanel
 				String parent = getParentPath(curPath);
 				explore(parent == null ? "" : parent);
 			}
-		}) {{setToolTipText(XMLResourceBundle.getBundledString("generalToolbarParent"));}});
+		}) {{setToolTipText(Lang.s("generalToolbarParent"));}});
 		toolPanel.add(new JToggleButton(new AbstractAction("", ImageUtils.getIcon("list-24x24.png"))
 		{
 			@Override public void actionPerformed(ActionEvent e)
@@ -94,7 +94,7 @@ public class Explorer extends JPanel
 				iconMode = !((JToggleButton)e.getSource()).isSelected();
 				curView.updateLayout();
 			}
-		}) {{setToolTipText(XMLResourceBundle.getBundledString("generalToolbarView"));}});
+		}) {{setToolTipText(Lang.s("generalToolbarView"));}});
 		add(toolPanel, BorderLayout.NORTH);
 	}
 	
@@ -168,11 +168,10 @@ public class Explorer extends JPanel
 			viewNeedsRevalidation = false;
 			SwingUtilities.invokeLater(new Runnable() {@Override public void run()
 			{
-				revalidate();
+				validate();
 				repaint();
 				SwingUtilities.invokeLater(new Runnable() {@Override public void run()
 				{
-					curViewComponent.revalidate();
 					curViewComponent.validate();
 					curViewComponent.repaint();
 				}});

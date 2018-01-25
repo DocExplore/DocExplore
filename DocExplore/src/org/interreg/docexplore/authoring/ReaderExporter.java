@@ -22,9 +22,9 @@ import javax.swing.JOptionPane;
 
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.util.StringUtils;
 
 public class ReaderExporter extends PresentationExporter
@@ -93,7 +93,7 @@ public class ReaderExporter extends PresentationExporter
 				String testTitle = xml.substring(index, endIndex);
 				if (testTitle.equals(title))
 				{
-					int res = JOptionPane.showConfirmDialog(tool, XMLResourceBundle.getBundledString("exportDuplicateMessage"), "Confirmation", 
+					int res = JOptionPane.showConfirmDialog(tool, Lang.s("exportDuplicateMessage"), "Confirmation", 
 						JOptionPane.YES_NO_CANCEL_OPTION);
 					if (res == JOptionPane.CANCEL_OPTION)
 						return;
@@ -104,7 +104,7 @@ public class ReaderExporter extends PresentationExporter
 					}
 					else
 					{
-						String name = JOptionPane.showInputDialog(tool, XMLResourceBundle.getBundledString("collectionAddBookMessage"), book.getName());
+						String name = JOptionPane.showInputDialog(tool, Lang.s("collectionAddBookMessage"), book.getName());
 						if (name == null)
 							return;
 						book.setName(name);

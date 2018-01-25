@@ -27,7 +27,7 @@ import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -59,20 +59,20 @@ public class TranscriptionEditor extends AnnotationEditor
 			
 			JPanel mainPanel = new JPanel(new BorderLayout());
 			mainPanel.setOpaque(false);
-			mainPanel.add(new JLabel("<html><big>"+XMLResourceBundle.getBundledString("transcriptEditorLabel")+"</big></html>", 
+			mainPanel.add(new JLabel("<html><big>"+Lang.s("transcriptEditorLabel")+"</big></html>", 
 					ImageUtils.getIcon("transcription-64x64.png"), 
 				SwingConstants.LEFT), BorderLayout.NORTH);
 			
 			JPanel authorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			authorPanel.setOpaque(false);
-			authorPanel.add(new JLabel(XMLResourceBundle.getBundledString("transcriptEditorAuthorLabel")));
+			authorPanel.add(new JLabel(Lang.s("transcriptEditorAuthorLabel")));
 			authorPanel.add(authorField);
 			mainPanel.add(authorPanel, BorderLayout.CENTER);
 			
 			JPanel contentPanel = new JPanel(new BorderLayout());
 			contentPanel.setOpaque(false);
 			contentPanel.setBorder(BorderFactory.createTitledBorder(
-				XMLResourceBundle.getBundledString("transcriptEditorContentLabel")));
+				Lang.s("transcriptEditorContentLabel")));
 			contentArea.setLineWrap(true);
 			contentPanel.add(new JScrollPane(contentArea, 
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,

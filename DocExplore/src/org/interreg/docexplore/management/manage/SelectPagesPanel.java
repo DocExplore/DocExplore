@@ -19,13 +19,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.interreg.docexplore.DocExploreTool;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 
 public class SelectPagesPanel
 {
 	public static List<File> show()
 	{
-		File [] files = DocExploreTool.getFileDialogs().openFiles(DocExploreTool.getImagesCategory(), XMLResourceBundle.getBundledString("manageSelectFilesMsg"));
+		File [] files = DocExploreTool.getFileDialogs().openFiles(DocExploreTool.getImagesCategory(), Lang.s("manageSelectFilesMsg"));
 		
 		if (files != null)
 		{

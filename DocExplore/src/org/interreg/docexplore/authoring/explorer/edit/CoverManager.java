@@ -43,7 +43,7 @@ import org.interreg.docexplore.authoring.explorer.ViewItem.Data;
 import org.interreg.docexplore.authoring.explorer.ViewMouseListener;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
@@ -61,10 +61,10 @@ public class CoverManager extends JPanel
 	{
 		super(new LooseGridLayout(2, 2, 5, 5, true, true, SwingConstants.CENTER, SwingConstants.CENTER, true, true));
 		
-		add(new ImagePanel(XMLResourceBundle.getBundledString("coverFront"), "frontCover"));
-		add(new ImagePanel(XMLResourceBundle.getBundledString("coverBack"), "backCover"));
-		add(new ImagePanel(XMLResourceBundle.getBundledString("coverFrontInner"), "frontInnerCover"));
-		add(new ImagePanel(XMLResourceBundle.getBundledString("coverBackInner"), "backInnerCover"));
+		add(new ImagePanel(Lang.s("coverFront"), "frontCover"));
+		add(new ImagePanel(Lang.s("coverBack"), "backCover"));
+		add(new ImagePanel(Lang.s("coverFrontInner"), "frontInnerCover"));
+		add(new ImagePanel(Lang.s("coverBackInner"), "backInnerCover"));
 		
 		setPreferredSize(new Dimension(800, 600));
 		
@@ -133,7 +133,7 @@ public class CoverManager extends JPanel
 			}};
 			
 			JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-			final JButton discard = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("coverDiscard")) {public void actionPerformed(ActionEvent e)
+			final JButton discard = new JButton(new AbstractAction(Lang.s("coverDiscard")) {public void actionPerformed(ActionEvent e)
 			{
 				try
 				{
@@ -147,7 +147,7 @@ public class CoverManager extends JPanel
 				
 				canvas.repaint();
 			}});
-			final JButton browse = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("coverBrowse")) {public void actionPerformed(ActionEvent e)
+			final JButton browse = new JButton(new AbstractAction(Lang.s("coverBrowse")) {public void actionPerformed(ActionEvent e)
 			{
 				try
 				{
@@ -260,62 +260,53 @@ public class CoverManager extends JPanel
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 		return null;
 	}
-	public static BufferedImage buildCoverImage(Book book, boolean trans)
+	public static BufferedImage buildCoverImage(Book book, boolean trans, boolean inner)
 	{
 		try
 		{
-			BufferedImage front = getImage(book, "frontCover");
-			BufferedImage back = getImage(book, "backCover");
+			BufferedImage front = inner ? getImage(book, "frontInnerCover") : getImage(book, "frontCover");
+			BufferedImage back = inner ? getImage(book, "backInnerCover") : getImage(book, "backCover");
 			if (front == null && back == null)
-				return ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("org/interreg/docexplore/reader/book/defaultCover"+(trans ? "" : "NoTrans")+".png"));
+			{
+				BufferedImage image = ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("org/interreg/docexplore/reader/book/default"+(inner ? "Inner" : "")+"Cover"+(trans ? "" : "NoTrans")+".png"));
+				if (!trans)
+				{
+					BufferedImage tmp = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+					tmp.createGraphics().drawImage(image, null, 0, 0);
+					image = tmp;
+				}
+				return image;
+			}
 			BufferedImage res = new BufferedImage(
 				(front != null ? front.getWidth() : back.getWidth())+(back != null ? back.getWidth() : front.getWidth()), 
 				Math.max((front != null ? front.getHeight() : back.getHeight()), (back != null ? back.getHeight() : front.getHeight())), 
-				BufferedImage.TYPE_INT_ARGB);
-			
+				trans ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_3BYTE_BGR);
 			Graphics2D g = res.createGraphics();
-			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
-			g.setBackground(new Color(0));
-			g.clearRect(0, 0, res.getWidth(), res.getHeight());
-			if (front != null)
-				g.drawImage(front, res.getWidth()-front.getWidth(), 0, front.getWidth(), front.getHeight(), null);
-			else g.drawImage(back, res.getWidth()-back.getWidth(), 0, res.getWidth(), res.getHeight(), back.getWidth(), 0, 0, back.getHeight(), null);
-			if (back != null)
-				g.drawImage(back, 0, 0, back.getWidth(), back.getHeight(), null);
-			else g.drawImage(front, 0, 0, front.getWidth(), front.getHeight(), front.getWidth(), 0, 0, front.getHeight(), null);
-			
+			if (trans)
+			{
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
+				g.setBackground(new Color(0));
+				g.clearRect(0, 0, res.getWidth(), res.getHeight());
+			}
+			if (inner)
+			{
+				if (back != null) g.drawImage(back, res.getWidth()-back.getWidth(), 0, back.getWidth(), back.getHeight(), null);
+				else g.drawImage(front, res.getWidth()-front.getWidth(), 0, res.getWidth(), res.getHeight(), front.getWidth(), 0, 0, front.getHeight(), null);
+				if (front != null) g.drawImage(front, 0, 0, front.getWidth(), front.getHeight(), null);
+				else g.drawImage(back, 0, 0, back.getWidth(), back.getHeight(), back.getWidth(), 0, 0, back.getHeight(), null);
+			}
+			else
+			{
+				if (front != null) g.drawImage(front, res.getWidth()-front.getWidth(), 0, front.getWidth(), front.getHeight(), null);
+				else g.drawImage(back, res.getWidth()-back.getWidth(), 0, res.getWidth(), res.getHeight(), back.getWidth(), 0, 0, back.getHeight(), null);
+				if (back != null) g.drawImage(back, 0, 0, back.getWidth(), back.getHeight(), null);
+				else g.drawImage(front, 0, 0, front.getWidth(), front.getHeight(), front.getWidth(), 0, 0, front.getHeight(), null);
+			}
 			return res;
 		}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 		return null;
 	}
-	public static BufferedImage buildInnerCoverImage(Book book, boolean trans)
-	{
-		try
-		{
-			BufferedImage front = getImage(book, "frontInnerCover");
-			BufferedImage back = getImage(book, "backInnerCover");
-			if (front == null && back == null)
-				return ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("org/interreg/docexplore/reader/book/defaultInnerCover"+(trans ? "" : "NoTrans")+".png"));
-			BufferedImage res = new BufferedImage(
-				(front != null ? front.getWidth() : back.getWidth())+(back != null ? back.getWidth() : front.getWidth()), 
-				Math.max((front != null ? front.getHeight() : back.getHeight()), (back != null ? back.getHeight() : front.getHeight())), 
-				BufferedImage.TYPE_INT_ARGB);
-			
-			Graphics2D g = res.createGraphics();
-			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
-			g.setBackground(new Color(0));
-			g.clearRect(0, 0, res.getWidth(), res.getHeight());
-			if (back != null)
-				g.drawImage(back, res.getWidth()-back.getWidth(), 0, back.getWidth(), back.getHeight(), null);
-			else g.drawImage(front, res.getWidth()-front.getWidth(), 0, res.getWidth(), res.getHeight(), front.getWidth(), 0, 0, front.getHeight(), null);
-			if (front != null)
-				g.drawImage(front, 0, 0, front.getWidth(), front.getHeight(), null);
-			else g.drawImage(back, 0, 0, back.getWidth(), back.getHeight(), back.getWidth(), 0, 0, back.getHeight(), null);
-			
-			return res;
-		}
-		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-		return null;
-	}
+	public static BufferedImage buildCoverImage(Book book, boolean trans) {return buildCoverImage(book, trans, false);}
+	public static BufferedImage buildInnerCoverImage(Book book, boolean trans) {return buildCoverImage(book, trans, true);}
 }
