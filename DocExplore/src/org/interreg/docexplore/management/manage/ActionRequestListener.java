@@ -21,7 +21,7 @@ public interface ActionRequestListener
 	public void onMovePagesRequest(List<Page> pages, Page moveAfter);
 	public void onMovePartsRequest(Book book, MetaData part, int col, int row, boolean insertRow);
 	public void onTransposePartsRequest(Book book);
-	public void onCropPageRequest(Page page, int tlx, int tly, int brx, int bry);
+	public void onCropPageRequest(AnnotatedObject object, int tlx, int tly, int brx, int bry);
 	public MetaData onAddAnnotationRequest(AnnotatedObject object, MetaData annotation);
 	public Region onAddRegionRequest(Page page, Point [] outline);
 	public void onDeleteRegionRequest(Region region);

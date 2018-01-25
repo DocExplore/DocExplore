@@ -232,9 +232,12 @@ public class ViewMouseListener implements MouseListener, MouseMotionListener
 	@Override public void mouseEntered(MouseEvent e) {}
 	@Override public void mouseExited(MouseEvent e) {}
 	
+	int downx, downy;
 	ViewItem pressed = null;
 	@Override public void mousePressed(MouseEvent e)
 	{
+		downx = e.getX();
+		downy = e.getY();
 		Component clicked = view.getComponentAt(e.getPoint());
 		if (clicked instanceof ViewItem)
 			pressed = (ViewItem)clicked;
@@ -246,9 +249,12 @@ public class ViewMouseListener implements MouseListener, MouseMotionListener
 		}
 	}
 
+	static int dragThreshold = 3;
 	DropTarget lastTarget = null;
 	@Override public void mouseDragged(MouseEvent e)
 	{
+		if (!isDragging && !view.selectionRectVisible && (e.getX()-downx)*(e.getX()-downx)+(e.getY()-downy)*(e.getY()-downy) < dragThreshold*dragThreshold)
+			return;
 		boolean ctrl = (e.getModifiersEx() & MouseEvent.CTRL_DOWN_MASK) != 0;
 		boolean shift = (e.getModifiersEx() & MouseEvent.SHIFT_DOWN_MASK) != 0;
 		

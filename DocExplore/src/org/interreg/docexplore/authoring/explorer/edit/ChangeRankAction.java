@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.interreg.docexplore.authoring.BookImporter;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.util.history.ReversibleAction;
@@ -74,7 +74,7 @@ public class ChangeRankAction extends ReversibleAction
 	
 	public String description()
 	{
-		return XMLResourceBundle.getBundledString("moveAnnotation");
+		return Lang.s("moveAnnotation");
 	}
 
 }

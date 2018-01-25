@@ -22,13 +22,14 @@ import javax.swing.JSplitPane;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.management.annotate.AnnotationPanel;
 import org.interreg.docexplore.management.image.BookEditor;
+import org.interreg.docexplore.management.image.ImageMetaDataEditor;
 import org.interreg.docexplore.management.image.PosterPageEditor;
 import org.interreg.docexplore.management.manage.ActionRequestListener;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
@@ -88,6 +89,7 @@ public class DocumentPanel extends JSplitPane implements DocumentEditorHost
 		if (document instanceof Book) return new BookEditor(this, (Book)document);
 		if (document instanceof Page) return new PosterPageEditor(this, (Page)document);
 		if (document instanceof Region) return new PosterPageEditor(this, (Region)document);
+		if (document instanceof MetaData && ((MetaData)document).getType().equals(MetaData.imageType)) return new ImageMetaDataEditor(this, (MetaData)document);
 		return null;
 	}
 	

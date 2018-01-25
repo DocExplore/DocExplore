@@ -25,9 +25,9 @@ import org.interreg.docexplore.authoring.explorer.edit.CollectionEditorView;
 import org.interreg.docexplore.authoring.explorer.edit.SlideEditorView;
 import org.interreg.docexplore.datalink.fs2.FS2ActionProvider;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
@@ -86,7 +86,7 @@ public class DataLinkExplorer extends Explorer
 		List<Integer> books = link.getLink().getAllBookIds();
 		if (books.isEmpty())
 		{
-			Book book = new Book(link, XMLResourceBundle.getBundledString("collectionDefaultBookLabel"));
+			Book book = new Book(link, Lang.s("collectionDefaultBookLabel"));
 			books = new LinkedList<Integer>();
 			books.add(book.getId());
 		}

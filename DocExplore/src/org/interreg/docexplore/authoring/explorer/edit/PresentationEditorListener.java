@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.management.gui.DocumentEditorHost;
 import org.interreg.docexplore.management.gui.DocumentPanel;
 import org.interreg.docexplore.management.manage.ActionRequestListener;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
@@ -31,7 +31,7 @@ public class PresentationEditorListener implements DocumentEditorHost, ActionReq
 	@Override public List<Page> onAppendPagesRequest(Book book, List<File> files) {return null;}
 	@Override public void onDeletePagesRequest(List<Page> pages) {}
 	@Override public void onMovePagesRequest(List<Page> pages, Page moveAfter) {}
-	@Override public void onCropPageRequest(Page page, int tlx, int tly, int brx, int bry) {}
+	@Override public void onCropPageRequest(AnnotatedObject object, int tlx, int tly, int brx, int bry) {}
 	@Override public MetaData onAddAnnotationRequest(AnnotatedObject object, MetaData annotation) {return null;}
 	@Override public Region onAddRegionRequest(Page page, Point[] outline) {return null;}
 	@Override public void onDeleteRegionRequest(Region region) {}

@@ -23,8 +23,8 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
 import org.interreg.docexplore.DocExploreTool;
-import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.util.ByteUtils;
 import org.interreg.docexplore.util.ZipUtils;
 

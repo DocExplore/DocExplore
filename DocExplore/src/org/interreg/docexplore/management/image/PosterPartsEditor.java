@@ -29,6 +29,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -41,23 +42,22 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
-import org.imgscalr.Scalr;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.IconButton;
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.gui.WrapLayout;
 import org.interreg.docexplore.gui.image.ImageView;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.DocumentEditorHost;
 import org.interreg.docexplore.management.manage.SelectPagesPanel;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
+import org.interreg.docexplore.manuscript.PosterUtils;
+import org.interreg.docexplore.manuscript.TileConfiguration;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
-import org.interreg.docexplore.util.MemoryImageSource;
 
 public class PosterPartsEditor extends JPanel implements BookEditor.ConfigurationEditor
 {
@@ -99,7 +99,7 @@ public class PosterPartsEditor extends JPanel implements BookEditor.Configuratio
 				catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 		}});
 		
-		topPanel.add(refreshButton = new IconButton("refresh-24x24.png", XMLResourceBundle.getBundledString("manageRefreshLabel")));
+		topPanel.add(refreshButton = new IconButton("refresh-24x24.png", Lang.s("manageRefreshLabel")));
 		refreshButton.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e)
 		{
 			GuiUtils.blockUntilComplete(new GuiUtils.ProgressRunnable() {@Override public void run()
@@ -108,11 +108,13 @@ public class PosterPartsEditor extends JPanel implements BookEditor.Configuratio
 				{
 					if (book.getLastPageNumber() > 0)
 					{
-						BufferedImage image = PosterUtils.buildComposite(host.getLink(), book, progress);
+						TileConfiguration config = new TileConfiguration();
+						config.build(host.getLink(), book, progress);
+						
 						Page page = book.getPage(1);
-						page.setImage(new MemoryImageSource(image));
-						page.setMetaDataString(host.getLink().dimKey, image.getWidth()+","+image.getHeight());
-						DocExploreDataLink.getImageMini(page);
+						page.setMetaDataString(host.getLink().dimKey, config.getFullWidth()+","+config.getFullHeight());
+						//DocExploreDataLink.getImageMini(page);
+						book.setMetaDataString(host.getLink().upToDateKey, "true");
 					}
 				}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
@@ -156,7 +158,7 @@ public class PosterPartsEditor extends JPanel implements BookEditor.Configuratio
 		try
 		{
 			partPanel.removeAll();
-			MetaData [][] mds = PosterUtils.getPosterPartsArray(host.getLink(), book);
+			MetaData [][] mds = PosterUtils.getBaseTilesArray(host.getLink(), book);
 			if (mds.length > 0 && mds[0].length > 0)
 			{
 				int [] rowLengths = new int [mds[0].length];
@@ -180,14 +182,14 @@ public class PosterPartsEditor extends JPanel implements BookEditor.Configuratio
 					}
 					else if (i%2 == 1 && j%2 == 1)
 					{
-						if (x <= rowLengths[y])
+						if (mds[x][y] != null)
 							partPanel.add(new PartLabel(this, mds[x][y], x, y));
 						else partPanel.add(new JLabel(""));
 					}
 					else
 					{
-						if (j%2 == 1 && (x == mds.length && x == rowLengths[y] || x < rowLengths[y]) ||
-							i%2 == 1 && ((y < 1 || mds[x][y-1] != null) && (y >= mds[0].length || mds[x][y] != null)))
+						if (j%2 == 1 && ((x >= 1 && mds[x-1][y] != null) || (x < mds.length && mds[x][y] != null)) ||
+							i%2 == 1 && ((y >= 1 && mds[x][y-1] != null) || (y < mds[0].length && mds[x][y] != null)))
 								partPanel.add(new PartLabel(this, null, x, y, j%2 == 0));
 						else partPanel.add(new JLabel(""));
 					}
@@ -236,13 +238,17 @@ public class PosterPartsEditor extends JPanel implements BookEditor.Configuratio
 				posterPreview.setImage(null);
 				return;
 			}
-			book.getPage(1).unloadImage();
-			BufferedImage image = book.getPage(1).getImage().getImage();
-			posterPreview.setImage(Scalr.resize(image, pw));
+			List<MetaData> configs = book.getMetaDataListForKey(host.getLink().tileConfigKey);
+			TileConfiguration config = configs.size() > 0 ? (TileConfiguration)new ObjectInputStream(configs.get(0).getValue()).readObject() : null;
+			if (config != null)
+			{
+				BufferedImage image = host.getLink().getMetaData(config.getTileId(config.getLastLayer(), 0, 0)).getImage();
+				posterPreview.setImage(image);
+			}
+			else posterPreview.setImage(new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR));
 			posterPreview.setPreferredSize(new Dimension(pw, pw));
 			posterPreview.revalidate();
 			posterPreview.repaint();
-			book.getPage(1).unloadImage();
 		}
 		catch (Exception e)
 		{

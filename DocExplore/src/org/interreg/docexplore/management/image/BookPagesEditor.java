@@ -33,8 +33,8 @@ import javax.swing.JScrollPane;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.WrapLayout;
-import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.management.manage.SelectPagesPanel;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.Page;
 
 public class BookPagesEditor extends JPanel implements BookEditor.ConfigurationEditor

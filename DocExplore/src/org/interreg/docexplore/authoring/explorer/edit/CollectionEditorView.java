@@ -26,9 +26,9 @@ import org.interreg.docexplore.authoring.explorer.Explorer.Listener;
 import org.interreg.docexplore.authoring.explorer.ExplorerView;
 import org.interreg.docexplore.authoring.explorer.ViewItem;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.util.ImageUtils;
 
 @SuppressWarnings("serial")
@@ -42,8 +42,8 @@ public class CollectionEditorView extends CollectionView
 		{
 			@Override public void actionPerformed(ActionEvent e)
 			{
-				String name = JOptionPane.showInputDialog(CollectionEditorView.this, XMLResourceBundle.getBundledString("collectionAddBookMessage"),
-					XMLResourceBundle.getBundledString("collectionDefaultBookLabel"));
+				String name = JOptionPane.showInputDialog(CollectionEditorView.this, Lang.s("collectionAddBookMessage"),
+					Lang.s("collectionDefaultBookLabel"));
 				if (name == null)
 					return;
 				try {explorer.link.getLink().addBook(name);}
@@ -51,7 +51,7 @@ public class CollectionEditorView extends CollectionView
 				explorer.explore("docex://");
 			}
 		});
-		newBook.setToolTipText(XMLResourceBundle.getBundledString("generalToolbarCreate"));
+		newBook.setToolTipText(Lang.s("generalToolbarCreate"));
 		final JButton removeBook = new JButton(new AbstractAction("", ImageUtils.getIcon("remove-24x24.png"))
 		{
 			@Override public void actionPerformed(ActionEvent e)
@@ -64,7 +64,7 @@ public class CollectionEditorView extends CollectionView
 				explorer.explore(explorer.curPath);
 			}
 		});
-		removeBook.setToolTipText(XMLResourceBundle.getBundledString("generalToolbarRemove"));
+		removeBook.setToolTipText(Lang.s("generalToolbarRemove"));
 		final JButton editBook = new JButton(new AbstractAction("", ImageUtils.getIcon("pencil-24x24.png"))
 		{
 			@Override public void actionPerformed(ActionEvent e)
@@ -72,7 +72,7 @@ public class CollectionEditorView extends CollectionView
 				if (selected.size() != 1)
 					return;
 				Book book = (Book)selected.iterator().next().data.object;
-				String name = JOptionPane.showInputDialog(CollectionEditorView.this, XMLResourceBundle.getBundledString("collectionAddBookMessage"), book.getName());
+				String name = JOptionPane.showInputDialog(CollectionEditorView.this, Lang.s("collectionAddBookMessage"), book.getName());
 				if (name == null)
 					return;
 				try
@@ -83,7 +83,7 @@ public class CollectionEditorView extends CollectionView
 				catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}
 		});
-		editBook.setToolTipText(XMLResourceBundle.getBundledString("generalToolbarEdit"));
+		editBook.setToolTipText(Lang.s("generalToolbarEdit"));
 		removeBook.setEnabled(false);
 		editBook.setEnabled(false);
 		addSelectionListener(new SelectionListener() {public void selectionChanged(ExplorerView view)

@@ -18,11 +18,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
-import org.interreg.docexplore.management.image.PosterUtils;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
+import org.interreg.docexplore.manuscript.PosterUtils;
 
 public class DeletePosterPartsAction extends UnreversibleAction
 {
@@ -55,7 +55,7 @@ public class DeletePosterPartsAction extends UnreversibleAction
 		}
 	}
 
-	public String description() {return XMLResourceBundle.getBundledString("deleteMetaData");}
+	public String description() {return Lang.s("deleteMetaData");}
 	
 	public void dispose()
 	{

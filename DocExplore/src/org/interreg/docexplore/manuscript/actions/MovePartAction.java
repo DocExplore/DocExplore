@@ -14,11 +14,11 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.manuscript.actions;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
-import org.interreg.docexplore.management.image.PosterUtils;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
+import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.util.history.ReversibleAction;
 
 public class MovePartAction extends ReversibleAction
@@ -47,6 +47,7 @@ public class MovePartAction extends ReversibleAction
 		fromRow = Integer.parseInt(pos[1]);
 		wasRowRemoved = PosterUtils.removeFromRow(link, book, fromCol, fromRow);
 		PosterUtils.addToRow(link, book, part, !wasRowRemoved && fromRow == row && fromCol < col ? col-1 : col, wasRowRemoved && fromRow < row ? row-1 : row, insertRow);
+		book.setMetaDataString(link.upToDateKey, "false");
 	}
 
 	public void undoAction() throws Exception
@@ -56,6 +57,7 @@ public class MovePartAction extends ReversibleAction
 		int row = Integer.parseInt(pos[1]);
 		PosterUtils.removeFromRow(link, book, col, row);
 		PosterUtils.addToRow(link, book, part, fromCol, fromRow, wasRowRemoved);
+		book.setMetaDataString(link.upToDateKey, "false");
 	}
 	
 	
@@ -68,6 +70,6 @@ public class MovePartAction extends ReversibleAction
 
 	public String description()
 	{
-		return XMLResourceBundle.getBundledString("movePages");
+		return Lang.s("movePages");
 	}
 }

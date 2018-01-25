@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.interreg.docexplore.gui.image.ImageView;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 
 public class FreeShapeROIOperation implements ImageView.Operation<PageEditor>
 {
@@ -56,7 +56,7 @@ public class FreeShapeROIOperation implements ImageView.Operation<PageEditor>
 			this.current = new LinkedList<Point>();
 			next.setLocation(-1, -1);
 		}
-		else current.add(new Point(Math.max(0, Math.min(view.getImage().getWidth()-1, (int)(vx+.5))), Math.max(0, Math.min(view.getImage().getHeight()-1, (int)(vy+.5)))));
+		else current.add(new Point(Math.max(0, Math.min(view.getImageWidth()-1, (int)(vx+.5))), Math.max(0, Math.min(view.getImageHeight()-1, (int)(vy+.5)))));
 		view.repaint();
 	}
 	
@@ -66,7 +66,7 @@ public class FreeShapeROIOperation implements ImageView.Operation<PageEditor>
 	
 	public void pointHovered(PageEditor view, int cx, int cy, double vx, double vy, int modifiers)
 	{
-		next.setLocation(Math.max(0, Math.min(view.getImage().getWidth()-1, (int)(vx+.5))), Math.max(0, Math.min(view.getImage().getHeight()-1, (int)(vy+.5))));
+		next.setLocation(Math.max(0, Math.min(view.getImageWidth()-1, (int)(vx+.5))), Math.max(0, Math.min(view.getImageHeight()-1, (int)(vy+.5))));
 		if (!current.isEmpty())
 		{
 			Point first = current.get(0);
@@ -102,7 +102,7 @@ public class FreeShapeROIOperation implements ImageView.Operation<PageEditor>
 			g.drawLine(last.x, last.y, next.x, next.y);
 	}
 	
-	public String getMessage() {return XMLResourceBundle.getBundledString("statusFreeMessage");}
+	public String getMessage() {return Lang.s("statusFreeMessage");}
 
 	public void pointDragged(PageEditor view, int cx, int cy, double vx, double vy, int downw, int downy, int deltax, int deltay, int modifiers) {pointHovered(view, cx, cy, vx, vy, modifiers);}
 	public void pointGrabbed(PageEditor view, int cx, int cy, double vx, double vy, int modifiers) {}

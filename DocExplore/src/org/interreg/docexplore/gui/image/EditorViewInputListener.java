@@ -16,8 +16,7 @@ public class EditorViewInputListener extends NavViewInputListener
 	
 	@Override public void mouseClicked(MouseEvent e)
 	{
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == 0 || view.getOperation() == null)
-			super.mouseClicked(e);
+		super.mouseClicked(e);
 		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0 && e.getClickCount() > 1)
 		{
 			if (view.getOperation() != null)
@@ -37,8 +36,6 @@ public class EditorViewInputListener extends NavViewInputListener
 	int dragDownX = 0, dragDownY = 0, dragCurX = 0, dragCurY = 0;
 	@Override public void mousePressed(MouseEvent e)
 	{
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == 0 || view.getOperation() == null)
-			super.mousePressed(e);
 		super.mousePressed(e);
 		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0)
 		{
@@ -51,8 +48,6 @@ public class EditorViewInputListener extends NavViewInputListener
 	
 	@Override public void mouseReleased(MouseEvent e)
 	{
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == 0 || view.getOperation() == null)
-			super.mouseReleased(e);
 		super.mouseReleased(e);
 		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) != 0)
 		{
@@ -73,8 +68,6 @@ public class EditorViewInputListener extends NavViewInputListener
 	static int dragThreshold = 3;
 	@Override public void mouseDragged(MouseEvent e)
 	{
-		if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == 0 || view.getOperation() == null)
-			super.mouseDragged(e);
 		super.mouseDragged(e);
 		if (draggingMaybe && !dragging)
 		{
@@ -89,15 +82,15 @@ public class EditorViewInputListener extends NavViewInputListener
 		}
 		if (dragging)
 		{
-			int dx = e.getX()-panCurX;
-			int dy = e.getY()-panCurY;
+			int dx = e.getX()-dragCurX;
+			int dy = e.getY()-dragCurY;
 			if (view.getOperation() != null)
 				view.getOperation().pointDragged(view, 
 					e.getX(), e.getY(), view.toViewX(e.getX()), view.toViewY(e.getY()), 
 					dragDownX, dragDownY, dx, dy, 
 					e.getModifiersEx());
-			panCurX = e.getX();
-			panCurY = e.getY();
+			dragCurX = e.getX();
+			dragCurY = e.getY();
 			view.checkForCompletion();
 		}
 	}

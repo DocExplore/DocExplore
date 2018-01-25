@@ -1,17 +1,15 @@
-package org.interreg.docexplore.management.image;
+package org.interreg.docexplore.manuscript;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.interreg.docexplore.datalink.DataLinkException;
-import org.interreg.docexplore.management.DocExploreDataLink;
-import org.interreg.docexplore.manuscript.Book;
-import org.interreg.docexplore.manuscript.MetaData;
 
 public class PosterUtils
 {
@@ -112,13 +110,23 @@ public class PosterUtils
 		return res;
 	}
 	
-	public static MetaData [][] getPosterPartsArray(DocExploreDataLink link, Book book) throws DataLinkException
+	public static List<MetaData> getUpperTiles(DocExploreDataLink link, Book book) throws DataLinkException
+	{
+		List<MetaData> tiles = new LinkedList<MetaData>();
+		List<MetaData> allTiles = book.getMetaDataListForKey(link.partKey);
+		for (MetaData tile : allTiles)
+			if (tile.getMetaDataString(link.partPosKey) == null)
+				tiles.add(tile);
+		return tiles;
+	}
+	
+	public static MetaData [][] getBaseTilesArray(DocExploreDataLink link, Book book) throws DataLinkException
 	{
 		int w = 0, h = 0;
 		for (MetaData md : book.getMetaDataListForKey(link.partKey))
 		{
 			String posmd = md.getMetaDataString(link.partPosKey);
-			if (posmd.equals(""))
+			if (posmd == null || posmd.equals(""))
 				continue;
 			String [] pos = md.getMetaDataString(link.partPosKey).split(",");
 			int x = Integer.parseInt(pos[0]);
@@ -130,7 +138,7 @@ public class PosterUtils
 		for (MetaData md : book.getMetaDataListForKey(link.partKey))
 		{
 			String posmd = md.getMetaDataString(link.partPosKey);
-			if (posmd.equals(""))
+			if (posmd == null || posmd.equals(""))
 				continue;
 			String [] pos = posmd.split(",");
 			res[Integer.parseInt(pos[0])][Integer.parseInt(pos[1])] = md;
@@ -139,7 +147,7 @@ public class PosterUtils
 	}
 	public static void transposePoster(DocExploreDataLink link, Book book) throws DataLinkException
 	{
-		MetaData [][] parts = getPosterPartsArray(link, book);
+		MetaData [][] parts = getBaseTilesArray(link, book);
 		for (int i=0;i<parts.length;i++)
 			for (int j=0;j<parts[i].length;j++)
 				if (parts[i][j] != null)
@@ -151,7 +159,7 @@ public class PosterUtils
 	
 	public static boolean removeFromRow(DocExploreDataLink link, Book book, int col, int row) throws DataLinkException
 	{
-		MetaData [][] parts = getPosterPartsArray(link, book);
+		MetaData [][] parts = getBaseTilesArray(link, book);
 		MetaData part = parts[col][row];
 		if (part == null)
 			return false;
@@ -174,7 +182,7 @@ public class PosterUtils
 	}
 	public static void addToRow(DocExploreDataLink link, Book book, MetaData part, int col, int row, boolean insert) throws DataLinkException
 	{
-		MetaData [][] parts = getPosterPartsArray(link, book);
+		MetaData [][] parts = getBaseTilesArray(link, book);
 		part.getMetaDataListForKey(link.partPosKey).get(0).setString((insert ? 0 : col)+","+row);
 		if (insert)
 		{
@@ -183,15 +191,18 @@ public class PosterUtils
 					if (parts[i][j] != null)
 						PosterUtils.setPartPos(link, parts[i][j], i, j+1);
 		}
-		else for (int i=col;i<parts.length;i++)
-			if (parts[i][row] != null)
-				PosterUtils.setPartPos(link, parts[i][row], i+1, row);
+		else
+		{
+			for (int i=col;i<parts.length;i++)
+				if (parts[i][row] != null)
+					PosterUtils.setPartPos(link, parts[i][row], i+1, row);
+		}
 	}
 	
-	static final int maxDim = 4*1024;
+	static final int maxDim = 2*1024;
 	public static BufferedImage buildComposite(DocExploreDataLink link, Book book, float [] progress) throws DataLinkException
 	{
-		MetaData [][] parts = getPosterPartsArray(link, book);
+		MetaData [][] parts = getBaseTilesArray(link, book);
 		if (parts.length == 0 || parts[0].length == 0)
 			return new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR);
 		int fullWidth = 0, fullHeight = 0;

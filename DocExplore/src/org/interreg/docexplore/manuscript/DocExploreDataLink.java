@@ -12,7 +12,7 @@ In this respect, the user's attention is drawn to the risks associated with load
 
 The fact that you are presently reading this means that you have had knowledge of the CeCILL license and that you accept its terms.
  */
-package org.interreg.docexplore.management;
+package org.interreg.docexplore.manuscript;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -35,13 +35,6 @@ import org.interreg.docexplore.datalink.DataLink;
 import org.interreg.docexplore.datalink.DataLink.DataLinkSource;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.manuscript.AnnotatedObject;
-import org.interreg.docexplore.manuscript.Book;
-import org.interreg.docexplore.manuscript.ManuscriptLink;
-import org.interreg.docexplore.manuscript.MetaData;
-import org.interreg.docexplore.manuscript.MetaDataKey;
-import org.interreg.docexplore.manuscript.Page;
-import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.util.FileImageSource;
 import org.interreg.docexplore.util.ImageUtils;
 import org.interreg.docexplore.util.Pair;
@@ -63,6 +56,9 @@ public final class DocExploreDataLink extends ManuscriptLink
 	public MetaDataKey partKey;
 	public MetaDataKey partPosKey;
 	public MetaDataKey displayKey;
+	public MetaDataKey bookKey;
+	public MetaDataKey upToDateKey;
+	public MetaDataKey tileConfigKey;
 	
 	public Set<MetaDataKey> readOnlyKeys, functionalKeys;
 	
@@ -116,6 +112,9 @@ public final class DocExploreDataLink extends ManuscriptLink
 				this.partKey = getOrCreateKey("part", "");
 				this.partPosKey = getOrCreateKey("part-pos", "");
 				this.displayKey = getOrCreateKey("display", "");
+				this.bookKey = getOrCreateKey("book", "");
+				this.upToDateKey = getOrCreateKey("up-to-date", "");
+				this.tileConfigKey = getOrCreateKey("tile-config", "");
 				
 				this.readOnlyKeys = new TreeSet<MetaDataKey>();
 				readOnlyKeys.add(miniKey);
@@ -124,11 +123,11 @@ public final class DocExploreDataLink extends ManuscriptLink
 				readOnlyKeys.add(partKey);
 				readOnlyKeys.add(partPosKey);
 				readOnlyKeys.add(displayKey);
+				readOnlyKeys.add(bookKey);
+				readOnlyKeys.add(upToDateKey);
+				readOnlyKeys.add(tileConfigKey);
 				
 				this.functionalKeys = new TreeSet<MetaDataKey>();
-				functionalKeys.add(miniKey);
-				functionalKeys.add(dimKey);
-				functionalKeys.add(sourceKey);
 				functionalKeys.add(transcriptionKey);
 				functionalKeys.add(linkKey);
 				functionalKeys.add(tagKey);
@@ -229,12 +228,12 @@ public final class DocExploreDataLink extends ManuscriptLink
 		tag.setString(tagXml);
 	}
 	
-	public static Dimension getImageDimension(Page page) throws DataLinkException {return getImageDimension(page, false);}
-	public static Dimension getImageDimension(Page page, boolean noUnload) throws DataLinkException
+	public static Dimension getImageDimension(AnnotatedObject object) throws DataLinkException {return getImageDimension(object, false);}
+	public static Dimension getImageDimension(AnnotatedObject object, boolean noUnload) throws DataLinkException
 	{
-		ManuscriptLink link = page.getLink();
+		ManuscriptLink link = object.getLink();
 		MetaDataKey dimKey = link.getOrCreateKey("dimension", "");
-		List<MetaData> dims = page.getMetaDataListForKey(dimKey);
+		List<MetaData> dims = object.getMetaDataListForKey(dimKey);
 		
 		for (MetaData data : dims)
 			if (data.getType().equals(MetaData.textType))
@@ -253,10 +252,10 @@ public final class DocExploreDataLink extends ManuscriptLink
 		
 		try
 		{
-			BufferedImage image = page.getImage().getImage();
-			page.addMetaData(new MetaData(link, dimKey, image.getWidth()+","+image.getHeight()));
-			if (!noUnload)
-				page.unloadImage();
+			BufferedImage image = object instanceof Page ? ((Page)object).getImage().getImage() : ((MetaData)object).getImage();
+			object.addMetaData(new MetaData(link, dimKey, image.getWidth()+","+image.getHeight()));
+			if (!noUnload && object instanceof Page)
+				((Page)object).unloadImage();
 			return new Dimension(image.getWidth(), image.getHeight());
 		}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
@@ -264,12 +263,12 @@ public final class DocExploreDataLink extends ManuscriptLink
 	}
 	
 	public static final int miniSize = 128;
-	public static BufferedImage getImageMini(Page page) throws Exception {return getImageMini(page, false);}
-	public static BufferedImage getImageMini(Page page, boolean noUnload) throws Exception
+	public static BufferedImage getImageMini(AnnotatedObject object) throws Exception {return getImageMini(object, false);}
+	public static BufferedImage getImageMini(AnnotatedObject object, boolean noUnload) throws Exception
 	{
-		MetaDataKey miniKey = page.getLink().getKey("mini", "");
+		MetaDataKey miniKey = object.getLink().getKey("mini", "");
 		BufferedImage mini = null;
-		List<MetaData> minis = page.getMetaDataListForKey(miniKey);
+		List<MetaData> minis = object.getMetaDataListForKey(miniKey);
 		
 		if (!minis.isEmpty())
 		{
@@ -277,13 +276,13 @@ public final class DocExploreDataLink extends ManuscriptLink
 			return mini;
 		}
 		
-		mini = ImageUtils.createIconSizeImage(page.getImage().getImage(), miniSize);
+		mini = ImageUtils.createIconSizeImage(object instanceof Page ? ((Page)object).getImage().getImage() : ((MetaData)object).getImage(), miniSize);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		ImageUtils.write(mini, "png", os);
 		InputStream is = new ByteArrayInputStream(os.toByteArray());
-		page.addMetaData(new MetaData(page.getLink(), miniKey, MetaData.imageType, is));
-		if (!noUnload)
-			page.unloadImage();
+		object.addMetaData(new MetaData(object.getLink(), miniKey, MetaData.imageType, is));
+		if (!noUnload && object instanceof Page)
+			((Page)object).unloadImage();
 		return mini;
 	}
 	

@@ -3,10 +3,10 @@ package org.interreg.docexplore.datalink.fs2;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.interreg.docexplore.management.DocExploreDataLink;
-import org.interreg.docexplore.management.image.PosterUtils;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
+import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.manuscript.actions.DeletePosterPartsAction;
 import org.interreg.docexplore.util.Pair;
 

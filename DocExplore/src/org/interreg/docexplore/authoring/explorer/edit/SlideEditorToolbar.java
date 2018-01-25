@@ -24,7 +24,7 @@ import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.WrapLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.DocumentPanel;
 import org.interreg.docexplore.management.gui.ToolbarButton;
 import org.interreg.docexplore.management.gui.ToolbarToggleButton;
@@ -42,7 +42,7 @@ public class SlideEditorToolbar extends JPanel
 	{
 		super(new WrapLayout(FlowLayout.LEFT));
 		
-		editor.addMainWindowListener((ToolbarButton)add(new ToolbarButton("previous-24x24.png", XMLResourceBundle.getBundledString("imageToolbarPreviousHistoric"))
+		editor.addMainWindowListener((ToolbarButton)add(new ToolbarButton("previous-24x24.png", Lang.s("imageToolbarPreviousHistoric"))
 		{
 			public void clicked()
 			{
@@ -57,7 +57,7 @@ public class SlideEditorToolbar extends JPanel
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 			}
 		}));
-		editor.addMainWindowListener((ToolbarButton)add(new ToolbarButton("next-24x24.png", XMLResourceBundle.getBundledString("imageToolbarNextHistoric"))
+		editor.addMainWindowListener((ToolbarButton)add(new ToolbarButton("next-24x24.png", Lang.s("imageToolbarNextHistoric"))
 		{
 			public void clicked()
 			{
@@ -73,7 +73,7 @@ public class SlideEditorToolbar extends JPanel
 			}
 		}));
 		
-		ToolbarButton fit = new ToolbarButton("fit-24x24.png", XMLResourceBundle.getBundledString("imageToolbarFit"))
+		ToolbarButton fit = new ToolbarButton("fit-24x24.png", Lang.s("imageToolbarFit"))
 		{
 			public void clicked() {editor.fit();}
 		};
@@ -84,7 +84,7 @@ public class SlideEditorToolbar extends JPanel
 		
 		final List<ToolbarToggleButton> roiButtons = new LinkedList<ToolbarToggleButton>();
 		
-		ToolbarToggleButton addFree = new ToolbarToggleButton("add-free-roi-24x24.png", XMLResourceBundle.getBundledString("imageToolbarAddFreeRoi"))
+		ToolbarToggleButton addFree = new ToolbarToggleButton("add-free-roi-24x24.png", Lang.s("imageToolbarAddFreeRoi"))
 		{
 			public void toggled()
 			{				
@@ -101,7 +101,7 @@ public class SlideEditorToolbar extends JPanel
 		roiButtons.add((ToolbarToggleButton)add(addFree));
 		editor.addMainWindowListener(addFree);
 		
-		ToolbarToggleButton addRect = new ToolbarToggleButton("add-rect-roi-24x24.png", XMLResourceBundle.getBundledString("imageToolbarAddRectRoi"))
+		ToolbarToggleButton addRect = new ToolbarToggleButton("add-rect-roi-24x24.png", Lang.s("imageToolbarAddRectRoi"))
 		{
 			public void toggled()
 			{				
@@ -118,7 +118,7 @@ public class SlideEditorToolbar extends JPanel
 		roiButtons.add((ToolbarToggleButton)add(addRect));
 		editor.addMainWindowListener(addRect);
 		
-		editor.addMainWindowListener((ToolbarButton)add(new ToolbarButton("del-roi-24x24.png", XMLResourceBundle.getBundledString("imageToolbarDelRoi"))
+		editor.addMainWindowListener((ToolbarButton)add(new ToolbarButton("del-roi-24x24.png", Lang.s("imageToolbarDelRoi"))
 		{
 			public void clicked()
 			{
@@ -131,7 +131,7 @@ public class SlideEditorToolbar extends JPanel
 			}
 		}));
 		
-		ToolbarToggleButton crop = new ToolbarToggleButton("resize-page-24x24.png", XMLResourceBundle.getBundledString("imageToolbarCrop"))
+		ToolbarToggleButton crop = new ToolbarToggleButton("resize-page-24x24.png", Lang.s("imageToolbarCrop"))
 		{
 			public void toggled()
 			{				

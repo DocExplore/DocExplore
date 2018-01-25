@@ -43,7 +43,7 @@ import org.interreg.docexplore.SplashScreen;
 import org.interreg.docexplore.datalink.DataLink;
 import org.interreg.docexplore.datalink.fs2.DataLinkFS2Source;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 import org.interreg.docexplore.util.ImageUtils;
@@ -69,13 +69,13 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 		
 		this.recent = new LinkedList<String>();
 		readRecent();
-		this.file = new JMenu(XMLResourceBundle.getBundledString("generalMenuFile"));
+		this.file = new JMenu(Lang.s("generalMenuFile"));
 		add(file);
 		
-		newItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuNew")) {public void actionPerformed(ActionEvent arg0) {newFile();}});
-		loadItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuLoad")) {public void actionPerformed(ActionEvent arg0) {load();}});
-		saveItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuSave")) {public void actionPerformed(ActionEvent arg0) {save();}});
-		saveAsItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuSaveAs")) {public void actionPerformed(ActionEvent arg0) {saveAs();}});
+		newItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuNew")) {public void actionPerformed(ActionEvent arg0) {newFile();}});
+		loadItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuLoad")) {public void actionPerformed(ActionEvent arg0) {load();}});
+		saveItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuSave")) {public void actionPerformed(ActionEvent arg0) {save();}});
+		saveAsItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuSaveAs")) {public void actionPerformed(ActionEvent arg0) {saveAs();}});
 //		exportItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuExport")+"...") {public void actionPerformed(ActionEvent arg0)
 //		{
 //			GuiUtils.blockUntilComplete(new ProgressRunnable()
@@ -88,7 +88,7 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 //				public float getProgress() {return (float)authoringTool.readerExporter.progress[0];}
 //			}, authoringTool.editor);
 //		}});
-		exportItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuExport")) {public void actionPerformed(ActionEvent arg0)
+		exportItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuExport")) {public void actionPerformed(ActionEvent arg0)
 		{
 			GuiUtils.centerOnComponent(authoringTool.exportDialog, authoringTool);
 			authoringTool.exportDialog.setVisible(true);
@@ -106,11 +106,11 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 //			}, authoringTool.editor);
 //		}});
 		
-		quitItem = new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("generalMenuQuit")) {public void actionPerformed(ActionEvent arg0)
+		quitItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuQuit")) {public void actionPerformed(ActionEvent arg0)
 			{authoringTool.quit();}});
 		buildFileMenu();
 		
-		JMenu edit = new JMenu(XMLResourceBundle.getBundledString("generalMenuEdit"));
+		JMenu edit = new JMenu(Lang.s("generalMenuEdit"));
 		this.undoItem = new JMenuItem();
 		undoItem.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
 		{
@@ -125,7 +125,7 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 			catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 		}});
 		edit.add(redoItem);
-		JMenuItem viewHistory = new JMenuItem(XMLResourceBundle.getBundledString("generalMenuEditViewHistory"));
+		JMenuItem viewHistory = new JMenuItem(Lang.s("generalMenuEditViewHistory"));
 		viewHistory.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
 		{
 			authoringTool.historyDialog.setVisible(true);
@@ -134,14 +134,14 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 		
 		edit.addSeparator();
 		
-		edit.add(new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("fixChars")) {public void actionPerformed(ActionEvent arg0)
+		edit.add(new JMenuItem(new AbstractAction(Lang.s("fixChars")) {public void actionPerformed(ActionEvent arg0)
 		{
-			Object res = JOptionPane.showInputDialog(tool, XMLResourceBundle.getBundledString("fixCharsMsg"), XMLResourceBundle.getBundledString("fixChars"), 
-				JOptionPane.QUESTION_MESSAGE, null, new Object [] {XMLResourceBundle.getBundledString("fixCharsWin"), XMLResourceBundle.getBundledString("fixCharsMac")}, 
-				XMLResourceBundle.getBundledString("fixCharsWin"));
+			Object res = JOptionPane.showInputDialog(tool, Lang.s("fixCharsMsg"), Lang.s("fixChars"), 
+				JOptionPane.QUESTION_MESSAGE, null, new Object [] {Lang.s("fixCharsWin"), Lang.s("fixCharsMac")}, 
+				Lang.s("fixCharsWin"));
 			if (res == null)
 				return;
-			try {convertPresentation(tool.defaultFile, res.equals(XMLResourceBundle.getBundledString("fixCharsWin")) ? "ISO-8859-1" : "x-MacRoman");}
+			try {convertPresentation(tool.defaultFile, res.equals(Lang.s("fixCharsWin")) ? "ISO-8859-1" : "x-MacRoman");}
 			catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 			try {tool.editor.reset();}
 			catch (Exception e) {e.printStackTrace();}
@@ -323,14 +323,14 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 		
 		add(edit);
 		
-		JMenu view = new JMenu(XMLResourceBundle.getBundledString("generalMenuView"));
+		JMenu view = new JMenu(Lang.s("generalMenuView"));
 		add(view);
 		
-		JMenuItem styles = new JMenuItem(XMLResourceBundle.getBundledString("styleEdit")+"...", ImageUtils.getIcon("pencil-24x24.png"));
+		JMenuItem styles = new JMenuItem(Lang.s("styleEdit")+"...", ImageUtils.getIcon("pencil-24x24.png"));
 		styles.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) {authoringTool.styleManager.styleDialog.setVisible(true);}});
 		view.add(styles);
 		
-		helpToggle = new JCheckBoxMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("viewHelpToggle")) {public void actionPerformed(ActionEvent arg0)
+		helpToggle = new JCheckBoxMenuItem(new AbstractAction(Lang.s("viewHelpToggle")) {public void actionPerformed(ActionEvent arg0)
 		{
 			authoringTool.displayHelp = helpToggle.isSelected();
 			authoringTool.repaint();
@@ -338,13 +338,13 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 		helpToggle.setSelected(tool.startup.showHelp);
 		view.add(helpToggle);
 		
-		JMenu helpMenu = new JMenu(XMLResourceBundle.getString("management-lrb", "generalMenuHelp"));
+		JMenu helpMenu = new JMenu(Lang.s("management-lrb", "generalMenuHelp"));
 		if (Desktop.isDesktopSupported())
 		{
 			final Desktop desktop = Desktop.getDesktop();
 			if (desktop.isSupported(Desktop.Action.OPEN))
 			{
-				helpMenu.add(new AbstractAction(XMLResourceBundle.getString("management-lrb", "generalMenuHelpContents")) {
+				helpMenu.add(new AbstractAction(Lang.s("management-lrb", "generalMenuHelpContents")) {
 					public void actionPerformed(ActionEvent e)
 					{
 						try
@@ -354,7 +354,7 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 						}
 						catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex, true);}
 					}});
-				helpMenu.add(new AbstractAction(XMLResourceBundle.getString("management-lrb", "generalMenuHelpWebsite")) {
+				helpMenu.add(new AbstractAction(Lang.s("management-lrb", "generalMenuHelpWebsite")) {
 					public void actionPerformed(ActionEvent e)
 					{
 						try
@@ -366,7 +366,7 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 					}});
 			}
 		}
-		helpMenu.add(new AbstractAction(XMLResourceBundle.getString("management-lrb", "generalMenuHelpAbout")) {
+		helpMenu.add(new AbstractAction(Lang.s("management-lrb", "generalMenuHelpAbout")) {
 			public void actionPerformed(ActionEvent e)
 			{
 				final JDialog splash = new JDialog(tool, true);
@@ -508,8 +508,8 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 		catch (Exception e) {e.printStackTrace(); return true;}
 		
 		int res = JOptionPane.showConfirmDialog(tool, 
-			XMLResourceBundle.getBundledString("generalSaveMessage"), 
-			XMLResourceBundle.getBundledString("generalMenuSave"), 
+			Lang.s("generalSaveMessage"), 
+			Lang.s("generalMenuSave"), 
 			JOptionPane.YES_NO_CANCEL_OPTION);
 		
 		if (res == JOptionPane.CANCEL_OPTION)
@@ -535,8 +535,8 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 
 	public void historyChanged(HistoryManager manager)
 	{
-		String undoLabel = XMLResourceBundle.getBundledString("generalMenuEditUndo");
-		String redoLabel = XMLResourceBundle.getBundledString("generalMenuEditRedo");
+		String undoLabel = Lang.s("generalMenuEditUndo");
+		String redoLabel = Lang.s("generalMenuEditRedo");
 		
 		if (manager.canUndo())
 			undoLabel += " "+manager.getUndoableAction().description();

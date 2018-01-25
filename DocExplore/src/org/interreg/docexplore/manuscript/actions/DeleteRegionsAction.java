@@ -17,7 +17,7 @@ package org.interreg.docexplore.manuscript.actions;
 import java.util.Collections;
 import java.util.List;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Region;
 
 public class DeleteRegionsAction extends UnreversibleAction
@@ -41,7 +41,7 @@ public class DeleteRegionsAction extends UnreversibleAction
 
 	public String description()
 	{
-		return XMLResourceBundle.getBundledString("deleteRegion");
+		return Lang.s("deleteRegion");
 	}
 
 }

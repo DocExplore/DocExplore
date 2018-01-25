@@ -31,10 +31,10 @@ import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.ExpandingItemList;
 import org.interreg.docexplore.gui.IconButton;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.MainWindow;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 
@@ -69,14 +69,14 @@ public class AnnotationPanel extends JPanel
 		JPanel listPanel = new JPanel(new BorderLayout());
 		listPanel.add(scrollPane, BorderLayout.CENTER);
 		listPanel.setBorder(BorderFactory.createTitledBorder(
-			XMLResourceBundle.getBundledString("transcriptAvailableLabel")));
+			Lang.s("transcriptAvailableLabel")));
 		
 		JPanel listButPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
-		listButPanel.add(new IconButton("add-24x24.png", XMLResourceBundle.getBundledString("annotateAddTooltip"), 
+		listButPanel.add(new IconButton("add-24x24.png", Lang.s("annotateAddTooltip"), 
 			new ActionListener() {public void actionPerformed(ActionEvent e) {addAnnotation();}}));
-		listButPanel.add(copy = new IconButton("copy-24x24.png", XMLResourceBundle.getBundledString("generalMenuEditCopy"), 
+		listButPanel.add(copy = new IconButton("copy-24x24.png", Lang.s("generalMenuEditCopy"), 
 			new ActionListener() {public void actionPerformed(ActionEvent e) {win.clipboard.copy(document); paste.setEnabled(true);}}));
-		listButPanel.add(paste = new IconButton("paste-24x24.png", XMLResourceBundle.getBundledString("generalMenuEditPaste"), 
+		listButPanel.add(paste = new IconButton("paste-24x24.png", Lang.s("generalMenuEditPaste"), 
 			new ActionListener() {public void actionPerformed(ActionEvent e)
 			{
 				try {win.clipboard.paste(document); setDocument(document); AnnotationPanel.this.validate(); AnnotationPanel.this.repaint();}

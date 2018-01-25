@@ -40,11 +40,11 @@ import org.interreg.docexplore.authoring.explorer.PageView;
 import org.interreg.docexplore.authoring.explorer.ViewItem;
 import org.interreg.docexplore.authoring.explorer.file.FolderView;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
-import org.interreg.docexplore.management.image.PosterUtils;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.Page;
+import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.manuscript.actions.AddPagesAction;
 import org.interreg.docexplore.manuscript.actions.DeletePagesAction;
@@ -67,7 +67,7 @@ public class PresentationEditorView extends BookView
 		super(explorer);
 		
 		this.coverManager = new CoverManager();
-		final JDialog coverDialog = new JDialog(explorer.tool, XMLResourceBundle.getBundledString("coverLabel"));
+		final JDialog coverDialog = new JDialog(explorer.tool, Lang.s("coverLabel"));
 		//coverDialog.setAlwaysOnTop(true);
 		coverDialog.add(coverManager);
 		coverDialog.pack();
@@ -145,7 +145,7 @@ public class PresentationEditorView extends BookView
 			}
 		});
 		
-		final JToggleButton setCover = new JToggleButton(new AbstractAction(XMLResourceBundle.getBundledString("coverLabel")) {public void actionPerformed(ActionEvent e)
+		final JToggleButton setCover = new JToggleButton(new AbstractAction(Lang.s("coverLabel")) {public void actionPerformed(ActionEvent e)
 		{
 			JToggleButton button = (JToggleButton)e.getSource();
 			coverDialog.setVisible(button.isSelected());
@@ -158,8 +158,8 @@ public class PresentationEditorView extends BookView
 			}
 		});
 		
-		removePage.setToolTipText(XMLResourceBundle.getBundledString("generalToolbarRemovePage"));
-		addPage.setToolTipText(XMLResourceBundle.getBundledString("generalToolbarAddPages"));
+		removePage.setToolTipText(Lang.s("generalToolbarRemovePage"));
+		addPage.setToolTipText(Lang.s("generalToolbarAddPages"));
 		explorer.addListener(new Listener() {@Override public void exploringChanged(Object explored)
 		{
 			if (explored instanceof Book)
@@ -176,7 +176,7 @@ public class PresentationEditorView extends BookView
 			}
 		}});
 		
-		msg = XMLResourceBundle.getBundledString("helpBookMsg");
+		msg = Lang.s("helpBookMsg");
 	}
 	
 	@Override public Component getViewComponent()
@@ -289,7 +289,7 @@ public class PresentationEditorView extends BookView
 				if (!importOptions.showOptions(explorer.tool, ((CollectionView)source).explorer.link, sourceSet))
 					return;
 				
-				if (curBook.pagesByNumber.isEmpty() && curBook.getName().equals(XMLResourceBundle.getBundledString("collectionDefaultBookLabel")))
+				if (curBook.pagesByNumber.isEmpty() && curBook.getName().equals(Lang.s("collectionDefaultBookLabel")))
 					for (ViewItem.Data item : items)
 						if (item.object instanceof Book)
 						{

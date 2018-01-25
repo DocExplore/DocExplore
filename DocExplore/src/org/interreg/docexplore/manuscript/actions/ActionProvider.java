@@ -43,5 +43,5 @@ public interface ActionProvider
 	public AddRegionsAction addRegions(Page page, List<Point []> outlines);
 	public MovePagesAction movePages(List<Page> pages, Page moveAfter);
 	public MovePartAction movePart(Book book, MetaData part, int col, int row, boolean insertRow);
-	public CropPageAction cropPage(Page page, int tlx, int tly, int brx, int bry);
+	public CropPageAction cropPage(AnnotatedObject object, int tlx, int tly, int brx, int bry);
 }

@@ -17,7 +17,7 @@ package org.interreg.docexplore.manuscript.actions;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.util.Pair;
@@ -71,6 +71,6 @@ public class MovePagesAction extends ReversibleAction
 
 	public String description()
 	{
-		return XMLResourceBundle.getBundledString("movePages");
+		return Lang.s("movePages");
 	}
 }

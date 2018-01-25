@@ -52,15 +52,14 @@ import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.DocumentPanel;
 import org.interreg.docexplore.management.gui.MainWindow;
 import org.interreg.docexplore.management.plugin.metadata.MetaDataPlugin;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
-import org.interreg.docexplore.manuscript.actions.AddMetaDataAction;
 import org.interreg.docexplore.manuscript.actions.DeleteMetaDataAction;
 import org.interreg.docexplore.manuscript.actions.WrappedAction;
 import org.interreg.docexplore.util.GuiUtils;
@@ -87,7 +86,7 @@ public class AnnotationHandler
 				String value = annotation.getString();
 				String author = value.substring(value.indexOf("<author>")+"<author>".length(), value.indexOf("</author>"));
 				String content = value.substring(value.indexOf("<content>")+"<content>".length(), value.indexOf("</content>"));
-				return new JLabel("<html><b>"+XMLResourceBundle.getBundledString("transcriptDisplayLabel")+
+				return new JLabel("<html><b>"+Lang.s("transcriptDisplayLabel")+
 						"<u>"+author+"</u></b>&nbsp;&nbsp;&nbsp<i>"+
 						content.substring(0, Math.min(limChars, content.length()))+(content.length() > limChars ? "..." : "")+"</i></html>", 
 					ImageUtils.getIcon("transcription-32x32.png"), SwingConstants.HORIZONTAL);
@@ -100,7 +99,7 @@ public class AnnotationHandler
 				if (tagString.length() > 0)
 					tagString.delete(tagString.length()-2, tagString.length());
 				String content = tagString.toString();
-				return new JLabel("<html><b>"+XMLResourceBundle.getBundledString("tagTagLabel")+"</b>&nbsp;&nbsp;&nbsp<i>"+
+				return new JLabel("<html><b>"+Lang.s("tagTagLabel")+"</b>&nbsp;&nbsp;&nbsp<i>"+
 						content.substring(0, Math.min(limChars, content.length()))+(content.length() > limChars ? "..." : "")+"</i></html>", 
 					ImageUtils.getIcon("tag-32x32.png"), SwingConstants.HORIZONTAL);
 			}
@@ -183,19 +182,19 @@ public class AnnotationHandler
 	@SuppressWarnings("serial")
 	public MetaData createMetaData(final AnnotatedObject document) throws DataLinkException
 	{
-		final JDialog dialog = new JDialog(win, XMLResourceBundle.getBundledString("annotateAnnotationLabel"), true);
+		final JDialog dialog = new JDialog(win, Lang.s("annotateAnnotationLabel"), true);
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		dialog.add(mainPanel);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
-		mainPanel.add(new JLabel(XMLResourceBundle.getBundledString("annotateAskTypeLabel")), BorderLayout.NORTH);
+		mainPanel.add(new JLabel(Lang.s("annotateAskTypeLabel")), BorderLayout.NORTH);
 		
 		Map<JRadioButton, String> labels = new HashMap<JRadioButton, String>();
 		JPanel choicePanel = new JPanel(new LooseGridLayout(0, 1, 5, 5, SwingConstants.LEFT, SwingConstants.TOP));
-		JRadioButton transButton = buildRadioButton(choicePanel, XMLResourceBundle.getBundledString("transcriptEditorLabel"), ImageUtils.getIcon("transcription-32x32.png"), labels);
-		JRadioButton textButton = buildRadioButton(choicePanel, XMLResourceBundle.getBundledString("annotateFreeTextLabel"), ImageUtils.getIcon("free-32x32.png"), labels);
-		JRadioButton imageButton = buildRadioButton(choicePanel, XMLResourceBundle.getBundledString("annotateTypeImage"), ImageUtils.getIcon("image-32x32.png"), labels);
-		JRadioButton tagsButton = buildRadioButton(choicePanel, XMLResourceBundle.getBundledString("tagTagLabel"), ImageUtils.getIcon("tag-32x32.png"), labels);
+		JRadioButton transButton = buildRadioButton(choicePanel, Lang.s("transcriptEditorLabel"), ImageUtils.getIcon("transcription-32x32.png"), labels);
+		JRadioButton textButton = buildRadioButton(choicePanel, Lang.s("annotateFreeTextLabel"), ImageUtils.getIcon("free-32x32.png"), labels);
+		JRadioButton imageButton = buildRadioButton(choicePanel, Lang.s("annotateTypeImage"), ImageUtils.getIcon("image-32x32.png"), labels);
+		JRadioButton tagsButton = buildRadioButton(choicePanel, Lang.s("tagTagLabel"), ImageUtils.getIcon("tag-32x32.png"), labels);
 		JRadioButton [] pluginButtons = new JRadioButton [win.pluginManager.metaDataPlugins.size()];
 		for (int i=0;i<win.pluginManager.metaDataPlugins.size();i++)
 		{
@@ -214,9 +213,9 @@ public class AnnotationHandler
 		
 		final boolean [] ok = {false};
 		JPanel buttonPanel = new JPanel(new FlowLayout());
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalOkLabel")) {
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalOkLabel")) {
 			public void actionPerformed(ActionEvent e) {ok[0] = true; dialog.setVisible(false);}}));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCancelLabel")) {
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("generalCancelLabel")) {
 			public void actionPerformed(ActionEvent e) {dialog.setVisible(false);}}));
 		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 		
@@ -327,12 +326,12 @@ public class AnnotationHandler
 	MetaDataKey requestKey(String preselect) throws DataLinkException
 	{
 		final boolean [] ok = {false};
-		final JDialog dialog = new JDialog(win, XMLResourceBundle.getBundledString("annotateKeyLabel"), true);
+		final JDialog dialog = new JDialog(win, Lang.s("annotateKeyLabel"), true);
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		dialog.add(mainPanel);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
-		mainPanel.add(new JLabel(XMLResourceBundle.getBundledString("annotateAskKeyLabel")), BorderLayout.NORTH);
+		mainPanel.add(new JLabel(Lang.s("annotateAskKeyLabel")), BorderLayout.NORTH);
 		
 		Collection<MetaDataKey> allKeys = link.getAllKeys();
 		Set<String> keys = new TreeSet<String>(new Comparator<String>()
@@ -340,7 +339,7 @@ public class AnnotationHandler
 			public int compare(String o1, String o2) {return collator.compare(o1, o2);}});
 		boolean foundPreselect = false;
 		for (MetaDataKey key : allKeys)
-			if (!link.functionalKeys.contains(key))
+			if (!link.readOnlyKeys.contains(key))
 		{
 			String keyName = key.getName();
 			if (keyName != null && keyName.trim().length() > 0)
@@ -357,9 +356,9 @@ public class AnnotationHandler
 		mainPanel.add(keyBox, BorderLayout.CENTER);
 		JPanel buttonPanel = new JPanel(new FlowLayout());
 		final JButton okButton, cancelButton;
-		buttonPanel.add(okButton = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalOkLabel")) {
+		buttonPanel.add(okButton = new JButton(new AbstractAction(Lang.s("generalOkLabel")) {
 			public void actionPerformed(ActionEvent e) {ok[0] = true; dialog.setVisible(false);}}));
-		buttonPanel.add(cancelButton = new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCancelLabel")) {
+		buttonPanel.add(cancelButton = new JButton(new AbstractAction(Lang.s("generalCancelLabel")) {
 			public void actionPerformed(ActionEvent e) {dialog.setVisible(false);}}));
 		okButton.setDefaultCapable(true);
 		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -384,7 +383,7 @@ public class AnnotationHandler
 		MetaDataKey key = link.getOrCreateKey(value);
 		if (link.functionalKeys.contains(key))
 		{
-			JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), XMLResourceBundle.getBundledString("keyNameReservedMessage"), "", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), Lang.s("keyNameReservedMessage"), "", JOptionPane.ERROR_MESSAGE);
 			return requestKey(preselect);
 		}
 		return key;

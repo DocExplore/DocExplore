@@ -35,7 +35,7 @@ import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.ExpandingItem;
 import org.interreg.docexplore.gui.IconButton;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
@@ -99,14 +99,14 @@ public abstract class AnnotationEditor extends ExpandingItem
 			buttonPanel.setOpaque(false);
 			if (!readOnly)
 			{
-				buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("transcriptEditorApplyButton"))
+				buttonPanel.add(new JButton(new AbstractAction(Lang.s("transcriptEditorApplyButton"))
 					{public void actionPerformed(ActionEvent e)
 				{
 					apply(); contract();
 				}}));
 			}
-			buttonPanel.add(new JButton(new AbstractAction(readOnly ? XMLResourceBundle.getBundledString("generalCloseLabel") : 
-				XMLResourceBundle.getBundledString("generalCancelLabel"))
+			buttonPanel.add(new JButton(new AbstractAction(readOnly ? Lang.s("generalCloseLabel") : 
+				Lang.s("generalCancelLabel"))
 					{public void actionPerformed(ActionEvent e)
 			{
 				cancel(); contract();

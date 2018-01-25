@@ -36,7 +36,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.plugin.metadata.MetaDataPlugin;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
@@ -57,7 +57,7 @@ public class ExportOptions extends JPanel
 		JPanel resizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		this.resizeBox = new JCheckBox();
 		resizePanel.add(resizeBox);
-		resizePanel.add(new JLabel(XMLResourceBundle.getBundledString("exportSizeLimit")));
+		resizePanel.add(new JLabel(Lang.s("exportSizeLimit")));
 		this.resizeField = new JTextField(5);
 		resizeField.setText("1500");
 		resizeField.getDocument().addDocumentListener(new DocumentListener()
@@ -85,18 +85,18 @@ public class ExportOptions extends JPanel
 		resizePanel.add(resizeField);
 		resizePanel.add(new JLabel("pixels"));
 		dimensionOptionPanel.add(resizePanel, BorderLayout.CENTER);
-		dimensionOptionPanel.add(new JLabel(XMLResourceBundle.getBundledString("exportSizeMessage")), BorderLayout.SOUTH);
-		dimensionOptionPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("exportDimensionOption")));
+		dimensionOptionPanel.add(new JLabel(Lang.s("exportSizeMessage")), BorderLayout.SOUTH);
+		dimensionOptionPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("exportDimensionOption")));
 		add(dimensionOptionPanel);
 		
 		JPanel transparencyOptionPanel = new JPanel(new BorderLayout());
 		JPanel transparencyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		this.transparencyBox = new JCheckBox();
 		transparencyPanel.add(transparencyBox);
-		transparencyPanel.add(new JLabel(XMLResourceBundle.getBundledString("exportTransparencyLabel")));
+		transparencyPanel.add(new JLabel(Lang.s("exportTransparencyLabel")));
 		transparencyOptionPanel.add(transparencyPanel, BorderLayout.CENTER);
-		transparencyOptionPanel.add(new JLabel(XMLResourceBundle.getBundledString("exportTransparencyMessage")), BorderLayout.SOUTH);
-		transparencyOptionPanel.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("exportTransparencyOption")));
+		transparencyOptionPanel.add(new JLabel(Lang.s("exportTransparencyMessage")), BorderLayout.SOUTH);
+		transparencyOptionPanel.setBorder(BorderFactory.createTitledBorder(Lang.s("exportTransparencyOption")));
 		add(transparencyOptionPanel);
 		
 		setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -136,17 +136,17 @@ public class ExportOptions extends JPanel
 		for (MetaDataPlugin plugin : comp.plugins)
 			plugin.setupExportOptions(options, exportType);
 		
-		final JDialog dialog = new JDialog(JOptionPane.getRootFrame(), XMLResourceBundle.getBundledString("exportOptions"), true);
+		final JDialog dialog = new JDialog(JOptionPane.getRootFrame(), Lang.s("exportOptions"), true);
 		dialog.setLayout(new BorderLayout());
 		dialog.add(options, BorderLayout.CENTER);
 		final boolean [] res = {false};
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getString("default-lrb", "cfgOkLabel")) {public void actionPerformed(ActionEvent e)
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("default-lrb", "cfgOkLabel")) {public void actionPerformed(ActionEvent e)
 		{
 			res[0] = true;
 			dialog.setVisible(false);
 		}}));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getString("default-lrb", "cfgCancelLabel")) {public void actionPerformed(ActionEvent e)
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("default-lrb", "cfgCancelLabel")) {public void actionPerformed(ActionEvent e)
 		{
 			dialog.setVisible(false);
 		}}));

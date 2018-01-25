@@ -31,6 +31,7 @@
 		var div = document.getElementById('readerContainer');
 		var w = div.clientWidth;
 		div.style.height = (9*w/16)+"px";
+		//console.log(">>>"+window.location.search.substring(1));
 		bookBasePath = getQueryVariable('path');
 		createDocexReader(document.getElementById('readerContainer'), bookBasePath, function(reader) {});
 	</script>

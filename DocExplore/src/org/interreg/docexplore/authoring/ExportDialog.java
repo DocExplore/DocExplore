@@ -14,7 +14,7 @@ import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 import org.interreg.docexplore.util.ImageUtils;
@@ -28,7 +28,7 @@ public class ExportDialog extends JDialog
 	
 	public ExportDialog(final AuthoringToolFrame authoringTool)
 	{
-		super((Frame)null, XMLResourceBundle.getBundledString("generalExportDialog"), true);
+		super((Frame)null, Lang.s("generalExportDialog"), true);
 		
 		JPanel top = new JPanel(new BorderLayout());
 		setContentPane(top);
@@ -49,7 +49,7 @@ public class ExportDialog extends JDialog
 				public float getProgress() {return (float)authoringTool.readerExporter.progress[0];}
 			}, authoringTool.editor);
 		}}));
-		panel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("exportReader")+"</b><br>"+XMLResourceBundle.getBundledString("exportReaderDesc")+"</html>"));
+		panel.add(new JLabel("<html><b>"+Lang.s("exportReader")+"</b><br>"+Lang.s("exportReaderDesc")+"</html>"));
 		
 		panel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("export-web-128x128.png")) {public void actionPerformed(ActionEvent arg0)
 		{
@@ -64,7 +64,7 @@ public class ExportDialog extends JDialog
 				public float getProgress() {return (authoringTool.webExporter.copyComplete ? .5f : 0f)+(float)(.5*authoringTool.webExporter.progress[0]);}
 			}, authoringTool.editor);
 		}}));
-		panel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("exportWeb")+"</b><br>"+XMLResourceBundle.getBundledString("exportWebDesc")+"</html>"));
+		panel.add(new JLabel("<html><b>"+Lang.s("exportWeb")+"</b><br>"+Lang.s("exportWebDesc")+"</html>"));
 		
 		panel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("export-mobile-128x128.png")) {public void actionPerformed(ActionEvent arg0)
 		{
@@ -79,10 +79,10 @@ public class ExportDialog extends JDialog
 				public float getProgress() {return (authoringTool.webExporter.copyComplete ? .5f : 0f)+(float)(.5*authoringTool.webExporter.progress[0]);}
 			}, authoringTool.editor);
 		}}));
-		panel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("exportMobile")+"</b><br>"+XMLResourceBundle.getBundledString("exportMobileDesc")+"</html>"));
+		panel.add(new JLabel("<html><b>"+Lang.s("exportMobile")+"</b><br>"+Lang.s("exportMobileDesc")+"</html>"));
 		
 		JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		buttons.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCancelLabel")) {@Override public void actionPerformed(ActionEvent arg0)
+		buttons.add(new JButton(new AbstractAction(Lang.s("generalCancelLabel")) {@Override public void actionPerformed(ActionEvent arg0)
 		{
 			ExportDialog.this.setVisible(false);
 		}}));

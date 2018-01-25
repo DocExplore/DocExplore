@@ -17,7 +17,7 @@ package org.interreg.docexplore.manuscript.actions;
 import java.util.List;
 
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.Page;
 
@@ -41,7 +41,7 @@ public class DeletePagesAction extends UnreversibleAction
 
 	public String description()
 	{
-		return pages.size() == 1 ? XMLResourceBundle.getBundledString("deletePage") : XMLResourceBundle.getBundledString("deletePages");
+		return pages.size() == 1 ? Lang.s("deletePage") : Lang.s("deletePages");
 	}
 	
 	public void dispose()

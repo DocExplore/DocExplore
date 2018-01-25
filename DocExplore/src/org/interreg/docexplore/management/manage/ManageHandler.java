@@ -24,14 +24,14 @@ import javax.swing.JOptionPane;
 import org.interreg.docexplore.datalink.DataLink.DataLinkSource;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.MainWindow;
-import org.interreg.docexplore.management.image.PosterUtils;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
+import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.manuscript.actions.AddBookAction;
 import org.interreg.docexplore.manuscript.actions.AddMetaDataAction;
@@ -40,6 +40,7 @@ import org.interreg.docexplore.manuscript.actions.AddPosterPartsAction;
 import org.interreg.docexplore.manuscript.actions.AddRegionsAction;
 import org.interreg.docexplore.manuscript.actions.CropPageAction;
 import org.interreg.docexplore.manuscript.actions.DeleteBooksAction;
+import org.interreg.docexplore.manuscript.actions.DeleteMetaDataAction;
 import org.interreg.docexplore.manuscript.actions.DeletePagesAction;
 import org.interreg.docexplore.manuscript.actions.DeletePosterPartsAction;
 import org.interreg.docexplore.manuscript.actions.DeleteRegionsAction;
@@ -97,7 +98,7 @@ public class ManageHandler implements ActionRequestListener
 			});
 			if (!addBookAction.failed.isEmpty())
 			{
-				StringBuffer sb = new StringBuffer(XMLResourceBundle.getBundledString("manageFailedMessage"));
+				StringBuffer sb = new StringBuffer(Lang.s("manageFailedMessage"));
 				for (Pair<AnnotatedObject, File> pair : addBookAction.failed)
 					sb.append("\n   -").append(pair.second.getName());
 				JOptionPane.showMessageDialog(win, sb.toString());
@@ -110,7 +111,7 @@ public class ManageHandler implements ActionRequestListener
 	public void onDeleteBooksRequest(final List<Book> books)
 	{
 		StringBuffer sb = new StringBuffer("<html>");
-		sb.append(XMLResourceBundle.getBundledString("manageDeleteBookMsg")).append("<br>");
+		sb.append(Lang.s("manageDeleteBookMsg")).append("<br>");
 		for (Book book : books)
 			sb.append("&nbsp;&nbsp;&nbsp;- <b>").append(book.getName()).append("</b><br>");
 		sb.append("</html>");
@@ -141,7 +142,7 @@ public class ManageHandler implements ActionRequestListener
 			});
 			if (!addPagesAction.failed.isEmpty())
 			{
-				StringBuffer sb = new StringBuffer(XMLResourceBundle.getBundledString("manageFailedMessage"));
+				StringBuffer sb = new StringBuffer(Lang.s("manageFailedMessage"));
 				for (Pair<AnnotatedObject, File> pair : addPagesAction.failed)
 					sb.append("\n   -").append(pair.second.getName());
 				JOptionPane.showMessageDialog(win, sb.toString());
@@ -163,7 +164,7 @@ public class ManageHandler implements ActionRequestListener
 			});
 			if (!addPartsAction.failed.isEmpty())
 			{
-				StringBuffer sb = new StringBuffer(XMLResourceBundle.getBundledString("manageFailedMessage"));
+				StringBuffer sb = new StringBuffer(Lang.s("manageFailedMessage"));
 				for (Pair<AnnotatedObject, File> pair : addPartsAction.failed)
 					sb.append("\n   -").append(pair.second.getName());
 				JOptionPane.showMessageDialog(win, sb.toString());
@@ -176,7 +177,7 @@ public class ManageHandler implements ActionRequestListener
 	public void onDeletePagesRequest(final List<Page> pages)
 	{
 		StringBuffer sb = new StringBuffer("<html>");
-		sb.append(XMLResourceBundle.getBundledString("manageDeletePageMsg"));
+		sb.append(Lang.s("manageDeletePageMsg"));
 		sb.append(" (").append(pages.size()).append(")");
 		sb.append("</html>");
 		if (JOptionPane.showConfirmDialog(win, sb.toString(), "", JOptionPane.YES_NO_OPTION) != JOptionPane.OK_OPTION)
@@ -197,7 +198,7 @@ public class ManageHandler implements ActionRequestListener
 	public void onDeletePartsRequest(final Book book, List<MetaData> parts)
 	{
 		StringBuffer sb = new StringBuffer("<html>");
-		sb.append(XMLResourceBundle.getBundledString("manageDeletePageMsg"));
+		sb.append(Lang.s("manageDeletePageMsg"));
 		sb.append(" (").append(parts.size()).append(")");
 		sb.append("</html>");
 		if (JOptionPane.showConfirmDialog(win, sb.toString(), "", JOptionPane.YES_NO_OPTION) != JOptionPane.OK_OPTION)
@@ -248,7 +249,7 @@ public class ManageHandler implements ActionRequestListener
 			{
 				public void doAction() throws Exception {PosterUtils.transposePoster(link, book); win.onBookChanged(book);}
 				public void undoAction() throws Exception {PosterUtils.transposePoster(link, book); win.onBookChanged(book);}
-				@Override public String description() {return XMLResourceBundle.getString("manuscript-lrb", "transposeParts");}
+				@Override public String description() {return Lang.s("manuscript-lrb", "transposeParts");}
 			});
 		}
 		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
@@ -284,34 +285,47 @@ public class ManageHandler implements ActionRequestListener
 		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
 	}
 	
-	public void onCropPageRequest(final Page page, int tlx, int tly, int brx, int bry)
+	public void onCropPageRequest(final AnnotatedObject object, int tlx, int tly, int brx, int bry)
 	{
 		try 
 		{
-			CropPageAction action = win.getActionProvider().cropPage(page, tlx, tly, brx, bry);
+			CropPageAction action = win.getActionProvider().cropPage(object, tlx, tly, brx, bry);
 			win.historyManager.submit(new WrappedAction(action)
 			{
-				public void doAction() throws Exception {super.doAction(); win.onPageChanged(page);}
-				public void undoAction() throws Exception {super.undoAction(); win.onPageChanged(page);}
+				public void doAction() throws Exception {super.doAction(); if (object instanceof Page) win.onPageChanged((Page)object); else win.onMetaDataChanged(null, (MetaData)object);}
+				public void undoAction() throws Exception {super.undoAction(); if (object instanceof Page) win.onPageChanged((Page)object); else win.onMetaDataChanged(null, (MetaData)object);}
 			});
 		}
 		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
 	}
 	
-	public MetaData onAddAnnotationRequest(final AnnotatedObject object, MetaData annotation)
+	public MetaData onAddAnnotationRequest(final AnnotatedObject object, final MetaData annotation)
 	{
 		final AddMetaDataAction addMetDataAction = win.getActionProvider().addMetaData(object, annotation);
 		try
 		{
 			win.historyManager.submit(new WrappedAction(addMetDataAction)
 			{
-				public void doAction() throws Exception {super.doAction();}
-				public void undoAction() throws Exception {super.undoAction();}
+				public void doAction() throws Exception {super.doAction(); win.onAnnotationAdded(object, annotation);}
+				public void undoAction() throws Exception {super.undoAction(); win.onAnnotationDeleted(object, annotation);}
 			});
 			return addMetDataAction.annotations.get(0);
 		}
 		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
 		return null;
+	}
+	public void onDeleteAnnotationRequest(final AnnotatedObject object, final MetaData annotation)
+	{
+		final DeleteMetaDataAction deleteMetDataAction = win.getActionProvider().deleteMetaData(object, annotation);
+		try
+		{
+			win.historyManager.submit(new WrappedAction(deleteMetDataAction)
+			{
+				public void doAction() throws Exception {super.doAction(); win.onAnnotationDeleted(object, annotation);}
+				public void undoAction() throws Exception {super.undoAction(); win.onAnnotationAdded(object, annotation);}
+			});
+		}
+		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
 	}
 	
 //	public void pagesProcessed(List<Page> pages)

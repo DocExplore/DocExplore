@@ -26,7 +26,7 @@ import org.interreg.docexplore.datalink.objects.BookData;
 import org.interreg.docexplore.datalink.objects.MetaDataData;
 import org.interreg.docexplore.datalink.objects.PageData;
 import org.interreg.docexplore.datalink.objects.RegionData;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.actions.ActionProvider;
 import org.interreg.docexplore.util.Pair;
 

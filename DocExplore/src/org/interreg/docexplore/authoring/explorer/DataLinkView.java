@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.util.GuiUtils;
 
@@ -42,7 +42,7 @@ public abstract class DataLinkView extends ExplorerView implements ViewMouseList
 		this.explorer = explorer;
 		this.vim = new ViewInsertionManager(this);
 		
-		msg = XMLResourceBundle.getBundledString("helpCollectionMsg");
+		msg = Lang.s("helpCollectionMsg");
 	}
 	
 	@Override protected String getPath(Object object) {return ((AnnotatedObject)object).getCanonicalUri();}

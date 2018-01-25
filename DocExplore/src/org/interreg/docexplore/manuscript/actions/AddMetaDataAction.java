@@ -17,8 +17,9 @@ package org.interreg.docexplore.manuscript.actions;
 import java.util.Collections;
 import java.util.List;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
+import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.MetaData;
 
 public class AddMetaDataAction extends UnreversibleAction
@@ -40,10 +41,19 @@ public class AddMetaDataAction extends UnreversibleAction
 	public void doAction() throws Exception
 	{
 		for (MetaData annotation : annotations)
+		{
+			if (document instanceof Book)
+			{
+				List<MetaData> links = annotation.getMetaDataListForKey(document.getLink().getOrCreateKey("book", ""));
+				for (MetaData link : links)
+					if (link.getType().equals(MetaData.textType))
+						link.setString(""+document.getId());
+			}
 			document.addMetaData(annotation);
+		}
 	}
 
-	public String description() {return XMLResourceBundle.getBundledString("addMetaData");}
+	public String description() {return Lang.s("addMetaData");}
 	
 	public void dispose()
 	{

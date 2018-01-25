@@ -27,12 +27,12 @@ import javax.swing.SwingUtilities;
 
 import org.interreg.docexplore.authoring.preview.PreviewPanel;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.management.image.PosterUtils;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.manuscript.Page;
+import org.interreg.docexplore.manuscript.PosterUtils;
 
 @SuppressWarnings("serial")
 public class BookView extends DataLinkView implements FilterPanel.Listener
@@ -101,7 +101,10 @@ public class BookView extends DataLinkView implements FilterPanel.Listener
 			List<MetaData> parts = curBook.getMetaDataListForKey(explorer.link.partKey);
 			for (MetaData part : parts)
 			{
-				String [] pos = part.getMetaDataString(explorer.link.partPosKey).split(",");
+				String posString = part.getMetaDataString(explorer.link.partPosKey);
+				if (posString == null)
+					continue;
+				String [] pos = posString.split(",");
 				res.add(new ViewItem(explorer.partTerm+" "+pos[0]+","+pos[1], "", part));
 			}
 			//PosterUtils.getPosterParts(link, book)

@@ -17,7 +17,7 @@ package org.interreg.docexplore.manuscript.actions;
 import java.util.Collections;
 import java.util.List;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.MetaData;
 
@@ -43,7 +43,7 @@ public class DeleteMetaDataAction extends UnreversibleAction
 			document.removeMetaData(annotation);
 	}
 
-	public String description() {return XMLResourceBundle.getBundledString("deleteMetaData");}
+	public String description() {return Lang.s("deleteMetaData");}
 	
 	public void dispose()
 	{

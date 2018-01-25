@@ -34,7 +34,7 @@ import javax.swing.JTextField;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.image.ImageView;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.image.RegionOverlay.RegionObject;
 import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.util.GuiUtils;
@@ -86,8 +86,8 @@ public class SelectionOperation implements ImageView.Operation<PageEditor>
 	void constrain(PageEditor view, RegionObject region, int from)
 	{
 		Polygon poly = region.polygon;
-		poly.xpoints[from] = Math.max(0, Math.min(view.getImage().getWidth()-1, poly.xpoints[from]));
-		poly.ypoints[from] = Math.max(0, Math.min(view.getImage().getHeight()-1, poly.ypoints[from]));
+		poly.xpoints[from] = Math.max(0, Math.min(view.getImageWidth()-1, poly.xpoints[from]));
+		poly.ypoints[from] = Math.max(0, Math.min(view.getImageHeight()-1, poly.ypoints[from]));
 	}
 	
 	public void pointClicked(PageEditor view, int cx, int cy, double vx, double vy, int modifiers, int clickCount)
@@ -200,6 +200,10 @@ public class SelectionOperation implements ImageView.Operation<PageEditor>
 			near.first.polygon.invalidate();
 			view.repaint();
 		}
+		else
+		{
+			view.scrollPixels(deltax, deltay);
+		}
 	}
 	public void pointDropped(PageEditor view, int cx, int cy, double vx, double vy, int downw, int downy, int deltax, int deltay, int modifiers)
 	{
@@ -214,7 +218,7 @@ public class SelectionOperation implements ImageView.Operation<PageEditor>
 	public void contextMenuRequested(final PageEditor view, int cx, int cy, final double vx, final double vy, int modifiers)
 	{
 		JPopupMenu popup = new JPopupMenu();
-		popup.add(new JMenuItem(new AbstractAction(XMLResourceBundle.getBundledString("imageLocateLabel")) {@Override public void actionPerformed(ActionEvent arg0)
+		popup.add(new JMenuItem(new AbstractAction(Lang.s("imageLocateLabel")) {@Override public void actionPerformed(ActionEvent arg0)
 		{
 			try
 			{

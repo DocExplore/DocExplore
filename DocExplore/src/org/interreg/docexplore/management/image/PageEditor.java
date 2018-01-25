@@ -87,8 +87,9 @@ public class PageEditor extends ImageView implements DocumentEditor
 	{
 		super.drawView(g, pixelSize);
 		drawOverlay(g, pixelSize);
+		super.drawMini(g, pixelSize);
 	}
-	
+	@Override protected void drawMini(Graphics2D g, double pixelSize) {}
 	protected void drawOverlay(Graphics2D g, double pixelSize)
 	{
 		regions.render(g, pixelSize);

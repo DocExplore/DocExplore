@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
 
@@ -53,7 +53,7 @@ public class AddRegionsAction extends UnreversibleAction
 
 	public String description()
 	{
-		return XMLResourceBundle.getBundledString("addRegion");
+		return Lang.s("addRegion");
 	}
 
 }

@@ -18,8 +18,8 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.actions.DeleteBooksAction;
 
 public class DeleteFS2BooksAction extends DeleteBooksAction

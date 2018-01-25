@@ -18,8 +18,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.actions.AddBookAction;
 import org.interreg.docexplore.util.history.ReversibleAction;

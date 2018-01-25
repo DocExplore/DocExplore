@@ -42,7 +42,7 @@ import org.interreg.docexplore.authoring.BookImporter;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.gui.WrapLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.plugin.metadata.MetaDataPlugin;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.MetaData;
@@ -80,7 +80,7 @@ public class MetaDataEditor extends JPanel
 		//toolbar.add(new JLabel(XMLResourceBundle.getBundledString("generalAddAnnotation")));
 		
 		JPanel addButtons = new JPanel(new WrapLayout(FlowLayout.LEFT));
-		addButtons.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("generalAddAnnotation")));
+		addButtons.setBorder(BorderFactory.createTitledBorder(Lang.s("generalAddAnnotation")));
 		JButton addText = new JButton(new AbstractAction("", ImageUtils.getIcon("free-32x32.png")) {public void actionPerformed(ActionEvent e)
 		{
 			try
@@ -98,7 +98,7 @@ public class MetaDataEditor extends JPanel
 			}
 			catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 		}});
-		addText.setToolTipText(XMLResourceBundle.getBundledString("annotationText"));
+		addText.setToolTipText(Lang.s("annotationText"));
 		addButtons.add(addText);
 		
 		JButton addImage = new JButton(new AbstractAction("", ImageUtils.getIcon("image-32x32.png")) {public void actionPerformed(ActionEvent e)
@@ -109,7 +109,7 @@ public class MetaDataEditor extends JPanel
 			try {addFiles(files);}
 			catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 		}});
-		addImage.setToolTipText(XMLResourceBundle.getBundledString("annotationImage"));
+		addImage.setToolTipText(Lang.s("annotationImage"));
 		addButtons.add(addImage);
 		
 		if (pageEditor.view.explorer.tool.metaDataTypeIsPluggedIn("vid"))
@@ -122,14 +122,14 @@ public class MetaDataEditor extends JPanel
 					try {addFiles(files.toArray(new File [0]));}
 					catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}});
-			addMedia.setToolTipText(XMLResourceBundle.getBundledString("annotationMedia"));
+			addMedia.setToolTipText(Lang.s("annotationMedia"));
 			addButtons.add(addMedia);
 		}
 		
 		toolbar.add(addButtons);
 		
 		JPanel previewButtons = new JPanel(new WrapLayout(FlowLayout.LEFT));
-		previewButtons.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("generalPreview")));
+		previewButtons.setBorder(BorderFactory.createTitledBorder(Lang.s("generalPreview")));
 		JButton preview = new JButton(new AbstractAction("", ImageUtils.getIcon("preview-32x32.png")) {public void actionPerformed(ActionEvent e)
 		{
 			GuiUtils.blockUntilComplete(new ProgressRunnable()
@@ -151,7 +151,7 @@ public class MetaDataEditor extends JPanel
 		toolbar.add(previewButtons);
 		
 		JPanel copyButtons = new JPanel(new WrapLayout(FlowLayout.LEFT));
-		copyButtons.setBorder(BorderFactory.createTitledBorder(XMLResourceBundle.getBundledString("generalCopyPaste")));
+		copyButtons.setBorder(BorderFactory.createTitledBorder(Lang.s("generalCopyPaste")));
 		JButton copy = new JButton(ImageUtils.getIcon("copy-24x24.png"));
 		paste = new JButton(ImageUtils.getIcon("paste-24x24.png"));
 		copy.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
@@ -267,9 +267,10 @@ public class MetaDataEditor extends JPanel
 			for (InfoElement element : elements)
 				elementPanel.add(element);
 			
-			elementPanel.getParent().validate();
-			elementPanel.getParent().invalidate();
-			elementPanel.getParent().repaint();
+//			elementPanel.getParent().validate();
+//			elementPanel.getParent().repaint();
+			scrollPane.validate();
+			scrollPane.repaint();
 			
 			if (monitoredElement[0] != null)
 			{
@@ -278,9 +279,6 @@ public class MetaDataEditor extends JPanel
 				if (element instanceof TextElement)
 					((TextElement)element).textPane.requestFocus();
 			}
-			scrollPane.getViewport().validate();
-			scrollPane.getViewport().invalidate();
-			scrollPane.getViewport().repaint();
 		}});
 	}
 }

@@ -16,8 +16,8 @@ package org.interreg.docexplore.datalink.fs2;
 
 import java.util.List;
 
-import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.actions.AddMetaDataAction;
 

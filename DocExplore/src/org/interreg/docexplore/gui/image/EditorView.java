@@ -38,7 +38,8 @@ public class EditorView extends NavView
 			return;
 		if (operation.completed())
 			cancelOperation();
-		onMessageChanged(operation.getMessage());
+		if (operation != null)
+			onMessageChanged(operation.getMessage());
 	}
 	protected void onMessageChanged(String s) {}
 	

@@ -2,10 +2,8 @@ package org.interreg.docexplore.manuscript.actions;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -13,13 +11,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
-import org.interreg.docexplore.management.image.PosterUtils;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
+import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.util.ImageUtils;
 import org.interreg.docexplore.util.MemoryImageSource;
 import org.interreg.docexplore.util.Pair;
@@ -55,16 +53,14 @@ public class AddPosterPartsAction extends UnreversibleAction
 			{
 				try
 				{
+					part.setMetaDataString(link.bookKey, ""+book.getId());
+					
 					part.setValue(MetaData.imageType, new FileInputStream(file));
 					part.addMetaData(new MetaData(link, link.sourceKey, file.getName()));
 					BufferedImage image = ImageUtils.read(part.getValue());
 					part.addMetaData(new MetaData(link, link.dimKey, image.getWidth()+","+image.getHeight()));
 					
-					BufferedImage mini = ImageUtils.createIconSizeImage(image, DocExploreDataLink.miniSize);
-					ByteArrayOutputStream os = new ByteArrayOutputStream();
-					ImageUtils.write(mini, "png", os);
-					InputStream is = new ByteArrayInputStream(os.toByteArray());
-					part.addMetaData(new MetaData(link, link.miniKey, MetaData.imageType, is));
+					DocExploreDataLink.getImageMini(part);
 				}
 				catch (Exception e)
 				{
@@ -108,13 +104,16 @@ public class AddPosterPartsAction extends UnreversibleAction
 			}
 			int colCnt = 0;
 			for (MetaData part : parts)
+			{
 				part.setMetaDataString(link.partPosKey, (colCnt++)+","+(max+1));
+			}
 		}
+		book.setMetaDataString(link.upToDateKey, "false");
 	}
 
 	public String description()
 	{
-		return (files != null ? files.size() : parts.size()) == 1 ? XMLResourceBundle.getBundledString("addPart") : XMLResourceBundle.getBundledString("addParts");
+		return (files != null ? files.size() : parts.size()) == 1 ? Lang.s("addPart") : Lang.s("addParts");
 	}
 
 	public double progress() {return progress;}

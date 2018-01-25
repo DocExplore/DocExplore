@@ -53,10 +53,10 @@ import org.interreg.docexplore.datalink.DataLink;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.datalink.fs2.DataLinkFS2Source;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.plugin.metadata.MetaDataPlugin;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.manuscript.Region;
@@ -107,7 +107,7 @@ public class AuthoringToolFrame extends JFrame
 		
 		startup.screen.setText("Initializing history");
 		this.historyManager = new HistoryManager(50, new File(DocExploreTool.getHomeDir(), ".at-cache"));
-		this.historyDialog = new JDialog(this, XMLResourceBundle.getBundledString("generalHistory"));
+		this.historyDialog = new JDialog(this, Lang.s("generalHistory"));
 		historyDialog.add(new HistoryPanel(historyManager));
 		historyDialog.pack();
 		
@@ -143,7 +143,7 @@ public class AuthoringToolFrame extends JFrame
 		//this.fileExplorer = new FileExplorer(this);
 		
 		this.explorer = new JPanel(new BorderLayout());
-		explorer.add(new JLabel("<html><font style=\"font-size:16\">"+XMLResourceBundle.getBundledString("generalLibraryLabel")+"</font></html>"), BorderLayout.NORTH);
+		explorer.add(new JLabel("<html><font style=\"font-size:16\">"+Lang.s("generalLibraryLabel")+"</font></html>"), BorderLayout.NORTH);
 		explorer.add(linkExplorer, BorderLayout.CENTER);
 		//explorer.addTab(XMLResourceBundle.getBundledString("generalFilesLabel"), fileExplorer);
 		
@@ -178,9 +178,9 @@ public class AuthoringToolFrame extends JFrame
 			catch (Exception e) {e.printStackTrace();}
 			
 			String linkTitle = menu.curFile == null ? null : menu.curFile.getAbsolutePath();
-			titleLabel.setText("<html><font style=\"font-size:14\">"+XMLResourceBundle.getBundledString("generalPresentationLabel")+" : <b>"+bookName+"</b>" +
+			titleLabel.setText("<html><font style=\"font-size:14\">"+Lang.s("generalPresentationLabel")+" : <b>"+bookName+"</b>" +
 				(linkTitle != null ? " ("+linkTitle+")" : "")+"</font></html>");
-			setTitle(XMLResourceBundle.getBundledString("frameTitle")+" "+(linkTitle != null ? linkTitle : ""));
+			setTitle(Lang.s("frameTitle")+" "+(linkTitle != null ? linkTitle : ""));
 			historyManager.reset(-1);
 			repaint();
 		}});
@@ -232,26 +232,29 @@ public class AuthoringToolFrame extends JFrame
 						String bookName = "";
 						bookName = book.getName();
 						String linkTitle = menu.curFile == null ? null : menu.curFile.getAbsolutePath();
-						titleLabel.setText("<html><font style=\"font-size:14\">"+XMLResourceBundle.getBundledString("generalPresentationLabel")+" : <b>"+bookName+"</b>" +
+						titleLabel.setText("<html><font style=\"font-size:14\">"+Lang.s("generalPresentationLabel")+" : <b>"+bookName+"</b>" +
 							(linkTitle != null ? " ("+linkTitle+")" : "")+"</font></html>");
-						setTitle(XMLResourceBundle.getBundledString("frameTitle")+" "+(linkTitle != null ? linkTitle : ""));
+						setTitle(Lang.s("frameTitle")+" "+(linkTitle != null ? linkTitle : ""));
 						editor.refreshPath();
 					}
 				}
 				catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}
 		});
-		editBook.setToolTipText(XMLResourceBundle.getBundledString("generalToolbarEdit"));
+		editBook.setToolTipText(Lang.s("generalToolbarEdit"));
 		
 		this.splitPane = new JSplitPane();
 		splitPane.setContinuousLayout(false);
-		JPanel editorPanel = new JPanel(new BorderLayout());
+		JPanel editorPanel = new JPanel(new BorderLayout(0, 0));
 		JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		titlePanel.add(titleLabel);
 		titlePanel.add(editBook);
 		//editorPanel.add(titlePanel, BorderLayout.NORTH);
-		editorPanel.add(editor, BorderLayout.CENTER);
-		splitPane.setLeftComponent(editorPanel);
+		
+//		editorPanel.add(editor, BorderLayout.CENTER);
+//		splitPane.setLeftComponent(editorPanel);
+		splitPane.setLeftComponent(editor);
+		
 		rightPanel = new JPanel(new BorderLayout(0, 0));
 		splitPane.setRightComponent(rightPanel);
 		rightPanel.add(explorer, BorderLayout.CENTER);

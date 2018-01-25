@@ -22,7 +22,7 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import org.apache.commons.io.FileUtils;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.actions.DeletePagesAction;
 

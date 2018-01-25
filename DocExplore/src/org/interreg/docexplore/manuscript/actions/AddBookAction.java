@@ -19,10 +19,10 @@ import java.util.List;
 
 import org.interreg.docexplore.datalink.fs2.AddFS2PagesAction;
 import org.interreg.docexplore.datalink.fs2.AddFS2PosterPartsAction;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.util.Pair;
 import org.interreg.docexplore.util.history.ReversibleAction;
@@ -66,7 +66,7 @@ public class AddBookAction extends UnreversibleAction
 
 	public String description()
 	{
-		return XMLResourceBundle.getBundledString("addBook");
+		return Lang.s("addBook");
 	}
 	
 	public void dispose()

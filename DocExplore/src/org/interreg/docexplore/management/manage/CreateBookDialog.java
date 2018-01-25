@@ -17,7 +17,7 @@ import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 import org.interreg.docexplore.util.ImageUtils;
@@ -27,7 +27,7 @@ public class CreateBookDialog extends JDialog
 {
 	public CreateBookDialog(final ManageComponent comp)
 	{
-		super((Frame)null, XMLResourceBundle.getBundledString("manageAddBookLabel"), true);
+		super((Frame)null, Lang.s("manageAddBookLabel"), true);
 		
 		JPanel top = new JPanel(new BorderLayout());
 		setContentPane(top);
@@ -45,12 +45,12 @@ public class CreateBookDialog extends JDialog
 					List<File> files = SelectPagesPanel.show();
 					if (files == null)
 						return;
-					String title = JOptionPane.showInputDialog(comp.win, XMLResourceBundle.getBundledString("manageInputTitleLabel"));
+					String title = JOptionPane.showInputDialog(comp.win, Lang.s("manageInputTitleLabel"));
 					if (title == null || title.trim().length() == 0)
 						return;
 					try {if (comp.findTitle(title) != null)
 					{
-						JOptionPane.showMessageDialog(comp.win, XMLResourceBundle.getBundledString("manageRenameExistsMessage"));
+						JOptionPane.showMessageDialog(comp.win, Lang.s("manageRenameExistsMessage"));
 						return;
 					}}
 					catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
@@ -59,7 +59,7 @@ public class CreateBookDialog extends JDialog
 				public float getProgress() {return (float)0;}
 			}, comp.win);
 		}}));
-		panel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("createBookFromImagesLabel")+"</b><br>"+XMLResourceBundle.getBundledString("createBookFromImagesMessage")+"</html>"));
+		panel.add(new JLabel("<html><b>"+Lang.s("createBookFromImagesLabel")+"</b><br>"+Lang.s("createBookFromImagesMessage")+"</html>"));
 		
 		panel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("scroll-128x128.png")) {public void actionPerformed(ActionEvent arg0)
 		{
@@ -71,12 +71,12 @@ public class CreateBookDialog extends JDialog
 					List<File> files = SelectPagesPanel.show();
 					if (files == null)
 						return;
-					String title = JOptionPane.showInputDialog(comp.win, XMLResourceBundle.getBundledString("manageInputTitleLabel"));
+					String title = JOptionPane.showInputDialog(comp.win, Lang.s("manageInputTitleLabel"));
 					if (title == null || title.trim().length() == 0)
 						return;
 					try {if (comp.findTitle(title) != null)
 					{
-						JOptionPane.showMessageDialog(comp.win, XMLResourceBundle.getBundledString("manageRenameExistsMessage"));
+						JOptionPane.showMessageDialog(comp.win, Lang.s("manageRenameExistsMessage"));
 						return;
 					}}
 					catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
@@ -85,10 +85,10 @@ public class CreateBookDialog extends JDialog
 				public float getProgress() {return 0;}
 			}, comp.win);
 		}}));
-		panel.add(new JLabel("<html><b>"+XMLResourceBundle.getBundledString("createDocumentFromImagesLabel")+"</b><br>"+XMLResourceBundle.getBundledString("createDocumentFromImagesMessage")+"</html>"));
+		panel.add(new JLabel("<html><b>"+Lang.s("createDocumentFromImagesLabel")+"</b><br>"+Lang.s("createDocumentFromImagesMessage")+"</html>"));
 		
 		JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		buttons.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("generalCancelLabel")) {@Override public void actionPerformed(ActionEvent arg0)
+		buttons.add(new JButton(new AbstractAction(Lang.s("generalCancelLabel")) {@Override public void actionPerformed(ActionEvent arg0)
 		{
 			CreateBookDialog.this.setVisible(false);
 		}}));

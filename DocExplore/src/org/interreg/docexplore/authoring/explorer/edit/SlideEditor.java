@@ -15,7 +15,6 @@ The fact that you are presently reading this means that you have had knowledge o
 package org.interreg.docexplore.authoring.explorer.edit;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
@@ -31,16 +30,16 @@ import org.interreg.docexplore.authoring.explorer.ExplorerView;
 import org.interreg.docexplore.authoring.explorer.ViewItem;
 import org.interreg.docexplore.authoring.explorer.ViewMouseListener;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.MainWindow;
 import org.interreg.docexplore.management.gui.MainWindow.MainWindowListener;
-import org.interreg.docexplore.management.image.PageEditor;
+import org.interreg.docexplore.management.image.PosterPageEditor;
 import org.interreg.docexplore.management.image.RegionOverlay.RegionObject;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Page;
 
 @SuppressWarnings("serial")
-public class SlideEditor extends PageEditor implements ViewMouseListener.DropTarget
+public class SlideEditor extends PosterPageEditor implements ViewMouseListener.DropTarget
 {
 	SlideEditorListener listener;
 	SlideEditorToolbar toolBar;
@@ -63,13 +62,14 @@ public class SlideEditor extends PageEditor implements ViewMouseListener.DropTar
 		msg = pageMsg;
 	}
 	
-	static String pageMsg = XMLResourceBundle.getBundledString("helpPageMsg");
-	static String regionMsg = XMLResourceBundle.getBundledString("helpRegionMsg");
+	static String pageMsg = Lang.s("helpPageMsg");
+	static String regionMsg = Lang.s("helpRegionMsg");
 	
 	@Override public void switchDocument(final AnnotatedObject document) throws Exception
 	{
 		super.switchDocument(document);
 		view.explorer.notifyExploringChanged(document);
+		refresh();
 	}
 	
 	public void reloadPage()
@@ -107,28 +107,24 @@ public class SlideEditor extends PageEditor implements ViewMouseListener.DropTar
 					g.draw(region.polygon);
 				}
 			}
+			g.setTransform(defaultTransform);
+			view.paintDropTarget(g);
+			g.setTransform(viewTransform);
+		}
+		
+		if (view.explorer.tool.displayHelp && !renderedMsg.equals(msg))
+		{
+			help = ExplorerView.helpRenderer.getImage(
+				"<html><div style=\"font-family: Arial; font-size: 24; font-weight: bold; color: rgb(128, 128, 128)\">"+msg+"</div></html>", 
+				getWidth(), ExplorerView.background);
+			renderedMsg = msg;
+		}
+		if (view.explorer.tool.displayHelp && msg.length() > 0)
+		{
+			g.setTransform(defaultTransform);
+			g.drawImage(help, 0, getHeight()-help.getHeight(), null);
 		}
 	}
-	
-	@Override protected void drawComponent(Graphics2D g)
-	{
-		super.drawComponent(g);
-		
-		if (view.dragging != null)
-			view.paintDropTarget(g);
-	}
-	
-	public String msg = "";
-	public void paintChildren(Graphics _g)
-	{
-		Graphics2D g = (Graphics2D)_g;
-		g.setTransform(defaultTransform);
-		super.paintChildren(g);
-		if (!view.explorer.tool.displayHelp || msg.length() == 0)
-			return;
-		BufferedImage help = ExplorerView.helpRenderer.getImage(
-			"<html><div style=\"font-family: Arial; font-size: 24; font-weight: bold; color: rgb(128, 128, 128)\">"+msg+"</div></html>", 
-			getWidth(), ExplorerView.background);
-		g.drawImage(help, 0, getHeight()-help.getHeight(), null);
-	}
+	BufferedImage help = null;
+	public String msg = "", renderedMsg = "";
 }

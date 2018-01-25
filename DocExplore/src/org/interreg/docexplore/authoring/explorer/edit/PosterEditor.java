@@ -12,9 +12,9 @@ import org.interreg.docexplore.authoring.explorer.ViewMouseListener;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.management.image.PosterPartsEditor;
-import org.interreg.docexplore.management.image.PosterUtils;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.MetaData;
+import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.manuscript.actions.AddMetaDataAction;
 import org.interreg.docexplore.manuscript.actions.AddPosterPartsAction;
 import org.interreg.docexplore.util.history.ReversibleAction;
@@ -102,7 +102,7 @@ public class PosterEditor extends PosterPartsEditor implements ViewMouseListener
 				view.curBook.addMetaData(part);
 			if (!addedParts.isEmpty())
 			{
-				MetaData [][] parts = PosterUtils.getPosterPartsArray(view.explorer.link, view.curBook);
+				MetaData [][] parts = PosterUtils.getBaseTilesArray(view.explorer.link, view.curBook);
 				int x = 0;
 				for (MetaData part : addedParts)
 				{

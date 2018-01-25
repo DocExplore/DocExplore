@@ -36,7 +36,7 @@ import javax.swing.JTextField;
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataImageSource;
 import org.interreg.docexplore.util.FileImageSource;
@@ -91,8 +91,8 @@ public class ImageEditor extends AnnotationEditor
 			imageField.setEditable(false);
 			imagePanel.add(imageField, BorderLayout.CENTER);
 			JButton browseButton = new JButton(
-				XMLResourceBundle.getBundledString("annotateBrowseLabel"));
-			imagePreview = new JLabel(XMLResourceBundle.getBundledString("annotateNoDisplayLabel"));
+				Lang.s("annotateBrowseLabel"));
+			imagePreview = new JLabel(Lang.s("annotateNoDisplayLabel"));
 			
 			if (image != null)
 				set();
@@ -147,7 +147,7 @@ public class ImageEditor extends AnnotationEditor
 			previewPanel.add(imagePreview);
 			imagePanel.add(previewPanel, BorderLayout.SOUTH);
 			imagePanel.setBorder(BorderFactory.createTitledBorder(
-				XMLResourceBundle.getBundledString("annotateTypeImage")));
+				Lang.s("annotateTypeImage")));
 			
 			add(imagePanel, BorderLayout.NORTH);
 		}

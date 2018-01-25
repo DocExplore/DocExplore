@@ -14,7 +14,7 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.datalink.fs2;
 
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.util.history.ReversibleAction;
 
 public abstract class FS2Action extends ReversibleAction

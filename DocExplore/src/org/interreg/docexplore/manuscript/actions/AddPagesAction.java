@@ -23,10 +23,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.util.FileImageSource;
@@ -94,6 +94,6 @@ public class AddPagesAction extends UnreversibleAction
 	
 	public String description()
 	{
-		return (files != null ? files.size() : pages.size()) == 1 ? XMLResourceBundle.getBundledString("addPage") : XMLResourceBundle.getBundledString("addPages");
+		return (files != null ? files.size() : pages.size()) == 1 ? Lang.s("addPage") : Lang.s("addPages");
 	}
 }

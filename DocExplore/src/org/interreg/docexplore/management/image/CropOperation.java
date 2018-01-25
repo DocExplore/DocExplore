@@ -14,14 +14,21 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.management.image;
 
-public class CropOperation extends RectROIOperation
+import java.awt.Point;
+
+import org.interreg.docexplore.gui.image.ImageView;
+import org.interreg.docexplore.management.gui.DocumentEditorHost;
+import org.interreg.docexplore.manuscript.AnnotatedObject;
+
+public class CropOperation extends RectOperation
 {
-	@Override public void pointDropped(PageEditor view, int cx, int cy, double vx, double vy, int downw, int downy, int deltax, int deltay, int modifiers)
+	@Override public void rectDrawn(ImageView view, Point first, Point second, int modifiers)
 	{
-		second.setLocation(Math.max(0, Math.min(view.getImage().getWidth()-1, (int)(vx+.5))), Math.max(0, Math.min(view.getImage().getHeight()-1, (int)(vy+.5))));
+		AnnotatedObject object = view instanceof PageEditor ? ((PageEditor)view).page : ((ImageMetaDataEditor)view).metaData;
+		DocumentEditorHost host = view instanceof PageEditor ? ((PageEditor)view).host : ((ImageMetaDataEditor)view).host;
 		int tlx = Math.min(first.x, second.x), tly = Math.min(first.y, second.y);
 		int brx = Math.max(first.x, second.x), bry = Math.max(first.y, second.y);
-		view.getHost().getActionListener().onCropPageRequest(view.page, tlx, tly, brx, bry);
+		host.getActionListener().onCropPageRequest(object, tlx, tly, brx, bry);
 		view.repaint();
 	}
 }

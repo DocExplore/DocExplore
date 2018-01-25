@@ -29,7 +29,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 
 @SuppressWarnings("serial")
@@ -52,15 +52,15 @@ public class ConfigPanel extends JPanel
 		JScrollPane generalPane = new JScrollPane(general, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		generalPane.setPreferredSize(new Dimension(pw, ph));
 		generalPane.getVerticalScrollBar().setUnitIncrement(15);
-		tabs.addTab(XMLResourceBundle.getBundledString("cfgGeneralLabel"), generalPane);
+		tabs.addTab(Lang.s("cfgGeneralLabel"), generalPane);
 		this.server = new ServerConfigPanel(config, serverDir);
 		JScrollPane serverPane = new JScrollPane(server, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		serverPane.setPreferredSize(new Dimension(pw, ph));
 		serverPane.getVerticalScrollBar().setUnitIncrement(15);
-		tabs.addTab(XMLResourceBundle.getBundledString("cfgServerLabel"), serverPane);
+		tabs.addTab(Lang.s("cfgServerLabel"), serverPane);
 		
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("cfgOkLabel")) {public void actionPerformed(ActionEvent e)
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("cfgOkLabel")) {public void actionPerformed(ActionEvent e)
 		{
 			wasValidated = true;
 			try
@@ -71,7 +71,7 @@ public class ConfigPanel extends JPanel
 			catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 			getTopLevelAncestor().setVisible(false);
 		}}));
-		buttonPanel.add(new JButton(new AbstractAction(XMLResourceBundle.getBundledString("cfgCancelLabel")) {
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("cfgCancelLabel")) {
 			public void actionPerformed(ActionEvent e) {getTopLevelAncestor().setVisible(false);}}));
 		
 		add(tabs, BorderLayout.CENTER);

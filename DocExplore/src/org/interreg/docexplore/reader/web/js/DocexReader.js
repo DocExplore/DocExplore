@@ -60,7 +60,7 @@ DocexInput.prototype.htmlMouseMove = function(x, y)
 		return;
 	var pos = this.reader.layout.container.getBoundingClientRect();
 	x -= pos.left;
-	y -= pos.top;
+	y -= pos.top; 
 	if (!this.isDrag && (x-this.down[0])*(x-this.down[0])+(y-this.down[1])*(y-this.down[1]) > 3*3)
 	{
 		this.isDrag = true;
@@ -131,18 +131,22 @@ function DocexSpec(basePath, xml)
 	this.roiMaterial.depthTest = false;
 	this.roiMaterial.transparent = true;
 	this.roiMaterial.opacity = 0;
+	this.roiMaterial.side = THREE.DoubleSide;
 	this.roiOutlineMaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
 	this.roiOutlineMaterial.depthTest = false;
 	this.roiOutlineMaterial.transparent = true;
 	this.roiOutlineMaterial.opacity = 0;
+	this.roiOutlineMaterial.side = THREE.DoubleSide;
 	this.roiSelectedMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
 	this.roiSelectedMaterial.depthTest = false;
 	this.roiSelectedMaterial.transparent = true;
 	this.roiSelectedMaterial.opacity = 0;
+	this.roiSelectedMaterial.side = THREE.DoubleSide;
 	this.roiSelectedOutlineMaterial = new THREE.MeshBasicMaterial({color: 0x2E4EFD});
 	this.roiSelectedOutlineMaterial.depthTest = false;
 	this.roiSelectedOutlineMaterial.transparent = true;
 	this.roiSelectedOutlineMaterial.opacity = 1;
+	this.roiSelectedOutlineMaterial.side = THREE.DoubleSide;
 	var canvas = document.createElement("CANVAS");
 	canvas.width = 512;
 	canvas.height = 512;
@@ -166,34 +170,39 @@ function DocexSpec(basePath, xml)
 	this.path = basePath+xml.substring(start, end);
 	//document.getElementById('poweredBy').innerHTML = this.path;
 	
+	this.isPoster = xml.indexOf("poster=\"true\"") > 0;
+	
 	start = xml.indexOf("aspectRatio=\"");
 	start += 13;
 	end = xml.indexOf("\"", start);
 	this.aspect = xml.substring(start, end);
 	
-	start = xml.indexOf("cover=\"");
-	start += 7;
-	end = xml.indexOf("\"", start);
-	this.cover = this.path+xml.substring(start, end);
-	
-	start = xml.indexOf("innerCover=\"");
-	start += 12;
-	end = xml.indexOf("\"", start);
-	this.innerCover = this.path+xml.substring(start, end);
-	
-	start = xml.indexOf("leftSide=\"");
-	if (start >= 0)
+	if (!this.isPoster)
 	{
-		start += 10;
+		start = xml.indexOf("cover=\"");
+		start += 7;
 		end = xml.indexOf("\"", start);
-		this.leftSide = this.path+xml.substring(start, end);
-	}
-	start = xml.indexOf("rightSide=\"");
-	if (start >= 0)
-	{
-		start += 11;
+		this.cover = this.path+xml.substring(start, end);
+		
+		start = xml.indexOf("innerCover=\"");
+		start += 12;
 		end = xml.indexOf("\"", start);
-		this.rightSide = this.path+xml.substring(start, end);
+		this.innerCover = this.path+xml.substring(start, end);
+		
+		start = xml.indexOf("leftSide=\"");
+		if (start >= 0)
+		{
+			start += 10;
+			end = xml.indexOf("\"", start);
+			this.leftSide = this.path+xml.substring(start, end);
+		}
+		start = xml.indexOf("rightSide=\"");
+		if (start >= 0)
+		{
+			start += 11;
+			end = xml.indexOf("\"", start);
+			this.rightSide = this.path+xml.substring(start, end);
+		}
 	}
 	
 	this.name = "";
@@ -241,21 +250,44 @@ DocexSpec.prototype.buildPage = function(xml, index)
 		page.tpath = this.path+xml.substring(start+6, end);
 	}
 	else page.tpath = null;
+	page.layers = [];
 	page.regions = [];
 	page.index = index;
 	
+	while (true)
+	{
+		start = xml.indexOf("<Layer");
+		if (start == -1)
+			break;
+		end = xml.indexOf("</Layer>")
+		page.layers[page.layers.length] = page.layers.length > 0 ? 
+			this.buildTileLayer(xml.substring(start, end+"</Layer>".length), page.layers[0].w, page.layers[0].h) :
+			this.buildTileLayer(xml.substring(start, end+"</Layer>".length));
+		xml = xml.substring(end+"</Layer>".length, xml.length);
+	}
 	while (true)
 	{
 		start = xml.indexOf("<RegionOfInterest");
 		if (start == -1)
 			break;
 		end = xml.indexOf("</RegionOfInterest>")
-		page.regions[page.regions.length] = this.buildRegion(xml.substring(start, end+19), index);
-		xml = xml.substring(end+19, xml.length);
+		page.regions[page.regions.length] = this.buildRegion(xml.substring(start, end+"</RegionOfInterest>".length), index);
+		xml = xml.substring(end+"</RegionOfInterest>".length, xml.length);
 	}
+	if (page.layers.length > 0)
+		page.layerFor = docexBuildLayerFor(page);
 	
 	return page;
 }
+
+function docexBuildLayerFor(page) {return function(w, h, sw, sh)
+{
+	var l = 0;
+	for (;l<page.layers.length-1;l++)
+		if (Math.min((w*page.layers[l].w)/sw, (h*page.layers[l].h)/sh) < 1.5)
+			break;
+	return l;
+};}
 
 DocexSpec.prototype.buildEmptyPage = function(index)
 {
@@ -265,6 +297,87 @@ DocexSpec.prototype.buildEmptyPage = function(index)
 	page.regions = [];
 	page.index = index;
 	return page;
+}
+
+DocexSpec.prototype.buildTileLayer = function(xml, layerw, layerh)
+{
+	var layer = {};
+	
+	var start = xml.indexOf("w=\"");
+	var end = xml.indexOf("\"", start+"w=\"".length);
+	layer.w = parseInt(xml.substring(start+"w=\"".length, end));
+	start = xml.indexOf("h=\"");
+	end = xml.indexOf("\"", start+"h=\"".length);
+	layer.h = parseInt(xml.substring(start+"h=\"".length, end));
+	start = xml.indexOf("hlayers=\"");
+	end = xml.indexOf("\"", start+"hlayers=\"".length);
+	layer.hlayers = parseInt(xml.substring(start+"hlayers=\"".length, end));
+	start = xml.indexOf("vlayers=\"");
+	end = xml.indexOf("\"", start+"vlayers=\"".length);
+	layer.vlayers = parseInt(xml.substring(start+"vlayers=\"".length, end));
+	
+	var tilesList = [];
+	while (true)
+	{
+		start = xml.indexOf("<Tile");
+		if (start == -1)
+			break;
+		end = xml.indexOf("/>")
+		tilesList[tilesList.length] = this.buildTile(xml.substring(start, end+"/>".length), 
+			typeof(layerw) == "undefined" ? layer.w : layerw, typeof(layerh) == "undefined" ? layer.h : layerh);
+		xml = xml.substring(end+"/>".length, xml.length);
+	}
+	layer.tiles = [];
+	for (var i=0;i<layer.hlayers;i++)
+	{
+		layer.tiles[i] = [];
+		for (var j=0;j<layer.vlayers;j++)
+			layer.tiles[i][j] = tilesList[j*layer.hlayers+i];
+	}
+	
+	var rx = 0;
+	for (var i=0;i<layer.hlayers;i++)
+	{
+		var ry = 0;
+		for (var j=0;j<layer.vlayers;j++)
+		{
+			layer.tiles[i][j].rx = rx;
+			layer.tiles[i][j].ry = ry;
+			ry += layer.tiles[i][j].rh;
+		}
+		rx += layer.tiles[i][0].rw;
+	}
+	
+	layer.tilei = docexBuildTilei(layer);
+	layer.tilej = docexBuildTilej(layer);
+	layer.tilex = docexBuildTilex(layer);
+	layer.tiley = docexBuildTiley(layer);
+	
+	return layer;
+}
+function docexBuildTilei(layer) {return function(x) {var i=0; while (i < layer.tiles.length-1 && layer.tiles[i][0].rx+layer.tiles[i][0].rw < x) i++; return i;};}
+function docexBuildTilej(layer) {return function(y) {var j=0; while (j < layer.tiles[0].length-1 && layer.tiles[0][j].ry+layer.tiles[0][j].rh < y) j++; return j;};}
+function docexBuildTilex(layer) {return function(i) {return layer.tiles[i][0].rx;};}
+function docexBuildTiley(layer) {return function(j) {return layer.tiles[0][j].ry;};}
+
+DocexSpec.prototype.buildTile = function(xml, layerw, layerh)
+{
+	var tile = {};
+	
+	var start = xml.indexOf("w=\"");
+	var end = xml.indexOf("\"", start+"w=\"".length);
+	tile.w = parseInt(xml.substring(start+"w=\"".length, end));
+	start = xml.indexOf("h=\"");
+	end = xml.indexOf("\"", start+"h=\"".length);
+	tile.h = parseInt(xml.substring(start+"h=\"".length, end));
+	start = xml.indexOf("src=\"");
+	end = xml.indexOf("\"", start+"src=\"".length);
+	tile.src = xml.substring(start+"src=\"".length, end);
+	
+	tile.rw = tile.w*1./layerw;
+	tile.rh = tile.h*1./layerh;
+	
+	return tile;
 }
 
 DocexSpec.prototype.buildRegion = function(xml, index)
@@ -469,10 +582,9 @@ function DocexCamera(reader)
 
 DocexCamera.prototype.init = function(x, y, z)
 {
-	var near = 0.01, far = 100;
-	
+	this.farFact = 10000;
 	this.aspect = this.reader.width/this.reader.height;
-	this.camera = new THREE.PerspectiveCamera(this.defaultFov, this.aspect, near, far);
+	this.camera = new THREE.PerspectiveCamera(this.defaultFov, this.aspect, Math.abs(z/2), Math.abs(z/2)*this.farFact);
 	
 	this.defaultPos = [x, y, z];
 	this.attractorPos = [x, y, z];
@@ -505,6 +617,9 @@ DocexCamera.prototype.update = function()
 	this.activity = (ox-this.camera.position.x)*(ox-this.camera.position.x)+
 		(oy-this.camera.position.y)*(oy-this.camera.position.y)+
 		(oz-this.camera.position.z)*(oz-this.camera.position.z);
+	this.camera.near = Math.abs(this.camera.position.z/2);
+	this.camera.far = this.camera.near*this.farFact;
+	this.camera.updateProjectionMatrix();
 }
 
 DocexCamera.prototype.unzoomed = function()
@@ -519,7 +634,8 @@ DocexCamera.prototype.translate = function(x, y)
 }
 DocexCamera.prototype.setPos = function(x, y, z)
 {
-	z = z > this.maxUnzoom ? this.maxUnzoom : z < 2 ? 2 : z;
+	var lim = this.reader.spec.isPoster ? 2048./this.reader.spec.pages[0].layers[0].h : 2;
+	z = z > this.maxUnzoom ? this.maxUnzoom : z < lim ? lim : z;
 	this.attractorPos = [x, y, z];
 }
 DocexCamera.prototype.setDiffPos = function(x, y, z)
@@ -534,6 +650,12 @@ DocexCamera.prototype.setDefaultPos = function()
 }
 DocexCamera.prototype.setPosToRegion = function(region)
 {
+	if (this.reader.spec.isPoster)
+	{
+		this.defaultPos[0] = this.attractorPos[0];
+		this.defaultPos[1] = this.attractorPos[1];
+		this.defaultPos[2] = this.attractorPos[2];
+	}
 	var xm = region.bounds[1][0];
 	var ym = .5*(region.bounds[0][1]+region.bounds[1][1]);
 	var l = Math.max(2*this.reader.height*(region.bounds[1][0]-region.bounds[0][0])/this.reader.width, region.bounds[1][1]-region.bounds[0][1]);
@@ -579,7 +701,7 @@ function DocexHand(reader)
 DocexHand.prototype.grab = function(x, y)
 {
 	var book = this.reader.bookModel;
-	if (!this.reader.zoomed)
+	if (!this.reader.zoomed && !this.reader.spec.isPoster)
 	{
 		if (!this.reader.ecoMode)
 		{
@@ -615,7 +737,7 @@ DocexHand.prototype.grab = function(x, y)
 
 DocexHand.prototype.drag = function(x, y)
 {
-	if (!this.reader.zoomed)
+	if (!this.reader.zoomed && !this.reader.spec.isPoster)
 	{
 		if (this.grabbedNode == null)
 			return;
@@ -1620,6 +1742,182 @@ DocexBookPage.prototype.attractToStack = function(headedLeft)
 	}
 }
 
+function DocexPosterModel(reader, length, height)
+{
+	this.reader = reader;
+	this.length = length;
+	this.height = height;
+	this.nCurrentRenderings = 0;
+	this.renderings = [];
+	
+	this.tileStates = [];
+	this.tiles = [];
+	for (var l=0;l<reader.spec.pages[0].layers.length;l++)
+	{
+		this.tileStates[l] = [];
+		this.tiles[l] = [];
+		for (var i=0;i<reader.spec.pages[0].layers[l].tiles.length;i++)
+		{
+			this.tileStates[l][i] = [];
+			this.tiles[l][i] = [];
+			for (var j=0;j<reader.spec.pages[0].layers[l].tiles[i].length;j++)
+			{
+				this.tileStates[l][i][j] = 0;
+				this.tiles[l][i][j] = null;
+			}
+		}
+	}
+	
+	this.areax0 = 0;
+	this.areay0 = 0;
+	this.areax1 = 1;
+	this.areay1 = 1;
+	
+	this.model = new THREE.Group();
+	
+	var geom = new THREE.PlaneGeometry(length, height);
+	this.backModel = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({map: reader.spec.loadingTex}));
+	this.backModel.renderOrder = -1;
+	this.backModel.translateX(.5*length);
+	this.backModel.frustumCulled = false;
+	this.backModel.material.side = THREE.DoubleSide;
+	this.model.add(this.backModel);
+	
+	var backModel = this.backModel;
+	var reader = this.reader;
+	this.reader.texLoader.loader.load(
+		this.reader.spec.pages[0].path,
+		function (tex)
+		{
+			backModel.material.map = tex; 
+			backModel.material.needsUpdate = true;
+			reader.mini.setImage(tex);
+		},
+		undefined,
+		function (err) {console.log("Couldn't load "+(this.reader.spec.pages[0].path)+": "+err);});
+}
+
+DocexPosterModel.prototype.setRendering = function(tex, x0, y0, x1, y1)
+{
+	var rendering = this.renderings.length > this.nCurrentRenderings ? this.renderings[this.nCurrentRenderings] : {};
+	this.renderings[this.nCurrentRenderings] = rendering;
+	this.nCurrentRenderings++;
+	if (typeof(rendering.mesh) == "undefined")
+	{
+		var geom = new THREE.Geometry();
+		geom.vertices.push(new THREE.Vector3(0, 0, 0));
+		geom.vertices.push(new THREE.Vector3(1, 0, 0));
+		geom.vertices.push(new THREE.Vector3(1, 1, 0));
+		geom.vertices.push(new THREE.Vector3(0, 1, 0));
+		geom.faces.push(new THREE.Face3(0, 1, 2));
+		geom.faces.push(new THREE.Face3(0, 2, 3));
+		geom.faceVertexUvs[0].push([new THREE.Vector2(0, 0), new THREE.Vector2(1, 0), new THREE.Vector2(1, 1)]);
+		geom.faceVertexUvs[0].push([new THREE.Vector2(0, 0), new THREE.Vector2(1, 1), new THREE.Vector2(0, 1)]);
+		rendering.mesh = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({map: this.reader.spec.loadingTex}));
+		rendering.mesh.frustumCulled = false;
+		rendering.mesh.material.side = THREE.DoubleSide;
+		this.model.add(rendering.mesh);
+	}
+	rendering.mesh.visible = true;
+	rendering.mesh.material.map = tex;
+	rendering.mesh.material.needsUpdate = true;
+	rendering.mesh.geometry.vertices[0].set(this.length*x0, this.height*(y0-.5), 0);
+	rendering.mesh.geometry.vertices[1].set(this.length*x1, this.height*(y0-.5), 0);
+	rendering.mesh.geometry.vertices[2].set(this.length*x1, this.height*(y1-.5), 0);
+	rendering.mesh.geometry.vertices[3].set(this.length*x0, this.height*(y1-.5), 0);
+	rendering.mesh.geometry.verticesNeedUpdate = true;
+}
+
+DocexPosterModel.prototype.update = function()
+{
+	var tl = this.reader.camera.toWorldCoords(0, 0);
+	var br = this.reader.camera.toWorldCoords(this.reader.width, this.reader.height);
+	var rw = (br[0]-tl[0])/this.length;
+	var rh = (tl[1]-br[1])/this.height;
+	var x1 = tl[0]/this.length;
+	var y1 = (br[1]/this.height+.5);
+	this.refreshArea(x1, 1-y1-rh, x1+rw, 1-y1);
+}
+
+DocexPosterModel.prototype.refreshArea = function(x0, y0, x1, y1)
+{
+	this.areax0 = Math.max(0, Math.min(1, x0));
+	this.areay0 = Math.max(0, Math.min(1, y0));
+	this.areax1 = Math.max(0, Math.min(1, x1));
+	this.areay1 = Math.max(0, Math.min(1, y1));
+	
+	this.nCurrentRenderings = 0;
+	var l = this.reader.spec.pages[0].layerFor(x1-x0, y1-y0, this.reader.width, this.reader.height);
+	var layer = this.reader.spec.pages[0].layers[l];
+	var i0 = layer.tilei(x0), i1 = layer.tilei(x1), j0 = layer.tilej(y0), j1 = layer.tilej(y1);
+	
+	for (var i=0;i<this.tiles[l].length;i++)
+		for (var j=0;j<this.tiles[l][i].length;j++)
+	{
+		if (i>=i0 && i<=i1 && j>=j0 && j<=j1)
+		{
+			if (this.tileStates[l][i][j] == 0)
+				this.requestTile(l, i, j);
+			else if (this.tileStates[l][i][j] == 2)
+			{
+				
+			}
+			if (this.tiles[l][i][j] != null)
+			{
+				var tile = this.reader.spec.pages[0].layers[l].tiles[i][j];
+				this.setRendering(this.tiles[l][i][j], tile.rx, 1-tile.ry-tile.rh, tile.rx+tile.rw, 1-tile.ry);
+			}
+		}
+		else
+		{
+			this.tileStates[l][i][j] = 0;
+			if (this.tiles[l][i][j] != null)
+				this.tiles[l][i][j].dispose();
+			this.tiles[l][i][j] = null;
+		}
+	}
+	for (var i=this.nCurrentRenderings;i<this.renderings.length;i++)
+		this.renderings[i].mesh.visible = false;
+}
+
+DocexPosterModel.prototype.requestTile = function(l, i, j)
+{
+	this.tileStates[l][i][j] = 1;
+	var src = this.reader.spec.pages[0].layers[l].tiles[i][j].src;
+	var poster = this;
+	this.reader.texLoader.loader.load(
+		this.reader.spec.path+src,
+		function (tex)
+		{
+			poster.tileStates[l][i][j] = 2;
+			poster.tiles[l][i][j] = tex;
+		},
+		undefined,
+		function (err)
+		{
+			poster.tileStates[l][i][j] = 0;
+			poster.tiles[l][i][j] = null;
+			console.log("Couldn't load "+src+": "+err);
+		});
+}
+
+DocexPosterModel.prototype.fromPageToWorld = function(x, y, left, res)
+{
+	res.x = x*this.length;
+	res.y = -.5*this.height+(1-y)*this.height;
+	res.z = 0;
+	this.model.localToWorld(res);
+}
+
+DocexPosterModel.prototype.toPage = function(p, d)
+{
+	var x = p.x-d.x*(p.z/d.z);
+	var cx = x/this.length;
+	var y = -p.y+d.y*(p.z/d.z);
+	var cy = y/this.height+.5;
+	return [true, [cx, cy]];
+}
+
 var BookModelConstants = {};
 BookModelConstants.gridSize = 15;
 
@@ -1783,6 +2081,85 @@ DocexBookModel.prototype.toPage = function(p, d)
 	return [left, [cx, cy]];
 }
 
+function DocexMini(reader)
+{
+	this.reader = reader;
+	this.model = new THREE.Group();
+	
+	var geom = new THREE.Geometry();
+	geom.vertices.push(new THREE.Vector3(0, 0, 0));
+	geom.vertices.push(new THREE.Vector3(1, 0, 0));
+	geom.vertices.push(new THREE.Vector3(1, 1, 0));
+	geom.vertices.push(new THREE.Vector3(0, 1, 0));
+	geom.faces.push(new THREE.Face3(0, 1, 2));
+	geom.faces.push(new THREE.Face3(0, 2, 3));
+	geom.faceVertexUvs[0].push([new THREE.Vector2(0, 0), new THREE.Vector2(1, 0), new THREE.Vector2(1, 1)]);
+	geom.faceVertexUvs[0].push([new THREE.Vector2(0, 0), new THREE.Vector2(1, 1), new THREE.Vector2(0, 1)]);
+	this.backMesh = new THREE.Mesh(geom, new THREE.MeshBasicMaterial({map: null}));
+	this.backMesh.frustumCulled = false;
+	this.backMesh.material.side = THREE.DoubleSide;
+	this.backMesh.material.transparent = true;
+	this.backMesh.material.opacity = 0;
+	
+	var areaGeom = new THREE.Geometry();
+	areaGeom.vertices.push(new THREE.Vector3(0, 0, 0));
+	areaGeom.vertices.push(new THREE.Vector3(1, 0, 0));
+	areaGeom.vertices.push(new THREE.Vector3(1, 1, 0));
+	areaGeom.vertices.push(new THREE.Vector3(0, 1, 0));
+	areaGeom.vertices.push(new THREE.Vector3(0, 0, 0));
+	this.areaMesh = new THREE.Line(areaGeom, new THREE.LineBasicMaterial({color: 0x0000ff}));
+	this.areaMesh.frustumCulled = false;
+	this.areaMesh.material.side = THREE.DoubleSide;
+	this.areaMesh.material.transparent = true;
+	this.areaMesh.material.opacity = 0;
+	
+	this.model.add(this.backMesh);
+	this.model.add(this.areaMesh);
+}
+
+DocexMini.prototype.refreshSize = function()
+{
+	var aspect = this.reader.spec.aspect;
+	var limk = .1;
+	this.w = aspect < 1 ? this.reader.width*limk : this.reader.height*limk*aspect;
+	this.h = this.w/aspect;
+	
+	this.backMesh.geometry.vertices[0].set(0, 0, 0);
+	this.backMesh.geometry.vertices[1].set(this.w, 0, 0);
+	this.backMesh.geometry.vertices[2].set(this.w, this.h, 0);
+	this.backMesh.geometry.vertices[3].set(0, this.h, 0);
+	this.backMesh.geometry.verticesNeedUpdate = true;
+}
+
+DocexMini.prototype.update = function()
+{
+	var targetAlpha = this.backMesh.material.map == null ? 0 : 1;
+	targetAlpha *= this.reader.selectedRegion == null ? 1 : 0;
+	
+	if (this.reader.spec.isPoster)
+	{
+		var model = this.reader.bookModel;
+		this.areaMesh.geometry.vertices[0].set(this.w*model.areax0, this.h*(1-model.areay0), 0);
+		this.areaMesh.geometry.vertices[1].set(this.w*model.areax1, this.h*(1-model.areay0), 0);
+		this.areaMesh.geometry.vertices[2].set(this.w*model.areax1, this.h*(1-model.areay1), 0);
+		this.areaMesh.geometry.vertices[3].set(this.w*model.areax0, this.h*(1-model.areay1), 0);
+		this.areaMesh.geometry.vertices[4].copy(this.areaMesh.geometry.vertices[0]);
+		this.areaMesh.geometry.verticesNeedUpdate = true;
+		targetAlpha *= (model.areax1-model.areax0)*(model.areay1-model.areay0) == 1 ? 0 : 1;
+	}
+	
+	this.backMesh.material.opacity = this.backMesh.material.opacity > targetAlpha ? 
+		Math.max(targetAlpha, this.backMesh.material.opacity-.05) :
+		Math.min(targetAlpha, this.backMesh.material.opacity+.05);
+	this.areaMesh.material.opacity = this.backMesh.material.opacity;
+}
+
+DocexMini.prototype.setImage = function(tex)
+{
+	this.backMesh.material.map = tex;
+	this.backMesh.material.needsUpdate = true;
+}
+
 function DocexTexLoader(reader)
 {
 	this.reader = reader;
@@ -1831,7 +2208,7 @@ function DocexPageImage(loader, page, path, tpath)
 	{
 		loader.loader.load(tpath, 
 			docexTexLoaderBuildOnTSuccess(this),
-			function(v) {},
+			undefined,
 			docexTexLoaderBuildOnTError(this)
 		);
 		docexTexLoaderOnReq(loader);
@@ -1840,37 +2217,40 @@ function DocexPageImage(loader, page, path, tpath)
 
 DocexTexLoader.prototype.refresh = function()
 {
-	var hand = this.reader.hand;
-	var from = Math.max(0, this.reader.currentPage-this.spread);
-	var to = Math.min(this.reader.spec.pages.length-1, this.reader.currentPage+this.spread+(hand.active ? 2 : 0));
-	
-	for (var i=from;i<=to;i++)
+	if (!this.reader.spec.isPoster)
 	{
-		if (!("p"+i in this.images) && this.queued < this.max)
-			this.images["p"+i] = new DocexPageImage(this, i, this.reader.spec.pages[i].path, this.reader.spec.pages[i].tpath);
-		else
+		var hand = this.reader.hand;
+		var from = Math.max(0, this.reader.currentPage-this.spread);
+		var to = Math.min(this.reader.spec.pages.length-1, this.reader.currentPage+this.spread+(hand.active ? 2 : 0));
+		
+		for (var i=from;i<=to;i++)
 		{
-			var pi = "p"+i in this.images ? this.images["p"+i] : null;
-			var tex = pi !== null && !pi.loading && pi.tex !== null ? pi.tex : this.reader.spec.loadingTex;
-			var ttex = pi !== null && !pi.tloading && pi.ttex !== null ? pi.ttex : this.reader.spec.loadingTex;
-			
-			if (i == this.reader.leftPageIndex) this.reader.bookModel.setLeftTex(tex);
-			else if (i == this.reader.rightPageIndex) this.reader.bookModel.setRightTex(tex);
-			else if (i == this.reader.leftPageIndex+1 && hand.active) this.reader.bookModel.page.setFrontTex(this.reader.spec.pages[i].tpath !== null ? ttex : tex);
-			else if (i == this.reader.leftPageIndex+2 && hand.active) this.reader.bookModel.page.setBackTex(this.reader.spec.pages[i].tpath !== null ? ttex : tex);
+			if (!("p"+i in this.images) && this.queued < this.max)
+				this.images["p"+i] = new DocexPageImage(this, i, this.reader.spec.pages[i].path, this.reader.spec.pages[i].tpath);
+			else
+			{
+				var pi = "p"+i in this.images ? this.images["p"+i] : null;
+				var tex = pi !== null && !pi.loading && pi.tex !== null ? pi.tex : this.reader.spec.loadingTex;
+				var ttex = pi !== null && !pi.tloading && pi.ttex !== null ? pi.ttex : this.reader.spec.loadingTex;
+				
+				if (i == this.reader.leftPageIndex) this.reader.bookModel.setLeftTex(tex);
+				else if (i == this.reader.rightPageIndex) this.reader.bookModel.setRightTex(tex);
+				else if (i == this.reader.leftPageIndex+1 && hand.active) this.reader.bookModel.page.setFrontTex(this.reader.spec.pages[i].tpath !== null ? ttex : tex);
+				else if (i == this.reader.leftPageIndex+2 && hand.active) this.reader.bookModel.page.setBackTex(this.reader.spec.pages[i].tpath !== null ? ttex : tex);
+			}
 		}
+		
+		for (var prop in this.images)
+			if (!this.images[prop].loading && (this.images[prop].page < from || this.images[prop].page > to))
+			{
+				if (this.images[prop].tex != null)
+					this.images[prop].tex.dispose();
+				if (this.images[prop].ttex != null)
+					this.images[prop].ttex.dispose();
+				delete this.images[prop];
+			}
+		//console.log(Object.keys(this.images).length);
 	}
-	
-	for (var prop in this.images)
-		if (!this.images[prop].loading && (this.images[prop].page < from || this.images[prop].page > to))
-		{
-			if (this.images[prop].tex != null)
-				this.images[prop].tex.dispose();
-			if (this.images[prop].ttex != null)
-				this.images[prop].ttex.dispose();
-			delete this.images[prop];
-		}
-	//console.log(Object.keys(this.images).length);
 }
 
 function docexTexLoaderBuildOnSideSuccess(loader, stack) {return function(tex) {docexTexLoaderOnRes(loader); stack.stackSideMesh.material.color = new THREE.Color(0xffffff); stack.stackSideMesh.material.map = tex; stack.stackSideMesh.material.needsUpdate = true;};}
@@ -1907,7 +2287,7 @@ DocexTexLoader.prototype.loadCoverTex = function(cover)
 	docexTexLoaderOnReq(this);
 }
 
-/** @namespace */
+/** @namespace THREEx */
 var THREEx		= THREEx 		|| {};
 THREEx.FullScreen	= THREEx.FullScreen	|| {};
 THREEx.FullScreen.available	= function() {return this._hasWebkitFullScreen || this._hasMozFullScreen;}
@@ -2095,7 +2475,7 @@ var docexLogo = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y
 </g>
 </svg>`;
 
-function DocexLayout(reader)
+function DocexLayout(reader, mobileUi)
 {
 	this.reader = reader;
 	
@@ -2106,9 +2486,10 @@ function DocexLayout(reader)
 	this.container = document.createElement("DIV");
 	this.top.appendChild(this.container);
 	this.container.style.cssText = "z-index: 0; background-color: #f0f0f0; opacity: 1; border: 0px; padding: 0px; position: absolute";
-	this.container.onmousedown = function(event) {reader.input.htmlMouseDown(event.clientX+document.body.scrollLeft+document.documentElement.scrollLeft, event.clientY);};
-	this.container.onmouseup = function(event) {reader.input.htmlMouseUp();};
-	this.container.onmousemove = function(event) {reader.input.htmlMouseMove(event.clientX+document.body.scrollLeft+document.documentElement.scrollLeft, event.clientY);};
+//	this.container.onmousedown = function(event) {reader.input.htmlMouseDown(event.clientX+document.body.scrollLeft+document.documentElement.scrollLeft, event.clientY);};
+//	this.container.onmouseup = function(event) {reader.input.htmlMouseUp();};
+//	this.container.onmousemove = function(event) {reader.layout.loadingSpan.innerHTML = "!!!";
+//		reader.input.htmlMouseMove(event.clientX+document.body.scrollLeft+document.documentElement.scrollLeft, event.clientY);};
 	this.container.onmouseout = function(event) {reader.input.htmlMouseOut(event.clientX+document.body.scrollLeft+document.documentElement.scrollLeft, event.clientY);};
 	
 	this.roiContainer = document.createElement("DIV");
@@ -2214,10 +2595,15 @@ function DocexLayout(reader)
 	var slider = this.slider;
 	this.slider.onchange = function() {sliderVal.value = docexSliderFormatVal(slider.value, reader); reader.quickJump(2*Math.floor(slider.value/2)-1);};
 	this.slider.oninput = function() {sliderVal.value = docexSliderFormatVal(slider.value, reader);};
+	if (reader.spec.isPoster)
+	{
+		this.sliderDiv.style.display = "none";
+		this.slider.style.display = "none";
+	}
 	
 	tdc = document.createElement("TD");
 	tbr.appendChild(tdc);
-	tdc.style.cssText = "text-align: center; vertical-align: middle; border: 0px; padding: 0px; margin: 0px; margin: 0px";
+	tdc.style.cssText = "text-align: right; vertical-align: middle; border: 0px; padding: 0px; margin: 0px; margin: 0px";
 	this.fullscreen = document.createElement("BUTTON");
 	tdc.appendChild(this.fullscreen);
 	this.fullscreen.style.cssText = "background: white; padding: 0px; border: 1px solid lightgray";
@@ -2232,6 +2618,8 @@ function DocexLayout(reader)
 		else THREEx.FullScreen.cancel();
 	}
 	this.fullscreen.innerHTML = docexFullscreenSvg;
+	if (reader.mobileUi)
+		this.fullscreen.style.display = "none";
 	
 	var startDiv = document.createElement("DIV");
 	this.top.appendChild(startDiv);
@@ -2250,11 +2638,11 @@ function DocexLayout(reader)
 	var fadeFunc = function()
 	{
 		if (startDiv.style.opacity == 0) 
-			top.removeChild(startDiv);
+			{top.removeChild(startDiv);}
 		else
 		{
 			startDiv.style.opacity = Math.max(0, startDiv.style.opacity-.05);
-			setTimeout(fadeFunc, 30);
+			setTimeout(fadeFunc, 15);
 		}
 	};
 	playDiv.onclick = function() {reader.start(); fadeFunc();};
@@ -2265,8 +2653,13 @@ function DocexLayout(reader)
 	
 	var ht = new Hammer(this.container);
 	ht.get('pinch').set({ enable: true});
+	ht.get('pan').set({direction: Hammer.DIRECTION_ALL, threshold: 1});
 	ht.on('pinch', function(ev) {reader.input.pinch(ev.scale);})
 	ht.on('pinchend', function(ev) {reader.input.pinchEnd();})
+	ht.on('panstart', function(ev) {var event = ev.srcEvent; reader.input.htmlMouseDown(event.clientX+document.body.scrollLeft+document.documentElement.scrollLeft, event.clientY);});
+	ht.on('panmove', function(ev) {var event = ev.srcEvent; reader.input.htmlMouseMove(event.clientX+document.body.scrollLeft+document.documentElement.scrollLeft, event.clientY);});
+	ht.on('panend', function(ev) {reader.input.htmlMouseUp();});
+	ht.on('tap', function(ev) {var event = ev.srcEvent; reader.input.htmlMouseDown(event.clientX+document.body.scrollLeft+document.documentElement.scrollLeft, event.clientY); reader.input.htmlMouseUp();});
 }
 
 function docexLimitButtonSize(elem, size)
@@ -2367,7 +2760,7 @@ if (!window.requestAnimationFrame)
 
 function docexBuildRenderCallback(reader) {return function() {reader.render();};}
 
-function DocexReader(xml, bookBasePath, topContainer)
+function DocexReader(xml, bookBasePath, topContainer, mobileUi)
 {
 	if (!bookBasePath.endsWith("/"))
 		bookBasePath = bookBasePath+"/";
@@ -2385,21 +2778,27 @@ function DocexReader(xml, bookBasePath, topContainer)
 	this.ecoMode = false;
 	this.pageDepth = .025;
 	this.useShadows = false;
+	this.mobileUi = mobileUi;
 	this.bookModel = null;
-	this.layout = new DocexLayout(this);
+	this.layout = new DocexLayout(this, mobileUi);
 	this.hand = new DocexHand(this);
 	this.texLoader = new DocexTexLoader(this);
 	this.camera = new DocexCamera(this);
 	this.input = new DocexInput(this);
+	this.mini = new DocexMini(this);
 	this.glw = -1;
 	this.glh = -1;
 	this.pulse = 0;
 	
 	this.width = Math.max(10, this.layout.container.clientWidth);
 	this.height = Math.max(10, this.layout.container.clientHeight);
-	this.layout.container.addEventListener("touchstart", function(event) {event.preventDefault(); this.input.htmlMouseDown(reader, event.targetTouches[0].pageX, event.targetTouches[0].pageY);}, false);
-	this.layout.container.addEventListener("touchmove", function(event) {event.preventDefault(); this.input.htmlMouseMove(reader, event.targetTouches[0].pageX, event.targetTouches[0].pageY);}, false);
-	this.layout.container.addEventListener("touchend", function(event) {event.preventDefault(); this.input.htmlMouseUp(reader);}, false);
+	this.heightBound = this.width*1./this.height > 2*this.spec.aspect;
+	
+	var reader = this;
+//	this.layout.container.addEventListener("touchstart", function(event) {event.preventDefault(); reader.input.htmlMouseDown(reader, event.targetTouches[0].pageX, event.targetTouches[0].pageY);}, false);
+//	this.layout.container.addEventListener("touchmove", function(event) {event.preventDefault(); reader.input.htmlMouseMove(reader, event.targetTouches[0].pageX, event.targetTouches[0].pageY);}, false);
+//	this.layout.container.addEventListener("touchend", function(event) {event.preventDefault(); reader.input.htmlMouseUp(reader);}, false);
+	this.layout.container.addEventListener("wheel", function(event) {event.preventDefault(); reader.zoomBy(.003*event.deltaY*Math.pow(20, event.deltaMode));}, false);
 	
 	if (DocexDetector.webgl)
 	{
@@ -2424,15 +2823,18 @@ function DocexReader(xml, bookBasePath, topContainer)
     this.layout.container.appendChild(this.renderer.domElement);
 	
 	var distFactor = 2*this.spec.aspect*this.height/this.width;
-	this.camera.init(0, 0, 5.2*Math.max(1, distFactor));
-    this.scene = new THREE.Scene();
-    this.heightBound = this.width*1./this.height > 2*this.spec.aspect;
-    
-    var pageHeight = this.spec.pageHeight;
+	var pageHeight = this.spec.pageHeight;
     var pageWidth = pageHeight*this.spec.aspect;
+	this.camera.init(this.spec.isPoster ? pageWidth*.5 : 0, 0, 5.2*Math.max(1, distFactor));
 	
-	// and the camera
-	this.scene.add(this.camera.camera);
+	this.scene = new THREE.Scene();
+    this.scene.add(this.camera.camera);
+    
+    this.uiCamera = new THREE.OrthographicCamera(0, 1, 1, 0, -1, 1);
+    this.uiScene = new THREE.Scene();
+    this.uiScene.background = null;
+    this.uiScene.add(this.uiCamera);
+    this.uiScene.add(this.mini.model);
 	
 	// create a point light
 	var pointLight = new THREE.DirectionalLight(0xDFDFDF);
@@ -2463,10 +2865,11 @@ function DocexReader(xml, bookBasePath, topContainer)
 	
 	this.input.listeners.push(this);
 	
-	this.bookModel = new DocexBookModel(this, pageWidth, pageHeight);
+	this.bookModel = this.spec.isPoster ? new DocexPosterModel(this, pageWidth, pageHeight) : new DocexBookModel(this, pageWidth, pageHeight);
 	
 	this.scene.add(this.bookModel.model);
-	this.scene.add(this.bookModel.page.model);
+	if (!this.spec.isPoster)
+		this.scene.add(this.bookModel.page.model);
 	
 	this.layout.slider.max = this.spec.pages.length;
 	
@@ -2479,7 +2882,7 @@ function DocexReader(xml, bookBasePath, topContainer)
 	this.rightPageIndex = 0;
 	this.handWasActive = false;
 	this.forceModelSynchro = false;
-	this.regionsAreShown = true;
+	this.regionsAreShown = false;
 	this.selectedRegion = null;
 	this.regionsAreLoaded = false;
 	
@@ -2489,9 +2892,10 @@ function DocexReader(xml, bookBasePath, topContainer)
 	this.infoMode = -1;
 	this.started = false;
 	
+	this.setSelectedRegion(null, true);
 	this.refreshLayout();
 	this.refreshCanvasSize();
-	//this.render();
+	this.renderer.autoClear = false;
 }
 
 DocexReader.prototype.start = function()
@@ -2527,7 +2931,7 @@ DocexReader.prototype.refreshLayout = function()
 	var isFullscreen = fse == this.layout.top;
 	var w = isFullscreen ? window.innerWidth : this.layout.top.clientWidth;
 	var h = isFullscreen ? window.innerHeight : this.layout.top.clientHeight-1;
-	var toolbarHeight = Math.max(32, Math.floor(.06*h));
+	var toolbarHeight = Math.max(32, Math.floor((this.mobileUi ? .1 : .06)*h));
 	
 	var container = this.layout.container;
 	container.style.left = "0px";
@@ -2568,6 +2972,10 @@ DocexReader.prototype.refreshCanvasSize = function()
     this.layout.infoSpan.style.fontSize = infoSize+"px";
     this.layout.infoIcon.style.width = infoSize+"px";
     this.layout.infoIcon.style.height = infoSize+"px";
+    this.uiCamera.right = this.width;
+    this.uiCamera.top = this.height;
+    this.uiCamera.updateProjectionMatrix();
+    this.mini.refreshSize();
     //console.log("DocexReader size: "+this.width+" "+this.height);
 }
 
@@ -2594,8 +3002,9 @@ DocexReader.prototype.render = function()
 	}
 	
 	this.bookModel.update();
+	this.mini.update();
 	
-	if (this.zoomed)
+	if (this.zoomed || this.spec.isPoster)
 	{
 		if (this.zoomIn) this.camera.setDiffPos(0, 0, -.1);
 		if (this.zoomOut) this.camera.setDiffPos(0, 0, .1);
@@ -2612,36 +3021,27 @@ DocexReader.prototype.render = function()
 		this.layout.roiContainer.style.zIndex = 1;
 	else this.layout.roiContainer.style.zIndex = -1;
 	
-	if (!this.regionsAreLoaded && !this.bookModel.isAnimating && this.camera.activity < .0001)
+	if (!this.regionsAreLoaded && (this.spec.isPoster || !this.bookModel.isAnimating && this.camera.activity < .0001))
 	{
-		if (this.leftPageIndex >= 0)
+		if (this.spec.isPoster)
 		{
-			var page = this.spec.pages[this.leftPageIndex];
+			var page = this.spec.pages[0];
 			for (var i=0;i<page.regions.length;i++)
-			{
-				var region = page.regions[i];
-				DocexRegion.buildRegionMesh(this, region);
-				this.tempModels[this.tempModels.length] = region.mesh;
-				this.tempModels[this.tempModels.length] = region.outline;
-				this.scene.add(region.mesh);
-				this.scene.add(region.outline);
-				region.mesh.visible = this.regionsAreShown;
-				region.outline.visible = this.regionsAreShown;
-			}
+				this.createRegion(page.regions[i]);
 		}
-		if (this.rightPageIndex >= 0)
+		else
 		{
-			var page = this.spec.pages[this.rightPageIndex];
-			for (var i=0;i<page.regions.length;i++)
+			if (this.leftPageIndex >= 0)
 			{
-				var region = page.regions[i];
-				DocexRegion.buildRegionMesh(this, region);
-				this.tempModels[this.tempModels.length] = region.mesh;
-				this.tempModels[this.tempModels.length] = region.outline;
-				this.scene.add(region.mesh);
-				this.scene.add(region.outline);
-				region.mesh.visible = this.regionsAreShown;
-				region.outline.visible = this.regionsAreShown;
+				var page = this.spec.pages[this.leftPageIndex];
+				for (var i=0;i<page.regions.length;i++)
+					this.createRegion(page.regions[i]);
+			}
+			if (this.rightPageIndex >= 0)
+			{
+				var page = this.spec.pages[this.rightPageIndex];
+				for (var i=0;i<page.regions.length;i++)
+					this.createRegion(page.regions[i]);
 			}
 		}
 		this.regionsAreLoaded = true;
@@ -2654,7 +3054,7 @@ DocexReader.prototype.render = function()
 	this.spec.roiMaterial.opacity = roiAlpha;
 	
 	var nextPage = this.requestPage;
-	if (nextPage != this.currentPage || this.handWasActive != this.hand.active || this.forceModelSynchro)
+	if ((!this.spec.isPoster && (nextPage != this.currentPage || this.handWasActive != this.hand.active)) || this.forceModelSynchro)
 	{
 		this.setSelectedRegion(null);
 		this.clearModels();
@@ -2677,7 +3077,7 @@ DocexReader.prototype.render = function()
 		this.texLoader.refresh();
 	}
 	
-	var shouldRegionsBeShown = !this.hand.active && this.currentPage > -3 && this.currentPage < this.spec.pages.length+1;
+	var shouldRegionsBeShown = this.spec.isPoster || (!this.hand.active && this.currentPage > -3 && this.currentPage < this.spec.pages.length+1);
 	if (shouldRegionsBeShown != this.regionsAreShown)
 	{
 		if (shouldRegionsBeShown) this.showRegions();
@@ -2687,10 +3087,23 @@ DocexReader.prototype.render = function()
 	this.handWasActive = this.hand.active;
 	this.forceModelSynchro = false;
 	this.updateInfoSpan();
-//	console.log(this.camera.activity);
-//	console.log(this.bookModel.isAnimating);
+	
+	this.renderer.clear(true, true);
 	this.renderer.render(this.scene, this.camera.camera);
+	this.renderer.clear(false, false);
+	this.renderer.render(this.uiScene, this.uiCamera);
+	
 	window.requestAnimationFrame(this.doRender);
+}
+DocexReader.prototype.createRegion = function(region)
+{
+	DocexRegion.buildRegionMesh(this, region);
+	this.tempModels[this.tempModels.length] = region.mesh;
+	this.tempModels[this.tempModels.length] = region.outline;
+	this.scene.add(region.mesh);
+	this.scene.add(region.outline);
+	region.mesh.visible = this.regionsAreShown;
+	region.outline.visible = this.regionsAreShown;
 }
 DocexReader.prototype.clearModels = function()
 {
@@ -2721,9 +3134,9 @@ DocexReader.prototype.onClick = function(x, y)
 		this.setSelectedRegion(region);
 	}
 }
-DocexReader.prototype.setSelectedRegion = function(region)
+DocexReader.prototype.setSelectedRegion = function(region, force)
 {
-	if (region != this.selectedRegion)
+	if (region != this.selectedRegion || (typeof(force) != "undefined" && force))
 	{
 		if (this.selectedRegion != null)
 		{
@@ -2749,6 +3162,8 @@ DocexReader.prototype.setSelectedRegion = function(region)
 			this.camera.setPosToRegion(this.selectedRegion);
 			this.layout.zoomBut.style.display = 'none';
 			this.layout.backBut.style.display = 'inline';
+			this.layout.zoominBut.style.display = 'none';
+			this.layout.zoomoutBut.style.display = 'none';
 			this.layout.prevBut.style.display = 'none';
 			this.layout.nextBut.style.display = 'none';
 			this.layout.sliderDiv.style.visibility = 'hidden';
@@ -2758,10 +3173,12 @@ DocexReader.prototype.setSelectedRegion = function(region)
 		{
 			this.camera.setDefaultPos();
 			this.roiAlpha = 0;
-			this.layout.zoomBut.style.display = 'inline';
+			this.layout.zoomBut.style.display = this.mobileUi ? 'none' : this.spec.isPoster ? 'none' : 'inline';
 			this.layout.backBut.style.display = 'none';
-			this.layout.prevBut.style.display = 'inline';
-			this.layout.nextBut.style.display = 'inline';
+			this.layout.zoominBut.style.display = this.mobileUi ? 'none' : this.spec.isPoster ? 'inline' : 'none';
+			this.layout.zoomoutBut.style.display = this.mobileUi ? 'none' : this.spec.isPoster ? 'inline' : 'none';
+			this.layout.prevBut.style.display = this.spec.isPoster ? 'none' : 'inline';
+			this.layout.nextBut.style.display = this.spec.isPoster ? 'none' : 'inline';
 			this.layout.sliderDiv.style.visibility = 'visible';
 			this.layout.slider.style.visibility = 'visible';
 			var videos = document.getElementsByTagName("video");
@@ -2790,17 +3207,17 @@ DocexReader.prototype.zoom = function()
 		this.layout.zoominBut.style.display = 'none';
 		this.layout.zoomoutBut.style.display = 'none';
 		this.layout.backBut.style.display = 'none';
-		this.layout.prevBut.style.display = 'inline';
-		this.layout.nextBut.style.display = 'inline';
-		this.layout.zoomBut.style.display = 'inline';
+		this.layout.prevBut.style.display = this.spec.isPoster ? 'none' : 'inline';
+		this.layout.nextBut.style.display = this.spec.isPoster ? 'none' : 'inline';
+		this.layout.zoomBut.style.display = this.mobileUi ? 'none' : 'inline';
 	}
 	else
 	{
 		this.zoomed = true;
 		this.clearModels();
 		this.camera.setDiffPos(0, 0, -2);
-		this.layout.zoominBut.style.display = 'inline';
-		this.layout.zoomoutBut.style.display = 'inline';
+		this.layout.zoominBut.style.display = this.mobileUi ? 'none' : 'inline';
+		this.layout.zoomoutBut.style.display = this.mobileUi ? 'none' : 'inline';
 		this.layout.backBut.style.display = 'inline';
 		this.layout.prevBut.style.display = 'none';
 		this.layout.nextBut.style.display = 'none';
@@ -2809,15 +3226,18 @@ DocexReader.prototype.zoom = function()
 }
 DocexReader.prototype.zoomBy = function(amount)
 {
-	if (!this.zoomed)
-		this.zoom();
-	else if (this.zoomed && this.camera.unzoomed() && amount > .1)
+	if (!this.spec.isPoster)
 	{
-		this.zoom();
-		this.input.waitForNextPinch = true;
+		if (!this.zoomed && amount < 0)
+			this.zoom();
+		else if (this.zoomed && this.camera.unzoomed() && amount > .1)
+		{
+			this.zoom();
+			this.input.waitForNextPinch = true;
+		}
 	}
 	
-	if (this.zoomed)
+	if (this.zoomed || this.spec.isPoster)
 	{
 		this.camera.setDiffPos(0, 0, amount);
 	}
@@ -2831,18 +3251,18 @@ DocexReader.prototype.onGrab = function(x, y) {this.hand.grab(x, y);}
 DocexReader.prototype.onDrag = function(x, y) {this.hand.drag(x, y);}
 DocexReader.prototype.onDrop = function(x, y) {this.hand.drop(x, y);}
 
-function createDocexReader(element, bookBasePath, onload, spec)
+function createDocexReader(element, bookBasePath, onload, spec, mobileUi)
 {
 	if (!bookBasePath.endsWith("/"))
 		bookBasePath = bookBasePath+"/";
-	var url = bookBasePath+(spec !== undefined && spec != null ? spec : 'book0.xml');
+	var url = bookBasePath+(typeof(spec) != "undefined" && spec != null ? spec : 'book0.xml');
 	
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function()
 	{
 		if (req.readyState !== XMLHttpRequest.DONE)
 			return;
-		if (req.status === 200)
+		if (req.status === 200 || req.status === 0)
 		{
 			var xml = req.responseText;
 			if (!xml.startsWith("<Book"))
@@ -2851,7 +3271,7 @@ function createDocexReader(element, bookBasePath, onload, spec)
 			}
 			else
 			{
-				var reader = new DocexReader(xml, bookBasePath, element); 
+				var reader = new DocexReader(xml, bookBasePath, element, typeof(mobileUi) == "undefined" ? false : mobileUi); 
 				if (onload !== undefined && onload != null)
 					onload(reader);
 			}

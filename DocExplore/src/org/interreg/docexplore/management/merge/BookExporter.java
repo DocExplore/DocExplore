@@ -22,10 +22,10 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.interreg.docexplore.datalink.DataLinkException;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.ManuscriptLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
@@ -222,7 +222,7 @@ public class BookExporter
 			
 			int lastPage = from.getLastPageNumber();
 			if (lastPage != to.getLastPageNumber())
-				throw new Exception(XMLResourceBundle.getBundledString("importPageNumberErrorMessage"));
+				throw new Exception(Lang.s("importPageNumberErrorMessage"));
 			
 			mergeMetaData(from, to);
 			for (int i=1;i<=lastPage;i++)

@@ -2,9 +2,9 @@ package org.interreg.docexplore.management.gui;
 
 import java.awt.image.BufferedImage;
 
-import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.management.manage.ActionRequestListener;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 
 public interface DocumentEditorHost

@@ -3,20 +3,22 @@ package org.interreg.docexplore.management.image;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Executors;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.management.gui.DocumentEditorHost;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
-import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
+import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.manuscript.Region;
+import org.interreg.docexplore.manuscript.TileConfiguration;
 import org.interreg.docexplore.util.ImageUtils;
 
 @SuppressWarnings("serial")
@@ -28,11 +30,10 @@ public class PosterPageEditor extends PageEditor
 	boolean isPoster;
 	Page tilePage = null;
 	
-	MetaData [][] parts;
-	TileState [][] tileStates;
-	BufferedImage [][] tiles;
-	int [] widths, heights;
-	int fullWidth, fullHeight;
+	TileConfiguration config;
+	MetaData [][][] parts;
+	TileState [][][] tileStates;
+	BufferedImage [][][] tiles;
 	
 	public PosterPageEditor(DocumentEditorHost listener, Page page) throws Exception
 	{
@@ -45,9 +46,12 @@ public class PosterPageEditor extends PageEditor
 	protected PosterPageEditor(DocumentEditorHost listener, Page page, Region region) throws Exception
 	{
 		super(listener, page, region);
-		this.isPoster = PosterUtils.isPoster(page.getBook());
+		this.isPoster = page != null && PosterUtils.isPoster(page.getBook());
 		updateTileStates();
 	}
+	
+	@Override public int getImageWidth() {return config == null ? super.getImageWidth() : config.getFullWidth();}
+	@Override public int getImageHeight() {return config == null ? super.getImageHeight() : config.getFullHeight();}
 	
 	private synchronized void updateTileStates()
 	{
@@ -61,117 +65,99 @@ public class PosterPageEditor extends PageEditor
 		}
 		if (doUpdate) try
 		{
-			this.tilePage = page;
-			Book book = tilePage.getBook();
-			parts = PosterUtils.getPosterPartsArray(host.getLink(), book);
-			tileStates = new TileState [parts.length][parts.length == 0 ? 0 : parts[0].length];
-			tiles = new BufferedImage [parts.length][parts.length == 0 ? 0 : parts[0].length];
-			widths = new int [parts.length];
-			heights = new int [parts.length == 0 ? 0 : parts[0].length];
-			for (int i=0;i<widths.length;i++) 
-				widths[i] = -1;
-			for (int i=0;i<heights.length;i++) 
-				heights[i] = -1;
-			for (int i=0;i<tileStates.length;i++)
-				for (int j=0;j<tileStates[0].length;j++)
+			List<MetaData> configs = page.getBook().getMetaDataListForKey(host.getLink().tileConfigKey);
+			config = configs.size() > 0 ? (TileConfiguration)new ObjectInputStream(configs.get(0).getValue()).readObject() : null;
+			
+			if (config != null)
 			{
-				tileStates[i][j] = TileState.Missing;
-				tiles[i][j] = null;
-				int w = 0, h = 0;
-				if (parts[i][j] != null)
+				tilePage = page;
+				parts = config.getTiles(host.getLink());
+				tileStates = new TileState [parts.length][][];
+				tiles = new BufferedImage [parts.length][][];
+				for (int l=0;l<parts.length;l++)
 				{
-					String [] dim = parts[i][j].getMetaDataString(host.getLink().dimKey).split(",");
-					w = Integer.parseInt(dim[0]);
-					h = Integer.parseInt(dim[1]);
+					tileStates[l] = new TileState [parts[l].length][parts[l].length == 0 ? 0 : parts[l][0].length];
+					tiles[l] = new BufferedImage [parts[l].length][parts[l].length == 0 ? 0 : parts[l][0].length];
 				}
-				if (widths[i] < 0 || w < widths[i])
-					widths[i] = w;
-				if (heights[j] < 0 || h < heights[j])
-					heights[j] = h;
+				for (int l=0;l<tileStates.length;l++)
+					for (int i=0;i<tileStates[l].length;i++)
+						for (int j=0;j<tileStates[l][i].length;j++)
+							tileStates[l][i][j] = TileState.Missing;
+				
+				try {setImage(ImageUtils.read(parts[parts.length-1][0][0].getValue()));}
+				catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
 			}
-			fullWidth = fullHeight = 0;
-			for (int i=0;i<widths.length;i++) 
-				fullWidth += widths[i];
-			for (int i=0;i<heights.length;i++) 
-				fullHeight += heights[i];
 		}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
 	}
 	private void clearTileStates()
 	{
 		posterId++;
+		config = null;
 		tiles = null;
 		tilePage = null;
 		parts = null;
-		widths = null;
-		heights = null;
 	}
 	
 	static class TileRendering
 	{
 		BufferedImage image;
-		int x0, y0, x1, y1;
+		int x0, y0, x1, y1, sw, sh;
 		TileRendering() {}
-		void set(BufferedImage image, int x0, int y0, int x1, int y1) {this.image = image; this.x0 = x0; this.y0 = y0; this.x1 = x1; this.y1 = y1;}
+		void set(BufferedImage image, int x0, int y0, int x1, int y1, int sw, int sh) {this.image = image; this.x0 = x0; this.y0 = y0; this.x1 = x1; this.y1 = y1; this.sw = sw; this.sh = sh;}
 	}
 	List<TileRendering> renderings = new ArrayList<TileRendering>();
-	private int tilei(int x) {int i = 0; for (;i<widths.length && x>0;i++) x -= widths[i]; return Math.max(0, i-1);}
-	private int tilej(int y) {int i = 0; for (;i<heights.length && y>0;i++) y -= heights[i]; return Math.max(0, i-1);}
-	private int tilex(int i) {int x = 0; for (;i-1>=0;i--) x += widths[i-1]; return x;}
-	private int tiley(int j) {int y = 0; for (;j-1>=0;j--) y += heights[j-1]; return y;}
-	private synchronized int requestArea(int vx0, int vy0, int vx1, int vy1, double pixelSize, List<TileRendering> renderings)
+	private synchronized int requestArea(int x0, int y0, int x1, int y1, double pixelSize, List<TileRendering> renderings)
 	{
-		int iw = image.getWidth(), ih = image.getHeight();
-		int x0 = vx0*fullWidth/iw, y0 = vy0*fullHeight/ih;
-		int x1 = vx1*fullWidth/iw, y1 = vy1*fullHeight/ih;
-		int i0 = tilei(x0), i1 = tilei(x1), j0 = tilej(y0), j1 = tilej(y1);
+		int l = config.layerFor(pixelSize);
+		int i0 = config.tilei(l, x0), i1 = config.tilei(l, x1), j0 = config.tilej(l, y0), j1 = config.tilej(l, y1);
 		int n = 0;
-		boolean useTiles = pixelSize > 1;//iw*pixelSize/fullWidth > .5;
 		
-		for (int i=0;i<tiles.length;i++)
-			for (int j=0;j<tiles[0].length;j++)
-				if (parts[i][j] != null)
+		for (int i=0;i<tiles[l].length;i++)
+			for (int j=0;j<tiles[l][i].length;j++)
+				if (parts[l][i][j] != null)
 		{
-			if (i>=i0 && i<=i1 && j>=j0 && j<=j1 && useTiles)
+			if (i>=i0 && i<=i1 && j>=j0 && j<=j1)
 			{
-				if (tileStates[i][j] == TileState.Missing)
-					requestTile(i, j);
-				else if (tileStates[i][j] == TileState.Loaded)
+				if (tileStates[l][i][j] == TileState.Missing)
+					requestTile(l, i, j);
+				else if (tileStates[l][i][j] == TileState.Loaded)
 				{
-					if (renderings.size() <= n)
-						renderings.add(new TileRendering());
-					int x = tilex(i), y = tiley(j);
-					renderings.get(n++).set(tiles[i][j], x*iw/fullWidth, y*ih/fullHeight, (x+widths[i])*iw/fullWidth, (y+heights[j])*ih/fullHeight);
+					
 				}
+				if (renderings.size() <= n)
+					renderings.add(new TileRendering());
+				int x = config.tilex(l, i), y = config.tiley(l, j);
+				renderings.get(n++).set(tiles[l][i][j], x, y, x+config.tileFullw(l, i), y+config.tileFullh(l, j), config.tilew(l, i), config.tileh(l, j));
 			}
 			else
 			{
-				tileStates[i][j] = TileState.Missing;
-				tiles[i][j] = null;
+				tileStates[l][i][j] = TileState.Missing;
+				tiles[l][i][j] = null;
 			}
 		}
 		return n;
 	}
-	private synchronized InputStream getTileSource(int i, int j, long posterId) throws DataLinkException
+	private synchronized InputStream getTileSource(int l, int i, int j, long posterId) throws DataLinkException
 	{
-		return posterId == this.posterId && tileStates[i][j] == TileState.Loading ? parts[i][j].getValue() : null;
+		return posterId == this.posterId && tileStates[l][i][j] == TileState.Loading ? parts[l][i][j].getValue() : null;
 	}
-	private synchronized void setTile(int i, int j, long posterId, BufferedImage image)
+	private synchronized void setTile(int l, int i, int j, long posterId, BufferedImage image)
 	{
-		if (posterId != this.posterId || tileStates[i][j] != TileState.Loading)
+		if (posterId != this.posterId || tileStates[l][i][j] != TileState.Loading)
 			return;
-		tiles[i][j] = image;
-		tileStates[i][j] = image == null ? TileState.Missing : TileState.Loaded;
+		tiles[l][i][j] = image;
+		tileStates[l][i][j] = image == null ? TileState.Missing : TileState.Loaded;
 		repaint();
 	}
-	private void requestTile(final int i, final int j)
+	private void requestTile(final int l, final int i, final int j)
 	{
 		final long posterId = this.posterId;
-		tileStates[i][j] = TileState.Loading;
+		tileStates[l][i][j] = TileState.Loading;
 		tileLoader.submit(new Callable<Void>() {@Override public Void call() throws Exception
 		{
 			InputStream in = null;
-			try {in = getTileSource(i, j, posterId);}
+			try {in = getTileSource(l, i, j, posterId);}
 			catch (DataLinkException e) {ErrorHandler.defaultHandler.submit(e, true);}
 			
 			BufferedImage image = null;
@@ -179,7 +165,7 @@ public class PosterPageEditor extends PageEditor
 				try {image = ImageUtils.read(in);}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
 			
-			setTile(i, j, posterId, image);
+			setTile(l, i, j, posterId, image);
 			return null;
 		}});
 	}
@@ -190,22 +176,49 @@ public class PosterPageEditor extends PageEditor
 		this.isPoster = PosterUtils.isPoster(page.getBook());
 		updateTileStates();
 	}
-
-	@Override protected void drawOverlay(Graphics2D g, double pixelSize)
+	
+	@Override protected void drawImage(Graphics2D g, double pixelSize)
 	{
-		if (isPoster)
+		if (isPoster && config != null)
 		{
 			int n = requestArea((int)toViewX(0), (int)toViewY(0), (int)toViewX(getWidth()), (int)toViewY(getHeight()), pixelSize, renderings);
-			for (int i=0;i<n;i++)
+			if (n == 0)
+				super.drawImage(g, pixelSize);
+			else for (int i=0;i<n;i++)
 			{
 				TileRendering r = renderings.get(i);
-				g.drawImage(r.image, r.x0, r.y0, r.x1-r.x0, r.y1-r.y0, null);
-				r.image = null;
+				//TODO: use "best" tile if requested one unavailable
+				if (r.image != null)
+				{
+					g.drawImage(r.image, r.x0, r.y0, r.x1, r.y1, 0, 0, r.sw, r.sh, null);
+					r.image = null;
+				}
+				else
+				{
+					int fw = config.getFullWidth(), fh = config.getFullHeight();
+					g.drawImage(image, r.x0, r.y0, r.x1, r.y1, r.x0*image.getWidth()/fw, r.y0*image.getHeight()/fh, r.x1*image.getWidth()/fw, r.y1*image.getHeight()/fh, null);
+				}
 			}
 		}
-		super.drawOverlay(g, pixelSize);
+		else super.drawImage(g, pixelSize);
 	}
 	
-	private static ExecutorService tileLoader = new ForkJoinPool(Math.max(2, Runtime.getRuntime().availableProcessors()-1));
+	@Override protected void renderMini(Graphics2D g, int mw, int mh)
+	{
+		if (!isPoster)
+			super.renderMini(g, mw, mh);
+		else
+		{
+			int l = config.getLastLayer();
+			synchronized (this)
+			{
+				if (tileStates[l][0][0] == TileState.Missing)
+					requestTile(l, 0, 0);
+			}
+			if (tiles[l][0][0] != null)
+				g.drawImage(tiles[l][0][0], 0, 0, mw, mh, null);
+		}
+	}
 	
+	private static ExecutorService tileLoader = Executors.newFixedThreadPool(Math.max(2, Runtime.getRuntime().availableProcessors()-1));
 }

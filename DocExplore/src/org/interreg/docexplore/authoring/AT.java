@@ -21,15 +21,15 @@ import javax.swing.JOptionPane;
 
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.Startup;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.util.GuiUtils;
 
 public class AT extends DocExploreTool
 {
 	public static void main(String [] args) throws Exception
 	{
-		Startup startup = new Startup(XMLResourceBundle.getBundledString("frameTitle"), "logoAT.png", true, true, true, true);
+		Startup startup = new Startup(Lang.s("frameTitle"), "logoAT.png", true, true, true, true);
 		
 		if (startup.autoConnectLink[0] == null)
 			throw new Exception("Missing auto connect link in config.xml!");
@@ -58,8 +58,8 @@ public class AT extends DocExploreTool
 		startup.startupComplete();
 		
 		boolean recovering = win.recovery && JOptionPane.showConfirmDialog(win, 
-			XMLResourceBundle.getBundledString("generalRecoveryMessage"),
-			XMLResourceBundle.getBundledString("generalRecoveryLabel"),
+			Lang.s("generalRecoveryMessage"),
+			Lang.s("generalRecoveryLabel"),
 			JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
 		if (!recovering)
 		{

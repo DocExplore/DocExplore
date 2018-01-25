@@ -71,6 +71,7 @@ public class PartLabel extends JPanel
 			addMouseMotionListener(adapter);
 			setFocusable(true);
 			setOpaque(false);
+			setBorder(BorderFactory.createEmptyBorder(borderThickness, borderThickness, borderThickness, borderThickness));
 		}
 		else
 		{
@@ -82,7 +83,6 @@ public class PartLabel extends JPanel
 	static Color dropZoneCol = new Color(224, 224, 224);
 	static MouseAdapter adapter = new MouseAdapter()
 	{
-		@SuppressWarnings("serial")
 		public void mouseReleased(MouseEvent e)
 		{
 			PartLabel source = (PartLabel)e.getSource();
@@ -186,15 +186,15 @@ public class PartLabel extends JPanel
 		void setMovedIndex(PosterPartsEditor viewer, PartLabel part)
 		{
 			if (viewer.lastMovedComp != null)
-				viewer.lastMovedComp.setBorder(null);
+				viewer.lastMovedComp.setBackground(dropZoneCol);
 			if (part != null)
-			{
-				part.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.blue));
-			}
+				part.setBackground(selection);
 			viewer.lastMovedComp = part;
 		}
 	};
 	
+	public static Color selection = new Color(.3f, .4f, .7f);
+	static int borderThickness = 4;
 	public void setSelected(boolean selected)
 	{
 		if (this.selected == selected)
@@ -204,8 +204,12 @@ public class PartLabel extends JPanel
 		if (selected)
 		{
 			setOpaque(true);
-			setBackground(new Color(.8f, .9f, 1f));
+			setBorder(BorderFactory.createLineBorder(selection, borderThickness));
 		}
-		else setOpaque(false);
+		else
+		{
+			setOpaque(false);
+			setBorder(BorderFactory.createEmptyBorder(borderThickness, borderThickness, borderThickness, borderThickness));
+		}
 	}
 }

@@ -19,7 +19,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 
 public class BeaconOperation implements PageEditor.Operation<PageEditor>
 {
@@ -76,5 +76,5 @@ public class BeaconOperation implements PageEditor.Operation<PageEditor>
 		}
 	}
 	
-	public String getMessage() {return XMLResourceBundle.getBundledString("statusBeaconMessage");}
+	public String getMessage() {return Lang.s("statusBeaconMessage");}
 }

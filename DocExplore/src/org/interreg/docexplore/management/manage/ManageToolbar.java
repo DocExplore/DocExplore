@@ -28,7 +28,7 @@ import javax.swing.JPanel;
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.IconButton;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.util.GuiUtils;
@@ -45,12 +45,12 @@ public class ManageToolbar extends JPanel
 		
 		this.manageComp = manageComp;
 		
-		addButton = new IconButton("add-24x24.png", XMLResourceBundle.getBundledString("manageAddBookLabel"));
-		deleteButton = new IconButton("remove-24x24.png", XMLResourceBundle.getBundledString("manageDeleteBookLabel"));
-		editButton = new IconButton("pencil-24x24.png", XMLResourceBundle.getBundledString("manageRenameLabel"));
+		addButton = new IconButton("add-24x24.png", Lang.s("manageAddBookLabel"));
+		deleteButton = new IconButton("remove-24x24.png", Lang.s("manageDeleteBookLabel"));
+		editButton = new IconButton("pencil-24x24.png", Lang.s("manageRenameLabel"));
 //		processButton = new ToolbarButton("gears-24x24.png", XMLResourceBundle.getBundledString("manageProcessBookLabel"));
-		exportButton = new IconButton("export-24x24.png", XMLResourceBundle.getBundledString("manageExportBookLabel"));
-		importButton = new IconButton("import-24x24.png", XMLResourceBundle.getBundledString("manageImportBookLabel"));
+		exportButton = new IconButton("export-24x24.png", Lang.s("manageExportBookLabel"));
+		importButton = new IconButton("import-24x24.png", Lang.s("manageImportBookLabel"));
 		
 		addButton.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent arg0)
 		{
@@ -86,14 +86,14 @@ public class ManageToolbar extends JPanel
 			if (books.size() != 1)
 				return;
 			Book book = books.get(0);
-			String title = JOptionPane.showInputDialog(manageComp.win, XMLResourceBundle.getBundledString("manageInputTitleLabel"), book.getName());
+			String title = JOptionPane.showInputDialog(manageComp.win, Lang.s("manageInputTitleLabel"), book.getName());
 			if (title == null || title.trim().length() == 0)
 				return;
 			try
 			{
 				if (manageComp.findTitle(title) != null)
 				{
-					JOptionPane.showMessageDialog(manageComp.win, XMLResourceBundle.getBundledString("manageRenameExistsMessage"));
+					JOptionPane.showMessageDialog(manageComp.win, Lang.s("manageRenameExistsMessage"));
 					return;
 				}
 				book.setName(title);

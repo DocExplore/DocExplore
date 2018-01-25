@@ -7,12 +7,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.management.DocExploreDataLink;
 import org.interreg.docexplore.management.gui.DocumentEditorHost;
 import org.interreg.docexplore.management.gui.DocumentPanel;
 import org.interreg.docexplore.management.manage.ActionRequestListener;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
@@ -49,11 +49,11 @@ public class SlideEditorListener implements DocumentEditorHost, ActionRequestLis
 	@Override public MetaData onAddAnnotationRequest(AnnotatedObject object, MetaData annotation) {return null;}
 	@Override public void onTransposePartsRequest(Book book) {}
 	
-	@Override public void onCropPageRequest(Page page, int tlx, int tly, int brx, int bry)
+	@Override public void onCropPageRequest(AnnotatedObject object, int tlx, int tly, int brx, int bry)
 	{
 		try 
 		{
-			CropPageAction action = view.explorer.getActionProvider().cropPage(page, tlx, tly, brx, bry);
+			CropPageAction action = view.explorer.getActionProvider().cropPage(object, tlx, tly, brx, bry);
 			view.explorer.tool.historyManager.submit(new WrappedAction(action)
 			{
 				public void doAction() throws Exception {super.doAction(); editor.reloadPage();}

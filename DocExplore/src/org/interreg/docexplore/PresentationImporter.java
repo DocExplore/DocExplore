@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.StringUtils;
 
 public class PresentationImporter
@@ -76,7 +76,7 @@ public class PresentationImporter
 				String testTitle = xml.substring(index, endIndex);
 				if (testTitle.equals(title))
 				{
-					int res = JOptionPane.showConfirmDialog(comp, XMLResourceBundle.getString("authoring-lrb", "exportDuplicateMessage"), "Confirmation", 
+					int res = JOptionPane.showConfirmDialog(comp, Lang.s("authoring-lrb", "exportDuplicateMessage"), "Confirmation", 
 						JOptionPane.YES_NO_CANCEL_OPTION);
 					if (res == JOptionPane.CANCEL_OPTION)
 						return;
@@ -87,7 +87,7 @@ public class PresentationImporter
 					}
 					else
 					{
-						title = JOptionPane.showInputDialog(comp, XMLResourceBundle.getString("authoring-lrb", "collectionAddBookMessage"), title);
+						title = JOptionPane.showInputDialog(comp, Lang.s("authoring-lrb", "collectionAddBookMessage"), title);
 						if (title != null)
 							doImport(comp, title, desc, bookFile);
 						return;

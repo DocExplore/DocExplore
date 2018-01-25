@@ -38,13 +38,14 @@ import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.IconToggleButton;
 import org.interreg.docexplore.gui.WrapLayout;
-import org.interreg.docexplore.internationalization.XMLResourceBundle;
-import org.interreg.docexplore.management.DocExploreDataLink;
+import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.gui.DocumentEditor;
 import org.interreg.docexplore.management.gui.DocumentEditorHost;
 import org.interreg.docexplore.management.gui.DocumentPanel;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.Page;
+import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.util.ImageUtils;
 import org.interreg.docexplore.util.Pair;
 
@@ -87,21 +88,24 @@ public class BookEditor extends JPanel implements DocumentEditor
 		getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "DEL");
 		getActionMap().put("DEL", new AbstractAction() {public void actionPerformed(ActionEvent e)
 		{
-			if (isLocked) JOptionPane.showMessageDialog(BookEditor.this, XMLResourceBundle.getBundledString("imageDelUnlockMessage"));
+			if (isLocked) JOptionPane.showMessageDialog(BookEditor.this, Lang.s("imageDelUnlockMessage"));
 			else configurationEditor.onDeletePagesRequest();
 		}});
 		
 		WrapLayout topLayout = new WrapLayout();
 		topLayout.setHgap(20);
 		JPanel topPanel = new JPanel(topLayout);
-		titleLabel = new JLabel("<html><big>"+book.getName()+"</big><br/>"+book.getLastPageNumber()+" pages</html>", ImageUtils.getIcon("book-48x48.png"), SwingConstants.LEFT);
+		boolean isPoster = PosterUtils.isPoster(book);
+		int nPages = book.getLastPageNumber();
+		titleLabel = new JLabel("<html><big>"+book.getName()+"</big>"+(isPoster ? "" : "<br/>"+nPages+" page"+(nPages == 1 ? "" : "s"))+"</html>", 
+			ImageUtils.getIcon(isPoster ? "scroll-64x64.png" : "book-64x64.png"), SwingConstants.LEFT);
 		topPanel.add(titleLabel);
 		
 		final Icon unlocked = ImageUtils.getIcon("unlocked-32x32.png");
 		final Icon locked = ImageUtils.getIcon("locked-32x32.png");
 		final IconToggleButton lockedButton = new IconToggleButton(locked);
 		lockedButton.setSelected(true);
-		lockedButton.setToolTipText(XMLResourceBundle.getBundledString("imageLockTooltip"));
+		lockedButton.setToolTipText(Lang.s("imageLockTooltip"));
 		lockedButton.setFocusable(false);
 		lockedButton.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
 		{
@@ -109,8 +113,8 @@ public class BookEditor extends JPanel implements DocumentEditor
 				lockedButton.setIcon(locked);
 			else
 			{
-				if (JOptionPane.showConfirmDialog(BookEditor.this, XMLResourceBundle.getBundledString("imageUnlockMessage"), 
-					XMLResourceBundle.getBundledString("imageLockTooltip"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+				if (JOptionPane.showConfirmDialog(BookEditor.this, Lang.s("imageUnlockMessage"), 
+					Lang.s("imageLockTooltip"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
 						lockedButton.setIcon(unlocked);
 				else
 				{
@@ -124,7 +128,7 @@ public class BookEditor extends JPanel implements DocumentEditor
 		topPanel.add(lockedButton);
 		
 		JPanel gotoPanel = new JPanel(new FlowLayout());
-		gotoPanel.add(new JLabel(XMLResourceBundle.getBundledString("imageGotoLabel")));
+		gotoPanel.add(new JLabel(Lang.s("imageGotoLabel")));
 		final JTextField goField = new JTextField(7);
 		goField.addKeyListener(new KeyAdapter()
 		{
@@ -190,10 +194,10 @@ public class BookEditor extends JPanel implements DocumentEditor
 	@Override public void onActionRequest(String action) throws Exception
 	{
 		if (action.equals("add-pages"))
-			if (isLocked) JOptionPane.showMessageDialog(BookEditor.this, XMLResourceBundle.getBundledString("imageDelUnlockMessage"));
+			if (isLocked) JOptionPane.showMessageDialog(BookEditor.this, Lang.s("imageDelUnlockMessage"));
 			else configurationEditor.onAddPagesRequest();
 		else if (action.equals("remove-pages"))
-			if (isLocked) JOptionPane.showMessageDialog(BookEditor.this, XMLResourceBundle.getBundledString("imageDelUnlockMessage"));
+			if (isLocked) JOptionPane.showMessageDialog(BookEditor.this, Lang.s("imageDelUnlockMessage"));
 			else configurationEditor.onDeletePagesRequest();
 		else configurationEditor.onActionRequest(action);
 	}
