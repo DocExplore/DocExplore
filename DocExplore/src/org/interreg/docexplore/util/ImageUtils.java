@@ -132,6 +132,16 @@ public class ImageUtils
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 		return null;
 	}
+	public static Icon getIcon(String iconName, int w, int h)
+	{
+		try
+		{
+			BufferedImage image = ImageIO.read(ClassLoader.getSystemResource("org/interreg/docexplore/gui/icons/"+iconName));
+			return new ImageIcon(Scalr.resize(image, Scalr.Method.QUALITY, Scalr.Mode.AUTOMATIC, w, h));
+		}
+		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
+		return null;
+	}
 	
 	public static BufferedImage getImageFromIcon(Icon icon)
 	{

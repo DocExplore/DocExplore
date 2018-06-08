@@ -1,9 +1,18 @@
 package org.interreg.docexplore.stitcher;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,8 +21,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+
+import org.interreg.docexplore.stitcher.network.Network;
 
 public class GroupDetector
 {
@@ -117,6 +129,10 @@ public class GroupDetector
 			}
 		}
 		
+		/**
+		 * Proportion of pois that are part of the group within all pois in the group bounds.
+		 */
+		double matchingFactor() {return matchingFactor(true)*matchingFactor(false);}
 		double matchingFactor(boolean left)
 		{
 			double [] bounds = left ? bounds1 : bounds2;
@@ -126,6 +142,10 @@ public class GroupDetector
 			near.clear();
 			return matching;
 		}
+		/**
+		 * How well spread along the edge are the group bounds.
+		 */
+		double edgenessFactor() {return edgenessFactor(true)*edgenessFactor(false);}
 		double edgenessFactor(boolean left)
 		{
 			double [] bounds = left ? bounds1 : bounds2;
@@ -133,12 +153,26 @@ public class GroupDetector
 			double l = bounds[0]/desc.fragment.imagew, u = bounds[1]/desc.fragment.imageh, r = bounds[2]/desc.fragment.imagew, d = bounds[3]/desc.fragment.imageh;
 			return Math.max(Math.max((1-l)*(d-u), r*(d-u)), Math.max((1-u)*(r-l), d*(r-l)));
 		}
+		/**
+		 * How much longer is one dimension of the group bounds than the other.
+		 */
+		double areaFactor() {return areaFactor(true)*areaFactor(false);}
 		double areaFactor(boolean left)
 		{
 			double [] bounds = left ? bounds1 : bounds2;
 			FragmentDescription desc = (left ? map.d1 : map.d2);
 			double l = bounds[0]/desc.fragment.imagew, u = bounds[1]/desc.fragment.imageh, r = bounds[2]/desc.fragment.imagew, d = bounds[3]/desc.fragment.imageh;
-			return Math.max((r-l)/(d-u), (d-u)/(r-l))*Math.max((r-l)*(r-l), (d-u)*(d-u));
+			//return Math.max((r-l)/(d-u+1), (d-u)/(r-l+1))*Math.max((r-l)*(r-l), (d-u)*(d-u));
+			return Math.max(r-l, d-u);
+		}
+		/**
+		 * How opposite are the group bounds on both fragments.
+		 */
+		double complementFactor()
+		{
+			double l1 = bounds1[0]/map.d1.fragment.imagew, u1 = bounds1[1]/map.d1.fragment.imageh, r1 = bounds1[2]/map.d1.fragment.imagew, d1 = bounds1[3]/map.d1.fragment.imageh;
+			double l2 = bounds2[0]/map.d2.fragment.imagew, u2 = bounds2[1]/map.d2.fragment.imageh, r2 = bounds2[2]/map.d2.fragment.imagew, d2 = bounds2[3]/map.d2.fragment.imageh;
+			return Math.max(Math.max(Math.abs(l1-l2), Math.abs(u1-u2)), Math.max(Math.abs(r1-r2), Math.abs(d1-d2)));
 		}
 		double deviationFactor()
 		{
@@ -146,45 +180,62 @@ public class GroupDetector
 		}
 		double lateGroupConfidence()
 		{
-			return 
-				Math.pow(Math.min(matchingFactor(true), matchingFactor(false)), Stitcher.groupMatchingWeight)*
-//				Math.pow(.5*(edgenessFactor(true)+edgenessFactor(false)), Stitcher.groupEdgenessWeight)*
-				Math.pow(Math.min(areaFactor(true), areaFactor(false)), Stitcher.groupAreaWeight)*
-				Math.pow(deviationFactor(), Stitcher.groupDeviationWeight)*
-				(1-1/Math.sqrt(assocs.size()));
+			double [] out = model.compute(new double []
+			{
+				assocs.size(),
+				matchingFactor(), 
+				edgenessFactor(),
+				areaFactor(),
+				complementFactor()
+			});
+			return out[0];
+//			return 
+//				Math.pow(Math.min(matchingFactor(true), matchingFactor(false)), Stitcher.groupMatchingWeight)*
+////				Math.pow(.5*(edgenessFactor(true)+edgenessFactor(false)), Stitcher.groupEdgenessWeight)*
+//				Math.pow(Math.min(areaFactor(true), areaFactor(false)), Stitcher.groupAreaWeight)*
+//				Math.pow(deviationFactor(), Stitcher.groupDeviationWeight)*
+//				(1-1/Math.sqrt(assocs.size()));
 		}
-		double earlyGroupConfidence()
-		{
-			return 
-				Math.pow(.5*(matchingFactor(true)+matchingFactor(false)), Stitcher.groupMatchingWeight)*
-//				Math.pow(.5*(edgenessFactor(true)+edgenessFactor(false)), Stitcher.groupEdgenessWeight)*
-//				Math.pow(.5*(areaFactor(true)+areaFactor(false)), Stitcher.groupAreaWeight)*
-				Math.pow(deviationFactor(), Stitcher.groupDeviationWeight);
-		}
+//		double earlyGroupConfidence()
+//		{
+//			return 
+//				Math.pow(.5*(matchingFactor(true)+matchingFactor(false)), Stitcher.groupMatchingWeight)*
+////				Math.pow(.5*(edgenessFactor(true)+edgenessFactor(false)), Stitcher.groupEdgenessWeight)*
+////				Math.pow(.5*(areaFactor(true)+areaFactor(false)), Stitcher.groupAreaWeight)*
+//				Math.pow(deviationFactor(), Stitcher.groupDeviationWeight);
+//		}
 		void dump()
 		{
-			System.out.printf("size: %d, match: %.3f-%.3f, edge: %.3f-%.3f, area: %.3f-%.3f, dev: %.3f => %.4f %.4f\n", 
+			//System.out.printf("size: %d, match: %.3f, edge: %.3f, area: %.3f, comp: %.3f => %.4f %.4f\n", 
+			System.out.printf("size: %d, %.4f %.4f %.4f %.4f => %.4f\n",
 				assocs.size(),
-				matchingFactor(true), matchingFactor(false),
-				edgenessFactor(true), edgenessFactor(false),
-				areaFactor(true), areaFactor(false),
-				deviationFactor(),
-				earlyGroupConfidence(), lateGroupConfidence());
+				matchingFactor(), 
+				edgenessFactor(),
+				areaFactor(),
+				complementFactor(),
+				lateGroupConfidence());
 		}
 	}
 	
 	double x0, y0;
 	double w, h;
 	List<Group> [][] groups;
+	Network model;
 	
 	public GroupDetector()
 	{
-		this(32, 32);
+		this(2, 32);
 	}
 	@SuppressWarnings("unchecked")
 	public GroupDetector(int nw, int nh)
 	{
 		this.groups = new List [nw][nh];
+		try
+		{
+			ObjectInputStream in = new ObjectInputStream(ClassLoader.getSystemResourceAsStream("org/interreg/docexplore/stitcher/model"));
+			this.model = (Network)in.readObject();
+		}
+		catch (Exception e) {e.printStackTrace(); System.exit(0);}
 	}
 	
 	public void setup(FragmentAssociation map)
@@ -465,7 +516,7 @@ public class GroupDetector
 			}
 		}
 		local.clear();
-		if (min != null && minDist <= Stitcher.surfMatchThreshold)
+		if (min != null && minDist <= min.matchThreshold())
 			return min;
 		return null;
 	}
@@ -493,12 +544,12 @@ public class GroupDetector
 					{
 						Group g = groups[i][j].get(k);
 						strengthenGroup(map, g);
-						boolean reject = g.assocs.size() < Stitcher.groupSizeThreshold;
-						if (!reject)
-						{
-							double c = g.earlyGroupConfidence();
-							reject = c < Stitcher.groupEarlyConfidenceThreshold;
-						}
+						boolean reject = g.assocs.size() < Stitcher.groupEarlySizeThreshold;
+//						if (!reject)
+//						{
+//							double c = g.earlyGroupConfidence();
+//							reject = c < Stitcher.groupEarlyConfidenceThreshold;
+//						}
 						if (reject)
 						{
 							groups[i][j].set(k, groups[i][j].get(groups[i][j].size()-1));
@@ -526,14 +577,16 @@ public class GroupDetector
 		
 		Group max = null;
 		double maxd = 0;
+		boolean showGroups = false;//stitcher.showDetectedGroups;
 		for (int i=0;i<lateGroups.size();i++)
 		{
 			Group g = lateGroups.get(i);
 			g.computeBounds();
 			double d = g.lateGroupConfidence();
-			g.dump();
-			//showGroup(g);
-			if (d > maxd && g.assocs.size() >= 2*Stitcher.groupSizeThreshold && d > Stitcher.groupLateConfidenceThreshold)
+			//g.dump();
+			if (showGroups)
+				showGroups = !showGroup(g, (i+1)+"/"+lateGroups.size());
+			if (d > maxd && g.assocs.size() >= Stitcher.groupLateSizeThreshold && d > Stitcher.groupConfidenceThreshold)
 			{
 				maxd = d;
 				max = g;
@@ -558,9 +611,11 @@ public class GroupDetector
 	}
 	
 	@SuppressWarnings("serial")
-	public static void showGroup(final Group gr)
+	public static boolean showGroup(final Group gr, String label)
 	{
-		JDialog dialog = new JDialog((Frame)null, "Group", true);
+		//gr.dump();
+		boolean [] skip = {false};
+		JDialog dialog = new JDialog((Frame)null, label, true);
 		dialog.add(new JPanel()
 		{
 			{setPreferredSize(new Dimension(1920, 1080));}
@@ -569,7 +624,7 @@ public class GroupDetector
 				super.paintComponent(g);
 				
 				Fragment f1 = gr.map.d1.fragment, f2 = gr.map.d2.fragment;
-				int scale = 3;
+				int scale = 6;
 				g.drawImage(f1.mini, 0, 0, f1.imagew/scale, f1.imageh/scale, null);
 				int xoff = f1.imagew/scale;
 				g.drawImage(f2.mini, xoff, 0, f2.imagew/scale, f2.imageh/scale, null);
@@ -583,8 +638,43 @@ public class GroupDetector
 					g.drawLine(x1, y1, x2, y2);
 				}
 			}
-		});
+		}, BorderLayout.CENTER);
+		JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
+		buttons.add(new JButton("Confirm") {{addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e)
+		{
+			writeGroundTruthData(gr, 1);
+			dialog.setVisible(false);
+		}});}});
+		buttons.add(new JButton("Deny") {{addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e)
+		{
+			writeGroundTruthData(gr, 0);
+			dialog.setVisible(false);
+		}});}});
+		buttons.add(new JButton("Skip") {{addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e)
+		{
+			dialog.setVisible(false);
+		}});}});
+		buttons.add(new JButton("Skip all") {{addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e)
+		{
+			skip[0] = true;
+			dialog.setVisible(false);
+		}});}});
+		dialog.add(buttons, BorderLayout.SOUTH);
 		dialog.pack();
 		dialog.setVisible(true);
+		return skip[0];
+	}
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static void writeGroundTruthData(Group gr, double val)
+	{
+		List<double [][]> data = null;
+		try {ObjectInputStream in = new ObjectInputStream(new FileInputStream(
+			new File("C:\\Users\\aburn\\Documents\\work\\git\\DocExplore\\DocExplore\\src\\org\\interreg\\docexplore\\stitcher\\data")));
+			data = (List)in.readObject(); in.close();} catch (Exception ex) {}
+		if (data == null) data = new ArrayList<>();
+		data.add(new double [][] {{gr.assocs.size(), gr.matchingFactor(), gr.edgenessFactor(), gr.areaFactor(), gr.complementFactor()}, {val}});
+		try {ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(
+			new File("C:\\Users\\aburn\\Documents\\work\\git\\DocExplore\\DocExplore\\src\\org\\interreg\\docexplore\\stitcher\\data")));
+			out.writeObject(data); out.close();} catch (Exception ex) {ex.printStackTrace();}
 	}
 }

@@ -48,6 +48,8 @@ public class DeleteFS2PagesAction extends DeletePagesAction
 	TreeMap<Integer, Integer> newPageNumbers = new TreeMap<Integer, Integer>();
 	public void doAction() throws Exception
 	{
+		if (book == null)
+			return;
 		File root = ((DataLinkFS2)link.getLink()).getFile();
 		newPageNumbers.clear();
 		for (Page page : pages)
@@ -79,6 +81,8 @@ public class DeleteFS2PagesAction extends DeletePagesAction
 
 	public void undoAction() throws Exception
 	{
+		if (book == null)
+			return;
 		File root = ((DataLinkFS2)link.getLink()).getFile();
 		for (Map.Entry<Integer, Integer> entry : newPageNumbers.descendingMap().entrySet())
 		{

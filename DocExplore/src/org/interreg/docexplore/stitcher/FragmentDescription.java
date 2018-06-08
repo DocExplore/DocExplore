@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.interreg.docexplore.util.ImageUtils;
-
 public class FragmentDescription
 {
 	public static double binWidth = 128;
@@ -37,7 +35,7 @@ public class FragmentDescription
 		int n = in.readInt();
 		this.features = new ArrayList<POI>(n);
 		for (int i=0;i<n;i++)
-			features.add(new POI(in, fragment, i));
+			features.add(POI.read(in, fragment, i));
 		resetBins();
 	}
 	
@@ -68,7 +66,7 @@ public class FragmentDescription
 	{
 		if (image != null)
 			return;
-		BufferedImage full = ImageUtils.read(fragment.file);
+		BufferedImage full = Fragment.getFull(fragment.file, fragment.link);
 		this.image = full;//rect.getWidth()*rect.getHeight() > 0 ? getSubImage(full, rect) : full;
 	}
 	
@@ -131,15 +129,15 @@ public class FragmentDescription
 	
 	public void refreshFeatures()
 	{
-		features = new ArrayList<POI>();
+		features = new ArrayList<POI>(fragment.features.size());
 		for (int i=0;i<fragment.features.size();i++)
-			features.add(new POI(fragment.features.get(i), features.size()));
+			features.add(POI.copy(fragment.features.get(i), features.size()));
 		resetBins();
 	}
 	
 	POI add(double x, double y)
 	{
-		POI poi = new POI(fragment, x, y, features.size());
+		POI poi = new UserPOI(fragment, new double [] {x, y}, features.size());
 		features.add(poi);
 		addToBins(poi);
 		return poi;
@@ -161,15 +159,15 @@ public class FragmentDescription
 				fa.remove(list.get(list.size()-1));
 	}
 	
-	void move(POI poi, double x, double y)
-	{
-		bins[binx(x)][biny(y)].remove(poi);
-		poi.x = x;
-		poi.y = y;
-		addToBins(poi);
-		if (poi.descriptor.length > 0)
-			poi.descriptor = new double [0];
-	}
+//	void move(POI poi, double x, double y)
+//	{
+//		bins[binx(x)][biny(y)].remove(poi);
+//		poi.x = x;
+//		poi.y = y;
+//		addToBins(poi);
+//		if (poi.descriptor != null)
+//			poi.descriptor = null;
+//	}
 	
 	double fromImageToLocalX(double x) {return x/image.getWidth();}
 	double fromImageToLocalY(double y) {return y/image.getHeight();}

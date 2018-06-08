@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="org/interreg/docexplore/features/|org/interreg/docexplore/datalink/DataLinkPageImageSource.java|org/interreg/docexplore/management/process/align/|org/interreg/docexplore/reader/util/ImageUtils.java|org/interreg/docexplore/reader/sound/MP3Decoder.java|org/interreg/docexplore/management/process/ProcessComponent.java" kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="jar/imgscalr-lib-4.1.jar"/>
 	<classpathentry kind="lib" path="jar/mysql-connector-java-5.1.13-bin.jar"/>
 	<classpathentry kind="lib" path="jar/javapng-2.0.jar"/>

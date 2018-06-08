@@ -1,5 +1,6 @@
 package org.interreg.docexplore.authoring.explorer.edit;
 
+import java.awt.Component;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -7,18 +8,18 @@ import java.util.Collections;
 import java.util.List;
 
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.management.gui.DocumentEditorHost;
-import org.interreg.docexplore.management.gui.DocumentPanel;
-import org.interreg.docexplore.management.manage.ActionRequestListener;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
-import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.manuscript.actions.CropPageAction;
 import org.interreg.docexplore.manuscript.actions.DeleteRegionsAction;
 import org.interreg.docexplore.manuscript.actions.WrappedAction;
+import org.interreg.docexplore.manuscript.app.ActionRequestListener;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost;
+import org.interreg.docexplore.manuscript.app.DocumentEditorHost;
+import org.interreg.docexplore.manuscript.app.DocumentPanel;
 
 public class SlideEditorListener implements DocumentEditorHost, ActionRequestListener
 {
@@ -26,10 +27,8 @@ public class SlideEditorListener implements DocumentEditorHost, ActionRequestLis
 	SlideEditorView view;
 	SlideEditorListener(SlideEditorView view) {this.view = view;}
 	
-	@Override public DocExploreDataLink getLink() {return view.explorer.link;}
-	@Override public ActionRequestListener getActionListener() {return this;}
 	@Override public void setMessage(String s) {}
-	@Override public void onDocumentSwitched(AnnotatedObject document) {}
+	@Override public void switchDocument(AnnotatedObject document) {}
 	@Override public DocumentPanel onDocumentEditorRequest(AnnotatedObject document) {return null;}
 	@Override public void onCloseRequest() {}
 	@Override public MetaData onAddAnnotationRequest() {return null;}
@@ -46,8 +45,13 @@ public class SlideEditorListener implements DocumentEditorHost, ActionRequestLis
 	@Override public void onDeletePartsRequest(Book book, List<MetaData> parts) {}
 	@Override public void onMovePagesRequest(List<Page> pages, Page moveAfter) {}
 	@Override public void onMovePartsRequest(Book book, MetaData part, int col, int row, boolean insertRow) {}
+	@Override public void onAddEmptyPartRequest(final Book book, int col, int row, boolean insertRow) {}
 	@Override public MetaData onAddAnnotationRequest(AnnotatedObject object, MetaData annotation) {return null;}
-	@Override public void onTransposePartsRequest(Book book) {}
+	@Override public void onFillPosterHolesRequest(Book book) {}
+	@Override public void onHorizontalMirrorPartsRequest(Book book) {}
+	@Override public void onVerticalMirrorPartsRequest(Book book) {}
+	@Override public void onRotatePartsLeftRequest(Book book) {}
+	@Override public void onRotatePartsRightRequest(Book book) {}
 	
 	@Override public void onCropPageRequest(AnnotatedObject object, int tlx, int tly, int brx, int bry)
 	{
@@ -87,4 +91,8 @@ public class SlideEditorListener implements DocumentEditorHost, ActionRequestLis
 		}
 		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
 	}
+	
+	@Override public ManuscriptAppHost getAppHost() {return null;}
+
+	@Override public void onAddRetroactiveAnnotationsRequest(AnnotatedObject object, List<MetaData> annotations) {}
 }

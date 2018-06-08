@@ -9,10 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
+
 public class FragmentSet
 {
-	List<Fragment> fragments = new ArrayList<Fragment>();
-	List<FragmentAssociation> associations = new ArrayList<FragmentAssociation>();
+	public List<Fragment> fragments = new ArrayList<Fragment>();
+	public List<FragmentAssociation> associations = new ArrayList<FragmentAssociation>();
 	
 	Map<Fragment, List<FragmentAssociation>> associationsByFragment;
 	
@@ -22,13 +24,13 @@ public class FragmentSet
 	}
 	
 	int serialVersion = 0;
-	public FragmentSet(ObjectInputStream in) throws Exception
+	public FragmentSet(ObjectInputStream in, DocExploreDataLink link) throws Exception
 	{
 		@SuppressWarnings("unused")
 		int serialVersion = in.readInt();
 		int n = in.readInt();
 		for (int i=0;i<n;i++)
-			fragments.add(new Fragment(in, i));
+			fragments.add(new Fragment(in, link, i));
 		n = in.readInt();
 		for (int i=0;i<n;i++)
 			associations.add(new FragmentAssociation(in, i, fragments));
@@ -63,10 +65,10 @@ public class FragmentSet
 		}
 	}
 	
-	public void fragmentsAt(double x, double y, Collection<Fragment> res)
+	public void fragmentsAt(double x, double y, double r, Collection<Fragment> res)
 	{
 		for (int i=0;i<fragments.size();i++)
-			if (fragments.get(i).contains(x, y))
+			if (fragments.get(i).contains(x, y, r))
 				res.add(fragments.get(i));
 	}
 	
@@ -109,9 +111,15 @@ public class FragmentSet
 		f.index = fragments.size()-1;
 	}
 	
-	public Fragment add(File file) throws Exception
+	public Fragment add(File file, FeatureDetector detector) throws Exception
 	{
-		Fragment f = new Fragment(file, fragments.size());
+		Fragment f = new Fragment(file.getAbsolutePath(), null, fragments.size(), detector);
+		fragments.add(f);
+		return f;
+	}
+	public Fragment add(String file, DocExploreDataLink link, FeatureDetector detector) throws Exception
+	{
+		Fragment f = new Fragment(file, link, fragments.size(), detector);
 		fragments.add(f);
 		return f;
 	}
@@ -150,5 +158,11 @@ public class FragmentSet
 		list.remove(fa);
 		if (list.isEmpty())
 			associationsByFragment.remove(fa.d2.fragment);
+	}
+	
+	public void clearAssociations()
+	{
+		associations.clear();
+		associationsByFragment.clear();
 	}
 }

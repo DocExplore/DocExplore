@@ -36,7 +36,7 @@ import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.internationalization.Lang;
-import org.interreg.docexplore.management.gui.MainWindow;
+import org.interreg.docexplore.management.gui.MMTApp;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.DocExploreDataLink;
@@ -55,11 +55,11 @@ public class TagManager extends JPanel
 	JLabel mergeText;
 	MetaData merging = null;
 	
-	public TagManager(final MainWindow win) throws DataLinkException
+	public TagManager(final MMTApp win) throws DataLinkException
 	{
 		super(new LooseGridLayout(0, 1, 5, 5, true, false, SwingConstants.CENTER, SwingConstants.TOP, true, false));
 		
-		link = win.getDocExploreLink();
+		link = win.host.getLink();
 		
 		model = new TagTableModel(link);
 		final JTable table = new JTable(model);
@@ -263,7 +263,7 @@ public class TagManager extends JPanel
 			object.removeMetaData(tag);
 	}
 	
-	public static void show(final MainWindow win) throws DataLinkException
+	public static void show(final MMTApp win) throws DataLinkException
 	{
 		final JDialog dialog = new JDialog(win, Lang.s("tagManagerLabel"), true);
 		

@@ -18,17 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.interreg.docexplore.gui.ErrorHandler;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.util.ImageUtils;
-
-import de.lmu.ifi.dbs.jfeaturelib.features.SURF;
-import ij.process.ColorProcessor;
 
 public class Fragment
 {
-	static int serialVersion = 0;
+	static int serialVersion = 1;
 	static int miniSize = 128;
 	
-	File file;
+	String file;
+	DocExploreDataLink link;
+	
 	final int imagew, imageh;
 	BufferedImage mini;
 	double uix, uiy;
@@ -45,42 +45,46 @@ public class Fragment
 	
 	FragmentDistortion distortion = null;
 	
-//	Fragment(int index)
-//	{
-//		this.file = null;
-//		this.imagew = 100;
-//		this.imageh = 100;
-//		this.mini = null;
-//		this.uix = 0; this.uiy = 0;
-//		this.uiw = 1;
-//		this.uiang = 0;
-//		this.index = index;
-//	}
-	
-	public Fragment(File file, int index) throws Exception
+	static BufferedImage getFull(String file, DocExploreDataLink link) throws Exception
 	{
-		BufferedImage img = ImageUtils.read(file);
+		BufferedImage img = null;
+		if (file.startsWith("docex://"))
+			img = link.getMetaData(Integer.parseInt(file.substring(9))).getImage();
+		else img = ImageUtils.read(new File(file));
+		return img;
+	}
+	static String getName(String file)
+	{
+		if (file.startsWith("docex://"))
+			return file.substring(8);
+		return new File(file).getName();
+	}
+	
+	public Fragment(String file, DocExploreDataLink link, int index, FeatureDetector detector) throws Exception
+	{
+		BufferedImage img = getFull(file, link);
 		if (img == null)
 			throw new NullPointerException();
 		
 		this.file = file;
+		this.link = link;
 		this.imagew = img.getWidth();
 		this.imageh = img.getHeight();
 		this.mini = ImageUtils.createIconSizeImage(img, miniSize);
 		this.uix = 0; this.uiy = 0;
 		this.uiw = 1;
 		this.uiang = 0;
-		computeFeatures(img);
+		this.features = detector.computeFeatures(this, img);
 		this.index = index;
 		
 		update();
 	}
 	
-	public Fragment(ObjectInputStream in, int index) throws Exception
+	public Fragment(ObjectInputStream in, DocExploreDataLink link, int index) throws Exception
 	{
-		@SuppressWarnings("unused")
+		this.link = link;
 		int serialVersion = in.readInt();
-		this.file = (File)in.readObject();
+		this.file = serialVersion < 1 ? ((File)in.readObject()).getAbsolutePath() : in.readUTF();
 		this.imagew = in.readInt();
 		this.imageh = in.readInt();
 		ByteArrayInputStream imgIn = new ByteArrayInputStream((byte [])in.readObject());
@@ -92,17 +96,19 @@ public class Fragment
 		int n = in.readInt();
 		this.features = new ArrayList<POI>(n);
 		for (int i=0;i<n;i++)
-			features.add(new POI(in, this, i));
+			features.add(POI.read(in, this, i));
 		this.distortion = (FragmentDistortion)in.readObject();
 		
 		this.index = index;
 		update();
 	}
 	
+	public int index() {return index;}
+	
 	public void write(ObjectOutputStream out) throws Exception
 	{
 		out.writeInt(serialVersion);
-		out.writeObject(file);
+		out.writeUTF(file);
 		out.writeInt(imagew);
 		out.writeInt(imageh);
 		ByteArrayOutputStream imgOut = new ByteArrayOutputStream();
@@ -116,22 +122,6 @@ public class Fragment
 		for (int i=0;i<features.size();i++)
 			features.get(i).write(out);
 		out.writeObject(distortion);
-	}
-	
-	public void computeFeatures(BufferedImage full) throws Exception
-	{
-		ColorProcessor cp = new ColorProcessor(full);
-		
-		SURF desc = new SURF(4, 4, (float)Stitcher.surfFeatureThreshold, 2, false, false, false, 1, false);
-		
-//		LocalBinaryPatterns desc = new LocalBinaryPatterns();
-//		desc.setNumberOfHistogramBins(256);
-		
-		desc.run(cp);
-		List<double []> v = desc.getFeatures();
-		features = new ArrayList<POI>(v.size());
-		for (int i=0;i<v.size();i++)
-			features.add(new POI(this, v.get(i), features.size()));
 	}
 	
 	public void setPos(double uix, double uiy)
@@ -154,7 +144,7 @@ public class Fragment
 	{
 		if (full != null)
 			full = null;
-		else try {full = ImageUtils.read(file);}
+		else try {full = getFull(file, link);}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 		update();
 	}
@@ -167,15 +157,64 @@ public class Fragment
 	public double toLocalY(double x, double y) {return ((x-uix)*vx+(y-uiy)*vy)/(vx*vx+vy*vy);}
 	public double fromLocalX(double x, double y) {return uix+x*ux+y*vx;}
 	public double fromLocalY(double x, double y) {return uiy+x*uy+y*vy;}
-	public boolean contains(double x, double y)
+	public boolean contains(double x, double y) {return contains(x, y, 0);}
+	public boolean contains(double x, double y, double r)
 	{
-		if (x < minx || x > maxx || y < miny || y > maxy)
+		if (x < minx-r || x > maxx+r || y < miny-r || y > maxy+r)
 			return false;
+		double rw = r/uiw, rh = r/uih;
 		double lx = toLocalX(x, y);
-		if (lx < 0 || lx > 1) return false;
+		if (lx < -rw || lx > 1+rw) return false;
 		double ly = toLocalY(x, y);
-		if (ly < 0 || ly > 1) return false;
+		if (ly < -rh || ly > 1+rh) return false;
 		return true;
+	}
+	
+	public int nearEdge(double x, double y, double r)
+	{
+		if (x < minx-r || x > maxx+r || y < miny-r || y > maxy+r)
+			return -1;
+		double rw = r/uiw, rh = r/uih;
+		double lx = toLocalX(x, y);
+		if (lx > -rw && lx < rw) return 0;
+		if (lx > 1-rw && lx < 1+rw) return 2;
+		double ly = toLocalY(x, y);
+		if (ly > -rh && ly < rh) return 1;
+		if (ly > 1-rh && ly < 1+rh) return 3;
+		return -1;
+	}
+	public double toLocalEdgeX(double x, double y, int edge)
+	{
+		if (edge == 1 || edge == 3) return toLocalX(x, y);
+		return edge == 0 ? 0 : 1;
+	}
+	public double toLocalEdgeY(double x, double y, int edge)
+	{
+		if (edge == 0 || edge == 2) return toLocalY(x, y);
+		return edge == 1 ? 0 : 1;
+	}
+	public double [] edgePoint(double x, double y, int edge, double [] res)
+	{
+		double lx = toLocalEdgeX(x, y, edge), ly = toLocalEdgeY(x, y, edge);
+		res[0] = fromLocalX(lx, ly);
+		res[1] = fromLocalY(lx, ly);
+		return res;
+	}
+	public double [] nearCornerPoint(int edge, double [] res)
+	{
+		if (edge == 0) {res[0] = uix+vx; res[1] = uiy+vy;}
+		if (edge == 1) {res[0] = uix; res[1] = uiy;}
+		if (edge == 2) {res[0] = uix+ux; res[1] = uiy+uy;}
+		if (edge == 3) {res[0] = uix+ux+vx; res[1] = uiy+uy+vy;}
+		return res;
+	}
+	public double [] farCornerPoint(int edge, double [] res)
+	{
+		if (edge == 3) {res[0] = uix+vx; res[1] = uiy+vy;}
+		if (edge == 0) {res[0] = uix; res[1] = uiy;}
+		if (edge == 1) {res[0] = uix+ux; res[1] = uiy+uy;}
+		if (edge == 2) {res[0] = uix+ux+vx; res[1] = uiy+uy+vy;}
+		return res;
 	}
 	
 	public boolean boundsIntersect(Fragment f)
@@ -294,12 +333,13 @@ public class Fragment
 			Color textColor = g.getColor();
 			Font font = g.getFont();
 			g.setFont(font.deriveFont((float)(16f/pixelSize)));
-			Rectangle2D bounds = g.getFontMetrics().getStringBounds(file.getName(), g);
+			String name = getName(file);
+			Rectangle2D bounds = g.getFontMetrics().getStringBounds(name, g);
 			double sh = g.getFont().getSize2D();
 			g.setColor(new Color(0f, 0f, 0f, .5f));
 			g.fill(new Rectangle2D.Double(uix, uiy-sh, bounds.getWidth(), 1.5*sh));
 			g.setColor(textColor);
-			g.drawString(file.getName(), (float)uix, (float)uiy);
+			g.drawString(name, (float)uix, (float)uiy);
 		}
 		
 		if (knob != null)
@@ -312,6 +352,15 @@ public class Fragment
 			g.draw(knobRect);
 			
 		}
+	}
+	public void drawEdge(Graphics2D g, double pixelSize, int edge)
+	{
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setColor(Color.blue);
+		if (edge == 1) {line.setLine(uix, uiy, uix+ux, uiy+uy); g.draw(line);}
+		if (edge == 2) {line.setLine(uix+ux, uiy+uy, uix+ux+vx, uiy+uy+vy); g.draw(line);}
+		if (edge == 3) {line.setLine(uix+ux+vx, uiy+uy+vy, uix+vx, uiy+vy); g.draw(line);}
+		if (edge == 0) {line.setLine(uix+vx, uiy+vy, uix, uiy); g.draw(line);}
 	}
 	float alpha = 1;
 	public void drawImage(Graphics2D g)

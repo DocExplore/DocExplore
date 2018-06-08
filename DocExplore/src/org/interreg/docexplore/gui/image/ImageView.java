@@ -50,7 +50,7 @@ public class ImageView extends EditorView
 		if (fit)
 			fit();
 	}
-	//public BufferedImage getImage() {return image;}
+	public BufferedImage getImage() {return image;}
 	public int getImageWidth() {return image != null ? image.getWidth() : -1;}
 	public int getImageHeight() {return image != null ? image.getHeight() : -1;}
 	public BufferedImage getSubImage(int x, int y, int w, int h) {return image.getSubimage(x, y, w, h);}

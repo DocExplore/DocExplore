@@ -13,6 +13,7 @@ public class LayoutDetector
 	public LayoutDetector(FragmentSet set)
 	{
 		this.set = set;
+		this.groupDetector = new GroupDetector();
 	}
 	
 	public void process(float [] progress)
@@ -29,7 +30,7 @@ public class LayoutDetector
 				FragmentAssociation fa = associate(set.fragments.get(i), set.fragments.get(j));
 				if (fa != null)
 				{
-					System.out.println(set.fragments.get(i).file.getName()+" <-> "+set.fragments.get(j).file.getName()+" ("+fa.associations.size()+")");
+					//System.out.println(Fragment.getName(set.fragments.get(i).file)+" <-> "+Fragment.getName(set.fragments.get(j).file)+" ("+fa.associations.size()+")");
 					set.add(fa);
 				}
 			}
@@ -41,7 +42,7 @@ public class LayoutDetector
 	float [] subProgress = {0};
 	List<Association> associations = new ArrayList<Association>();
 	Rectangle2D.Double bounds1 = new Rectangle2D.Double(), bounds2 = new Rectangle2D.Double();
-	GroupDetector groupDetector = new GroupDetector();
+	GroupDetector groupDetector;
 	FragmentAssociation associate(Fragment f1, Fragment f2)
 	{
 		FragmentAssociation map = new FragmentAssociation(f1, f2, -1);
@@ -92,6 +93,8 @@ public class LayoutDetector
 			{
 				for (int i=0;i<list.size();i++)
 					associations.addAll(list.get(i).associations);
+				if (associations.isEmpty())
+					continue;
 				fragment.distortion = new FragmentDistortion(fragment, associations);
 				associations.clear();
 			}

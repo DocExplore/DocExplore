@@ -10,7 +10,7 @@ import java.util.Map;
 public class FragmentAssociation
 {
 	FragmentDescription d1, d2;
-	List<Association> associations = new ArrayList<Association>(0);
+	public List<Association> associations = new ArrayList<Association>(0);
 	Map<POI, List<Association>> associationsByPOI = new HashMap<POI, List<Association>>();
 	int index;
 	
@@ -21,8 +21,8 @@ public class FragmentAssociation
 		this.d1 = new FragmentDescription(this, f1);
 		this.d2 = new FragmentDescription(this, f2);
 		this.index = index;
-		
 		resetAssociationsByPOI();
+		this.transform = FragmentTransform.build(this, null);
 	}
 	
 	static int serialVersion = 0;
@@ -52,7 +52,7 @@ public class FragmentAssociation
 		out.writeObject(transform);
 	}
 	
-	void resetAssociationsByPOI()
+	public void resetAssociationsByPOI()
 	{
 		associationsByPOI = new HashMap<POI, List<Association>>();
 		for (int i=0;i<associations.size();i++)
@@ -121,11 +121,6 @@ public class FragmentAssociation
 	public void transform(Fragment res, float [] progress) {transform(res, progress, 0, 1);}
 	public void transform(Fragment res, float [] progress, float ps, float pe)
 	{
-		if (associations.size() < 3)
-		{
-			if (progress != null) progress[0] = pe;
-			return;
-		}
 		if (transform == null)
 			this.transform = FragmentTransform.build(this, progress, pe, ps);
 		if (res != d1.fragment)
@@ -185,5 +180,13 @@ public class FragmentAssociation
 			if (!associationsByPOI.containsKey(poi))
 				{d2.remove(poi); i--;}
 		}
+	}
+	
+	public void clearDescriptors()
+	{
+		d1.features.clear();
+		d2.features.clear();
+		associations.clear();
+		resetAssociationsByPOI();
 	}
 }

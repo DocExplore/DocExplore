@@ -211,7 +211,7 @@ public class MetaDataEditor extends JPanel
 	}
 	void addFiles(File [] files) throws Exception
 	{
-		List<MetaData> annotations = MetaDataUtils.importFiles(pageEditor.view.explorer.tool, (Region)document, files);
+		List<MetaData> annotations = MetaDataUtils.importFiles(pageEditor.view.explorer.tool.plugins, (Region)document, files);
 		metaDataImported(annotations);
 	}
 //	void copyAnnotations(Region region) throws Exception
@@ -224,6 +224,8 @@ public class MetaDataEditor extends JPanel
 	
 	public void setDocument(AnnotatedObject document) throws Exception
 	{
+		if (!(document instanceof Region))
+			document = null;System.out.println("!!!");
 		paste.setEnabled(pageEditor.view.explorer.tool.clipboard.canPaste());
 		
 		if (this.document != document)

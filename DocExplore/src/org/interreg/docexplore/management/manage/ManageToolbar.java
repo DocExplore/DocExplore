@@ -47,7 +47,7 @@ public class ManageToolbar extends JPanel
 		
 		addButton = new IconButton("add-24x24.png", Lang.s("manageAddBookLabel"));
 		deleteButton = new IconButton("remove-24x24.png", Lang.s("manageDeleteBookLabel"));
-		editButton = new IconButton("pencil-24x24.png", Lang.s("manageRenameLabel"));
+		editButton = new IconButton("pencil-24x24.png", "???");//Lang.s("manageRenameLabel"));
 //		processButton = new ToolbarButton("gears-24x24.png", XMLResourceBundle.getBundledString("manageProcessBookLabel"));
 		exportButton = new IconButton("export-24x24.png", Lang.s("manageExportBookLabel"));
 		importButton = new IconButton("import-24x24.png", Lang.s("manageImportBookLabel"));
@@ -86,14 +86,14 @@ public class ManageToolbar extends JPanel
 			if (books.size() != 1)
 				return;
 			Book book = books.get(0);
-			String title = JOptionPane.showInputDialog(manageComp.win, Lang.s("manageInputTitleLabel"), book.getName());
+			String title = JOptionPane.showInputDialog(manageComp.host.getFrame(), Lang.s("manageInputTitleLabel"), book.getName());
 			if (title == null || title.trim().length() == 0)
 				return;
 			try
 			{
 				if (manageComp.findTitle(title) != null)
 				{
-					JOptionPane.showMessageDialog(manageComp.win, Lang.s("manageRenameExistsMessage"));
+					JOptionPane.showMessageDialog(manageComp.host.getFrame(), Lang.s("manageRenameExistsMessage"));
 					return;
 				}
 				book.setName(title);

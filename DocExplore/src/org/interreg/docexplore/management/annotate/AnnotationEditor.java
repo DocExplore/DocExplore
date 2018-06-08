@@ -49,17 +49,17 @@ import org.interreg.docexplore.util.GuiUtils;
 @SuppressWarnings("serial")
 public abstract class AnnotationEditor extends ExpandingItem
 {
-	AnnotationPanel panel;
+	MMTAnnotationPanel panel;
 //	JTextArea tagArea;
 	public MetaData annotation;
 	
 	public String keyName;
-	JLabel keyLabel;
+	protected JLabel keyLabel;
 	
 	public final boolean readOnly;
 	protected boolean changed = false;
 	
-	public AnnotationEditor(AnnotationPanel panel, MetaData annotation) throws DataLinkException
+	public AnnotationEditor(MMTAnnotationPanel panel, MetaData annotation) throws DataLinkException
 	{
 		super();
 		
@@ -69,7 +69,7 @@ public abstract class AnnotationEditor extends ExpandingItem
 		this.annotation = annotation;
 //		this.tagArea = new JTextArea(3, 30);
 		this.keyLabel = new JLabel();
-		this.readOnly = panel.handler.win.getDocExploreLink().readOnlyKeys.contains(annotation.getKey());
+		this.readOnly = panel.handler.win.getLink().readOnlyKeys.contains(annotation.getKey());
 		
 		fillContractedState();
 	}
@@ -129,7 +129,7 @@ public abstract class AnnotationEditor extends ExpandingItem
 				changed = false;
 				SwingUtilities.invokeLater(new Runnable() {public void run()
 				{
-					GuiUtils.blockUntilComplete(new Runnable() {public void run() {disposeExpandedState();}}, panel.handler.win);
+					GuiUtils.blockUntilComplete(new Runnable() {public void run() {disposeExpandedState();}}, panel.handler.win.getFrame());
 				}});
 			}
 			public void ancestorMoved(AncestorEvent arg0) {}
@@ -177,7 +177,7 @@ public abstract class AnnotationEditor extends ExpandingItem
 	String buildTagString(AnnotatedObject document) throws DataLinkException
 	{
 		StringBuilder tagString = new StringBuilder();
-		for (MetaData tag : document.getMetaDataListForKey(panel.handler.link.tagKey))
+		for (MetaData tag : document.getMetaDataListForKey(panel.win.getLink().tagKey))
 			tagString.append(TagHolder.extractLocalizedTag(tag.getString(), Locale.getDefault().getLanguage())+", ");
 		if (tagString.length() > 0)
 			tagString.delete(tagString.length()-2, tagString.length());

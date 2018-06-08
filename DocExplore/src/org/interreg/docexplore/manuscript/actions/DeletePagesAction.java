@@ -29,7 +29,7 @@ public class DeletePagesAction extends UnreversibleAction
 	public DeletePagesAction(List<Page> pages)
 	{
 		this.pages = pages;
-		this.book = pages.get(0).getBook();
+		this.book = pages.isEmpty() ? null : pages.get(0).getBook();
 	}
 	
 	public void doAction() throws Exception

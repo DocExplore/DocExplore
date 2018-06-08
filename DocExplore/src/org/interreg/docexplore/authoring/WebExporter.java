@@ -16,15 +16,15 @@ package org.interreg.docexplore.authoring;
 
 import java.io.File;
 import java.io.InputStream;
-import java.net.URL;
-import java.util.Enumeration;
 
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
 import org.interreg.docexplore.DocExploreTool;
+import org.interreg.docexplore.authoring.explorer.edit.StyleManager;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.DocExploreDataLink;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost;
 import org.interreg.docexplore.util.ByteUtils;
 import org.interreg.docexplore.util.ZipUtils;
 
@@ -32,16 +32,16 @@ public class WebExporter extends PresentationExporter
 {
 	File exportDir = new File(DocExploreTool.getHomeDir(), "web-tmp");
 	
-	public WebExporter(AuthoringToolFrame tool)
+	public WebExporter(ManuscriptAppHost host, StyleManager styles)
 	{
-		super(tool);
+		super(host, styles);
 	}
 
 	boolean copyComplete = false;
 	public void doExport(final DocExploreDataLink link, boolean noHtml) throws Exception
 	{
 		copyComplete = false;
-		ExportOptions options = ExportOptions.getOptions(tool, noHtml ? ExportDialog.MobileExport : ExportDialog.WebExport);
+		ExportOptions options = ExportOptions.getOptions(host.getFrame(), host.plugins.metaDataPlugins, noHtml ? ExportDialogOld.MobileExport : ExportDialogOld.WebExport);
 		if (options == null)
 			return;
 		
@@ -49,13 +49,13 @@ public class WebExporter extends PresentationExporter
 		if (exportTo == null)
 			return;
 		if (exportTo.exists() && 
-			JOptionPane.showConfirmDialog(tool, "A file with the same name already exists. Do you wish to overwrite it?", "Overwrite", 
+			JOptionPane.showConfirmDialog(host.getFrame(), "A file with the same name already exists. Do you wish to overwrite it?", "Overwrite", 
 				JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)
 					return;
 		
 		exportDir.mkdirs();
 		Book book = link.getBook(link.getLink().getAllBookIds().get(0));
-		doExport(book, exportDir, options, 0, "JPG", noHtml ? ExportDialog.MobileExport : ExportDialog.WebExport);
+		doExport(book, exportDir, options, 0, "JPG", noHtml ? ExportDialogOld.MobileExport : ExportDialogOld.WebExport);
 		
 		if (!noHtml)
 		{

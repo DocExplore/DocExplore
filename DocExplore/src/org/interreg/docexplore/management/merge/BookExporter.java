@@ -16,6 +16,7 @@ package org.interreg.docexplore.management.merge;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -324,12 +325,14 @@ public class BookExporter
 		return regionCopy;
 	}
 	
-	void copyMetaData(AnnotatedObject from, AnnotatedObject to, MetaDataFilter filter) throws DataLinkException
+	public List<MetaData> copyMetaData(AnnotatedObject from, AnnotatedObject to, MetaDataFilter filter) throws DataLinkException
 	{
+		List<MetaData> list = new LinkedList<>();
 		for (Map.Entry<MetaDataKey, List<MetaData>> entry : from.getMetaData().entrySet())
 			for (MetaData metaData : entry.getValue())
 				if (filter == null || filter.keepAnnotation(from, to, metaData))
-					addMetaData(metaData, to, filter);
+					list.add(addMetaData(metaData, to, filter));
+		return list;
 	}
 	protected MetaData addMetaData(MetaData metaData, ManuscriptLink to, MetaDataFilter filter) throws DataLinkException
 	{

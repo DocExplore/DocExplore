@@ -11,6 +11,7 @@
 	<entry key="generalMenuSave">Enregistrer</entry>
 	<entry key="generalMenuSaveAs">Enregistrer sous...</entry>
 	<entry key="generalMenuNew">Nouveau</entry>
+	<entry key="generalMenuDelete">Supprimer</entry>
 	<entry key="generalSaveMessage">Voulez-vous enregistrer la présentation actuelle?</entry>
 	<entry key="generalMenuImport">Importer...</entry>
 	<entry key="generalMenuExport">Exporter...</entry>
@@ -149,4 +150,8 @@ faute de quoi elles ne s'afficheront pas correctement.
     <entry key="fixCharsMsg">La présentation a été créée sous</entry>
     <entry key="fixCharsWin">Windows</entry>
     <entry key="fixCharsMac">Mac OSX</entry>
+    
+    <entry key="associate">Associer</entry>
+	<entry key="disassociate">Désassocier</entry>
+	<entry key="editStitches">Modifier les raccords</entry>
 </properties>

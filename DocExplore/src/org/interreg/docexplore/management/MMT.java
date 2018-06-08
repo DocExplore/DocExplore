@@ -26,7 +26,7 @@ import org.interreg.docexplore.Startup;
 import org.interreg.docexplore.DocExplore;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.Lang;
-import org.interreg.docexplore.management.gui.MainWindow;
+import org.interreg.docexplore.management.gui.MMTApp;
 import org.interreg.docexplore.management.plugin.PluginManager;
 import org.interreg.docexplore.util.GuiUtils;
 
@@ -35,11 +35,11 @@ public class MMT extends DocExploreTool
 {
 	public static void main(final String [] args)
 	{
-		final Startup startup = new Startup(Lang.s("frameTitle"), "logoMMT.png", true, true, true, true);
+		final Startup startup = new Startup(Lang.s("mmtTitle"), "logoMMT.png", true, true, true, true);
 		
 		try
 		{
-			final MainWindow win = new MainWindow(startup, new PluginManager(startup));
+			final MMTApp win = new MMTApp(startup, new PluginManager(startup));
 			JOptionPane.setRootFrame(win);
 			
 			win.setSize(800, 600);
@@ -53,7 +53,7 @@ public class MMT extends DocExploreTool
 			
 			startup.screen.setText("Autoconnecting");
 			if (startup.autoConnectLink[0] != null)
-				try {win.setLink(startup.autoConnectLink[0]);}
+				try {win.host.setLink(startup.autoConnectLink[0]);}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
 			
 			win.addWindowListener(new WindowAdapter()

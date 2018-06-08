@@ -179,6 +179,26 @@ public class PresentationEditorView extends BookView
 		msg = Lang.s("helpBookMsg");
 	}
 	
+	PosterEditorToolbar posterToolbar = null;
+	public void shown()
+	{
+		if (posterEditor == null)
+			return;
+		posterToolbar = posterEditor.toolbar;
+		explorer.toolPanel.add(posterEditor.toolbar); 
+		posterEditor.toolbar.revalidate();
+		posterEditor.toolbar.repaint();
+	}
+	public void hidden()
+	{
+		if (posterToolbar == null)
+			return;
+		explorer.toolPanel.remove(posterToolbar);
+		explorer.toolPanel.revalidate();
+		explorer.toolPanel.repaint();
+		posterToolbar = null;
+	}
+	
 	@Override public Component getViewComponent()
 	{
 		if (isPoster)
@@ -198,7 +218,12 @@ public class PresentationEditorView extends BookView
 		else if (!isPoster)
 			posterEditor = null;
 		if (posterEditor != null)
+		{
+			Component [] comps = posterEditor.toolbar.getComponents();
+			for (int i=0;i<comps.length;i++)
+				comps[i].setEnabled(isPoster);
 			posterEditor.refresh();
+		}
 		return items;
 	}
 

@@ -18,6 +18,128 @@
 	<entry key="deleteRegion">Delete region</entry>
 	<entry key="movePages">Move pages</entry>
 	<entry key="moveParts">Move parts</entry>
-	<entry key="transposeParts">Transpose parts</entry>
+	<entry key="transposeParts">Transpose poster</entry>
+	<entry key="mirrorParts">Mirror poster</entry>
+	<entry key="rotateParts">Rotate poster</entry>
 	<entry key="cropPage">Crop page</entry>
+	<entry key="fillPoster">Fill poster holes</entry>
+	<entry key="addCover">Add cover</entry>
+	<entry key="deleteCover">Delete cover</entry>
+	<entry key="importCover">Cover import</entry>
+	<entry key="addPreview">Add preview</entry>
+	<entry key="deletePreview">Delete preview</entry>
+	
+	<entry key="generalCollection">Collection</entry>
+	<entry key="generalBook">book</entry>
+	<entry key="generalBooks">books</entry>
+	<entry key="generalPage">page</entry>
+	<entry key="generalPages">pages</entry>
+	<entry key="generalHistory">History</entry>
+	<entry key="generalHelp">Help</entry>
+	<entry key="imageToolbarPreviousHistoric">Previous page</entry>
+	<entry key="imageToolbarNextHistoric">Next page</entry>
+	<entry key="imageToolbarUp">Show book</entry>
+	<entry key="imageToolbarAddFreeRoi">Add a free region of interest</entry>
+	<entry key="imageToolbarAddRectRoi">Add a rectangle region of interest</entry>
+	<entry key="imageToolbarDelRoi">Delete a Region Of Interest</entry>
+	<entry key="imageToolbarCrop">Crop page</entry>
+	<entry key="imageToolbarFit">Fit in frame</entry>
+	<entry key="imageToolbarFillPoster">Fill poster holes</entry>
+	<entry key="imageToolbarMirrorHor">Horizontal mirror</entry>
+	<entry key="imageToolbarMirrorVer">Vertical mirror</entry>
+	<entry key="imageToolbarRotateLeft">Rotate left</entry>
+	<entry key="imageToolbarRotateRight">Rotate right</entry>
+	<entry key="imageToolbarStitch">Stitch parts together</entry>
+	<entry key="imageToolbarUnstitch">Discard stitching</entry>
+	<entry key="imageToolbarSaveStitches">Save stitching</entry>
+	<entry key="imageToolbarClearStitches">Clear all stitches</entry>
+	<entry key="imageToolbarDetectStitches">Detect stitches</entry>
+	<entry key="imageToolbarRenderStitches">Render stitched document</entry>
+	<entry key="imageLocateLabel">Get location code</entry>
+	<entry key="manageAppendPagesLabel">Append pages to the book</entry>
+	<entry key="manageDeletePageLabel">Delete selected pages</entry>
+	<entry key="generalNoLinkStatus">No connection established</entry>
+	<entry key="manageFailedMessage">The following files could not be imported:</entry>
+	<entry key="manageDeleteBookMsg">Are you sure you want to delete the following books?</entry>
+	<entry key="manageDeletePageMsg">Are you sure you want to delete these pages?</entry>
+	<entry key="imageFillPosterMessage">You must fill poster holes before using this operation.</entry>
+	<entry key="imageGotoLabel">Go to</entry>
+	<entry key="manageInputTitleLabel">Give a title to the book</entry>
+	<entry key="manageNewDocumentLabel">New document</entry>
+	<entry key="manageRenameExistsMessage">A book with this title already exists.</entry>
+	<entry key="manageRenameLabel">Rename the selected book</entry>
+	<entry key="manageRefreshLabel">Refresh</entry>
+	<entry key="statusSquareMessage">Click and drag the mouse from one corner of the region to the opposite corner.</entry>
+	<entry key="statusFreeMessage">Click on each summit of the region, then click on the first summit to close the shape.</entry>
+	<entry key="statusBeaconMessage">Location of the given code.</entry>
+	<entry key="cover">Cover</entry>
+	<entry key="coverFront">Front</entry>
+	<entry key="coverInnerFront">Inner front</entry>
+	<entry key="coverInnerBack">Inner back</entry>
+	<entry key="coverBack">Back</entry>
+	<entry key="coverOpaque">Opaque</entry>
+	<entry key="coverTransparent">Transparent</entry>
+	<entry key="saveStitchMsg">Save the changes made to the part stitches?</entry>
+	<entry key="saveStitchLabel">Save changes?</entry>
+	<entry key="useLayoutLabel">Use current layout?</entry>
+	<entry key="useLayoutMessage">Would you like to limit the detection to empty assocations (the lines in red)? If you select not to, all current association will be removed
+	    and the detection will make no assumptions on the overall layout.
+	</entry>
+	<entry key="helpCover">&lt;b>Cover&lt;/b>
+	    &lt;br/>
+	    &lt;br/>Each frame can hold an image representing a part of the book cover.
+	    Since book covers often have rounded edges, they might require an image with transparent parts.
+	    However, images with transparency can't be efficiently compressed and might not be suitable if exported in certain contexts.
+	    You can therefore define opaque and transparent versions of the cover images.
+	    &lt;br/>
+	    Any cover part that is undefined will be given a default image if exported.
+	    You can drag files and images on to these frames to define their content.
+	    Use the right click to delete the content of a frame.
+	</entry>
+	<entry key="helpBookToolsMsg">&lt;b>Book tools&lt;/b>
+	    &lt;br/>
+	    &lt;br/>&lt;img src='%icons%up-24x24.png'/>&#160;Navigate back to the collection
+	    &lt;br/>&lt;img src='%icons%add-file-24x24.png'/>&#160;Import images as pages
+	    &lt;br/>&lt;img src='%icons%delete-file-24x24.png'/>&#160;Delete the selected pages
+	</entry>
+	<entry key="helpPosterToolsMsg">&lt;b>Poster tools&lt;/b>
+	    &lt;br/>
+	    &lt;br/>&lt;img src='%icons%up-24x24.png'/>&#160;Navigate back to the collection
+	    &lt;br/>&lt;img src='%icons%add-file-24x24.png'/>&#160;Append images as poster parts
+	    &lt;br/>&lt;img src='%icons%delete-file-24x24.png'/>&#160;Delete the selected parts
+	    &lt;br/>&lt;img src='%icons%fill-poster-24x24.png'/>&#160;Fill the holes in the poster grid to obtain a rectangle
+	    &lt;br/>&lt;img src='%icons%mirror-hor-24x24.png'/>&#160;Swap all the parts horizontally
+	    &lt;br/>&lt;img src='%icons%mirror-ver-24x24.png'/>&#160;Swap all the parts vertically
+	    &lt;br/>&lt;img src='%icons%rotate-left-24x24.png'/>&#160;Rotate all the parts a quarter turn counter-clockwise
+	    &lt;br/>&lt;img src='%icons%rotate-right-24x24.png'/>&#160;Rotate all the parts a quarter turn clockwise
+	    &lt;br/>&lt;img src='%icons%stitch-24x24.png'/>&#160;Stitch together parts that don't line up
+	</entry>
+	<entry key="helpPosterStitchMsg">&lt;b>Poster stitching&lt;/b>
+	    &lt;br/>
+	    &lt;br/>This is a poster being stitched into a seamless document.
+	    &lt;br/>This process can be &lt;a href='helpManualStitchingMsg'>manual&lt;/a> or &lt;a href='helpPosterToolsMsg'>automatic&lt;/a>.
+	    &lt;br/>Once the parts are correctly assembled, use the &lt;img src='%icons%render-stitch-24x24.png'/>&#160; render button to produce a single document.
+	</entry>
+	<entry key="helpManualStitchingMsg">&lt;b>Manual stitching&lt;/b>
+	    &lt;br/>
+	    &lt;br/>You can click and drag the parts around the canvas.
+	    &lt;br/>The corners of the parts have handles allowing you to resize them.
+	    &lt;br/>Press &lt;i>CTRL&lt;/i> while moving a handle to rotate the part.
+	    &lt;br/>If the parts can't be seamlessly assembled with these manipulations, you can edit the stitches by first selecting a part (the selected part has a yellow outline)
+	    and then right clicking on different part. This will open the &lt;a href='helpStitchEditorMsg'>stitch editor&lt;/a>.
+	</entry>
+	<entry key="helpStitchEditorMsg">&lt;b>Stitch editor&lt;/b>
+	    &lt;br/>
+	    &lt;br/>The stitch editor provides tools for stitching together two parts which means finding points of overlap between the two and joining them into a single image.
+	</entry>
+	<entry key="helpPageToolsMsg">&lt;b>Page tools&lt;/b>
+	    &lt;br/>
+	    &lt;br/>&lt;img src='%icons%previous-24x24.png'/>&#160;Navigate to the previous page
+	    &lt;br/>&lt;img src='%icons%next-24x24.png'/>&#160;Navigate to the next page
+	    &lt;br/>&lt;img src='%icons%up-24x24.png'/>&#160;Navigate back to all pages
+	    &lt;br/>&lt;img src='%icons%fit-24x24.png'/>&#160;Fit the page view to fill the panel
+	    &lt;br/>&lt;img src='%icons%add-free-roi-24x24.png'/>&#160;Create a free shape region of interest
+	    &lt;br/>&lt;img src='%icons%add-rect-roi-24x24.png'/>&#160;Create a rectangular region of interest
+	    &lt;br/>&lt;img src='%icons%resize-page-24x24.png'/>&#160;Crop the page
+	</entry>
 </properties>

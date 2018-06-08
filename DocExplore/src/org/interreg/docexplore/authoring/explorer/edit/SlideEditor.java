@@ -31,12 +31,11 @@ import org.interreg.docexplore.authoring.explorer.ViewItem;
 import org.interreg.docexplore.authoring.explorer.ViewMouseListener;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.Lang;
-import org.interreg.docexplore.management.gui.MainWindow;
-import org.interreg.docexplore.management.gui.MainWindow.MainWindowListener;
-import org.interreg.docexplore.management.image.PosterPageEditor;
-import org.interreg.docexplore.management.image.RegionOverlay.RegionObject;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Page;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost.AppListener;
+import org.interreg.docexplore.manuscript.app.editors.PosterPageEditor;
+import org.interreg.docexplore.manuscript.app.editors.RegionOverlay.RegionObject;
 
 @SuppressWarnings("serial")
 public class SlideEditor extends PosterPageEditor implements ViewMouseListener.DropTarget
@@ -83,8 +82,8 @@ public class SlideEditor extends PosterPageEditor implements ViewMouseListener.D
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 	}
 	
-	List<MainWindowListener> listeners = new LinkedList<MainWindow.MainWindowListener>();
-	public void addMainWindowListener(MainWindowListener listener) {listeners.add(listener);}
+	List<AppListener> listeners = new LinkedList<AppListener>();
+	public void addMainWindowListener(AppListener listener) {listeners.add(listener);}
 	
 	@Override public void dropped(ExplorerView source, List<ViewItem.Data> items, Point where) {view.dropped(source, items, where); reloadPage();}
 	@Override public void dragged(ExplorerView source, List<ViewItem.Data> items, Point where) {view.dragged(source, items, where); repaint();}

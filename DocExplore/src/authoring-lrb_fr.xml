@@ -3,7 +3,7 @@
 <properties>
 	<comment>Ressources en français</comment>
 	
-	<entry key="frameTitle">Outil d'Edition DocExplore</entry>
+	<entry key="atTitle">Outil d'Edition DocExplore</entry>
 	
 	<entry key="generalMenuFile">Fichier</entry>
 	<entry key="generalMenuQuit">Retour au menu</entry>
@@ -36,6 +36,8 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="generalCopyPaste">Copier/Coller</entry>
 	<entry key="generalTitle">Titre</entry>
 	<entry key="generalDescription">Description</entry>
+	<entry key="generalPreview">Aperçu</entry>
+	<entry key="generalSetPreview">Définir l'aperçu</entry>
 	
 	<entry key="exportReader">Export vers le feuilleteur</entry>
 	<entry key="exportReaderDesc">Cette présentation sera ajoutée à la collection local de cette installation de DocExplore.</entry>
@@ -45,12 +47,33 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="exportMobileDesc">Cette présentation sera placée dans un fichier lisible par l'application mobile DocExplore.</entry>
 	
 	<entry key="viewHelpToggle">Afficher l'aide</entry>
-	<entry key="helpBookMsg">Ce panneau affiche les pages de votre présentation. Pour en ajouter vous pouvez:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Cliquer sur l'icône &amp;oplus; dans la barre d'outils pour importer des images&amp;uarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser livres et pages depuis la droite &amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser directement des images depuis votre navigateur de fichiers</entry>
-    <entry key="helpPageMsg">Ceci est une page de votre présentation. Vous pouvez:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Créer et modifier des régions d'intérêt à l'aide de la barre d'outils supérieure&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Ajouter des régions et des annotations en les glissant depuis la droite&amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser des fichiers sur une région depuis votre navigateur de fichiers</entry>
-	<entry key="helpRegionMsg">Vous avez sélectionné une région d'intérêt et les éléments qu'elle contient sont affichés dans le panneau de droite &amp;rarr;&lt;br/>Vous pouvez ajouter, supprimer, modifier et réordonner ces éléments en utilisant les barres d'outils.</entry>
-	<entry key="helpCollectionMsg">Ceci est votre collection numérique.&lt;br/>&amp;larr; Glissez des éléments vers la gauche pour les inclure dans votre présentation.</entry>
+	<entry key="helpAtBookMsg">Le panneau de gauche affiche les pages de votre présentation. Pour en ajouter vous pouvez:
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Cliquer sur l'icône &amp;oplus; dans la barre d'outils pour importer des images
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser des livres et des pages depuis le panneau de droite
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser directement des images depuis votre navigateur de fichiers
+		&lt;br/>
+		&lt;br/>Le panneau de droite affiche la collection locale de l'outil de gestion.
+	</entry>
+    <entry key="helpRegionMsg">Vous avez sélectionné une région d'intérêt et les éléments qu'elle contient sont affichés dans le panneau de droite &amp;rarr;&lt;br/>Vous pouvez ajouter, supprimer, modifier et réordonner ces éléments en utilisant les barres d'outils.</entry>
+	<entry key="helpAtCollectionMsg">Ceci est votre collection numérique.&lt;br/>&amp;larr; Glissez des éléments vers la gauche pour les inclure dans votre présentation.</entry>
 	<entry key="helpLocalMsg">Ceci est le stockage local de votre ordinateur. Double-cliquez sur un lecteur pour parcourir son contenu.</entry>
 	<entry key="helpFolderMsg">Faites un clic droit sur un fichier pour prévisualiser son contenu.&lt;br/>&amp;larr; Glissez des fichiers vers la gauche pour les inclure dans votre présentation.</entry>
+	<entry key="helpPreview">&lt;b>Aperçu&lt;/b>
+	    &lt;br/>L'aperçu est utilisé par le feuilleteur pour représenter ce document après export.
+	    &lt;br/>En l'absence d'image, un aperçu par défaut est utilisé.
+	    &lt;br/>Vous pouvez glisser un fichier ou une image sur ce cadre pour définir l'aperçu.
+	    &lt;br/>Faites un clic droit sur ce cadre pour supprimer l'image définie.
+	</entry>
+	<entry key="helpAtPageMsg">&lt;b>Page&lt;/b>
+	    &lt;br/>Le panneau de gauche affiche une page de votre livre.
+	    &lt;br/>Vous pouvez créer et modifier des régions d'intérêt avec la &lt;a href='helpPageToolsMsg'>barre d'outils&lt;/a>.
+	    &lt;br/>
+		&lt;br/>Le panneau de droite affiche les &lt;a href='management helpAnnotationsMsg'>annotations&lt;/a> associées à cette page.
+	</entry>
+	<entry key="helpAtAnnotationsMsg">&lt;b>Panneau d'annotations&lt;/b>
+	    &lt;br/>Ce panneau vous permet de voir et de modifier les méta-données associées au document de droite.
+	    &lt;br/>Utilisez les icônes pour ajouter texte, images et vidéos.
+	</entry>
 	
 	<entry key="generalToolbarFilter">Configurer le filtre d'import...</entry>
 	<entry key="generalToolbarParent">Parcourir le parent</entry>
@@ -72,6 +95,12 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="imageLocateLabel">Code d'emplacement</entry>
 	<entry key="imageToolbarPreviousHistoric">Page précédente</entry>	
 	<entry key="imageToolbarNextHistoric">Page suivante</entry>	
+	<entry key="imageToolbarFillPoster">Remplir les trous du poster</entry>
+	<entry key="imageToolbarMirrorHor">Mirror horizontal</entry>
+	<entry key="imageToolbarMirrorVer">Mirroir vertical</entry>
+	<entry key="imageToolbarRotateLeft">Rotation à gauche</entry>
+	<entry key="imageToolbarRotateRight">Rotation à droite</entry>
+	<entry key="imageFillPosterMessage">Vous devez remplir les trous du poster avant d'effectuer cette opération.</entry>
 	
 	<entry key="collectionAddBookMessage">Veuillez indiquer un titre pour cette présentation</entry>
 	<entry key="collectionDefaultBookLabel">Nouvelle présentation</entry>
@@ -140,10 +169,12 @@ faute de quoi elles ne s'afficheront pas correctement.
     <entry key="importAnnotationFilter">&lt;html>Les annotations nommées &lt;b>%name&lt;/b> doivent être &lt;/html></entry>
     <entry key="importImported">Importées</entry>
     <entry key="importDiscarded">Ignorées</entry>
+    <entry key="importEmptyPosterMessage">La présentation doit être vide pour pouvoir importer un poster.</entry>
+    <entry key="importPoster">Import de poster</entry>
     
     <entry key="coverLabel">Couverture</entry>
-    <entry key="coverFront">Couverture avant</entry>
-    <entry key="coverBack">Couverture arrière</entry>
+    <entry key="coverFront">Avant</entry>
+    <entry key="coverBack">Arrière</entry>
     <entry key="coverFrontInner">Couverture avant intérieure</entry>
     <entry key="coverBackInner">Couverture arrière intérieure</entry>
     <entry key="coverDiscard">Effacer</entry>

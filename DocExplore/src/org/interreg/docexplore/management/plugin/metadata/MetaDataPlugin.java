@@ -24,9 +24,10 @@ import org.interreg.docexplore.authoring.ExportOptions;
 import org.interreg.docexplore.authoring.explorer.edit.InfoElement;
 import org.interreg.docexplore.authoring.explorer.edit.MetaDataEditor;
 import org.interreg.docexplore.authoring.preview.PreviewPanel;
+import org.interreg.docexplore.authoring.rois.RegionSidePanel;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.management.annotate.AnnotationEditor;
-import org.interreg.docexplore.management.annotate.AnnotationPanel;
+import org.interreg.docexplore.management.annotate.MMTAnnotationPanel;
 import org.interreg.docexplore.management.plugin.Plugin;
 import org.interreg.docexplore.manuscript.MetaData;
 
@@ -37,11 +38,12 @@ public interface MetaDataPlugin extends Plugin
 {
 	//returns the type
 	public String getType();
-	public AnnotationEditor createEditor(AnnotationPanel panel, MetaData annotation) throws DataLinkException;
+	public AnnotationEditor createEditor(MMTAnnotationPanel panel, MetaData annotation) throws DataLinkException;
 	public JLabel createLabel(String keyName, MetaData annotation) throws DataLinkException;
 	public Object createDefaultValue();
 	public Collection<File> openFiles(boolean multiple);
 	public InfoElement createInfoElement(MetaDataEditor editor, MetaData md, int width) throws DataLinkException;
+	public org.interreg.docexplore.authoring.rois.InfoElement createInfoElement(RegionSidePanel editor, MetaData md, int width) throws DataLinkException;
 	public boolean canPreview(Object object);
 	public String getFileType();
 	public Icon createIcon(Object object);

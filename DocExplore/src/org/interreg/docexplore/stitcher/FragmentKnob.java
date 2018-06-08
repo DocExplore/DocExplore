@@ -32,7 +32,26 @@ public enum FragmentKnob
 		ma0 = angle(cx, cy, x, y);
 	}
 	
-	public void onDrag(Fragment fragment, double x, double y, boolean rightClick, boolean shift, boolean ctrl)
+	private double lengthTo(double [] c, double [] p) {return lengthTo(c[0]-cx, c[1]-cy, p);}
+	private double lengthTo(double vx, double vy, double [] p)
+	{
+		double k = ((p[0]-cx)*vx+(p[1]-cy)*vy)/(vx*vx+vy*vy);
+		double ix = cx+k*vx, iy = cy+k*vy;
+		return Math.sqrt((ix-cx)*(ix-cx)+(iy-cy)*(iy-cy));
+	}
+	private void firstCorner(Fragment fragment, double [] res)
+	{
+		res[0] = fragment.fromLocalX(1-ax, ay);
+		res[1] = fragment.fromLocalY(1-ax, ay);
+	}
+	private void secondCorner(Fragment fragment, double [] res)
+	{
+		res[0] = fragment.fromLocalX(ax, 1-ay);
+		res[1] = fragment.fromLocalY(ax, 1-ay);
+	}
+	private double dist2(double [] p1, double [] p2) {return (p1[0]-p2[0])*(p1[0]-p2[0])+(p1[1]-p2[1])*(p1[1]-p2[1]);}
+	double [] firstCorner = {0, 0}, secondCorner = {0, 0}, nearCorner = {0, 0};
+	public void onDrag(Fragment fragment, double x, double y, boolean rightClick, boolean shift, boolean ctrl, FragmentView view, double magnetRay)
 	{
 		boolean resize = !rightClick || ctrl;
 		boolean rotate = rightClick || ctrl;
@@ -66,6 +85,36 @@ public enum FragmentKnob
 		FragmentKnob opp = values()[(ordinal()+2)%values().length];
 		double tx = fragment.fromLocalX(opp.ax, opp.ay), ty = fragment.fromLocalY(opp.ax, opp.ay);
 		fragment.setPos(fragment.uix+cx-tx, fragment.uiy+cy-ty);
+		
+		if (resize && !rotate)
+		{
+			firstCorner(fragment, firstCorner);
+			secondCorner(fragment, secondCorner);
+			boolean hor = true;
+			double minDist2 = -1, dist2 = 0, scale = -1;
+			for (int i=0;i<view.set.fragments.size();i++)
+			{
+				Fragment near = view.set.fragments.get(i);
+				if (near == fragment)
+					continue;
+				for (int j=0;j<4;j++)
+				{
+					near.farCornerPoint(j, nearCorner);
+					if ((dist2 = dist2(firstCorner, nearCorner)) < magnetRay*magnetRay && (minDist2 < 0 || dist2 < minDist2))
+						{minDist2 = dist2; scale = lengthTo(firstCorner, nearCorner); hor = true;}
+					if ((dist2 = dist2(secondCorner, nearCorner)) < magnetRay*magnetRay && (minDist2 < 0 || dist2 < minDist2))
+						{minDist2 = dist2; scale = lengthTo(secondCorner, nearCorner); hor = false;}
+				}
+			}
+			if (scale >= 0)
+			{
+				scale = hor ? fragment.uiw*scale/fragment.uih : scale;
+				fragment.setSize(scale);
+				opp = values()[(ordinal()+2)%values().length];
+				tx = fragment.fromLocalX(opp.ax, opp.ay); ty = fragment.fromLocalY(opp.ax, opp.ay);
+				fragment.setPos(fragment.uix+cx-tx, fragment.uiy+cy-ty);
+			}
+		}
 	}
 	
 	public double angle(double cx, double cy, double x, double y)

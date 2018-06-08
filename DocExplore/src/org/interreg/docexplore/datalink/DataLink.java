@@ -173,6 +173,6 @@ public interface DataLink
 	 */
 	public List<Pair<Integer, String>> getMetaDataText(String id, Collection<Integer> keyIds) throws DataLinkException;
 	
-	public ActionProvider getActionProvider(DocExploreDataLink link);
 	public boolean supportsHistory();
+	public ActionProvider getActionProvider(DocExploreDataLink link);
 }

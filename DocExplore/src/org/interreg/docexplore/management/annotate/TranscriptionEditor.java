@@ -37,7 +37,7 @@ public class TranscriptionEditor extends AnnotationEditor
 	JTextField authorField;
 	JTextArea contentArea;
 	
-	public TranscriptionEditor(AnnotationPanel panel, MetaData annotation) throws DataLinkException
+	public TranscriptionEditor(MMTAnnotationPanel panel, MetaData annotation) throws DataLinkException
 	{
 		super(panel, annotation);
 		
@@ -45,6 +45,7 @@ public class TranscriptionEditor extends AnnotationEditor
 		this.contentArea = new JTextArea(5, 40);
 		contentArea.setLineWrap(true);
 		contentArea.setWrapStyleWord(true);
+		keyLabel.setIcon(ImageUtils.getIcon("transcription-64x64.png"));
 	}
 	
 	protected void fillExpandedState()

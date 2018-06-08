@@ -14,20 +14,20 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.management.plugin;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.interreg.docexplore.Startup;
 import org.interreg.docexplore.Startup.PluginConfig;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.management.gui.MainWindow;
+import org.interreg.docexplore.management.gui.MMTApp;
 import org.interreg.docexplore.management.plugin.analysis.AnalysisPlugin;
 import org.interreg.docexplore.management.plugin.analysis.AnalysisPluginSetup;
 import org.interreg.docexplore.management.plugin.metadata.MetaDataPlugin;
 
 public class PluginManager implements HostInterface
 {
-	public Vector<AnalysisPlugin> analysisPlugins = new Vector<AnalysisPlugin>();
-	public Vector<MetaDataPlugin> metaDataPlugins = new Vector<MetaDataPlugin>();
+	public ArrayList<AnalysisPlugin> analysisPlugins = new ArrayList<AnalysisPlugin>();
+	public ArrayList<MetaDataPlugin> metaDataPlugins = new ArrayList<MetaDataPlugin>();
 	public final AnalysisPluginSetup analysisPluginSetup;
 	
 	public PluginManager(Startup startup)
@@ -43,7 +43,7 @@ public class PluginManager implements HostInterface
 		this.analysisPluginSetup = new AnalysisPluginSetup(this);
 	}
 	
-	public void initAnalysisPlugins(MainWindow win)
+	public void initAnalysisPlugins(MMTApp win)
 	{
 		analysisPluginSetup.win = win;
 		for (AnalysisPlugin plugin : analysisPlugins)
@@ -68,6 +68,14 @@ public class PluginManager implements HostInterface
 			analysisPlugins.add((AnalysisPlugin)pluginObject);
 			return (AnalysisPlugin)pluginObject;
 		}
+		return null;
+	}
+	
+	public MetaDataPlugin getPluginForMetaDataType(String type)
+	{
+		for (int i=0;i<metaDataPlugins.size();i++)
+			if (metaDataPlugins.get(i).getType().equals(type))
+				return metaDataPlugins.get(i);
 		return null;
 	}
 }

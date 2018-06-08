@@ -190,7 +190,8 @@ public class TileConfiguration implements Serializable
 					int cx = tilex(ti, layer.metrics), cy = tiley(tj, layer.metrics);
 					int l = Math.max(cx, x0), r = Math.min(cx+layer.metrics.widths[ti], x1);
 					int u = Math.max(cy, y0), d = Math.min(cy+layer.metrics.heights[tj], y1);//System.out.println(">>>"+parts[ti][tj]);
-					g.drawImage(parts[ti][tj].getImage(), l-x0, u-y0, r-x0, d-y0, l-cx, u-cy, r-cx, d-cy, null);
+					if (parts[ti][tj].type.equals(MetaData.imageType))
+						g.drawImage(parts[ti][tj].getImage(), l-x0, u-y0, r-x0, d-y0, l-cx, u-cy, r-cx, d-cy, null);
 				}
 				image = Scalr.resize(image, Method.QUALITY, image.getWidth()/2, image.getHeight()/2);
 				newParts[i][j] = new MetaData(link, link.partKey, MetaData.imageType, new MemoryImageSource(image).getFile());//System.out.println(newParts[i][j].getValue());
@@ -217,19 +218,21 @@ public class TileConfiguration implements Serializable
 	{
 		int [] widths = new int [parts.length];
 		int [] heights = new int [parts.length == 0 ? 0 : parts[0].length];
-		for (int i=0;i<widths.length;i++) widths[i] = -1;
-		for (int i=0;i<heights.length;i++) heights[i] = -1;
+		for (int i=0;i<widths.length;i++) widths[i] = 1;
+		for (int i=0;i<heights.length;i++) heights[i] = 1;
 		for (int i=0;i<parts.length;i++)
 			for (int j=0;j<parts[0].length;j++)
 		{
-			int w = 0, h = 0;
-			if (parts[i][j] != null)
-			{
-				String [] dim = parts[i][j].getMetaDataString(link.dimKey).split(",");
-				w = Integer.parseInt(dim[0]); h = Integer.parseInt(dim[1]);
-				if (widths[i] < 0 || w < widths[i]) widths[i] = w;
-				if (heights[j] < 0 || h < heights[j]) heights[j] = h;
-			}
+			int w = 1, h = 1;
+			if (parts[i][j] == null)
+				continue;
+			String dims = parts[i][j].getMetaDataString(link.dimKey);
+			if (dims == null)
+				continue;
+			String [] dim = dims.split(",");
+			w = Integer.parseInt(dim[0]); h = Integer.parseInt(dim[1]);
+			if (widths[i] == 1 || w < widths[i]) widths[i] = w;
+			if (heights[j] == 1 || h < heights[j]) heights[j] = h;
 		}
 		int fullWidth = 0;
 		int fullHeight = 0;

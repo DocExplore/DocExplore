@@ -34,11 +34,11 @@ import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.internationalization.Lang;
-import org.interreg.docexplore.management.gui.MainWindow;
+import org.interreg.docexplore.management.gui.MMTApp;
 import org.interreg.docexplore.management.manage.ManageComponent;
-import org.interreg.docexplore.management.manage.ManageHandler;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.DocExploreDataLink;
+import org.interreg.docexplore.manuscript.app.DocumentActionHandler;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
 
@@ -50,19 +50,19 @@ public class ExportImportComponent extends JPanel
 		public void bookChanged(Book book);
 	}
 	
-	MainWindow win;
+	MMTApp win;
 	DocExploreDataLink left, right;
 	ManageComponent leftComp, rightComp;
 	
-	public ExportImportComponent(MainWindow win, DocExploreDataLink left, DocExploreDataLink right) throws DataLinkException
+	public ExportImportComponent(MMTApp win, DocExploreDataLink left, DocExploreDataLink right) throws DataLinkException
 	{
 		super(new BorderLayout());
 		
 		this.left = left;
 		this.right = right;
 		
-		this.leftComp = new ManageComponent(win, new ManageHandler(left.getWrappedSource()), false, false);
-		this.rightComp = new ManageComponent(win, new ManageHandler(right.getWrappedSource()), false, false);
+		this.leftComp = new ManageComponent(win.host, new DocumentActionHandler(left.getWrappedSource()), false, false);
+		this.rightComp = new ManageComponent(win.host, new DocumentActionHandler(right.getWrappedSource()), false, false);
 		leftComp.setSingleSelection();
 		rightComp.setSingleSelection();
 		

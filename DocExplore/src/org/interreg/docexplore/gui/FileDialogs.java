@@ -44,7 +44,9 @@ public class FileDialogs
 			this.current = current;
 		}
 		
-		public boolean conatins(String name)
+		public File current() {return current;}
+		
+		public boolean contains(String name)
 		{
 			int dot = name.lastIndexOf('.');
 			if (dot < 0)
@@ -118,6 +120,21 @@ public class FileDialogs
 		return category;
 	}
 	
+	public File openFolder() {return openFolder(null, null);}
+	public File openFolder(String title) {return openFolder(title, null);}
+	public File openFolder(String title, File start)
+	{
+		fileDialog.acceptFiles = false;
+		fileDialog.acceptFolders = true;
+		fileDialog.multipleSelection = false;
+		fileDialog.title = title != null ? title : Lang.s("fileOpen");
+		fileDialog.setCurrentFile(start != null ? start : getDefaultDocumentDir());
+		fileDialog.setFileFilter(null);
+		if (!fileDialog.showOpenDialog())
+			return null;
+		return fileDialog.getSelectedFile();
+	}
+	
 	public File openFile(Category category) {return openFile(category, null);}
 	public File openFile(Category category, String title)
 	{
@@ -155,7 +172,7 @@ public class FileDialogs
 			category.current = file.getParentFile();
 			writeCategories();
 		}
-		if (!category.conatins(file.getName()))
+		if (!category.contains(file.getName()))
 			file = new File(file.getParent(), file.getName()+"."+category.filters.iterator().next());
 		return file;
 	}

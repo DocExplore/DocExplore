@@ -52,4 +52,9 @@ public class DataLinkActionProvider implements ActionProvider
 	@Override public MovePagesAction movePages(List<Page> pages, Page moveAfter) {return new MovePagesAction(pages, moveAfter);}
 	@Override public CropPageAction cropPage(AnnotatedObject object, int tlx, int tly, int brx, int bry) {return new CropPageAction(object, tlx, tly, brx, bry);}
 	@Override public MovePartAction movePart(Book book, MetaData part, int col, int row, boolean insertRow) {return new MovePartAction(link ,book, part, col, row, insertRow);}
+	@Override public FillPosterAction fillPoster(Book book) {return new FillPosterAction(link, book);}
+	@Override public RotatePosterLeftAction rotatePosterLeft(Book book) {return new RotatePosterLeftAction(link, book);}
+	@Override public RotatePosterRightAction rotatePosterRight(Book book) {return new RotatePosterRightAction(link, book);}
+	@Override public HorizontalMirrorPosterAction horizontalMirrorPoster(Book book) {return new HorizontalMirrorPosterAction(link, book);}
+	@Override public VerticalMirrorPosterAction verticalMirrorPoster(Book book) {return new VerticalMirrorPosterAction(link, book);}
 }

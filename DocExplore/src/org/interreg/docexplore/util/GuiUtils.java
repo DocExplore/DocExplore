@@ -69,7 +69,7 @@ public class GuiUtils
 	static Color progressCol = Color.lightGray;
 	
 	public static void blockUntilComplete(final Runnable runnable, Component component)
-		{blockUntilComplete(runnable, component, Lang.s("gui-lrb", "dialogWaitLabel"));}
+		{blockUntilComplete(runnable, component, Lang.s("dialogWaitLabel"));}
 	public static void blockUntilComplete(final Runnable runnable, Component component, String message)
 	{
 		//Window win = component != null ? (Window)component.getTopLevelAncestor() : null;

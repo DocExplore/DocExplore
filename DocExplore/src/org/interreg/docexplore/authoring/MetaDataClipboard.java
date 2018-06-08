@@ -1,5 +1,6 @@
 package org.interreg.docexplore.authoring;
 
+import java.awt.Frame;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.LinkedList;
@@ -51,11 +52,11 @@ public class MetaDataClipboard
 		}
 	}
 	
-	AuthoringToolFrame tool;
+	Frame tool;
 	File dir;
 	List<Entry> entries = new LinkedList<Entry>();
 	
-	public MetaDataClipboard(AuthoringToolFrame tool, File dir)
+	public MetaDataClipboard(Frame tool, File dir)
 	{
 		this.tool = tool;
 		this.dir = dir;

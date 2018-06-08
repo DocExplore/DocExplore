@@ -35,6 +35,7 @@ import org.interreg.docexplore.datalink.DataLink;
 import org.interreg.docexplore.datalink.DataLink.DataLinkSource;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
+import org.interreg.docexplore.manuscript.actions.ActionProvider;
 import org.interreg.docexplore.util.FileImageSource;
 import org.interreg.docexplore.util.ImageUtils;
 import org.interreg.docexplore.util.Pair;
@@ -55,12 +56,18 @@ public final class DocExploreDataLink extends ManuscriptLink
 	public MetaDataKey sourceKey;
 	public MetaDataKey partKey;
 	public MetaDataKey partPosKey;
+	public MetaDataKey stitchKey;
+	public MetaDataKey stitchRenderKey;
+	public MetaDataKey stitchEditKey;
 	public MetaDataKey displayKey;
 	public MetaDataKey bookKey;
 	public MetaDataKey upToDateKey;
 	public MetaDataKey tileConfigKey;
+	public MetaDataKey previewKey;
+	public MetaDataKey frontCover, frontInnerCover, backInnerCover, backCover;
+	public MetaDataKey frontCoverTrans, frontInnerCoverTrans, backInnerCoverTrans, backCoverTrans;
 	
-	public Set<MetaDataKey> readOnlyKeys, functionalKeys;
+	public Set<MetaDataKey> readOnlyKeys;
 	
 	public DocExploreDataLink()
 	{
@@ -69,6 +76,10 @@ public final class DocExploreDataLink extends ManuscriptLink
 		try {setLink(null);}
 		catch (Exception e) {}
 	}
+	
+	private ActionProvider actionProvider = null;
+	public ActionProvider actionProvider() {return actionProvider;}
+	public boolean supportsHistory() {return link != null && link.supportsHistory();}
 	
 	public static interface Listener
 	{
@@ -93,45 +104,41 @@ public final class DocExploreDataLink extends ManuscriptLink
 		
 		if (link != null)
 		{
+			this.actionProvider = link.getActionProvider(this);
+			
 			Object autoWrite = link.getProperty("autoWrite");
 			boolean wasAutoWrite = autoWrite == null ? true : (Boolean)autoWrite;
 			if (wasAutoWrite)
 				link.setProperty("autoWrite", false);
 			try
 			{
-				this.transcriptionKey = getOrCreateKey("transcription", "en");
-				transcriptionKey.setName("transcription", "fr");
-				this.linkKey = getOrCreateKey("link", "en");
-				linkKey.setName("lien", "fr");
-				this.tagKey = getOrCreateKey("tag", "en");
-				tagKey.setName("tag", "fr");
-				this.tagsKey = getOrCreateKey("tags", "");
-				this.miniKey = getOrCreateKey("mini", "");
-				this.dimKey = getOrCreateKey("dimension", "");
-				this.sourceKey = getOrCreateKey("source-file", "");
-				this.partKey = getOrCreateKey("part", "");
-				this.partPosKey = getOrCreateKey("part-pos", "");
-				this.displayKey = getOrCreateKey("display", "");
-				this.bookKey = getOrCreateKey("book", "");
-				this.upToDateKey = getOrCreateKey("up-to-date", "");
-				this.tileConfigKey = getOrCreateKey("tile-config", "");
-				
 				this.readOnlyKeys = new TreeSet<MetaDataKey>();
-				readOnlyKeys.add(miniKey);
-				readOnlyKeys.add(dimKey);
-				readOnlyKeys.add(sourceKey);
-				readOnlyKeys.add(partKey);
-				readOnlyKeys.add(partPosKey);
-				readOnlyKeys.add(displayKey);
-				readOnlyKeys.add(bookKey);
-				readOnlyKeys.add(upToDateKey);
-				readOnlyKeys.add(tileConfigKey);
+				readOnlyKeys.add(miniKey = getOrCreateKey("mini", ""));
+				readOnlyKeys.add(dimKey = getOrCreateKey("dimension", ""));
+				readOnlyKeys.add(sourceKey = getOrCreateKey("source-file", ""));
+				readOnlyKeys.add(partKey = getOrCreateKey("part", ""));
+				readOnlyKeys.add(partPosKey = getOrCreateKey("part-pos", ""));
+				readOnlyKeys.add(stitchKey = getOrCreateKey("stitch", ""));
+				readOnlyKeys.add(stitchRenderKey = getOrCreateKey("stitch-render", ""));
+				readOnlyKeys.add(stitchEditKey = getOrCreateKey("stitch-edit", ""));
+				readOnlyKeys.add(displayKey = getOrCreateKey("display", ""));
+				readOnlyKeys.add(bookKey = getOrCreateKey("book", ""));
+				readOnlyKeys.add(upToDateKey = getOrCreateKey("up-to-date", ""));
+				readOnlyKeys.add(tileConfigKey = getOrCreateKey("tile-config", ""));
+				readOnlyKeys.add(transcriptionKey = getOrCreateKey("transcription", "en")); transcriptionKey.setName("transcription", "fr");
+				readOnlyKeys.add(linkKey = getOrCreateKey("link", "en")); linkKey.setName("lien", "fr");
+				readOnlyKeys.add(tagKey = getOrCreateKey("tag", "en")); tagKey.setName("tag", "fr");
+				readOnlyKeys.add(tagsKey = getOrCreateKey("tags", "")); tagsKey.setName("mots-clés", "fr");
+				readOnlyKeys.add(previewKey = getOrCreateKey("preview", ""));
 				
-				this.functionalKeys = new TreeSet<MetaDataKey>();
-				functionalKeys.add(transcriptionKey);
-				functionalKeys.add(linkKey);
-				functionalKeys.add(tagKey);
-				functionalKeys.add(tagsKey);
+				readOnlyKeys.add(frontCover = getOrCreateKey("front-cover", "en")); frontCover.setName("couverture-avant", "fr");
+				readOnlyKeys.add(frontInnerCover = getOrCreateKey("front-inner-cover", "en")); frontInnerCover.setName("couverture-avant-intérieure", "fr");
+				readOnlyKeys.add(backInnerCover = getOrCreateKey("back-inner-cover", "en")); backInnerCover.setName("couverture-arrière-intérieure", "fr");
+				readOnlyKeys.add(backCover = getOrCreateKey("back-cover", "en")); backCover.setName("couverture-arrière", "fr");
+				readOnlyKeys.add(frontCoverTrans = getOrCreateKey("front-cover-trans", "en")); frontCoverTrans.setName("couverture-avant-trans", "fr");
+				readOnlyKeys.add(frontInnerCoverTrans = getOrCreateKey("front-inner-cover-trans", "en")); frontInnerCoverTrans.setName("couverture-avant-intérieure-trans", "fr");
+				readOnlyKeys.add(backInnerCoverTrans = getOrCreateKey("back-inner-cover-trans", "en")); backInnerCoverTrans.setName("couverture-arrière-intérieure-trans", "fr");
+				readOnlyKeys.add(backCoverTrans = getOrCreateKey("back-cover-trans", "en")); backCoverTrans.setName("couverture-arrière-trans", "fr");
 				
 				if (wasAutoWrite)
 					link.setProperty("autoWrite", true);
@@ -145,6 +152,7 @@ public final class DocExploreDataLink extends ManuscriptLink
 		}
 		else
 		{
+			this.actionProvider = null;
 			this.transcriptionKey = null;
 			this.linkKey = null;
 			this.tagKey = null;

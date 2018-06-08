@@ -21,19 +21,21 @@ import java.nio.charset.Charset;
 import javax.swing.JOptionPane;
 
 import org.interreg.docexplore.DocExploreTool;
+import org.interreg.docexplore.authoring.explorer.edit.StyleManager;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.DocExploreDataLink;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost;
 import org.interreg.docexplore.util.StringUtils;
 
 public class ReaderExporter extends PresentationExporter
 {
 	File exportDir = new File(DocExploreTool.getHomeDir(), "reader");
 	
-	public ReaderExporter(AuthoringToolFrame tool)
+	public ReaderExporter(ManuscriptAppHost host, StyleManager styles)
 	{
-		super(tool);
+		super(host, styles);
 	}
 	
 	public void doExport(final DocExploreDataLink link) throws Exception
@@ -45,7 +47,7 @@ public class ReaderExporter extends PresentationExporter
 			return;
 		}
 		
-		ExportOptions options = ExportOptions.getOptions(tool, ExportDialog.ReaderExport);
+		ExportOptions options = ExportOptions.getOptions(host.getFrame(), host.plugins.metaDataPlugins, ExportDialogOld.ReaderExport);
 		if (options == null)
 			return;
 		
@@ -93,7 +95,7 @@ public class ReaderExporter extends PresentationExporter
 				String testTitle = xml.substring(index, endIndex);
 				if (testTitle.equals(title))
 				{
-					int res = JOptionPane.showConfirmDialog(tool, Lang.s("exportDuplicateMessage"), "Confirmation", 
+					int res = JOptionPane.showConfirmDialog(host.getFrame(), Lang.s("exportDuplicateMessage"), "Confirmation", 
 						JOptionPane.YES_NO_CANCEL_OPTION);
 					if (res == JOptionPane.CANCEL_OPTION)
 						return;
@@ -104,7 +106,7 @@ public class ReaderExporter extends PresentationExporter
 					}
 					else
 					{
-						String name = JOptionPane.showInputDialog(tool, Lang.s("collectionAddBookMessage"), book.getName());
+						String name = JOptionPane.showInputDialog(host.getFrame(), Lang.s("collectionAddBookMessage"), book.getName());
 						if (name == null)
 							return;
 						book.setName(name);
@@ -127,7 +129,7 @@ public class ReaderExporter extends PresentationExporter
 			indexOutput.write(xml.getBytes(Charset.forName("UTF-8")));
 			indexOutput.close();
 			
-			doExport(book, exportDir, options, bookNum, "PNG", ExportDialog.ReaderExport);
+			doExport(book, exportDir, options, bookNum, "PNG", ExportDialogOld.ReaderExport);
 		}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 	}

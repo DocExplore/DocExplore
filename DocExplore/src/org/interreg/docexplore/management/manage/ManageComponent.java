@@ -44,10 +44,12 @@ import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.datalink.fs2.DataLinkFS2Source;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.Lang;
-import org.interreg.docexplore.management.gui.MainWindow;
+import org.interreg.docexplore.management.gui.MMTApp;
 import org.interreg.docexplore.management.merge.BookExporter;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.ManuscriptLink;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost;
+import org.interreg.docexplore.manuscript.app.DocumentActionHandler;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 import org.interreg.docexplore.util.ZipUtils;
@@ -56,25 +58,25 @@ public class ManageComponent extends JPanel
 {
 	private static final long serialVersionUID = -3824420946641467221L;
 	
-	MainWindow win;
-	public final ManageHandler handler;
+	ManuscriptAppHost host;
+	public final DocumentActionHandler handler;
 	ManageToolbar toolbar;
 	CreateBookDialog createDialog;
 	JList bookList;
 	
 	@SuppressWarnings("serial")
-	public ManageComponent(final MainWindow win, final ManageHandler handler, boolean editable, boolean showPages)
+	public ManageComponent(final ManuscriptAppHost host, final DocumentActionHandler handler, boolean editable, boolean showPages)
 	{
 		super(new BorderLayout());
 		
-		this.win = win;
+		this.host = host;
 		this.handler = handler;
 		this.bookList = new JList(new CollectionNode(this));
 		setBorder(BorderFactory.createLineBorder(Color.black, 1));
-		this.createDialog = new CreateBookDialog(this);
+		this.createDialog = new CreateBookDialog(host);
 		
 		bookList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		bookList.setCellRenderer(new ManageCellRenderer(win));
+		bookList.setCellRenderer(new ManageCellRenderer(host));
 		//tree.setRowHeight(52);
 		add(new JScrollPane(bookList), BorderLayout.CENTER);
 		
@@ -89,7 +91,7 @@ public class ManageComponent extends JPanel
 						int index = bookList.locationToIndex(e.getPoint());
 						if (index < 0 || !bookList.getCellBounds(index, index).contains(e.getPoint()))
 							return;
-						win.addTab((Book)bookList.getModel().getElementAt(index));
+						host.addDocument((Book)bookList.getModel().getElementAt(index));
 					}
 				}
 			});
@@ -118,7 +120,7 @@ public class ManageComponent extends JPanel
 				handler.onDeleteBooksRequest(books);
 		}});
 	}
-	public ManageComponent(MainWindow win, ManageHandler handler) {this(win, handler, true, true);}
+	public ManageComponent(ManuscriptAppHost host, DocumentActionHandler handler) {this(host, handler, true, true);}
 	
 	public void setSingleSelection() {bookList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);}
 	
@@ -176,7 +178,7 @@ public class ManageComponent extends JPanel
 					catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
 			}
 			public float getProgress() {return .5f*exporter.progress+.5f*progress[0];}
-		}, win);
+		}, host.getFrame());
 	}
 	
 	public void importBook(final File file, final Book selected)
@@ -207,7 +209,7 @@ public class ManageComponent extends JPanel
 					boolean cancel = false;
 					if (selected != null && selected.getLastPageNumber() == remote.getLastPageNumber())
 					{
-						int res = JOptionPane.showConfirmDialog(win, Lang.s("manageMergeMessage").replace("%name", selected.getName()), 
+						int res = JOptionPane.showConfirmDialog(host.getFrame(), Lang.s("manageMergeMessage").replace("%name", selected.getName()), 
 							Lang.s("manageMergeLabel"), JOptionPane.YES_NO_CANCEL_OPTION);
 						if (res == JOptionPane.CANCEL_OPTION)
 							cancel = true;
@@ -219,7 +221,7 @@ public class ManageComponent extends JPanel
 						Book found = findTitle(remote.getName());
 						if (found != null && found != selected && found.getLastPageNumber() == remote.getLastPageNumber())
 						{
-							int res = JOptionPane.showConfirmDialog(win, Lang.s("manageMergeMessage").replace("%name", found.getName()), 
+							int res = JOptionPane.showConfirmDialog(host.getFrame(), Lang.s("manageMergeMessage").replace("%name", found.getName()), 
 								Lang.s("manageMergeLabel"), JOptionPane.YES_NO_CANCEL_OPTION);
 							if (res == JOptionPane.CANCEL_OPTION)
 								cancel = true;
@@ -243,7 +245,7 @@ public class ManageComponent extends JPanel
 					{
 						if (merge == null)
 						{
-							Book imported = exporter.add(remote, win.getDocExploreLink(), null);
+							Book imported = exporter.add(remote, host.getLink(), null);
 							if (newTitle != null)
 								imported.setName(newTitle);
 						}
@@ -258,16 +260,16 @@ public class ManageComponent extends JPanel
 					catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
 			}
 			public float getProgress() {return .5f*exporter.progress+.5f*progress[0];}
-		}, win);
+		}, host.getFrame());
 		refresh();
 	}
 	
 	Book findTitle(String title) throws DataLinkException
 	{
-		List<Integer> bookIds = win.getDocExploreLink().getLink().getAllBookIds();
+		List<Integer> bookIds = host.getLink().getLink().getAllBookIds();
 		for (int bookId : bookIds)
-			if (title.equals(win.getDocExploreLink().getLink().getBookTitle(bookId)))
-				return win.getDocExploreLink().getBook(bookId);
+			if (title.equals(host.getLink().getLink().getBookTitle(bookId)))
+				return host.getLink().getBook(bookId);
 		return null;
 	}
 }

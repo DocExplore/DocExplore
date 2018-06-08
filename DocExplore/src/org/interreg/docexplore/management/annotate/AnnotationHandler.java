@@ -53,8 +53,7 @@ import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.internationalization.Lang;
-import org.interreg.docexplore.management.gui.DocumentPanel;
-import org.interreg.docexplore.management.gui.MainWindow;
+import org.interreg.docexplore.management.plugin.PluginManager;
 import org.interreg.docexplore.management.plugin.metadata.MetaDataPlugin;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.DocExploreDataLink;
@@ -62,23 +61,26 @@ import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.manuscript.actions.DeleteMetaDataAction;
 import org.interreg.docexplore.manuscript.actions.WrappedAction;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost;
+import org.interreg.docexplore.manuscript.app.DocumentPanel;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
 
 public class AnnotationHandler
 {
-	DocExploreDataLink link;
-	MainWindow win;
+	ManuscriptAppHost win;
+	PluginManager pluginManager;
 	
-	public AnnotationHandler(MainWindow win)
+	public AnnotationHandler(ManuscriptAppHost win, PluginManager pluginManager)
 	{
-		this.link = win.getDocExploreLink();
 		this.win = win;
+		this.pluginManager = pluginManager;
 	}
 	
-	int limChars = 32;
+	public final int limChars = 32;
 	public JLabel buildDisplayLabel(AnnotatedObject document, MetaData annotation)
 	{
+		DocExploreDataLink link = win.getLink();
 		try
 		{
 			if (annotation.getKey() == link.transcriptionKey)
@@ -117,7 +119,7 @@ public class AnnotationHandler
 							content.substring(0, Math.min(limChars, content.length()))+(content.length() > limChars ? "..." : "")+"</i></html>",
 						ImageUtils.getIcon("free-32x32.png"), SwingConstants.HORIZONTAL);
 				}
-				else for (MetaDataPlugin plugin : win.pluginManager.metaDataPlugins)
+				else for (MetaDataPlugin plugin : pluginManager.metaDataPlugins)
 					if (annotation.getType().toString().equals(plugin.getType()))
 				{
 					return plugin.createLabel(keyName, annotation);
@@ -130,6 +132,7 @@ public class AnnotationHandler
 	
 	public Set<MetaData> getSuggestedTags(MetaData annotation)
 	{
+		DocExploreDataLink link = win.getLink();
 		try {return link.tagKey.getMetaData(MetaData.textType);}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 		return new TreeSet<MetaData>();
@@ -137,6 +140,7 @@ public class AnnotationHandler
 	
 	public void setTags(AnnotatedObject document, Set<String> tagNames) throws DataLinkException
 	{
+		DocExploreDataLink link = win.getLink();
 		List<MetaData> tags = document.getMetaDataListForKey(link.tagKey);
 		for (MetaData tag : tags)
 			document.removeMetaData(tag);
@@ -149,7 +153,7 @@ public class AnnotationHandler
 	
 	public void deleteMetaData(final AnnotatedObject document, MetaData annotation) throws DataLinkException
 	{
-		final DeleteMetaDataAction deletePagesAction = win.getActionProvider().deleteMetaData(document, annotation);
+		final DeleteMetaDataAction deletePagesAction = win.getLink().actionProvider().deleteMetaData(document, annotation);
 		try
 		{
 			win.historyManager.submit(new WrappedAction(deletePagesAction)
@@ -162,10 +166,10 @@ public class AnnotationHandler
 	}
 	public void refreshAnnotationPanel(AnnotatedObject document) throws Exception
 	{
-		DocumentPanel panel = win.getPanelForDocument(document);
+		DocumentPanel panel = win.getDocument(document);
 		if (panel == null)
 			return;
-		panel.annotationPanel.setDocument(document);
+		panel.sidePanel.setDocument(document);
 	}
 	
 	public JRadioButton buildRadioButton(JPanel panel, String text, Icon icon, Map<JRadioButton, String> labels)
@@ -182,7 +186,8 @@ public class AnnotationHandler
 	@SuppressWarnings("serial")
 	public MetaData createMetaData(final AnnotatedObject document) throws DataLinkException
 	{
-		final JDialog dialog = new JDialog(win, Lang.s("annotateAnnotationLabel"), true);
+		DocExploreDataLink link = win.getLink();
+		final JDialog dialog = new JDialog(win.getFrame(), Lang.s("annotateAnnotationLabel"), true);
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		dialog.add(mainPanel);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -195,10 +200,10 @@ public class AnnotationHandler
 		JRadioButton textButton = buildRadioButton(choicePanel, Lang.s("annotateFreeTextLabel"), ImageUtils.getIcon("free-32x32.png"), labels);
 		JRadioButton imageButton = buildRadioButton(choicePanel, Lang.s("annotateTypeImage"), ImageUtils.getIcon("image-32x32.png"), labels);
 		JRadioButton tagsButton = buildRadioButton(choicePanel, Lang.s("tagTagLabel"), ImageUtils.getIcon("tag-32x32.png"), labels);
-		JRadioButton [] pluginButtons = new JRadioButton [win.pluginManager.metaDataPlugins.size()];
-		for (int i=0;i<win.pluginManager.metaDataPlugins.size();i++)
+		JRadioButton [] pluginButtons = new JRadioButton [pluginManager.metaDataPlugins.size()];
+		for (int i=0;i<pluginManager.metaDataPlugins.size();i++)
 		{
-			MetaDataPlugin plugin = win.pluginManager.metaDataPlugins.get(i);
+			MetaDataPlugin plugin = pluginManager.metaDataPlugins.get(i);
 			pluginButtons[i] = buildRadioButton(choicePanel, plugin.getFileType(), ImageUtils.getIcon("video-32x32.png"), labels);
 		}
 		ButtonGroup group = new ButtonGroup();
@@ -273,7 +278,7 @@ public class AnnotationHandler
 			else for (int i=0;i<pluginButtons.length;i++)
 				if (pluginButtons[i].isSelected())
 				{
-					plugin = win.pluginManager.metaDataPlugins.get(i);
+					plugin = pluginManager.metaDataPlugins.get(i);
 					Object val = plugin.createDefaultValue();
 					InputStream stream = null;
 					if (val instanceof InputStream)
@@ -290,7 +295,7 @@ public class AnnotationHandler
 		{
 			if (sourceUri != null)
 				annotation.addMetaData(new MetaData(link, link.getOrCreateKey("source-uri"), sourceUri));
-			win.manageComponent.handler.onAddAnnotationRequest(document, annotation);
+			win.getActionRequestListener().onAddAnnotationRequest(document, annotation);
 //			final AddMetaDataAction addMetDataAction = win.getActionProvider().addMetaData(document, annotation);
 //			try
 //			{
@@ -306,8 +311,9 @@ public class AnnotationHandler
 		return annotation;
 	}
 	
-	public AnnotationEditor getEditorFor(AnnotationPanel panel, MetaData annotation) throws DataLinkException
+	public AnnotationEditor getEditorFor(MMTAnnotationPanel panel, MetaData annotation) throws DataLinkException
 	{
+		DocExploreDataLink link = win.getLink();
 		if (annotation.getKey() == link.transcriptionKey)
 			return new TranscriptionEditor(panel, annotation);
 		else if (annotation.getKey() == link.tagsKey)
@@ -316,7 +322,7 @@ public class AnnotationHandler
 			return new FreeTextEditor(panel, annotation);
 		else if (annotation.getType().equals(MetaData.imageType))
 			return new ImageEditor(panel, annotation);
-		else for (MetaDataPlugin plugin : win.pluginManager.metaDataPlugins)
+		else for (MetaDataPlugin plugin : pluginManager.metaDataPlugins)
 			if (annotation.getType().toString().equals(plugin.getType()))
 				return plugin.createEditor(panel, annotation);
 		return null;
@@ -325,8 +331,9 @@ public class AnnotationHandler
 	@SuppressWarnings("serial")
 	MetaDataKey requestKey(String preselect) throws DataLinkException
 	{
+		DocExploreDataLink link = win.getLink();
 		final boolean [] ok = {false};
-		final JDialog dialog = new JDialog(win, Lang.s("annotateKeyLabel"), true);
+		final JDialog dialog = new JDialog(win.getFrame(), Lang.s("annotateKeyLabel"), true);
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		dialog.add(mainPanel);
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -381,7 +388,7 @@ public class AnnotationHandler
 			value = preselect;
 		
 		MetaDataKey key = link.getOrCreateKey(value);
-		if (link.functionalKeys.contains(key))
+		if (link.readOnlyKeys.contains(key))
 		{
 			JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), Lang.s("keyNameReservedMessage"), "", JOptionPane.ERROR_MESSAGE);
 			return requestKey(preselect);

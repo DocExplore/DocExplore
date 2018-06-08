@@ -52,23 +52,19 @@ public class Lang extends ResourceBundle
 	}
 	
 	private static XMLBundleControl bundleControl = new XMLBundleControl();
-	public static String s(String baseName, String key)
-	{
-		return ResourceBundle.getBundle(baseName, bundleControl).getString(key);
-	}
 	public static String s(String key)
 	{
-		String className = new Throwable().getStackTrace()[1].getClassName();
-		if (className.startsWith("org.interreg.docexplore."))
-		{
-			String sub = className.substring("org.interreg.docexplore.".length());
-			int index = sub.indexOf('.');
-			if (index < 0)
-				try {return ResourceBundle.getBundle("default-lrb", bundleControl).getString(key);} catch (Exception e) {e.printStackTrace(); return "???";}
-			try {return ResourceBundle.getBundle(sub.substring(0, index)+"-lrb", bundleControl).getString(key);} catch (Exception e) {e.printStackTrace(); return "???";}
-		}
-		
-		try {return ResourceBundle.getBundle("langBundle", bundleControl).getString(key);} catch (Exception e) {e.printStackTrace(); return "???";}
+//		String className = new Throwable().getStackTrace()[1].getClassName();
+//		if (className.startsWith("org.interreg.docexplore."))
+//		{
+//			String sub = className.substring("org.interreg.docexplore.".length());
+//			int index = sub.indexOf('.');
+//			if (index < 0)
+//				try {return ResourceBundle.getBundle("default-lrb", bundleControl).getString(key);} catch (Exception e) {e.printStackTrace(); return "???";}
+//			try {return ResourceBundle.getBundle(sub.substring(0, index)+"-lrb", bundleControl).getString(key);} catch (Exception e) {e.printStackTrace(); return "???";}
+//		}
+//		
+		try {return ResourceBundle.getBundle("lang-lrb", bundleControl).getString(key);} catch (Exception e) {e.printStackTrace(); return "???";}
 	}
 	
 	public static String getDefaultBaseName()

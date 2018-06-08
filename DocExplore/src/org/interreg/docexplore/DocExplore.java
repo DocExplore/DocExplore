@@ -41,6 +41,7 @@ import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.MMT;
 import org.interreg.docexplore.reader.ReaderApp;
+import org.interreg.docexplore.reader.ReaderElectronApp;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.ImageUtils;
 import org.interreg.docexplore.util.StringUtils;
@@ -100,7 +101,7 @@ public class DocExplore extends DocExploreTool
 		JPanel panel = new JPanel(new LooseGridLayout(0, 2, 10, 10, true, false, SwingConstants.CENTER, SwingConstants.CENTER, true, false));
 		win.add(panel, BorderLayout.CENTER);
 		
-		panel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("mmt-logo.png")) {public void actionPerformed(ActionEvent arg0)
+		panel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("mmt-logo.png", 192, 192)) {public void actionPerformed(ActionEvent arg0)
 		{
 			win.setVisible(false);
 			new Thread() {public void run()
@@ -111,7 +112,7 @@ public class DocExplore extends DocExploreTool
 		}}));
 		panel.add(new JLabel("<html><b>"+Lang.s("mmtLabel")+"</b><br>"+Lang.s("mmtMessage")+"</html>"));
 		
-		panel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("at-logo.png")) {public void actionPerformed(ActionEvent arg0)
+		panel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("at-logo.png", 192, 192)) {public void actionPerformed(ActionEvent arg0)
 		{
 			win.setVisible(false);
 			new Thread() {public void run()
@@ -122,7 +123,19 @@ public class DocExplore extends DocExploreTool
 		}}));
 		panel.add(new JLabel("<html><b>"+Lang.s("atLabel")+"</b><br>"+Lang.s("atMessage")+"</html>"));
 		
-		panel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("reader-logo.png")) {public void actionPerformed(ActionEvent arg0)
+		panel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("reader-logo.png", 192, 192)) {public void actionPerformed(ActionEvent arg0)
+		{
+			win.setVisible(false);
+			new Thread() {public void run()
+			{
+				try {ReaderElectronApp.main(args);}
+				catch (Exception e) {ErrorHandler.defaultHandler.submit(e); System.exit(0);}
+			}}.start();
+		}}));
+		panel.add(new JLabel("<html><b>"+Lang.s("readerLabel")+"</b><br>"+Lang.s("readerMessage")+"</html>"));
+		
+		JPanel oldReaderPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+		oldReaderPanel.add(new JButton(new AbstractAction("", ImageUtils.getIcon("reader-logo-old.png", 64, 64)) {public void actionPerformed(ActionEvent arg0)
 		{
 			win.setVisible(false);
 			new Thread() {public void run()
@@ -131,7 +144,9 @@ public class DocExplore extends DocExploreTool
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e); System.exit(0);}
 			}}.start();
 		}}));
-		panel.add(new JLabel("<html><b>"+Lang.s("readerLabel")+"</b><br>"+Lang.s("readerMessage")+"</html>"));
+		panel.add(oldReaderPanel);
+		panel.add(new JLabel("<html><b>"+Lang.s("readerOldLabel")+"</b><br>"+Lang.s("readerOldMessage")+"</html>"));
+		
 		
 //		panel.add(new JLabel(" ")); panel.add(new JLabel(" ")); panel.add(new JLabel(" ")); panel.add(new JLabel(" "));
 //		

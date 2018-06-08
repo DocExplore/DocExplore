@@ -54,6 +54,13 @@ public class FragmentTransform implements Serializable
 	{
 		if (progress != null) progress[0] = ps;
 		
+		if (fa.associations.isEmpty())
+		{
+			double xi = fa.d1.fragment.toLocalX(fa.d2.fragment.uix, fa.d2.fragment.uiy);
+			double yi = fa.d1.fragment.toLocalY(fa.d2.fragment.uix, fa.d2.fragment.uiy);
+			return new FragmentTransform(xi, yi, fa.d2.fragment.uiw/fa.d1.fragment.uiw, fa.d2.fragment.uiang-fa.d1.fragment.uiang);
+		}
+		
 		final List<POI> features = new ArrayList<POI>(fa.associations.size());
 		for (int i=0;i<fa.d2.features.size();i++)
 			if (fa.associationsByPOI.containsKey(fa.d2.features.get(i)))
@@ -138,5 +145,110 @@ public class FragmentTransform implements Serializable
 	private static double computeDesiredScale(double ux, double uy, double vx, double vy)
 	{
 		return Math.sqrt(vx*vx+vy*vy)/Math.sqrt(ux*ux+uy*uy);
+	}
+	
+	public double overlap(Fragment f, Fragment res)
+	{
+		double uixt = f.fromLocalX(dx, dy);
+		double uiyt = f.fromLocalY(dx, dy);
+		double uiwt = res.imagew*f.uiw*dw/f.imagew;
+		double uiangt = f.uiang+dang;
+		double uxt = uiwt*Math.cos(uiangt);
+		double uyt = uiwt*Math.sin(uiangt);
+		double vxt = -res.imageh*uyt/res.imagew;
+		double vyt = res.imageh*uxt/res.imagew;
+		return computeOverlap(f.uix, f.uiy, f.ux, f.uy, f.vx, f.vy, uixt, uiyt, uxt, uyt, vxt, vyt);
+	}
+	
+	static double [][] output = new double [12][2];
+	static double [][] input = new double [12][2];
+	private static void copy(double [][] from, double [][] to, int n)
+	{
+		for (int i=0;i<n;i++)
+			for (int j=0;j<from[i].length;j++)
+				to[i][j] = from[i][j];
+	}
+	private static boolean inside(double [] p, double [] e)
+	{
+		double ux = p[0]-e[0], uy = p[1]-e[1];
+		return ux*e[3]-uy*e[2] < 0;
+	}
+	private static double triangleArea(double ux, double uy, double vx, double vy)
+	{
+		double k = (ux*vx+uy*vy)/(vx*vx+vy*vy);
+		double ix = k*vx, iy = k*vy;
+		return .5*Math.sqrt((ux-ix)*(ux-ix)+(uy-iy)*(uy-iy))*Math.sqrt(vx*vx+vy*vy);
+	}
+	private static double computeOverlap(double x1, double y1, double ux1, double uy1, double vx1, double vy1,
+		double x2, double y2, double ux2, double uy2, double vx2, double vy2)
+	{
+		double [][] clip = {{x1, y1, ux1, uy1}, {x1+ux1, y1+uy1, vx1, vy1}, {x1+ux1+vx1, y1+uy1+vy1, -ux1, -uy1}, {x1+vx1, y1+vy1, -vx1, -vy1}};
+		double [][] subject = {{x2, y2}, {x2+ux2, y2+uy2}, {x2+ux2+vx2, y2+uy2+vy2}, {x2+vx2, y2+vy2}};
+		double [][][] segs = {
+			{{x1, y1, ux1, uy1}, {x1+ux1, y1+uy1, vx1, vy1}, {x1+ux1+vx1, y1+uy1+vy1, -ux1, -uy1}, {x1+vx1, y1+vy1, -vx1, -vy1}},
+			{{x2, y2, ux2, uy2}, {x2+ux2, y2+uy2, vx2, vy2}, {x2+ux2+vx2, y2+uy2+vy2, -ux2, -uy2}, {x2+vx2, y2+vy2, -vx2, -vy2}}};
+		copy(subject, output, 4);
+		int nOutput = 4;
+		for (int c=0;c<4;c++)
+		{
+			int nInput = nOutput;
+			copy(output, input, nOutput);
+			nOutput = 0;
+			int s = nInput-1;
+			for (int e=0;e<nInput;e++)
+			{
+				if (inside(input[e], clip[c]))
+				{
+					if (!inside(input[s], clip[c]))
+					{
+						double ux = input[e][0]-input[s][0], uy = input[e][1]-input[s][1];
+						double k = intersect(input[s][0], input[s][1], ux, uy, clip[c][0], clip[c][1], clip[c][2], clip[c][3]);
+						output[nOutput][0] = input[s][0]+k*ux;
+						output[nOutput][1] = input[s][1]+k*uy;
+						nOutput++;
+					}
+					output[nOutput][0] = input[e][0];
+					output[nOutput][1] = input[e][1];
+					nOutput++;
+				}
+				else if (inside(input[s], clip[c]))
+				{
+					double ux = input[e][0]-input[s][0], uy = input[e][1]-input[s][1];
+					double k = intersect(input[s][0], input[s][1], ux, uy, clip[c][0], clip[c][1], clip[c][2], clip[c][3]);
+					output[nOutput][0] = input[s][0]+k*ux;
+					output[nOutput][1] = input[s][1]+k*uy;
+					nOutput++;
+				}
+				s = e;
+			}
+		}
+		
+		double xm = 0, ym = 0;
+		for (int i=0;i<nOutput;i++)
+		{
+			xm += output[i][0];
+			ym += output[i][1];
+		}
+		xm /= nOutput;
+		ym /= nOutput;
+		
+		double area = 0;
+		for (int i=0;i<nOutput;i++)
+			area += triangleArea(output[i][0]-xm, output[i][1]-ym, output[(i+1)%nOutput][0]-xm, output[(i+1)%nOutput][1]-ym);
+		return area/(Math.sqrt(ux1*ux1+uy1*uy1)*Math.sqrt(vx1*vx1+vy1*vy1)+Math.sqrt(ux2*ux2+uy2*uy2)*Math.sqrt(vx2*vx2+vy2*vy2));
+	}
+	private static double intersect(double [] s1, double [] s2)
+	{
+		return intersect(s1[0], s1[1], s1[2], s1[3], s2[0], s2[1], s2[2], s2[3]);
+	}
+	private static double intersect(double x1, double y1, double vx1, double vy1, double x2, double y2, double vx2, double vy2)
+	{
+		return ((x2-x1)*vy2-(y2-y1)*vx2)/(vx1*vy2-vy1*vx2);
+	}
+	
+	public static void main(String [] args)
+	{
+		//System.out.println(computeOverlap(0, 0, 4, 2, -3, 6, 1, 1, 3, 3, -3, 3));
+		System.out.println(computeOverlap(0, 0, 4, 0, 0, 4, 1, 1, 2.9, 0, 0, 2.9));
 	}
 }

@@ -32,7 +32,7 @@ public class FreeTextEditor extends AnnotationEditor
 {
 	JTextArea contentArea;
 	
-	public FreeTextEditor(AnnotationPanel panel, MetaData annotation) throws DataLinkException
+	public FreeTextEditor(MMTAnnotationPanel panel, MetaData annotation) throws DataLinkException
 	{
 		super(panel, annotation);
 		

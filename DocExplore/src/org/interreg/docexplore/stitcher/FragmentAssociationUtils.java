@@ -34,7 +34,7 @@ public class FragmentAssociationUtils
 		void add(List<POI> pois)
 		{
 			for (int i=0;i<pois.size();i++)
-				if (pois.get(i).descriptor.length > 0)
+				if (pois.get(i).descriptor != null)
 			{
 				int bin = bin(lsh.hash(pois.get(i).descriptor));
 				if (data[bin] == null)
@@ -75,7 +75,7 @@ public class FragmentAssociationUtils
 			progress[0] = ps+i*1f/fa.d1.features.size()*(pe-ps);
 			
 			POI poi1 = fa.d1.features.get(i);
-			if (poi1.descriptor.length == 0)
+			if (poi1.descriptor == null)
 				continue;
 			
 			//List<POI> search = fa.d2.features;
@@ -88,7 +88,7 @@ public class FragmentAssociationUtils
 			for (int j=0;j<search.size();j++)
 			{
 				POI poi2 = search.get(j);
-				if (poi2.descriptor.length == 0)
+				if (poi2.descriptor == null)
 					continue;
 				double dist = poi1.featureDistance2(poi2);
 				if (min == null || dist < minDist)
@@ -97,7 +97,7 @@ public class FragmentAssociationUtils
 					minDist = dist;
 				}
 			}//System.out.println(">>>"+minDist);
-			if (min != null && minDist < Stitcher.surfMatchThreshold)
+			if (min != null && minDist < min.matchThreshold())
 				fa.add(poi1, min);
 		}
 		fa.resetAssociationsByPOI();

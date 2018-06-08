@@ -3,7 +3,7 @@
 <properties>
 	<comment>Ressources en français</comment>
 	
-	<entry key="frameTitle">Outil de Gestion de Manuscrits DocExplore</entry>
+	<entry key="mmtTitle">Outil de Gestion de Manuscrits DocExplore</entry>
 	
 	<entry key="generalOkLabel">OK</entry>
 	<entry key="generalCancelLabel">Annuler</entry>
@@ -23,12 +23,10 @@
 	<entry key="generalMenuEditUndo">Annuler</entry>
 	<entry key="generalMenuEditRedo">Refaire</entry>
 	<entry key="generalMenuEditViewHistory">Afficher l'historique</entry>
-	<entry key="generalHistory">Historique</entry>
 	<entry key="generalMenuEditCopy">Copier</entry>
 	<entry key="generalMenuEditPaste">Coller</entry>
 	<entry key="generalMenuTools">Outils</entry>
 	<entry key="generalCloseTab">Fermer cette fenêtre</entry>
-	<entry key="generalNoLinkStatus">Aucune connection établie</entry>
 	<entry key="generalMenuLoad">Ouvrir</entry>
 	<entry key="generalMenuSave">Enregistrer</entry>
 	<entry key="generalMenuSaveAs">Enregistrer sous...</entry>
@@ -42,7 +40,7 @@
 	
 	<entry key="manageCollectionLabel">Collection</entry>
 	
-	<entry key="importTitle">Importer/Exporter</entry>
+	<entry key="importExportTitle">Importer/Exporter</entry>
 	<entry key="importChooseLabel">Choisissez les livres à importer depuis</entry>
 	<entry key="importChooseHelpLabel">Utiliser les touches Ctrl et Shift pour les sélections multiples</entry>
 	<entry key="importImportFromLabel">Importer depuis</entry>
@@ -53,24 +51,13 @@
 	<entry key="importPageNumberErrorMessage">Les deux livres n'ont pas le même nombre de pages</entry>
 	<entry key="importTransferMessage">Transfert en cours...</entry>
 
-	<entry key="imageToolbarPreviousHistoric">Page précédente</entry>	
-	<entry key="imageToolbarNextHistoric">Page suivante</entry>	
-	<entry key="imageToolbarUp">Afficher le livre</entry>
 	<entry key="imageToolbarZoomIn">Zoom Avant</entry>
 	<entry key="imageToolbarZoomOut">Zoom Arriere</entry>
-	<entry key="imageToolbarAddFreeRoi">Ajouter une région d'intérêt libre</entry>
-	<entry key="imageToolbarAddRectRoi">Ajouter une région d'intérêt rectangulaire</entry>
-	<entry key="imageToolbarDelRoi">Effacer une région d'intérêt</entry>
-	<entry key="imageToolbarCrop">Retailler la page</entry>
 	<entry key="imageToolbarPreviousPage">Page Précédente</entry>
 	<entry key="imageToolbarUpPage">Aller au Livre</entry>
 	<entry key="imageToolbarNextPage">Page Suivante</entry>
 	<entry key="imageToolbarScroll">Défiler</entry>
 	<entry key="imageToolbarSelect">Sélectionner</entry>
-	<entry key="imageToolbarFit">Ajuster au cadre</entry>
-	<entry key="imageToolbarTranspose">Transposer</entry>
-	<entry key="imageGotoLabel">Aller à</entry>
-	<entry key="imageLocateLabel">Code d'emplacement</entry>
 	<entry key="imageLockTooltip">Verrouiller/Déverrouiller la configuration des pages</entry>
 	<entry key="imageUnlockMessage">Vous êtes sur le point de déverrouiller la configuration des pages.
 									Un changement de configuration risque de rendre impossible la fusion avec des livres issus d'autres sources 
@@ -154,26 +141,18 @@
 	<entry key="manageImportBookLabel">Importer un livre</entry>
 	<entry key="manageExportPageLabel">Exporter les image sélectionnées...</entry>
 	<entry key="manageDeleteBookLabel">Supprimer les livres sélectionnés</entry>
-	<entry key="manageDeletePageLabel">Supprimer les pages sélectionnées</entry>
-	<entry key="manageDeleteBookMsg">Etes-vous sur de vouloir supprimer les livres suivants?</entry>
-	<entry key="manageDeletePageMsg">Etes-vous sur de vouloir supprimer ces pages?</entry>
 	<entry key="manageSelectFolderLabel">Choisissez un dossier</entry>
 	<entry key="manageSelectFilesLabel">Fichiers</entry>
 	<entry key="manageSelectAllLabel">Tout sélectionner</entry>
 	<entry key="manageSelectRecognizedLabel">Sélectionner les formats reconnus</entry>
 	<entry key="manageSelectNoneLabel">Ne rien sélectionner</entry>
-	<entry key="manageInputTitleLabel">Donnez un titre au livre</entry>
-	<entry key="manageAppendPagesLabel">Ajouter des pages au livre</entry>
 	<entry key="manageRefreshLabel">Rafraîchir</entry>
 	<entry key="manageImportPagesLabel">Import en cours...</entry>
 	<entry key="manageLoadingLabel">Chargement de la page...</entry>
 	<entry key="manageCreatePresentation">Créer une présentation du livre sélectionné</entry>
-	<entry key="manageFailedMessage">Les fichiers suivants n'ont pu être importés :</entry>
-	<entry key="manageRenameLabel">Renommer le livre sélectionné</entry>
 	<entry key="manageMergeMessage">&lt;html>Souhaitez-vous fusionner le livre importé avec &lt;i>%name&lt;/i>?&lt;/html></entry>
     <entry key="manageMergeLabel">Fusion</entry>
     <entry key="manageExistsMessage">&lt;html>Un livre portant le titre &lt;i>%name&lt;/i> existe déjà.&lt;br/>Veuillez indiquer un titre différent:&lt;/html></entry>
-    <entry key="manageRenameExistsMessage">Un livre portant ce titre existe déjà.</entry>
 	
 	<entry key="searchTypeLabel">Rechercher seulement parmi:</entry>
 	<entry key="searchBooksLabel">Livres</entry>
@@ -268,9 +247,6 @@
 	<entry key="pluginTaskCanceledLabel">Annulé</entry>
 	<entry key="pluginTaskCompletedLabel">Complété</entry>
 	
-	<entry key="statusSquareMessage">Cliquer et glisser la souris depuis un coin de la region jusqu'au coin opposé.</entry>
-	<entry key="statusFreeMessage">Cliquer sur chaque sommet de la région, puis sur le premier pour fermer la forme.</entry>
-	<entry key="statusBeaconMessage">Emplacement du code fourni.</entry>
 	<entry key="statusAnalysisMessage">Cliquer sur un coin de la region, puis sur le coin opposé pour créer une entrée.</entry>
 	
 	<entry key="cleanLinkLabel">Nettoyage...</entry>
@@ -304,4 +280,46 @@ Souhaitez-vous continuer?</entry>
     <entry key="createBookFromImagesMessage">Sélectionnez les images qui constituent les pages d'un livre. L'ordre des pages suivra l'ordre des images mais il pourra être changé à tout moment.</entry>
     <entry key="createDocumentFromImagesLabel">Créer un document d'une seule page à partir d'images</entry>
     <entry key="createDocumentFromImagesMessage">Sélectionnez les images qui constituent les parties d'un document. L'arrangement des images sera déduite des noms de fichiers mais il pourra être changé à tout moment</entry>
+    
+    <entry key="helpMmtCollectionMsg">&lt;b>Collection&lt;/b>
+        &lt;br/>
+	    &lt;br/>Ceci est votre collection locale. A l'aide de la barre d'outils, vous pouvez :
+		&lt;br/>&lt;img src='%icons%import-24x24.png'/>&#160;Importer un livre ou un poster d'une autre collection
+		&lt;br/>&lt;img src='%icons%export-24x24.png'/>&#160;Exporter le livre ou le poster sélectionné
+		&lt;br/>&lt;img src='%icons%add-file-24x24.png'/>&#160;Créer un nouveau document
+		&lt;br/>&lt;img src='%icons%delete-file-24x24.png'/>&#160;Supprimer les documents sélectionnés
+	</entry>
+	<entry key="helpMmtBookMsg">&lt;b>Livre&lt;/b>
+	    &lt;br/>
+	    &lt;br/>Ceci est un livre de votre collection. Vous pouvez :
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Utiliser la &lt;a href='helpBookToolsMsg'>barre d'outils&lt;/a> pour naviguer et ajouter ou enlever des pages
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser des images depuis votre explorateur de fichiers pour ajouter des pages
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Changer l'ordre des pages en glissant les images
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Gérer les images de la &lt;a href='helpCover'>couverture&lt;/a>
+		&lt;br/>
+		&lt;br/>Utilisez le bouton &lt;img src='%icons%pencil-24x24.png'/> pour changer le titre.
+		&lt;br/>Les modifications sont ignorées si le livre est vérouillé &lt;img src='%icons%locked-32x32.png'/>
+	</entry>
+	<entry key="helpMmtPosterMsg">&lt;b>Poster&lt;/b>
+	    &lt;br/>
+	    &lt;br/>Ceci est un poster de votre collection. Vous pouvez :
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Utiliser la &lt;a href='helpPosterToolsMsg'>barre d'outils&lt;/a> pour naviguer et modifier les parties
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Glisser des images depuis votre explorateur de fichiers pour ajouter des parties
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Changer la configuration des parties en glissant les images
+		&lt;br/>
+		&lt;br/>Utilisez le bouton &lt;img src='%icons%pencil-24x24.png'/> pour changer le titre.
+		&lt;br/>Les modifications sont ignorées si le poster est vérouillé &lt;img src='%icons%locked-32x32.png'/>
+	</entry>
+	<entry key="helpMmtPageMsg">&lt;b>Page&lt;/b>
+	    &lt;br/>
+	    &lt;br/>Le panneau de gauche affiche une page de votre livre.
+	    &lt;br/>Vous pouvez créer et modifier des régions d'intérêt avec la &lt;a href='helpPageToolsMsg'>barre d'outils&lt;/a>.
+	    &lt;br/>
+		&lt;br/>Le panneau de droite affiche les &lt;a href='management helpAnnotationsMsg'>annotations&lt;/a> associées à cette page.
+	</entry>
+	<entry key="helpMmtAnnotationsMsg">&lt;b>Panneau d'annotations&lt;/b>
+	    &lt;br/>
+	    &lt;br/>Ce panneau vous permet de voir et de modifier les méta-données associées au document de droite.
+	    &lt;br/>Utilisez le bouton &lt;img src='%icons%add-24x24.png'/> pour ajouter texte, images et vidéos.
+	</entry>
 </properties>

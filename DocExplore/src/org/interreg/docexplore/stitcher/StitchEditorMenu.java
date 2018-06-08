@@ -11,8 +11,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import org.interreg.docexplore.internationalization.Lang;
+
 @SuppressWarnings("serial")
-class StitchEditorMenu extends JMenuBar
+public class StitchEditorMenu extends JMenuBar
 {
 	StitchEditor editor;
 	
@@ -20,18 +22,18 @@ class StitchEditorMenu extends JMenuBar
 	{
 		this.editor = editor;
 		
-		JMenu file = new JMenu("File");
+		JMenu file = new JMenu(Lang.s("generalMenuFile"));
 		add(file);
-		file.add(new JMenuItem(new AbstractAction("Delete and close") {@Override public void actionPerformed(ActionEvent e)
-		{
-			editor.stitcher.remove(editor.map);
-			editor.getTopLevelAncestor().setVisible(false);
-		}}));
+//		file.add(new JMenuItem(new AbstractAction("Delete and close") {@Override public void actionPerformed(ActionEvent e)
+//		{
+//			editor.view.set.remove(editor.map);
+//			editor.getTopLevelAncestor().setVisible(false);
+//		}}));
 		file.add(new JMenuItem(new AbstractAction("Close") {@Override public void actionPerformed(ActionEvent e)
 		{
 			editor.getTopLevelAncestor().setVisible(false);
 		}}));
-		JMenu view = new JMenu("View");
+		JMenu view = new JMenu(Lang.s("generalMenuView"));
 		add(view);
 		view.add(new JMenuItem(new AbstractAction("Flip") {@Override public void actionPerformed(ActionEvent e)
 		{
@@ -41,17 +43,17 @@ class StitchEditorMenu extends JMenuBar
 		{
 			editor.reverse();
 		}}));
-		view.add(new JMenuItem(new AbstractAction("Toggle associations") {@Override public void actionPerformed(ActionEvent e)
-		{
-			editor.showAssociations = !editor.showAssociations;
-			editor.repaint();
-		}}));
-		view.add(new JMenuItem(new AbstractAction("Toggle distortions") {@Override public void actionPerformed(ActionEvent e)
-		{
-			editor.showAlpha = !editor.showAlpha;
-			editor.repaint();
-		}}));
-		JMenu tools = new JMenu("Tools");
+//		view.add(new JMenuItem(new AbstractAction("Toggle associations") {@Override public void actionPerformed(ActionEvent e)
+//		{
+//			editor.showAssociations = !editor.showAssociations;
+//			editor.repaint();
+//		}}));
+//		view.add(new JMenuItem(new AbstractAction("Toggle distortions") {@Override public void actionPerformed(ActionEvent e)
+//		{
+//			editor.showAlpha = !editor.showAlpha;
+//			editor.repaint();
+//		}}));
+		JMenu tools = new JMenu(Lang.s("generalMenuTools"));
 		add(tools);
 		tools.add(new JMenuItem(new AbstractAction("Refresh features") {@Override public void actionPerformed(ActionEvent e)
 		{
@@ -85,7 +87,7 @@ class StitchEditorMenu extends JMenuBar
 				else
 				{
 					a = editor.map.add(editor.left.selected, editor.right.selected);
-					System.out.printf("Feature dist: %.3f, desc: %.3f, scor: %.3f\n", a.p1.featureDistance2(a.p2), a.p1.descriptorDistance2(a.p2), a.p1.scaleAndOrientationDistance2(a.p2));
+					System.out.printf("Feature dist: %.3f, desc: %.3f\n", a.p1.featureDistance2(a.p2), a.p1.descriptorDistance2(a.p2));
 				}
 				editor.left.repaint();
 				editor.right.repaint();

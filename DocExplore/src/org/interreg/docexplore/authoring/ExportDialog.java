@@ -26,7 +26,7 @@ public class ExportDialog extends JDialog
 	public final static int WebExport = 1;
 	public final static int MobileExport = 2;
 	
-	public ExportDialog(final AuthoringToolFrame authoringTool)
+	public ExportDialog(final ATAppHost host)
 	{
 		super((Frame)null, Lang.s("generalExportDialog"), true);
 		
@@ -43,11 +43,11 @@ public class ExportDialog extends JDialog
 			{
 				public void run()
 				{
-					try {authoringTool.readerExporter.doExport(authoringTool.editor.link);}
+					try {host.readerExporter.doExport(host.getLink());}
 					catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 				}
-				public float getProgress() {return (float)authoringTool.readerExporter.progress[0];}
-			}, authoringTool.editor);
+				public float getProgress() {return (float)host.readerExporter.progress[0];}
+			}, host.getFrame());
 		}}));
 		panel.add(new JLabel("<html><b>"+Lang.s("exportReader")+"</b><br>"+Lang.s("exportReaderDesc")+"</html>"));
 		
@@ -58,11 +58,11 @@ public class ExportDialog extends JDialog
 			{
 				public void run()
 				{
-					try {authoringTool.webExporter.doExport(authoringTool.editor.link, false);}
+					try {host.webExporter.doExport(host.getLink(), false);}
 					catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 				}
-				public float getProgress() {return (authoringTool.webExporter.copyComplete ? .5f : 0f)+(float)(.5*authoringTool.webExporter.progress[0]);}
-			}, authoringTool.editor);
+				public float getProgress() {return (host.webExporter.copyComplete ? .5f : 0f)+(float)(.5*host.webExporter.progress[0]);}
+			}, host.getFrame());
 		}}));
 		panel.add(new JLabel("<html><b>"+Lang.s("exportWeb")+"</b><br>"+Lang.s("exportWebDesc")+"</html>"));
 		
@@ -73,11 +73,11 @@ public class ExportDialog extends JDialog
 			{
 				public void run()
 				{
-					try {authoringTool.webExporter.doExport(authoringTool.editor.link, true);}
+					try {host.webExporter.doExport(host.getLink(), true);}
 					catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 				}
-				public float getProgress() {return (authoringTool.webExporter.copyComplete ? .5f : 0f)+(float)(.5*authoringTool.webExporter.progress[0]);}
-			}, authoringTool.editor);
+				public float getProgress() {return (host.webExporter.copyComplete ? .5f : 0f)+(float)(.5*host.webExporter.progress[0]);}
+			}, host.getFrame());
 		}}));
 		panel.add(new JLabel("<html><b>"+Lang.s("exportMobile")+"</b><br>"+Lang.s("exportMobileDesc")+"</html>"));
 		

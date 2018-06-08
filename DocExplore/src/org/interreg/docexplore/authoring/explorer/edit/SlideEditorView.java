@@ -97,7 +97,7 @@ public class SlideEditorView extends DataLinkView
 			for (ViewItem.Data item : items)
 				if (item.object instanceof File && !((File)item.object).isDirectory())
 			{
-				MetaData md = MetaDataUtils.importFile(explorer.tool, region, (File)item.object);
+				MetaData md = MetaDataUtils.importFile(explorer.tool.plugins, region, (File)item.object);
 				if (md == null)
 					continue;
 				annotations.add(md);
@@ -141,7 +141,7 @@ public class SlideEditorView extends DataLinkView
 			for (ViewItem.Data item : items)
 				if (item.object instanceof File && !((File)item.object).isDirectory())
 			{
-				MetaData md = MetaDataUtils.importFile(explorer.tool, region, (File)item.object);
+				MetaData md = MetaDataUtils.importFile(explorer.tool.plugins, region, (File)item.object);
 				if (md == null)
 					continue;
 				annotations.add(md);
@@ -149,6 +149,4 @@ public class SlideEditorView extends DataLinkView
 			explorer.metaDataImported(region, annotations);
 		}
 	}
-	
-	
 }

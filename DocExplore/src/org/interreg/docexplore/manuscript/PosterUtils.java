@@ -18,6 +18,21 @@ public class PosterUtils
 		String display = book.getMetaDataString(book.getLink().getOrCreateKey("display", ""));
 		return display != null && display.equals("poster");
 	}
+	public static boolean isInStitches(Book book) throws DataLinkException
+	{
+		List<MetaData> mds = book.getMetaDataListForKey(book.getLink().getOrCreateKey("stitch", ""));
+		return !mds.isEmpty();
+	}
+	public static boolean isInRendering(Book book) throws DataLinkException
+	{
+		List<MetaData> mds = book.getMetaDataListForKey(book.getLink().getOrCreateKey("stitch-render", ""));
+		return !mds.isEmpty() && mds.get(0).getString().equals("true");
+	}
+	public static boolean isInEditing(Book book) throws DataLinkException
+	{
+		List<MetaData> mds = book.getMetaDataListForKey(book.getLink().getOrCreateKey("stitch-edit", ""));
+		return !mds.isEmpty() && !mds.get(0).getString().equals("");
+	}
 	
 	public static void assignPartLocations(DocExploreDataLink link, Book book) throws DataLinkException
 	{
@@ -70,6 +85,15 @@ public class PosterUtils
 			}
 		}
 		
+	}
+	
+	public static int [] getPartPos(DocExploreDataLink link, MetaData part) throws DataLinkException
+	{
+		List<MetaData> mds = part.getMetaDataListForKey(link.partPosKey);
+		if (mds.isEmpty())
+			return null;
+		String [] toks = mds.get(0).getString().split(",");
+		return new int [] {Integer.parseInt(toks[0]), Integer.parseInt(toks[1])};
 	}
 	
 	public static void setPartPos(DocExploreDataLink link, MetaData part, int i, int j) throws DataLinkException
@@ -145,16 +169,56 @@ public class PosterUtils
 		}
 		return res;
 	}
-	public static void transposePoster(DocExploreDataLink link, Book book) throws DataLinkException
+	
+	public static boolean posterHasHoles(DocExploreDataLink link, Book book) throws DataLinkException
+	{
+		MetaData [][] parts = getBaseTilesArray(link, book);
+		for (int i=0;i<parts.length;i++)
+			for (int j=0;j<parts[i].length;j++)
+				if (parts[i][j] == null)
+					return true;
+		return false;
+	}
+	
+//	public static void transposePoster(DocExploreDataLink link, Book book) throws DataLinkException
+//	{
+//		MetaData [][] parts = getBaseTilesArray(link, book);
+//		for (int i=0;i<parts.length;i++)
+//			for (int j=0;j<parts[i].length;j++)
+//				if (parts[i][j] != null)
+//					setPartPos(link, parts[i][j], j, i);
+//	}
+	public static void horizontalMirrorPoster(DocExploreDataLink link, Book book) throws DataLinkException
 	{
 		MetaData [][] parts = getBaseTilesArray(link, book);
 		for (int i=0;i<parts.length;i++)
 			for (int j=0;j<parts[i].length;j++)
 				if (parts[i][j] != null)
-				{
-					String [] pos = parts[i][j].getMetaDataString(link.partPosKey).split(",");
-					setPartPos(link, parts[i][j], Integer.parseInt(pos[1]), Integer.parseInt(pos[0]));
-				}
+					setPartPos(link, parts[i][j], parts.length-1-i, j);
+	}
+	public static void verticalMirrorPoster(DocExploreDataLink link, Book book) throws DataLinkException
+	{
+		MetaData [][] parts = getBaseTilesArray(link, book);
+		for (int i=0;i<parts.length;i++)
+			for (int j=0;j<parts[i].length;j++)
+				if (parts[i][j] != null)
+					setPartPos(link, parts[i][j], i, parts[0].length-1-j);
+	}
+	public static void rotatePosterLeft(DocExploreDataLink link, Book book) throws DataLinkException
+	{
+		MetaData [][] parts = getBaseTilesArray(link, book);
+		for (int i=0;i<parts.length;i++)
+			for (int j=0;j<parts[i].length;j++)
+				if (parts[i][j] != null)
+					setPartPos(link, parts[i][j], j, parts.length-1-i);
+	}
+	public static void rotatePosterRight(DocExploreDataLink link, Book book) throws DataLinkException
+	{
+		MetaData [][] parts = getBaseTilesArray(link, book);
+		for (int i=0;i<parts.length;i++)
+			for (int j=0;j<parts[i].length;j++)
+				if (parts[i][j] != null)
+					setPartPos(link, parts[i][j], parts[0].length-1-j, i);
 	}
 	
 	public static boolean removeFromRow(DocExploreDataLink link, Book book, int col, int row) throws DataLinkException

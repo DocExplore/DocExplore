@@ -1,19 +1,29 @@
 package org.interreg.docexplore.stitcher;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.util.List;
 
 import javax.swing.JPanel;
 
 import org.interreg.docexplore.gui.ErrorHandler;
+import org.interreg.docexplore.manuscript.app.editors.ConfigurationEditor;
 
 @SuppressWarnings("serial")
-public class StitchEditor extends JPanel
+public class StitchEditor extends JPanel implements ConfigurationEditor
 {
-	Stitcher stitcher;
+	public static interface Listener
+	{
+		public void onCancelRequest();
+		public void onSaveRequest(boolean force);
+	}
+	
+	Listener listener;
+	public final FragmentView view;
 	GridLayout layout;
 	FragmentDescriptionView left, right;
 	FragmentAssociation map = null;
@@ -21,11 +31,12 @@ public class StitchEditor extends JPanel
 	
 	boolean showAssociations = true, showAlpha = false;
 	
-	public StitchEditor(Stitcher stitcher)
+	public StitchEditor(Listener listener, FragmentView view)
 	{
 		super();
 		
-		this.stitcher = stitcher;
+		this.listener = listener;
+		this.view = view;
 		this.toolkit = new StitchEditorToolkit(this);
 		
 		setLayout(this.layout = new GridLayout(1, 2, 5, 5));
@@ -51,6 +62,8 @@ public class StitchEditor extends JPanel
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 		left.setImageDescription(map.d1);
 		right.setImageDescription(map.d2);
+		view.modified = true;
+		repaint();
 	}
 	
 	public FragmentDescriptionView otherView(FragmentDescriptionView v) {return v == left ? right : left;}
@@ -80,6 +93,32 @@ public class StitchEditor extends JPanel
 		layout.layoutContainer(this);
 		repaint();
 	}
+	public void fit()
+	{
+		left.fit();
+		right.fit();
+	}
+	public void link()
+	{
+		if (left.selected != null && right.selected != null)
+		{
+			Association a = null;
+			List<Association> list = map.associationsByPOI.get(left.selected);
+			if (list != null)
+				for (int i=0;i<list.size();i++)
+					if (list.get(i).other(left.selected) == right.selected)
+						{a = list.get(i); break;}
+			if (a != null)
+				map.remove(a);
+			else
+			{
+				a = map.add(left.selected, right.selected);
+				//System.out.printf("Feature dist: %.3f, desc: %.3f\n", a.p1.featureDistance2(a.p2), a.p1.descriptorDistance2(a.p2));
+			}
+			left.repaint();
+			right.repaint();
+		}
+	}
 	
 	Point point = new Point();
 	Color associationCol = new Color(1f, 0, 1f, .5f);
@@ -105,4 +144,33 @@ public class StitchEditor extends JPanel
 //				g.drawLine(x0, y0, x1, y1);
 //			}
 	}
+
+	@Override public Component getComponent() {return this;}
+	@Override public boolean allowGoto() {return false;}
+	@Override public void onActionRequest(String action, Object param)
+	{
+		if (action.equals("back"))
+		{
+			new LayoutDetector(view.set).consolidate(left.desc.fragment);
+			listener.onCancelRequest();
+		}
+		else if (action.equals("flip"))
+			flip();
+		else if (action.equals("reverse"))
+			reverse();
+		else if (action.equals("refresh-poi"))
+			toolkit.refreshFeatures();
+		else if (action.equals("detect"))
+			toolkit.detectGroup(true);
+		else if (action.equals("fit"))
+			fit();
+		else if (action.equals("toggle-link"))
+			link();
+		else if (action.equals("clear-poi"))
+			toolkit.clearFeatures();
+	}
+
+	@Override public void onCloseRequest() {if (view.modified) listener.onSaveRequest(false);}
+	@Override public void refresh() {repaint();}
+	@Override public void setReadOnly(boolean b) {}
 }

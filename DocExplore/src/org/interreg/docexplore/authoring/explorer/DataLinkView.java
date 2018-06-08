@@ -42,7 +42,7 @@ public abstract class DataLinkView extends ExplorerView implements ViewMouseList
 		this.explorer = explorer;
 		this.vim = new ViewInsertionManager(this);
 		
-		msg = Lang.s("helpCollectionMsg");
+		msg = Lang.s("helpMmtCollectionMsg");
 	}
 	
 	@Override protected String getPath(Object object) {return ((AnnotatedObject)object).getCanonicalUri();}

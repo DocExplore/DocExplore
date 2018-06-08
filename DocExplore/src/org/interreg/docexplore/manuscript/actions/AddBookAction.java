@@ -17,8 +17,6 @@ package org.interreg.docexplore.manuscript.actions;
 import java.io.File;
 import java.util.List;
 
-import org.interreg.docexplore.datalink.fs2.AddFS2PagesAction;
-import org.interreg.docexplore.datalink.fs2.AddFS2PosterPartsAction;
 import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
@@ -60,7 +58,7 @@ public class AddBookAction extends UnreversibleAction
 			action = new AddPosterPartsAction(link, book, files);
 		}
 		action.doAction();
-		failed = (action instanceof AddFS2PagesAction ? ((AddFS2PagesAction)action).failed : ((AddFS2PosterPartsAction)action).failed);
+		failed = (action instanceof AddPagesAction ? ((AddPagesAction)action).failed : ((AddPosterPartsAction)action).failed);
 		action = null;
 	}
 

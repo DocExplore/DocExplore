@@ -90,7 +90,7 @@ public class ManageMouseListener extends MouseAdapter
 			int index = manageComp.bookList.locationToIndex(e.getPoint());
 			if (index < 0 || !manageComp.bookList.getCellBounds(index, index).contains(e.getPoint()))
 				return;
-			manageComp.win.addTab((Book)manageComp.bookList.getModel().getElementAt(index));
+			manageComp.host.addDocument((Book)manageComp.bookList.getModel().getElementAt(index));
 		}
 	}
 	

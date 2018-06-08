@@ -38,7 +38,7 @@ import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.internationalization.Lang;
-import org.interreg.docexplore.management.gui.MainWindow;
+import org.interreg.docexplore.management.gui.MMTApp;
 import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.util.GuiUtils;
@@ -53,11 +53,11 @@ public class MetaDataKeyManager extends JPanel
 	JLabel mergeText;
 	MetaDataKey merging = null;
 	
-	public MetaDataKeyManager(final MainWindow win, float [] progress) throws DataLinkException
+	public MetaDataKeyManager(final MMTApp win, float [] progress) throws DataLinkException
 	{
 		super(new LooseGridLayout(0, 1, 5, 5, true, false, SwingConstants.CENTER, SwingConstants.TOP, true, false));
 		
-		link = win.getDocExploreLink();
+		link = win.host.getLink();
 		final Set<MetaDataKey> reserved = new HashSet<MetaDataKey>();
 		reserved.add(link.dimKey);
 		reserved.add(link.linkKey);
@@ -180,7 +180,7 @@ public class MetaDataKeyManager extends JPanel
 		add(mergePanel);
 	}
 	
-	public static void show(final MainWindow win, float [] progress) throws DataLinkException
+	public static void show(final MMTApp win, float [] progress) throws DataLinkException
 	{
 		final JDialog dialog = new JDialog(win, Lang.s("keyManagerLabel"), true);
 		

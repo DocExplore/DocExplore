@@ -38,7 +38,7 @@ public class AddPagesAction extends UnreversibleAction
 	public final Book book;
 	public final List<File> files;
 	public final List<Pair<AnnotatedObject, File>> failed = new LinkedList<Pair<AnnotatedObject, File>>();
-	public final List<Page> pages = new LinkedList<Page>();
+	public List<Page> pages = new LinkedList<Page>();
 	double progress;
 	
 	public AddPagesAction(DocExploreDataLink link, Book book, List<File> files)
@@ -87,7 +87,10 @@ public class AddPagesAction extends UnreversibleAction
 			catch (Exception e) {}
 		
 		for (Pair<AnnotatedObject, File> pair : failed)
+		{
 			((Page)pair.first).removeFromBook();
+			pages.remove((Page)pair.first);
+		}
 	}
 	
 	public double progress() {return progress;}

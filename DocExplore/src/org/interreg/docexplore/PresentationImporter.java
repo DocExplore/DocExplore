@@ -76,7 +76,7 @@ public class PresentationImporter
 				String testTitle = xml.substring(index, endIndex);
 				if (testTitle.equals(title))
 				{
-					int res = JOptionPane.showConfirmDialog(comp, Lang.s("authoring-lrb", "exportDuplicateMessage"), "Confirmation", 
+					int res = JOptionPane.showConfirmDialog(comp, Lang.s("exportDuplicateMessage"), "Confirmation", 
 						JOptionPane.YES_NO_CANCEL_OPTION);
 					if (res == JOptionPane.CANCEL_OPTION)
 						return;
@@ -87,7 +87,7 @@ public class PresentationImporter
 					}
 					else
 					{
-						title = JOptionPane.showInputDialog(comp, Lang.s("authoring-lrb", "collectionAddBookMessage"), title);
+						title = JOptionPane.showInputDialog(comp, Lang.s("collectionAddBookMessage"), title);
 						if (title != null)
 							doImport(comp, title, desc, bookFile);
 						return;

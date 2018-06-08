@@ -30,6 +30,12 @@ public class StitchEditorToolkit
 		editor.repaint();
 	}
 	
+	public void clearFeatures()
+	{
+		editor.map.clearDescriptors();
+		editor.repaint();
+	}
+	
 	public void matchFeatures()
 	{
 		if (editor.map == null)
@@ -90,6 +96,6 @@ public class StitchEditorToolkit
 		editor.left.repaint();
 		editor.right.repaint();
 		editor.repaint();
-		editor.stitcher.view.repaint();
+		editor.view.repaint();
 	}
 }

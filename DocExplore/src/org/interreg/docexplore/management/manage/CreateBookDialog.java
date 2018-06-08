@@ -18,6 +18,8 @@ import javax.swing.SwingConstants;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.internationalization.Lang;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost;
+import org.interreg.docexplore.manuscript.app.editors.ManuscriptEditor;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 import org.interreg.docexplore.util.ImageUtils;
@@ -25,7 +27,7 @@ import org.interreg.docexplore.util.ImageUtils;
 @SuppressWarnings("serial")
 public class CreateBookDialog extends JDialog
 {
-	public CreateBookDialog(final ManageComponent comp)
+	public CreateBookDialog(final ManuscriptAppHost host)
 	{
 		super((Frame)null, Lang.s("manageAddBookLabel"), true);
 		
@@ -45,19 +47,19 @@ public class CreateBookDialog extends JDialog
 					List<File> files = SelectPagesPanel.show();
 					if (files == null)
 						return;
-					String title = JOptionPane.showInputDialog(comp.win, Lang.s("manageInputTitleLabel"));
+					String title = JOptionPane.showInputDialog(Lang.s("manageInputTitleLabel"), Lang.s("manageNewDocumentLabel"));
 					if (title == null || title.trim().length() == 0)
 						return;
-					try {if (comp.findTitle(title) != null)
+					try {if (ManuscriptEditor.findTitle(host.getLink(), title) != null)
 					{
-						JOptionPane.showMessageDialog(comp.win, Lang.s("manageRenameExistsMessage"));
+						JOptionPane.showMessageDialog(host.getFrame(), Lang.s("manageRenameExistsMessage"));
 						return;
 					}}
 					catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-					comp.handler.onAddBookRequest(title, files, false);
+					host.getActionRequestListener().onAddBookRequest(title, files, false);
 				}
 				public float getProgress() {return (float)0;}
-			}, comp.win);
+			}, host.getFrame());
 		}}));
 		panel.add(new JLabel("<html><b>"+Lang.s("createBookFromImagesLabel")+"</b><br>"+Lang.s("createBookFromImagesMessage")+"</html>"));
 		
@@ -71,19 +73,19 @@ public class CreateBookDialog extends JDialog
 					List<File> files = SelectPagesPanel.show();
 					if (files == null)
 						return;
-					String title = JOptionPane.showInputDialog(comp.win, Lang.s("manageInputTitleLabel"));
+					String title = JOptionPane.showInputDialog(Lang.s("manageInputTitleLabel"), Lang.s("manageNewDocumentLabel"));
 					if (title == null || title.trim().length() == 0)
 						return;
-					try {if (comp.findTitle(title) != null)
+					try {if (ManuscriptEditor.findTitle(host.getLink(), title) != null)
 					{
-						JOptionPane.showMessageDialog(comp.win, Lang.s("manageRenameExistsMessage"));
+						JOptionPane.showMessageDialog(host.getFrame(), Lang.s("manageRenameExistsMessage"));
 						return;
 					}}
 					catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-					comp.handler.onAddBookRequest(title, files, true);
+					host.getActionRequestListener().onAddBookRequest(title, files, true);
 				}
 				public float getProgress() {return 0;}
-			}, comp.win);
+			}, host.getFrame());
 		}}));
 		panel.add(new JLabel("<html><b>"+Lang.s("createDocumentFromImagesLabel")+"</b><br>"+Lang.s("createDocumentFromImagesMessage")+"</html>"));
 		

@@ -40,7 +40,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import org.interreg.docexplore.authoring.AuthoringToolFrame;
 import org.interreg.docexplore.authoring.BookImporter;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.LooseGridLayout;
@@ -80,9 +79,9 @@ public class ImportOptions implements BookImporter.PresentationFilter
 			add(shouldImportBox = new JComboBox(new Object [] {Lang.s("importImported"), Lang.s("importDiscarded")}));
 			final JLabel textStyleLabel = new JLabel(Lang.s("importTextStyle"));
 			add(textStyleLabel);
-			Object [] styles = new Object [importPanel.importOptions.tool.styleManager.styleDialog.styles.length];
+			Object [] styles = new Object [importPanel.importOptions.styles.styleDialog.styles.length];
 			for (int i=0;i<styles.length;i++)
-				styles[i] = importPanel.importOptions.tool.styleManager.styleDialog.styles[i].name;
+				styles[i] = importPanel.importOptions.styles.styleDialog.styles[i].name;
 			add(styleBox = new JComboBox(styles));
 			
 			shouldImportBox.addItemListener(new ItemListener() {public void itemStateChanged(ItemEvent e)
@@ -278,14 +277,14 @@ public class ImportOptions implements BookImporter.PresentationFilter
 		}
 	}
 	
-	AuthoringToolFrame tool;
+	StyleManager styles;
 	ImportPanel importPanel = null;
 	DocExploreDataLink link;
 	Set<String> pageTags, regionTags;
 	
-	public ImportOptions(AuthoringToolFrame tool)
+	public ImportOptions(StyleManager styles)
 	{
-		this.tool = tool;
+		this.styles = styles;
 	}
 	
 	public boolean showOptions(Frame parent, DocExploreDataLink sourceLink, List<Page> pages) throws DataLinkException
@@ -421,8 +420,8 @@ public class ImportOptions implements BookImporter.PresentationFilter
 		if (panel == null)
 			return;
 		String styleName = panel.styleBox.getSelectedItem().toString();
-		for (int i=0;i<tool.styleManager.styleDialog.styles.length;i++)
-			if (styleName.equals(tool.styleManager.styleDialog.styles[i].name))
+		for (int i=0;i<styles.styleDialog.styles.length;i++)
+			if (styleName.equals(styles.styleDialog.styles[i].name))
 			{
 				MetaData styleMD = TextElement.getStyleMD(md);
 				styleMD.setString(""+i);

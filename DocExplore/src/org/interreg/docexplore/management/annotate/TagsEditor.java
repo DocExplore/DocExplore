@@ -43,11 +43,12 @@ public class TagsEditor extends AnnotationEditor
 {
 	JTextArea tagArea;
 
-	public TagsEditor(AnnotationPanel panel, MetaData annotation) throws DataLinkException
+	public TagsEditor(MMTAnnotationPanel panel, MetaData annotation) throws DataLinkException
 	{
 		super(panel, annotation);
 		
 		this.tagArea = new JTextArea(3, 30);
+		keyLabel.setIcon(ImageUtils.getIcon("tag-64x64.png"));
 	}
 	
 	protected void fillExpandedState()

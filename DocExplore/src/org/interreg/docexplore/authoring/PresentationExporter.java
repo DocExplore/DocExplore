@@ -28,8 +28,10 @@ import java.util.TreeMap;
 
 import org.interreg.docexplore.authoring.explorer.edit.CoverManager;
 import org.interreg.docexplore.authoring.explorer.edit.Style;
+import org.interreg.docexplore.authoring.explorer.edit.StyleManager;
 import org.interreg.docexplore.authoring.explorer.edit.TextElement;
 import org.interreg.docexplore.gui.ErrorHandler;
+import org.interreg.docexplore.management.plugin.metadata.MetaDataPlugin;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
@@ -37,17 +39,19 @@ import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.manuscript.TileConfiguration;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost;
 import org.interreg.docexplore.util.ImageUtils;
 import org.interreg.docexplore.util.StringUtils;
 
 public abstract class PresentationExporter
 {
-	AuthoringToolFrame tool;
+	ManuscriptAppHost host;
+	StyleManager styles;
 	
-	
-	public PresentationExporter(AuthoringToolFrame tool)
+	public PresentationExporter(ManuscriptAppHost host, StyleManager styles)
 	{
-		this.tool = tool;
+		this.host = host;
+		this.styles = styles;
 	}
 	
 	float [] progress = {0};
@@ -69,21 +73,29 @@ public abstract class PresentationExporter
 			boolean poster = PosterUtils.isPoster(book);
 			
 			StringBuffer bookSpec = new StringBuffer("<Book path=\"").append("book").append(bookNum).append("/\" aspectRatio=\"").append(aspectRatio(book)).append("\"");
+			
+			BufferedImage preview = null;
+			List<MetaData> previewList = book.getMetaDataListForKey(host.getLink().previewKey);
+			if (!previewList.isEmpty())
+				preview = previewList.get(0).getImage();
+			else if (!poster) 
+				preview = CoverManager.buildPreviewCoverImage(host.getLink(), book);
+			if (preview != null)
+			{
+				ImageUtils.write(preview, format, new File(bookDir, "preview."+format));
+				bookSpec.append(" preview=\"preview."+format+"\"");
+			}
+			
 			if (!poster)
 			{
-				BufferedImage cover = CoverManager.buildCoverImage(book, format.toLowerCase().equals("png"));
+				BufferedImage cover = CoverManager.buildCoverImage(host.getLink(), book, format.toLowerCase().equals("png"));
 				if (cover != null)
 				{
 					ImageUtils.write(cover, format, new File(bookDir, "cover."+format));
 					bookSpec.append(" cover=\"cover."+format+"\"");
 					cover = null;
-					
-					BufferedImage preview = CoverManager.buildPreviewCoverImage(book);
-					if (preview != null)
-						ImageUtils.write(preview, format, new File(exportDir, "book"+bookNum+"."+format));
-					preview = null;
 				}
-				BufferedImage innerCover = CoverManager.buildInnerCoverImage(book, format.toLowerCase().equals("png"));
+				BufferedImage innerCover = CoverManager.buildInnerCoverImage(host.getLink(), book, format.toLowerCase().equals("png"));
 				if (innerCover != null)
 				{
 					ImageUtils.write(innerCover, format, new File(bookDir, "innerCover."+format));
@@ -138,13 +150,13 @@ public abstract class PresentationExporter
 				}
 				else
 				{
-					List<MetaData> configs = page.getBook().getMetaDataListForKey(tool.editor.link.tileConfigKey);
+					List<MetaData> configs = page.getBook().getMetaDataListForKey(host.getLink().tileConfigKey);
 					config = configs.size() > 0 ? (TileConfiguration)new ObjectInputStream(configs.get(0).getValue()).readObject() : null;
 					iw = config.getFullWidth();
 					ih = config.getFullHeight();
-					MetaData [][][] parts = config.getTiles(tool.editor.link);
+					MetaData [][][] parts = config.getTiles(host.getLink());
 					
-					BufferedImage image = fix(tool.editor.link.getMetaData(config.getTileId(config.getLastLayer(), 0, 0)).getImage());
+					BufferedImage image = fix(host.getLink().getMetaData(config.getTileId(config.getLastLayer(), 0, 0)).getImage());
 					ImageUtils.write(options.handlePage(image), format, new File(bookDir, "image"+pageNum+"."+format));
 					
 					for (int l=0;l<=config.getLastLayer();l++)
@@ -154,7 +166,9 @@ public abstract class PresentationExporter
 						for (int y=0;y<vlayers;y++)
 							for (int x=0;x<hlayers;x++)
 						{
-							image = fix(parts[l][x][y].getImage());
+							if (parts[l][x][y] != null && parts[l][x][y].getType().equals(MetaData.imageType))
+								image = fix(parts[l][x][y].getImage());
+							else image = new BufferedImage(config.tilew(l, x), config.tileh(l, y), BufferedImage.TYPE_3BYTE_BGR);
 							//System.out.println(config.tilew(l, y)+" "+image.getWidth());
 							ImageUtils.write(options.handlePage(image.getSubimage(0, 0, config.tilew(l, x), config.tileh(l, y))), format, new File(bookDir, "tile"+pageNum+"_"+l+"_"+x+"_"+y+"."+format));
 						}
@@ -233,7 +247,7 @@ public abstract class PresentationExporter
 						if (md.getType().equals(MetaData.textType))
 						{
 							bookSpec.append("\t\t\t<Info type=\"text\">\n");
-							Style style = TextElement.getStyle(md, tool.styleManager);
+							Style style = TextElement.getStyle(md, styles);
 							bookSpec.append("\t\t\t\t").append(StringUtils.escapeXmlChars(style.apply(md.getString()))).append("\n");
 							bookSpec.append("\t\t\t</Info>\n");
 						}
@@ -245,7 +259,12 @@ public abstract class PresentationExporter
 							bookSpec.append("\t\t\t<Info type=\"image\" src=\"").append("roiImage").append(imageNum).append(".").append(format).append("\" />\n");
 							imageNum++;
 						}
-						else tool.exportMetaData(md, bookSpec, bookDir, imageNum++, options, exportType);
+						else
+						{
+							MetaDataPlugin plugin = host.plugins.getPluginForMetaDataType(md.getType());
+							if (plugin != null)
+								plugin.exportMetaData(md, bookSpec, bookDir, imageNum++, options, exportType);
+						}
 					}
 					
 					bookSpec.append("\t\t</RegionOfInterest>\n");
@@ -276,7 +295,7 @@ public abstract class PresentationExporter
 	String aspectRatio(Book book) throws Exception
 	{
 		Page page = book.getPage(1);
-		String dim = page.getMetaDataString(tool.editor.link.dimKey);
+		String dim = page.getMetaDataString(host.getLink().dimKey);
 		float ar = 0;
 		if (dim != null)
 		{

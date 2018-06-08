@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.interreg.docexplore.authoring.AuthoringToolFrame;
 import org.interreg.docexplore.authoring.BookImporter;
 import org.interreg.docexplore.management.plugin.metadata.MetaDataPlugin;
 import org.interreg.docexplore.manuscript.MetaData;
@@ -14,11 +13,11 @@ import org.interreg.docexplore.util.FileImageSource;
 
 public class MetaDataUtils
 {
-	public static MetaData importFile(AuthoringToolFrame tool, Region region, File file) throws Exception
+	public static MetaData importFile(List<MetaDataPlugin> plugins, Region region, File file) throws Exception
 	{
 		MetaData md = null;
 		boolean handledByPlugin = false;
-		for (MetaDataPlugin plugin : tool.plugins)
+		for (MetaDataPlugin plugin : plugins)
 			if (plugin.canPreview(file))
 		{
 			handledByPlugin = true;
@@ -39,13 +38,13 @@ public class MetaDataUtils
 		return md;
 	}
 	
-	public static List<MetaData> importFiles(AuthoringToolFrame tool, Region region, File [] files) throws Exception
+	public static List<MetaData> importFiles(List<MetaDataPlugin> plugins, Region region, File [] files) throws Exception
 	{
 		List<MetaData> annotations = new LinkedList<MetaData>();
 		for (File file : files)
 			if (!file.isDirectory())
 		{
-			MetaData md = importFile(tool, region, file);
+			MetaData md = importFile(plugins, region, file);
 			if (md == null)
 				continue;
 			annotations.add(md);

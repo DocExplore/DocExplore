@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -26,14 +28,20 @@ public class FragmentDescriptionView extends NavView
 	{
 		super();
 		this.editor = editor;
-		this.setView(0, 0, 1);
 		this.defaultStrokeWidth = 2;
+		addComponentListener(new ComponentAdapter() {@Override public void componentResized(ComponentEvent e) {if (scale == 0) fit();}});
 	}
 	@Override protected NavViewInputListener createInputListener() {return new FragmentDescriptionViewInputListener(this);}
 	
 	@Override protected void onViewChange()
 	{
 		editor.repaint();
+	}
+	
+	public void fit()
+	{
+		if (desc != null) 
+			fitView(0, 0, desc.image.getWidth(), desc.image.getHeight(), .1);
 	}
 	
 	void setSelected(POI poi)
@@ -71,7 +79,7 @@ public class FragmentDescriptionView extends NavView
 		this.highlighted = null;
 		this.selected = null;
 		if (desc != null)
-			fitView(0, 0, desc.image.getWidth(), desc.image.getHeight(), .1);
+			fit();
 		else repaint();
 	}
 	
@@ -87,20 +95,21 @@ public class FragmentDescriptionView extends NavView
 		{
 			Font font = g.getFont();
 			g.setFont(font.deriveFont((float)(16f/pixelSize)));
-			Rectangle2D bounds = g.getFontMetrics().getStringBounds(desc.fragment.file.getName(), g);
+			String name = Fragment.getName(desc.fragment.file);
+			Rectangle2D bounds = g.getFontMetrics().getStringBounds(name, g);
 			double sh = g.getFont().getSize2D();
 			g.setColor(new Color(0f, 0f, 0f, .5f));
 			double x0 = toViewX(0), y0 = toViewY(0)+sh;
 			g.fill(new Rectangle2D.Double(x0, y0-sh, bounds.getWidth(), 1.5*sh));
 			g.setColor(Color.white);
-			g.drawString(desc.fragment.file.getName(), (float)x0, (float)y0);
+			g.drawString(name, (float)x0, (float)y0);
 			
 			g.drawImage(desc.image, 0, 0, null);
 			
 			for (int i=0;i<desc.features.size();i++)
 			{
 				POI poi = desc.features.get(i);
-				g.setColor(poi.descriptor.length == 0 ? Color.blue : desc.fa.associationsByPOI.get(poi) == null ? loneSurfCol : Color.red);
+				g.setColor(poi.descriptor == null ? Color.blue : desc.fa.associationsByPOI.get(poi) == null ? loneSurfCol : Color.red);
 				rect.setRect(poi.x-1, poi.y-1, 2, 2);
 				g.draw(rect);
 				if (poi == highlighted || poi == selected)

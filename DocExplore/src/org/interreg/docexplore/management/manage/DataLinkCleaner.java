@@ -23,7 +23,7 @@ import java.util.TreeSet;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.Lang;
-import org.interreg.docexplore.management.gui.MainWindow;
+import org.interreg.docexplore.management.gui.MMTApp;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.DocExploreDataLink;
@@ -35,9 +35,9 @@ import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 
 public class DataLinkCleaner implements ProgressRunnable
 {
-	MainWindow win;
+	MMTApp win;
 	
-	public DataLinkCleaner(MainWindow win)
+	public DataLinkCleaner(MMTApp win)
 	{
 		this.win = win;
 	}
@@ -46,8 +46,8 @@ public class DataLinkCleaner implements ProgressRunnable
 	{
 		try
 		{
-			DocExploreDataLink link = win.getDocExploreLink();
-			if (link == null || link.getLink() == null)
+			DocExploreDataLink link = win.host.getLink();
+			if (link.getLink() == null)
 				throw new Exception(Lang.s("cleanLinkNoConnection"));
 			
 			Set<Integer> referencedIds = getAllReferencedMetaDataIds(link);
@@ -65,7 +65,7 @@ public class DataLinkCleaner implements ProgressRunnable
 			System.out.println(referencedIds.size()+" referenced annotations");
 			System.out.println(allIds.size()+" unreferenced annotations");
 			
-			win.historyManager.reset();
+			win.host.historyManager.reset();
 			
 			cnt = 0;
 			for (int id : allIds)

@@ -23,20 +23,17 @@ import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.interreg.docexplore.authoring.AuthoringToolFrame;
 import org.interreg.docexplore.manuscript.MetaData;
 
-public class StyleManager implements StyleDialog.Listener
+public abstract class StyleManager implements StyleDialog.Listener
 {
-	public AuthoringToolFrame tool;
 	public StyleDialog styleDialog;
 	JPopupMenu menu = new JPopupMenu();
 	JCheckBoxMenuItem [] items;
 	MetaData md;
 	
-	public StyleManager(AuthoringToolFrame tool)
+	public StyleManager()
 	{
-		this.tool = tool;
 		this.styleDialog = new StyleDialog(defaultStyles());
 		
 		this.menu = new JPopupMenu();
@@ -69,7 +66,7 @@ public class StyleManager implements StyleDialog.Listener
 		}
 		else unserialize(serialized);
 	}
-	private void writeMD() throws Exception
+	protected void writeMD() throws Exception
 	{
 		md.setString(serialize());
 	}
@@ -95,7 +92,7 @@ public class StyleManager implements StyleDialog.Listener
 	public static Color styleBackground = new Color(0, 0, 0, 192);
 	public static Color styleHighLightedBackground = new Color(16, 32, 64, 192);
 	
-	TextElement current = null;
+	Object current = null;
 	public void showStyleMenu(Component comp, TextElement element)
 	{
 		current = element;
@@ -104,8 +101,16 @@ public class StyleManager implements StyleDialog.Listener
 				{items[i].setSelected(true); break;}
 		menu.show(comp, comp.getWidth(), comp.getHeight());
 	}
+	public void showStyleMenu(Component comp, org.interreg.docexplore.authoring.rois.TextElement element)
+	{
+		current = element;
+		for (int i=0;i<styleDialog.getNumStyles();i++)
+			if (i == element.style)
+				{items[i].setSelected(true); break;}
+		menu.show(comp, comp.getWidth(), comp.getHeight());
+	}
 
-	private void refreshMenu()
+	protected void refreshMenu()
 	{
 		menu.removeAll();
 		ButtonGroup group = new ButtonGroup();
@@ -119,7 +124,10 @@ public class StyleManager implements StyleDialog.Listener
 			items[i].addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
 			{
 				if (current != null)
-					current.setStyle(styleDialog.getStyle(index));
+				{
+					if (current instanceof TextElement) ((TextElement)current).setStyle(styleDialog.getStyle(index));
+					else ((org.interreg.docexplore.authoring.rois.TextElement)current).setStyle(styleDialog.getStyle(index));
+				}
 			}});
 			group.add(items[i]);
 			menu.add(items[i]);
@@ -129,13 +137,5 @@ public class StyleManager implements StyleDialog.Listener
 //		menu.add(edit);
 	}
 	
-	public void stylesChanged(StyleDialog dialog)
-	{
-		refreshMenu();
-		try {writeMD();}
-		catch (Exception e) {e.printStackTrace();}
-		if (tool.mdEditor != null)
-			try {tool.mdEditor.reload();}
-			catch (Exception e) {e.printStackTrace();}
-	}
+	public abstract void stylesChanged(StyleDialog dialog);
 }

@@ -49,11 +49,12 @@ public class ImageEditor extends AnnotationEditor
 {
 	ImageSource image;
 	
-	public ImageEditor(AnnotationPanel panel, MetaData annotation) throws DataLinkException
+	public ImageEditor(MMTAnnotationPanel panel, MetaData annotation) throws DataLinkException
 	{
 		super(panel, annotation);
 		
 		image = new MetaDataImageSource(annotation);
+		keyLabel.setIcon(ImageUtils.getIcon("image-64x64.png"));
 	}
 	
 	void set()
@@ -131,7 +132,7 @@ public class ImageEditor extends AnnotationEditor
 				try
 				{
 					final BufferedImage fullImage = image.getImage();
-					JDialog imageDialog = new JDialog(panel.handler.win, true);
+					JDialog imageDialog = new JDialog(panel.handler.win.getFrame(), true);
 					JLabel imageLabel = new JLabel(new ImageIcon(fullImage));
 					imageDialog.add(new JScrollPane(imageLabel));
 					imageDialog.pack();

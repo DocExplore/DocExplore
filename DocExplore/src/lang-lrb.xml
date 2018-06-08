@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment></comment>
+
+	<entry key="addBook">Add book</entry>
+	<entry key="addCover">Add cover</entry>
+	<entry key="addMetaData">Add annotation</entry>
+	<entry key="addPage">Add page</entry>
+	<entry key="addPages">Add pages</entry>
+	<entry key="addPart">Add part</entry>
+	<entry key="addParts">Add parts</entry>
+	<entry key="addPreview">Add preview</entry>
+	<entry key="addRegion">Add region</entry>
+	<entry key="advancedLabel">Advanced</entry>
+	<entry key="annotateAddTooltip">Add an annotation</entry>
+	<entry key="annotateAnnotationLabel">Annotation</entry>
+	<entry key="annotateAnyKeyLabel">Any key</entry>
+	<entry key="annotateAnyValueLabel">Any value</entry>
+	<entry key="annotateApplyLabel">Apply</entry>
+	<entry key="annotateAskKeyLabel">Specify a name for your annotation</entry>
+	<entry key="annotateAskTypeLabel">Select the type of annotation you would like to create</entry>
+	<entry key="annotateBrowseLabel">Browse</entry>
+	<entry key="annotateContentLabel">Contents</entry>
+	<entry key="annotateDefaultField">New field</entry>
+	<entry key="annotateFieldLabel">Field</entry>
+	<entry key="annotateFilterLabel">Filter</entry>
+	<entry key="annotateFilterTooltip">Show/Hide filter options</entry>
+	<entry key="annotateFreeTextLabel">Free text</entry>
+	<entry key="annotateImageErrorMsg">Couldn't open image</entry>
+	<entry key="annotateInternalSourceLabel">Internal source</entry>
+	<entry key="annotateKeyLabel">Name</entry>
+	<entry key="annotateKeyTypeLabel">Key type</entry>
+	<entry key="annotateName">Annotations</entry>
+	<entry key="annotateNoDisplayLabel">Nothing to display</entry>
+	<entry key="annotateRefreshTooltip">Apply filter</entry>
+	<entry key="annotateSaveMessage">Some changes to '%key' might not have been saved. Would you like to save them now?</entry>
+	<entry key="annotateTypeImage">Image</entry>
+	<entry key="annotateTypeLabel">Type</entry>
+	<entry key="annotateTypeText">Text</entry>
+	<entry key="annotateUseFilterLabel">Use filter</entry>
+	<entry key="annotateValueTypeLabel">Value type</entry>
+	<entry key="annotationImage">Image</entry>
+	<entry key="annotationMedia">Media</entry>
+	<entry key="annotationText">Text</entry>
+	<entry key="associate">Associate</entry>
+	<entry key="atLabel">Presentation Tool</entry>
+	<entry key="atMessage">This tool allows you to create and setup digital presentations.</entry>
+	<entry key="atTitle">DocExplore Presentation Tool</entry>
+	<entry key="authoringInitLabel">Initialization...</entry>
+	<entry key="authoringLabel">Browse presentations</entry>
+	<entry key="authoringNameMessage">Please give a name to the presentation</entry>
+	<entry key="bgcolorPropertyChooseName">Choose color</entry>
+	<entry key="bgcolorPropertyName">Color</entry>
+	<entry key="bgcolorPropertyTransName">Opacity</entry>
+	<entry key="bgimagePropertyBrowseName">Browse...</entry>
+	<entry key="bgimagePropertyName">Image</entry>
+	<entry key="browseLabel">Browse</entry>
+	<entry key="cfgACLabel">Auto-connect</entry>
+	<entry key="cfgAddPluginLabel">Add plugin</entry>
+	<entry key="cfgAddPluginMessage">&lt;html>To add plugins, place the files in the plugin directory.&lt;br/>Click on 'Refresh' to update the plugin list.&lt;br/>&lt;br/>&lt;b>Plugin directory: &lt;/b>%pdir&lt;/html></entry>
+	<entry key="cfgBookInfoLabel">Book info</entry>
+	<entry key="cfgBooksLabel">Books</entry>
+	<entry key="cfgBrowseLabel">Browse</entry>
+	<entry key="cfgCancelLabel">Cancel</entry>
+	<entry key="cfgCurrentLabel">Current</entry>
+	<entry key="cfgDBLabel">Database</entry>
+	<entry key="cfgDeleteRestoreLabel">Delete/Restore</entry>
+	<entry key="cfgDescriptionLabel">Description</entry>
+	<entry key="cfgDisplayLabel">Display</entry>
+	<entry key="cfgEnglishLabel">English</entry>
+	<entry key="cfgExportLabel">Export</entry>
+	<entry key="cfgFileLabel">File</entry>
+	<entry key="cfgFrenchLabel">French</entry>
+	<entry key="cfgFullscreenLabel">Fullscreen</entry>
+	<entry key="cfgGeneralLabel">General</entry>
+	<entry key="cfgHeightLabel">Height</entry>
+	<entry key="cfgHelpLabel">Show help</entry>
+	<entry key="cfgHostLabel">Host</entry>
+	<entry key="cfgImportLabel">Import</entry>
+	<entry key="cfgJarFileLabel">Jar file</entry>
+	<entry key="cfgLanguageLabel">Language</entry>
+	<entry key="cfgMainClassLabel">Main class</entry>
+	<entry key="cfgMissingFileLabel">file not found</entry>
+	<entry key="cfgMysqlLabel">MySQL</entry>
+	<entry key="cfgOkLabel">OK</entry>
+	<entry key="cfgOptionsLabel">Reader options</entry>
+	<entry key="cfgPasswordLabel">Password</entry>
+	<entry key="cfgPathLabel">Path</entry>
+	<entry key="cfgPluginsLabel">Plugins</entry>
+	<entry key="cfgRecentLabel">Recent</entry>
+	<entry key="cfgRefreshPluginsLabel">Refresh</entry>
+	<entry key="cfgRemoveLabel">Remove</entry>
+	<entry key="cfgReplacePluginMessage">A plugin by the same name already exists. Would you like to overwrite it?</entry>
+	<entry key="cfgSafeModeLabel">Safe mode</entry>
+	<entry key="cfgServerLabel">Reader</entry>
+	<entry key="cfgTimeoutLabel">Idleness timer (in seconds, default is 300, 0 means never)</entry>
+	<entry key="cfgTitleLabel">Title</entry>
+	<entry key="cfgTypeLabel">Type</entry>
+	<entry key="cfgUseACLabel">Use auto-connect</entry>
+	<entry key="cfgUseCursorLabel">Use native cursor</entry>
+	<entry key="cfgUseLabel">Use</entry>
+	<entry key="cfgUserLabel">User</entry>
+	<entry key="cfgWidthLabel">Width</entry>
+	<entry key="chooseHomeMessage">&lt;html>DocExplore could not find the home directory. &lt;u>This is normal if you are running the software for the first time&lt;/u>.&lt;br/>
+The home directory is where DocExplore will store all of the data you create.&lt;br/>
+It is recommended to use the default directory provided below but you may change it if needed.&lt;br/>&lt;br/>
+Press OK to confirm the home directory or cancel to specify it at a later time.&lt;/html></entry>
+	<entry key="cleanLinkLabel">Clean up...</entry>
+	<entry key="cleanLinkNoConnection">You are not currently connected to a collection.</entry>
+	<entry key="cleanLinkTasksRunning">There are tasks currently running that could interfere.
+Please wait until all tasks have completed.</entry>
+	<entry key="cleanLinkWarning">You are about to remove from your collection all annotations that are no longer associated to any document.
+It will not be possible to undo this operation and it might take several minutes to complete.
+Do you wish to continue?</entry>
+	<entry key="clearLabel">Clear</entry>
+	<entry key="collectionAddBookMessage">Please specify a title for the presentation</entry>
+	<entry key="collectionBookDisplayLabel">Display as a book</entry>
+	<entry key="collectionBookDisplayLockedMsg">The presentation must be empty to change the display</entry>
+	<entry key="collectionDefaultBookLabel">New presentation</entry>
+	<entry key="collectionPosterDisplayLabel">Display as a poster</entry>
+	<entry key="collectionToBookDisplayLabel">Display as book</entry>
+	<entry key="collectionToPosterDisplayLabel">Display as poster</entry>
+	<entry key="confLabel">Configuration</entry>
+	<entry key="confMessage">Allows you to set the default settings of the DocExplore software suite.</entry>
+	<entry key="confirmLabel">Confirm</entry>
+	<entry key="cover">Cover</entry>
+	<entry key="coverBack">Back</entry>
+	<entry key="coverBackInner">Back inner cover</entry>
+	<entry key="coverBrowse">Browse...</entry>
+	<entry key="coverDiscard">Discard</entry>
+	<entry key="coverFront">Front</entry>
+	<entry key="coverFrontInner">Front inner cover</entry>
+	<entry key="coverInnerBack">Inner back</entry>
+	<entry key="coverInnerFront">Inner front</entry>
+	<entry key="coverLabel">Cover</entry>
+	<entry key="coverOpaque">Opaque</entry>
+	<entry key="coverTransparent">Transparent</entry>
+	<entry key="createBookFromImagesLabel">Create a new book from images</entry>
+	<entry key="createBookFromImagesMessage">Select image files which make up the pages of a new book. The pages will stay in the order the images were selected but they can be reordered at any time.</entry>
+	<entry key="createDocumentFromImagesLabel">Create a single page document from images</entry>
+	<entry key="createDocumentFromImagesMessage">Select image files which make up the parts of a single page document. The image configuration will be guessed based on the file names but it can be changed at any time.</entry>
+	<entry key="cropPage">Crop page</entry>
+	<entry key="databaseDatabaseLabel">Database name</entry>
+	<entry key="databasePasswordLabel">Password</entry>
+	<entry key="databaseTitle">Connection to a database</entry>
+	<entry key="databaseUrlLabel">URL</entry>
+	<entry key="databaseUserLabel">User</entry>
+	<entry key="deleteBook">Delete book</entry>
+	<entry key="deleteBooks">Delete books</entry>
+	<entry key="deleteCover">Delete cover</entry>
+	<entry key="deleteMetaData">Delete annotation</entry>
+	<entry key="deletePage">Delete page</entry>
+	<entry key="deletePages">Delete pages</entry>
+	<entry key="deletePreview">Delete preview</entry>
+	<entry key="deleteRegion">Delete region</entry>
+	<entry key="dialogCloseLabel">Close</entry>
+	<entry key="dialogDockingLabel">Pin/Unpin</entry>
+	<entry key="dialogWaitLabel">Please wait</entry>
+	<entry key="disassociate">Disasociate</entry>
+	<entry key="editStitches">Edit stitches</entry>
+	<entry key="errorDetailsLabel">Details</entry>
+	<entry key="errorGenericMessage">An error has occurred!</entry>
+	<entry key="errorGenericTitle">Error</entry>
+	<entry key="errorLabel">Error</entry>
+	<entry key="exitLabel">Exit</entry>
+	<entry key="exportAllRoisLabel">All regions on the page</entry>
+	<entry key="exportAllTagsLabel">All of the following tags</entry>
+	<entry key="exportAnnotationFieldLabelsLabel">From annotation with the field name</entry>
+	<entry key="exportAnnotationFieldNameLabel">With the field name</entry>
+	<entry key="exportAnnotationTagLabel">Tagged with</entry>
+	<entry key="exportAnnotationTagLabelsLabel">From annotation tagged with</entry>
+	<entry key="exportAnyTagLabel">Any of the following tags</entry>
+	<entry key="exportAreaLabel">Targeted area</entry>
+	<entry key="exportAreaPageLabel">Entire page</entry>
+	<entry key="exportAreaRoiLabel">Regions of interest</entry>
+	<entry key="exportContentAnnotationLabel">Annotation image</entry>
+	<entry key="exportContentLabel">Targeted content</entry>
+	<entry key="exportContentPageLabel">Page image</entry>
+	<entry key="exportDimensionOption">Limit image size</entry>
+	<entry key="exportDuplicateMessage">A presentation with the same title already exists. Do you want to replace it?</entry>
+	<entry key="exportExportLabel">Export</entry>
+	<entry key="exportExportingLabel">Exporting...</entry>
+	<entry key="exportFillBlackLabel">Black</entry>
+	<entry key="exportFillLabel">Fill background with</entry>
+	<entry key="exportFillWhiteLabel">White</entry>
+	<entry key="exportFolderLabel">Export folder</entry>
+	<entry key="exportFormatLabel">Image format</entry>
+	<entry key="exportGeneralLabel">General</entry>
+	<entry key="exportLabelFileLabel">Label file named</entry>
+	<entry key="exportLabelLabel">Labels</entry>
+	<entry key="exportLabelNoneLabel">No labels</entry>
+	<entry key="exportMobile">Export to mobile</entry>
+	<entry key="exportMobileDesc">This presentation will be packaged into a file that can be loaded by the DocExplore mobile app.</entry>
+	<entry key="exportOptions">Export options</entry>
+	<entry key="exportReader">Export to Reader</entry>
+	<entry key="exportReaderDesc">This presentation will be added to the local collection of this DocExplore installation.</entry>
+	<entry key="exportSizeLimit">Image dimensions shouldn't exceed</entry>
+	<entry key="exportSizeMessage">&lt;html>&lt;div style=&quot;width: 360px;&quot;>Limiting the dimensions of images serves to lower the hardware requirements of presentations. 
+If you experience excessive loading times or even crashes when viewing a presentation, it is 
+recommended to enable this option. Be aware that although this will not distort the images, it 
+might visibly reduce their quality, especially when zooming in.&lt;/div>&lt;/html></entry>
+	<entry key="exportTaggedRoisLabel">Only regions tagged with</entry>
+	<entry key="exportTitleLabel">Image export</entry>
+	<entry key="exportTranscriptionLabelsLabel">From transcriptions with</entry>
+	<entry key="exportTransparencyLabel">Enable transparency</entry>
+	<entry key="exportTransparencyMessage">&lt;html>&lt;div style=&quot;width: 360px;&quot;>Enable this option if some of the pages of the presentation contain areas of transparency, otherwise they will not render properly. 
+&lt;u>Please note that if this option is enabled, the processing time required to complete the export may increase significantly as well as the resulting file sizes.&lt;/u>&lt;/div>&lt;/html></entry>
+	<entry key="exportTransparencyOption">Transparency</entry>
+	<entry key="exportWeb">Export to web</entry>
+	<entry key="exportWebDesc">This presentation will be packaged into an archive suitable for a website.</entry>
+	<entry key="fileOpen">Open</entry>
+	<entry key="fileSave">Save</entry>
+	<entry key="fillPoster">Fill poster holes</entry>
+	<entry key="filterAllPages">Show all pages</entry>
+	<entry key="filterAnnotPages">Only show pages with regions of interest annotated with</entry>
+	<entry key="filterAnnotRois">Do not import regions without annotations</entry>
+	<entry key="filterConfig">Filter configuration</entry>
+	<entry key="filterImage">Images</entry>
+	<entry key="filterMedia">Media</entry>
+	<entry key="filterPages">Display</entry>
+	<entry key="filterRoiPages">Only show pages with annotated regions of interest</entry>
+	<entry key="filterRois">Import</entry>
+	<entry key="filterTagPages">Only show pages with regions of interest tagged with</entry>
+	<entry key="filterTagRois">Only import annotations named</entry>
+	<entry key="filterText">Text</entry>
+	<entry key="fixChars">Fix special characters</entry>
+	<entry key="fixCharsMac">Mac OSX</entry>
+	<entry key="fixCharsMsg">The presentation was created in</entry>
+	<entry key="fixCharsWin">Windows</entry>
+	<entry key="generalAddAnnotation">Add</entry>
+	<entry key="generalBook">book</entry>
+	<entry key="generalBooks">books</entry>
+	<entry key="generalBrowseLabel">Browse</entry>
+	<entry key="generalCancelLabel">Cancel</entry>
+	<entry key="generalCloseLabel">Close</entry>
+	<entry key="generalCloseTab">Close this window</entry>
+	<entry key="generalCollection">Collection</entry>
+	<entry key="generalCopyPaste">Copy/Paste</entry>
+	<entry key="generalDescription">Description</entry>
+	<entry key="generalExportDialog">Export</entry>
+	<entry key="generalFilesLabel">Files</entry>
+	<entry key="generalHelp">Help</entry>
+	<entry key="generalHistory">History</entry>
+	<entry key="generalLibraryLabel">Library</entry>
+	<entry key="generalMenuDelete">Delete</entry>
+	<entry key="generalMenuEdit">Edit</entry>
+	<entry key="generalMenuEditCopy">Copy</entry>
+	<entry key="generalMenuEditPaste">Paste</entry>
+	<entry key="generalMenuEditRedo">Redo</entry>
+	<entry key="generalMenuEditUndo">Undo</entry>
+	<entry key="generalMenuEditViewHistory">View history</entry>
+	<entry key="generalMenuExport">Export...</entry>
+	<entry key="generalMenuFile">File</entry>
+	<entry key="generalMenuFileConnect">Connect to</entry>
+	<entry key="generalMenuFileConnectFile">a file...</entry>
+	<entry key="generalMenuFileConnectMySQL">MySQL...</entry>
+	<entry key="generalMenuFileDisconnect">Disconnect</entry>
+	<entry key="generalMenuFileImport">Import/Export with</entry>
+	<entry key="generalMenuFileManage">Gérer la collection...</entry>
+	<entry key="generalMenuFileMemory">Memory</entry>
+	<entry key="generalMenuFileQuit">Back to menu</entry>
+	<entry key="generalMenuHelp">Help</entry>
+	<entry key="generalMenuHelpAbout">About...</entry>
+	<entry key="generalMenuHelpContents">Help contents...</entry>
+	<entry key="generalMenuHelpWebsite">Website...</entry>
+	<entry key="generalMenuImport">Import...</entry>
+	<entry key="generalMenuLoad">Open</entry>
+	<entry key="generalMenuNew">New</entry>
+	<entry key="generalMenuOpen">Open</entry>
+	<entry key="generalMenuQuit">Back to menu</entry>
+	<entry key="generalMenuSave">Save</entry>
+	<entry key="generalMenuSaveAs">Save as...</entry>
+	<entry key="generalMenuTools">Tools</entry>
+	<entry key="generalMenuSettings">Settings</entry>
+	<entry key="generalMenuView">View</entry>
+	<entry key="generalMenuWebExport">Web export</entry>
+	<entry key="generalNoLinkStatus">No connection established</entry>
+	<entry key="generalOkLabel">OK</entry>
+	<entry key="generalPage">page</entry>
+	<entry key="generalPages">pages</entry>
+	<entry key="generalPathLabel">Path</entry>
+	<entry key="generalPresentationLabel">Presentation</entry>
+	<entry key="generalPreview">Preview</entry>
+	<entry key="generalRecoveryLabel">Recovery</entry>
+	<entry key="generalRecoveryMessage">A presentation has been recovered from a previous session.
+Would you like to keep it in the editor?</entry>
+	<entry key="generalSaveMessage">Would you like to save the current presentation?</entry>
+	<entry key="generalSetPreview">Set as preview</entry>
+	<entry key="generalTitle">Title</entry>
+	<entry key="generalToolbarAddPages">Add pages...</entry>
+	<entry key="generalToolbarCreate">Create a book...</entry>
+	<entry key="generalToolbarEdit">Edit selected book...</entry>
+	<entry key="generalToolbarFilter">Set import filter...</entry>
+	<entry key="generalToolbarParent">Browse parent</entry>
+	<entry key="generalToolbarRemove">Remove selected books...</entry>
+	<entry key="generalToolbarRemovePage">Remove selected pages...</entry>
+	<entry key="generalToolbarView">Toggle list/icon view</entry>
+	<entry key="helpAtAnnotationsMsg">&lt;b>Annotation panel&lt;/b>
+	    &lt;br/>This panel allows you to view, edit and add metadata associated with the right side document.
+	    &lt;br/>Use the icons to add text, image and media annotations.</entry>
+	<entry key="helpAtBookMsg">The left side panel shows the pages of your presentation. To add pages, you can:
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Click on the &amp;oplus; icon in the toolbar to import images
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag books and pages from the right side panel
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag image files directly from the file explorer
+		&lt;br/>
+		&lt;br/>The right side panel shows the local collection from the management tool.</entry>
+	<entry key="helpAtCollectionMsg">This is your digital collection from the management tool.&lt;br/>&amp;larr; Drag items to the left to include them in your presentation.</entry>
+	<entry key="helpAtPageMsg">&lt;b>Page&lt;/b>
+	    &lt;br/>The left side panel displays a page of your book.
+	    &lt;br/>You can create and modify regions of interest with the &lt;a href='helpPageToolsMsg'>toolbar&lt;/a> above.
+	    &lt;br/>
+		&lt;br/>The right side panel contains the &lt;a href='helpAtAnnotationsMsg'>annotations&lt;/a> associated with this page.</entry>
+	<entry key="helpAtPosterMsg"></entry>
+	<entry key="helpBook1">Slide your finger to turn the pages</entry>
+	<entry key="helpBook2">Tap on a highlighted area to get more information</entry>
+	<entry key="helpBookMsg">This panel displays the pages of your presentation. To add pages, you can:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Click on the &amp;oplus; sign in the toolbar to browse for images&amp;uarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag books and pages from the right side &amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag images directly from your file explorer into this panel</entry>
+	<entry key="helpBookToolsMsg">&lt;b>Book tools&lt;/b>
+	    &lt;br/>
+	    &lt;br/>&lt;img src='%icons%up-24x24.png'/>&#160;Navigate back to the collection
+	    &lt;br/>&lt;img src='%icons%add-file-24x24.png'/>&#160;Import images as pages
+	    &lt;br/>&lt;img src='%icons%delete-file-24x24.png'/>&#160;Delete the selected pages</entry>
+	<entry key="helpCollectionMsg">This is your digital collection from the management tool.&lt;br/>&amp;larr; Drag items to the left to include them in your presentation.</entry>
+	<entry key="helpCover">&lt;b>Cover&lt;/b>
+	    &lt;br/>
+	    &lt;br/>Each frame can hold an image representing a part of the book cover.
+	    Since book covers often have rounded edges, they might require an image with transparent parts.
+	    However, images with transparency can't be efficiently compressed and might not be suitable if exported in certain contexts.
+	    You can therefore define opaque and transparent versions of the cover images.
+	    &lt;br/>
+	    Any cover part that is undefined will be given a default image if exported.
+	    You can drag files and images on to these frames to define their content.
+	    Use the right click to delete the content of a frame.</entry>
+	<entry key="helpFolderMsg">Right click on a file to preview contents.&lt;br/>&amp;larr; Drag files to the left to include them in your presentation.</entry>
+	<entry key="helpLocalMsg">This is your local storage. Double click on a drive to browse contents.</entry>
+	<entry key="helpManualStitchingMsg">&lt;b>Manual stitching&lt;/b>
+	    &lt;br/>
+	    &lt;br/>You can click and drag the parts around the canvas.
+	    &lt;br/>The corners of the parts have handles allowing you to resize them.
+	    &lt;br/>Press &lt;i>CTRL&lt;/i> while moving a handle to rotate the part.
+	    &lt;br/>If the parts can't be seamlessly assembled with these manipulations, you can edit the stitches by first selecting a part (the selected part has a yellow outline)
+	    and then right clicking on different part. This will open the &lt;a href='helpStitchEditorMsg'>stitch editor&lt;/a>.</entry>
+	<entry key="helpMmtAnnotationsMsg">&lt;b>Annotation panel&lt;/b>
+	    &lt;br/>
+	    &lt;br/>This panel allows you to view, edit and add metadata associated with the right side document.
+	    &lt;br/>Use the &lt;img src='%icons%add-24x24.png'/> button to add text, image and media annotations.</entry>
+	<entry key="helpMmtBookMsg">&lt;b>Book&lt;/b>
+	    &lt;br/>
+	    &lt;br/>This is a book in your collection. From here you can:
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Use the &lt;a href='helpBookToolsMsg'>toolbar&lt;/a> to navigate and add or remove pages
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag image files directly from the file explorer to add pages
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Reorder the pages by dragging the images
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Manage the book &lt;a href='helpCover'>cover&lt;/a>
+		&lt;br/>
+		&lt;br/>Use the &lt;img src='%icons%pencil-24x24.png'/> button to change the title.
+		&lt;br/>Modifications are ignored if the book is locked &lt;img src='%icons%locked-32x32.png'/></entry>
+	<entry key="helpMmtCollectionMsg">&lt;b>Collection&lt;/b>
+        &lt;br/>
+	    &lt;br/>This is your local collection. With the toolbar above, you can:
+		&lt;br/>&lt;img src='%icons%import-24x24.png'/>&#160;Import a book poster that was exported from a different collection
+		&lt;br/>&lt;img src='%icons%import-24x24.png'/>&#160;Export the selected book or poster
+		&lt;br/>&lt;img src='%icons%add-file-24x24.png'/>&#160;Create a new document
+		&lt;br/>&lt;img src='%icons%delete-file-24x24.png'/>&#160;Delete the selected documents</entry>
+	<entry key="helpMmtPageMsg">&lt;b>Page&lt;/b>
+	    &lt;br/>
+	    &lt;br/>The left side panel displays a page of your book.
+	    &lt;br/>You can create and modify regions of interest with the &lt;a href='helpPageToolsMsg'>toolbar&lt;/a> above.
+	    &lt;br/>
+		&lt;br/>The right side panel contains the &lt;a href='helpMmtAnnotationsMsg'>annotations&lt;/a> associated with this page.</entry>
+	<entry key="helpMmtPosterMsg">&lt;b>Poster&lt;/b>
+	    &lt;br/>
+	    &lt;br/>This is a poster in your collection. From here you can:
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Use the &lt;a href='helpPosterToolsMsg'>toolbar&lt;/a> to navigate and edit parts
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag image files directly from the file explorer to add parts
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Change the configuration by dragging the images
+		&lt;br/>
+		&lt;br/>Use the &lt;img src='%icons%pencil-24x24.png'/> button to change the title.
+		&lt;br/>Modifications are ignored if the poster is locked &lt;img src='%icons%locked-32x32.png'/></entry>
+	<entry key="helpPageMsg">This is a slide of your presentation. You can:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Create and modify regions of interest with the toolbar above&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Add regions and annotations by dragging them from the right&amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag supported files on a region from your file explorer</entry>
+	<entry key="helpPageToolsMsg">&lt;b>Page tools&lt;/b>
+	    &lt;br/>
+	    &lt;br/>&lt;img src='%icons%previous-24x24.png'/>&#160;Navigate to the previous page
+	    &lt;br/>&lt;img src='%icons%next-24x24.png'/>&#160;Navigate to the next page
+	    &lt;br/>&lt;img src='%icons%up-24x24.png'/>&#160;Navigate back to all pages
+	    &lt;br/>&lt;img src='%icons%fit-24x24.png'/>&#160;Fit the page view to fill the panel
+	    &lt;br/>&lt;img src='%icons%add-free-roi-24x24.png'/>&#160;Create a free shape region of interest
+	    &lt;br/>&lt;img src='%icons%add-rect-roi-24x24.png'/>&#160;Create a rectangular region of interest
+	    &lt;br/>&lt;img src='%icons%resize-page-24x24.png'/>&#160;Crop the page</entry>
+	<entry key="helpPosterStitchEditMsg">&lt;b>Stitching editor&lt;/b>
+	    &lt;br/>
+	    This editor allows you to precisely define the overlap between two images. This is done by specifying pairs of points that match on both documents, 
+	    referred to as stitches.
+	    &lt;br/>
+	    &lt;br/>&lt;u>Usage&lt;/u>
+	    &lt;br/>This editor displays the two images that were selected for stitching.
+	    You can drag the mouse with the right button held down to move around either image. Use the mouse wheel to zoom in and out. Red dots indicate points of interest
+	    that can be used as endpoints for a stitch. Stitches themselves are drawn as pink lines.
+	    &lt;br/>
+	    &lt;br/>&lt;u>Automatic stitching&lt;/u>
+	    &lt;br/>Stitching can be done automatically by using the &lt;img src='%icons%detect-stitches-24x24.png'/>&#160;detect button.
+	    This process will assume that both images do indeed overlap and will try to force a match.
+	    &lt;br/>
+	    &lt;br/>&lt;u>Manual stitching&lt;/u>
+	    &lt;br/>You can manually stitch the images if the detection isn't successful. You can create a point of interest by left clicking on one of the images while
+	    holding &lt;i>Ctrl&lt;/i> key. You can also use one of the automatically detected points of interest. Points can be selected by left clicking on them, showing
+	    a yellow outline. When a point is selected on each image, use the &lt;img src='%icons%toggle-stitch-24x24.png'/>&#160;link button to add a stitch between them, 
+	    or remove a stitch if one already exists.
+	    &lt;br/>
+	    &lt;br/>&lt;u>Toolbar&lt;/u>
+	    &lt;br/>Here are the tools at your disposal in this editor:
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%stitch-flip-24x24.png'/>&#160;Flip between a horizontal and vertical layout
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%stitch-reverse-24x24.png'/>&#160;Reverse image locations
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%stitch-poi-24x24.png'/>&#160;Clear all stitches and show auto-detected points of interest
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%erase-pois-24x24.png'/>&#160;Clear all stitches and points of interest
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%toggle-stitch-24x24.png'/>&#160;Add or remove stitch between selected points
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%detect-stitches-24x24.png'/>&#160;Detect stitches automatically
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%previous-24x24.png'/>&#160;Leave the editor</entry>
+	<entry key="helpPosterStitchMsg">&lt;b>Poster stitching&lt;/b>
+	    &lt;br/>
+	    &lt;br/>This is a poster being stitched into a seamless document. Use this tool to assemble slightly overlapping images into a single one.
+	    &lt;br/>
+	    &lt;br/>&lt;u>Usage&lt;/u>
+	    &lt;br/>This editor displays a canvas where all the parts of the poster are laid out. The goal is to assemble them together to construct a single image.
+	    You can drag the mouse with the right button held down to move around the canvas. Use the mouse wheel to zoom in and out. You can select individual parts
+	    by left clicking on them. Press space when a part is selected to see the contained image in full definition.
+	    &lt;br/>
+	    &lt;br/>&lt;u>Automatic assembly&lt;/u>
+	    &lt;br/>This process can be done automatically by using the &lt;img src='%icons%detect-stitches-24x24.png'/>&#160;detect button.
+	    If the detection is sucessful, all you need to do is rotate the interlinked parts to best fit inside a rectangle and 
+	    &lt;img src='%icons%render-stitch-24x24.png'/>&#160;render the poster.
+	    &lt;br/>
+	    &lt;br/>&lt;u>Manual assembly&lt;/u>
+	    &lt;br/>You can manually assemble the parts if the detection isn't successful. You can move a part around by dragging it with the left mouse button.
+	    The corners of a part can be grabbed for resizing and rotating (by holding the &lt;i>Ctrl&lt;/i> key).
+	    &lt;br/>If you grab a part close to an edge, that edge will appear in blue and snap on to nearby edges when dragged, allowing for perfect alignment of parts.
+	    Similarily, when resizing a part, the corners adjacent to the corner being dragged will snap on to nearby corners. 
+	    &lt;br/>When you modify a part, all connected parts (denoted by either a red or blue line) will change as well to remain unchanged relative to the original one. 
+	    A red line indicates that the connection between two parts is exactly as displayed with no further deformations. 
+	    A blue line indicates that a more complex deformation has been computed between the two. This is necessary when you have images that don't perfectly line up or overlap,
+	    usually due to slighly different perspectives or camera lens deformations.
+	    &lt;br/>If a part is selected (yellow outline), you can right click on different part to edit their relation:
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;If no relation exists, you can associate them together. This will build a red line and lock both parts into place relative
+	    to each other based on their current configuration.
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;If a relation exists, you can disassociate the parts. No line is shown and changing one has no influence on the other.
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;If a relation exists, you can &lt;a href='helpPosterStitchEditMsg'>edit the stitches&lt;/a>. 
+	    This will allow you to define complex deformations to seamlessly join both parts.
+	    &lt;br/>
+	    &lt;br/>&lt;u>Toolbar&lt;/u>
+	    &lt;br/>Here are the tools at your disposal in this editor:
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%save-stitches-24x24.png'/>&#160;Save the current state of the stitches
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%clear-stitches-24x24.png'/>&#160;Clear all stitches
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%detect-stitches-24x24.png'/>&#160;Detect document layout and stitching
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%render-stitch-24x24.png'/>&#160;Use current layout for &lt;a href='helpPosterRenderMsg'>rendering&lt;/a>
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%previous-24x24.png'/>&#160;Cancel stitching process</entry>
+	<entry key="helpPosterStitchRenderMsg">&lt;b>Poster rendering&lt;/b>
+	    &lt;br/>
+	    This editor allows you to render a stitched poster. 
+	    referred to as stitches.
+	    &lt;br/>
+	    &lt;br/>&lt;u>Usage&lt;/u>
+	    &lt;br/>This editor displays the full layout of your poster.
+	    You can drag the mouse with the right button held down to move around either image. Use the mouse wheel to zoom in and out. Four lines define the rectangle that
+	    will be rendered, the excluded area being greyed out. You can click and drag these lines to change the rectangle. You can type a numerical value in the 
+	    &lt;i>Max tile size&lt;/i> field to control the number of sub-images that will be created. Use the &lt;i>Resolution&lt;/i> slider to control the quality
+	    of the output (slide all the way to the right for minimal loss). Once these parameters are set up, use the &lt;img src='%icons%render-stitch-24x24.png'/>&#160;
+	    render button to generate the poster. Upon completion the editor will close. 
+	    &lt;br/>
+	    &lt;br/>&lt;u>Toolbar&lt;/u>
+	    &lt;br/>Here are the tools at your disposal in this editor:
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%bounds-24x24.png'/>&#160;Fit the bounds around the content
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%render-stitch-24x24.png'/>&#160;Render the poster
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%previous-24x24.png'/>&#160;Leave the editor</entry>
+	<entry key="helpPosterToolsMsg">&lt;b>Poster tools&lt;/b>
+	    &lt;br/>
+	    &lt;br/>&lt;img src='%icons%up-24x24.png'/>&#160;Navigate back to the collection
+	    &lt;br/>&lt;img src='%icons%add-file-24x24.png'/>&#160;Append images as poster parts
+	    &lt;br/>&lt;img src='%icons%delete-file-24x24.png'/>&#160;Delete the selected parts
+	    &lt;br/>&lt;img src='%icons%fill-poster-24x24.png'/>&#160;Fill the holes in the poster grid to obtain a rectangle
+	    &lt;br/>&lt;img src='%icons%mirror-hor-24x24.png'/>&#160;Swap all the parts horizontally
+	    &lt;br/>&lt;img src='%icons%mirror-ver-24x24.png'/>&#160;Swap all the parts vertically
+	    &lt;br/>&lt;img src='%icons%rotate-left-24x24.png'/>&#160;Rotate all the parts a quarter turn counter-clockwise
+	    &lt;br/>&lt;img src='%icons%rotate-right-24x24.png'/>&#160;Rotate all the parts a quarter turn clockwise
+	    &lt;br/>&lt;img src='%icons%stitch-24x24.png'/>&#160;Stitch together parts that don't line up</entry>
+	<entry key="helpPreview">&lt;b>Preview&lt;/b>
+	    &lt;br/>The preview is used to represent this document in the reader tool once exported.
+	    &lt;br/>If no preview is defined, a default image is used.
+	    &lt;br/>You can drag a file or an image on to this frame to set the preview.
+	    &lt;br/>Use a right click on this frame to delete the current preview.</entry>
+	<entry key="helpRegionMsg">You have selected a region of interest and the elements it contains are displayed in the right panel &amp;rarr;&lt;br/>You can add, remove, edit and reorder the elements using the toolbars.</entry>
+	<entry key="helpRoi1">Slide your finger on the right side to scroll up and down</entry>
+	<entry key="helpRoi2">Tap anywhere on the left side to return to the book</entry>
+	<entry key="helpShelf1">Slide your finger to select a book</entry>
+	<entry key="helpShelf2">Tap on a book to open it</entry>
+	<entry key="helpStitchEditorMsg">&lt;b>Stitch editor&lt;/b>
+	    &lt;br/>
+	    &lt;br/>The stitch editor provides tools for stitching together two parts which means finding points of overlap between the two and joining them into a single image.</entry>
+	<entry key="homeErrorMessage">Unable to initialize home directory</entry>
+	<entry key="homeLabel">Home directory</entry>
+	<entry key="imageAnalysis">Select an image area for analysis</entry>
+	<entry key="imageDelUnlockMessage">You must unlock this book in order to change the page configuration.</entry>
+	<entry key="imageFillPosterMessage">You must fill poster holes before using this operation.</entry>
+	<entry key="imageGotoLabel">Go to</entry>
+	<entry key="imageLocateLabel">Get location code</entry>
+	<entry key="imageLockTooltip">Lock/Unlock page configuration</entry>
+	<entry key="imageProcessFunctionContrast">Contrast Adjustment</entry>
+	<entry key="imageProcessFunctionCrop">Crop</entry>
+	<entry key="imageToolbarAddFreeRoi">Add a free region of interest</entry>
+	<entry key="imageToolbarAddRectRoi">Add a rectangle region of interest</entry>
+	<entry key="imageToolbarClearStitches">Clear all stitches</entry>
+	<entry key="imageToolbarCrop">Crop page</entry>
+	<entry key="imageToolbarDelRoi">Delete a Region Of Interest</entry>
+	<entry key="imageToolbarDetectStitches">Detect stitches</entry>
+	<entry key="imageToolbarFillPoster">Fill poster holes</entry>
+	<entry key="imageToolbarFit">Fit in frame</entry>
+	<entry key="imageToolbarMirrorHor">Horizontal mirror</entry>
+	<entry key="imageToolbarMirrorVer">Vertical mirror</entry>
+	<entry key="imageToolbarNextHistoric">Next page</entry>
+	<entry key="imageToolbarNextPage">Next Page</entry>
+	<entry key="imageToolbarPreviousHistoric">Previous page</entry>
+	<entry key="imageToolbarPreviousPage">Previous Page</entry>
+	<entry key="imageToolbarRenderStitches">Render stitched document</entry>
+	<entry key="imageToolbarRotateLeft">Rotate left</entry>
+	<entry key="imageToolbarRotateRight">Rotate right</entry>
+	<entry key="imageToolbarSaveStitches">Save stitching</entry>
+	<entry key="imageToolbarScroll">Scroll</entry>
+	<entry key="imageToolbarSelect">Select</entry>
+	<entry key="imageToolbarStitch">Stitch parts together</entry>
+	<entry key="imageToolbarUnstitch">Discard stitching</entry>
+	<entry key="imageToolbarUp">Show book</entry>
+	<entry key="imageToolbarUpPage">Go to Book</entry>
+	<entry key="imageToolbarZoomIn">Zoom In</entry>
+	<entry key="imageToolbarZoomOut">Zoom Out</entry>
+	<entry key="imageUnlockMessage">You are about to unlock this book which will allow you to change the page configuration.
+									Changing the configuration might render merging operations impossible with books from other sources 
+									which have not undergone the same changes.
+									Are you sure you wish to continue?</entry>
+	<entry key="imagesLabel">Loading images...</entry>
+	<entry key="importActionMessage">What would like to do?</entry>
+	<entry key="importAddMessage">Add &lt;i>%b&lt;/i></entry>
+	<entry key="importAnnotationFilter">&lt;html>Annotations named &lt;b>%name&lt;/b> should be &lt;/html></entry>
+	<entry key="importAnnotations">Annotations</entry>
+	<entry key="importChooseHelpLabel">Use Ctrl and Shift keys for multiple items</entry>
+	<entry key="importChooseLabel">Select the books to import from</entry>
+	<entry key="importCover">Cover import</entry>
+	<entry key="importDiscarded">Discarded</entry>
+	<entry key="importEmptyPosterMessage">The presentation must be empty to import a poster.</entry>
+	<entry key="importExportTitle">Import/Export</entry>
+	<entry key="importExportToLabel">Export to</entry>
+	<entry key="importImportFromLabel">Import from</entry>
+	<entry key="importImported">Imported</entry>
+	<entry key="importMergeMessage">Merge &lt;i>%b1&lt;/i>&lt;br>with &lt;i>%b2&lt;/i></entry>
+	<entry key="importPageNumberErrorMessage">The two books have a different number of pages</entry>
+	<entry key="importPageRegions">Discard pages with no regions</entry>
+	<entry key="importPageTags">Only import pages that are tagged with at least one of the following tags:</entry>
+	<entry key="importPages">Pages</entry>
+	<entry key="importPoster">Poster import</entry>
+	<entry key="importRegionAnnotations">Discard regions with no annotations</entry>
+	<entry key="importRegionTags">Only import regions that are tagged with at least one of the following tags:</entry>
+	<entry key="importRegions">Regions</entry>
+	<entry key="importTextStyle">and text content should be styled as</entry>
+	<entry key="importTitle">Import Options</entry>
+	<entry key="importTransferMessage">Transfering...</entry>
+	<entry key="keyCountLabel">Occurrences</entry>
+	<entry key="keyDeleteLabel">Delete</entry>
+	<entry key="keyEmptyMessage">The name can't be empty.</entry>
+	<entry key="keyManagerLabel">Annotation name manager</entry>
+	<entry key="keyMergeLabel">Merge</entry>
+	<entry key="keyMergeMessage">All occurrences of the name &lt;i>%from&lt;/i> will become &lt;i>%to&lt;/i>.</entry>
+	<entry key="keyNameReservedMessage">This name is reserved by the system.</entry>
+	<entry key="keyReservedMessage">This annotation name is reserved by the system and can't be merged or deleted.</entry>
+	<entry key="keySelectMessage">Select an annotation name to merge with &lt;i>%from&lt;/i>.</entry>
+	<entry key="keyUsedMessage">This name is already in use.</entry>
+	<entry key="loadingLabel">Loading collection...</entry>
+	<entry key="manageAddBookLabel">Add a book</entry>
+	<entry key="manageAddCustomBookLabel">Create a book from custom image files</entry>
+	<entry key="manageAddEmptyBookLabel">Create an empty book</entry>
+	<entry key="manageAddFolderBookLabel">Create a book from image files in a folder</entry>
+	<entry key="manageAppendPagesLabel">Append pages to the book</entry>
+	<entry key="manageCancelLabel">Cancel</entry>
+	<entry key="manageCollectionLabel">Collection</entry>
+	<entry key="manageCreatePresentation">Create presentation of the selected book</entry>
+	<entry key="manageDataAuthorLabel">Author</entry>
+	<entry key="manageDataCountryLabel">Country</entry>
+	<entry key="manageDataGenreLabel">Genre</entry>
+	<entry key="manageDataLanguageLabel">Language</entry>
+	<entry key="manageDataTitleLabel">Title</entry>
+	<entry key="manageDataYearLabel">Year</entry>
+	<entry key="manageDeleteBookLabel">Delete selected books</entry>
+	<entry key="manageDeleteBookMsg">Are you sure you want to delete the following books?</entry>
+	<entry key="manageDeletePageLabel">Delete selected pages</entry>
+	<entry key="manageDeletePageMsg">Are you sure you want to delete these pages?</entry>
+	<entry key="manageExistsMessage">&lt;html>A book with the title &lt;i>%name&lt;/i> already exists.&lt;br/>Please specify a different title:&lt;/html></entry>
+	<entry key="manageExportBookLabel">Export book</entry>
+	<entry key="manageExportPageLabel">Export selected pages...</entry>
+	<entry key="manageFailedMessage">The following files could not be imported:</entry>
+	<entry key="manageFolderLabel">Folder</entry>
+	<entry key="manageImportBookLabel">Import book</entry>
+	<entry key="manageImportPagesLabel">Importing...</entry>
+	<entry key="manageImportTypeMsg">Please choose how you would like to add a new book.</entry>
+	<entry key="manageInputMetadataMsg">Fill in book information here. Hit 'next' to complete creation.</entry>
+	<entry key="manageInputTitleLabel">Give a title to the book</entry>
+	<entry key="manageLoadingLabel">Loading page...</entry>
+	<entry key="manageMergeLabel">Merge</entry>
+	<entry key="manageMergeMessage">&lt;html>Would you like to merge the imported book with &lt;i>%name&lt;/i>?&lt;/html></entry>
+	<entry key="manageNewDocumentLabel">New document</entry>
+	<entry key="manageNextLabel">Next</entry>
+	<entry key="managePreviousLabel">Previous</entry>
+	<entry key="manageProcessBookLabel">Process all pages in the selected book</entry>
+	<entry key="manageProcessPageLabel">Process selected pages...</entry>
+	<entry key="manageRefreshLabel">Refresh</entry>
+	<entry key="manageRenameExistsMessage">A book with this title already exists.</entry>
+	<entry key="manageRenameLabel">Rename the selected book</entry>
+	<entry key="manageSelectAllLabel">Select all</entry>
+	<entry key="manageSelectFilesLabel">Files</entry>
+	<entry key="manageSelectFilesMsg">Select the images to import</entry>
+	<entry key="manageSelectFolderLabel">Choose a folder</entry>
+	<entry key="manageSelectFolderMsg">Please select the folder to import the images from.</entry>
+	<entry key="manageSelectNoneLabel">Select none</entry>
+	<entry key="manageSelectRecognizedLabel">Select recognized formats</entry>
+	<entry key="mirrorParts">Mirror poster</entry>
+	<entry key="mmtLabel">Manuscript Management Tool</entry>
+	<entry key="mmtMessage">This tool allows you to edit, annotate and search your digital collection.</entry>
+	<entry key="mmtTitle">DocExplore Manuscript Management Tool</entry>
+	<entry key="moveAnnotation">Move comment</entry>
+	<entry key="movePages">Move pages</entry>
+	<entry key="moveParts">Move parts</entry>
+	<entry key="noDescriptionMsg">No description available</entry>
+	<entry key="noLabel">No</entry>
+	<entry key="noResultsMsg">No results to display</entry>
+	<entry key="pluginAnalysisInputFirstMessage">While viewing a page, use the</entry>
+	<entry key="pluginAnalysisInputSecondMessage">tool to define an input.</entry>
+	<entry key="pluginAnalysisLabel">Tasks</entry>
+	<entry key="pluginAnalysisTaskMessage">Which task would you like to perform?</entry>
+	<entry key="pluginAnalysisToolMessage">Which tool would you like to use?</entry>
+	<entry key="pluginAutoOpenLabel">Open this window after defining an input.</entry>
+	<entry key="pluginInputLabel">Input</entry>
+	<entry key="pluginNoAnalysisToolMessage">No analysis tools are available.</entry>
+	<entry key="pluginParameterFirstMessage">Type in parameters in a 'key=value' form</entry>
+	<entry key="pluginParameterSecondMessage">separated by commas or a new line.</entry>
+	<entry key="pluginParametersLabel">Parameters</entry>
+	<entry key="pluginResultLabel">Results</entry>
+	<entry key="pluginTaskCanceledLabel">Canceled</entry>
+	<entry key="pluginTaskCompletedLabel">Completed</entry>
+	<entry key="pluginTaskPendingLabel">Pending</entry>
+	<entry key="pluginTaskPluginLabel">Plugin</entry>
+	<entry key="pluginTaskRunningLabel">Running</entry>
+	<entry key="pluginTaskStatusLabel">Status</entry>
+	<entry key="pluginTaskTaskLabel">Task</entry>
+	<entry key="pluginTaskTimeLabel">Time</entry>
+	<entry key="pluginTasksLabel">Tasks</entry>
+	<entry key="popupcopy"></entry>
+	<entry key="popuppaste"></entry>
+	<entry key="previewRatio">Display aspect ratio</entry>
+	<entry key="previewTitle">Preview</entry>
+	<entry key="previewWarning">Warning: the specificities of your display may incur slight changes in layout</entry>
+	<entry key="processAllLabel">All images</entry>
+	<entry key="processCurrentLabel">Current image</entry>
+	<entry key="processFieldNameLabel">Choose a field or type in a new one :</entry>
+	<entry key="processFieldNameTitle">Field name</entry>
+	<entry key="processInFileLabel">In file...</entry>
+	<entry key="processInFilesLabel">In files...</entry>
+	<entry key="processInMetadataLabel">Into meta data...</entry>
+	<entry key="processPreviewLabel">Preview</entry>
+	<entry key="processProcessLabel">Process</entry>
+	<entry key="processTitleLabel">Image processing</entry>
+	<entry key="quitLabel">Quit</entry>
+	<entry key="readLabel">Do you wish to read &lt;i>%s&lt;/i>?</entry>
+	<entry key="readerLabel">Reader</entry>
+	<entry key="readerMessage">This tool allows you to view and interact with digital presentations.</entry>
+	<entry key="readerOldLabel">Old reader</entry>
+	<entry key="readerOldMessage">For compatibility reasons, you can use the previous version of the reader app. 
+	    &lt;br/>Use this version if you experience problems viewing older presentations.
+	    &lt;br/>This version might not work with new presentations.</entry>
+	<entry key="recordInputLabel">Input</entry>
+	<entry key="recordOutputLabel">Output</entry>
+	<entry key="recordPlayingLabel">Playing</entry>
+	<entry key="recordRecordingLabel">Recording</entry>
+	<entry key="recordStoppedLabel">Stopped</entry>
+	<entry key="restartLabel">Restart</entry>
+	<entry key="restartMessage">You must restart DocExplore for the changes to take effect.</entry>
+	<entry key="resultsLabel">Results</entry>
+	<entry key="rotateParts">Rotate poster</entry>
+	<entry key="saveStitchLabel">Save changes?</entry>
+	<entry key="saveStitchMsg">Save the changes made to the part stitches?</entry>
+	<entry key="searcByMD">Search by annotation name...</entry>
+	<entry key="searcByTag">Search by tag...</entry>
+	<entry key="searchBooksLabel">Books</entry>
+	<entry key="searchKeyLabel">Select the name of the annotation to search</entry>
+	<entry key="searchLabel">Search</entry>
+	<entry key="searchMetaDataLabel">Meta data</entry>
+	<entry key="searchMethodAllLabel">Matching all of the criteria below</entry>
+	<entry key="searchMethodAnyLabel">Matching any of the criteria below</entry>
+	<entry key="searchPagesLabel">Pages</entry>
+	<entry key="searchPanelLabel">Show/hide search panel</entry>
+	<entry key="searchRoisLabel">ROIs</entry>
+	<entry key="searchTagLabel">Select the name of the tag to search</entry>
+	<entry key="searchTypeLabel">Search only among:</entry>
+	<entry key="searchingMsg">Searching...</entry>
+	<entry key="statusAnalysisMessage">Click on one corner of the region, then on the opposite corner to define an input.</entry>
+	<entry key="statusBeaconMessage">Location of the given code.</entry>
+	<entry key="statusFreeMessage">Click on each summit of the region, then click on the first summit to close the shape.</entry>
+	<entry key="statusSquareMessage">Click and drag the mouse from one corner of the region to the opposite corner.</entry>
+	<entry key="stitcherClearPois">Remove all points of interest</entry>
+	<entry key="stitcherFitBounds">Fit bounds</entry>
+	<entry key="stitcherFitView">Fit</entry>
+	<entry key="stitcherFlipView">Flip view</entry>
+	<entry key="stitcherReverseView">Reverse view</entry>
+	<entry key="stitcherMaxTileSize">Max tile size</entry>
+	<entry key="stitcherRefreshPois">Refresh points of interest</entry>
+	<entry key="stitcherRender">Render</entry>
+	<entry key="stitcherToggleLink">Add or remove link between points of interest</entry>
+	<entry key="stitcherResolution">Resolution</entry>
+	<entry key="structureCommentLabel">Comment</entry>
+	<entry key="structureDefaultComment">Enter comment here.</entry>
+	<entry key="structureDefaultUri">Paste URI here.</entry>
+	<entry key="structureLinkLabel">Link</entry>
+	<entry key="structureName">Links</entry>
+	<entry key="structureUriLabel">URI</entry>
+	<entry key="structureUriOpen">Open</entry>
+	<entry key="styleClose">Close</entry>
+	<entry key="styleEdit">Edit styles</entry>
+	<entry key="styleFont">Font</entry>
+	<entry key="styleName">Name</entry>
+	<entry key="stylePreview">Preview</entry>
+	<entry key="styleSettings">Settings</entry>
+	<entry key="styleStyles">Styles</entry>
+	<entry key="styleTest">Wafting zephyrs quickly vexed Jumbo.</entry>
+	<entry key="switchHomeLabel">Switch home directory...</entry>
+	<entry key="switchHomeMessage">&lt;html>Please specify the location of the home directory.&lt;br/>
+The home directory is where DocExplore will store all of the data you create.&lt;/html></entry>
+	<entry key="tagAddTagLabel">Add</entry>
+	<entry key="tagDeleteMessage">All occurrences of the tag &lt;i>%from&lt;/i> will be removed.</entry>
+	<entry key="tagEmptyMessage">The tag can't be empty.</entry>
+	<entry key="tagManagerLabel">Tag manager</entry>
+	<entry key="tagMergeMessage">All occurrences of the tag &lt;i>%from&lt;/i> will become &lt;i>%to&lt;/i>.</entry>
+	<entry key="tagSelectMessage">Select a tag to merge with &lt;i>%from&lt;/i>.</entry>
+	<entry key="tagTagLabel">Tags</entry>
+	<entry key="tagTagTooltip">This field contains keywords separated by a comma. 
+		Use the list on the left to add an already referenced keyword.</entry>
+	<entry key="tagUsedMessage">This tag already exists.</entry>
+	<entry key="textDefaultMessage">Enter text here</entry>
+	<entry key="transcriptAvailableLabel">Annotations</entry>
+	<entry key="transcriptDefaultAuthor">New Author</entry>
+	<entry key="transcriptDefaultContent">Enter transcription here.</entry>
+	<entry key="transcriptDisplayLabel">Transcription by</entry>
+	<entry key="transcriptEditorApplyButton">Apply</entry>
+	<entry key="transcriptEditorAuthorLabel">Author</entry>
+	<entry key="transcriptEditorContentLabel">Content</entry>
+	<entry key="transcriptEditorLabel">Transcription</entry>
+	<entry key="transcriptName">Transcriptions</entry>
+	<entry key="transposeParts">Transpose poster</entry>
+	<entry key="uriCopyLabel">Copy URI</entry>
+	<entry key="uriPasteLabel">Paste URI</entry>
+	<entry key="useLayoutLabel">Use current layout?</entry>
+	<entry key="useLayoutMessage">Would you like to limit the detection to empty assocations (the lines in red)? If you select not to, all current association will be removed
+	    and the detection will make no assumptions on the overall layout.</entry>
+	<entry key="viewHelpToggle">Show help</entry>
+	<entry key="waitLabel">Please wait</entry>
+	<entry key="yesLabel">Yes</entry>
+</properties>

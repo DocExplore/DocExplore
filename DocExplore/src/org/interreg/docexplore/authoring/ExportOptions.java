@@ -15,9 +15,11 @@ The fact that you are presently reading this means that you have had knowledge o
 package org.interreg.docexplore.authoring;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -131,9 +133,9 @@ public class ExportOptions extends JPanel
 	}
 	
 	static ExportOptions options = new ExportOptions();
-	public static ExportOptions getOptions(AuthoringToolFrame comp, int exportType)
+	public static ExportOptions getOptions(Component comp, List<MetaDataPlugin> plugins, int exportType)
 	{
-		for (MetaDataPlugin plugin : comp.plugins)
+		for (MetaDataPlugin plugin : plugins)
 			plugin.setupExportOptions(options, exportType);
 		
 		final JDialog dialog = new JDialog(JOptionPane.getRootFrame(), Lang.s("exportOptions"), true);
@@ -141,12 +143,12 @@ public class ExportOptions extends JPanel
 		dialog.add(options, BorderLayout.CENTER);
 		final boolean [] res = {false};
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		buttonPanel.add(new JButton(new AbstractAction(Lang.s("default-lrb", "cfgOkLabel")) {public void actionPerformed(ActionEvent e)
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("cfgOkLabel")) {public void actionPerformed(ActionEvent e)
 		{
 			res[0] = true;
 			dialog.setVisible(false);
 		}}));
-		buttonPanel.add(new JButton(new AbstractAction(Lang.s("default-lrb", "cfgCancelLabel")) {public void actionPerformed(ActionEvent e)
+		buttonPanel.add(new JButton(new AbstractAction(Lang.s("cfgCancelLabel")) {public void actionPerformed(ActionEvent e)
 		{
 			dialog.setVisible(false);
 		}}));

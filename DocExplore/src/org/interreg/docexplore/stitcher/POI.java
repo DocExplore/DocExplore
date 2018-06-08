@@ -3,33 +3,17 @@ package org.interreg.docexplore.stitcher;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class POI
+public abstract class POI
 {
 	Fragment fragment;
-	double x, y, trace, strength, scale, orientation;
+	double x, y;
 	double [] descriptor;
 	int index;
 	
-	public POI(Fragment fragment, double [] surf, int index)
+	public POI(Fragment fragment, double [] d, int index)
 	{
 		this.fragment = fragment;
-		this.x = surf[0];
-		this.y = surf[1];
-		this.trace = surf[2];
-		this.strength = surf[3];
-		this.scale = surf[4];
-		this.orientation = surf[5];
-		this.descriptor = new double [surf.length-6];
-		for (int i=0;i<descriptor.length;i++)
-			descriptor[i] = surf[i+6];
-		this.index = index;
-	}
-	public POI(Fragment fragment, double x, double y, int index)
-	{
-		this.fragment = fragment;
-		this.x = x;
-		this.y = y;
-		this.descriptor = new double [0];
+		initFromVector(d);
 		this.index = index;
 	}
 	public POI(POI poi, int index)
@@ -37,45 +21,65 @@ public class POI
 		this.fragment = poi.fragment;
 		this.x = poi.x;
 		this.y = poi.y;
-		this.trace = poi.trace;
-		this.strength = poi.strength;
-		this.scale = poi.scale;
-		this.orientation = poi.orientation;
 		this.descriptor = poi.descriptor;
 		this.index = index;
 	}
 	
-	static int serialVersion = 0;
-	public POI(ObjectInputStream in, Fragment fragment, int index) throws Exception
+	static int serialVersion = 1;
+	public POI(ObjectInputStream in, Fragment fragment, int index, int serialVersion) throws Exception
 	{
-		@SuppressWarnings("unused")
-		int serialVersion = in.readInt();
 		this.fragment = fragment;
 		this.x = in.readDouble();
 		this.y = in.readDouble();
-		this.trace = in.readDouble();
-		this.strength = in.readDouble();
-		this.scale = in.readDouble();
-		this.orientation = in.readDouble();
+		initFromStream(in);
 		this.descriptor = (double [])in.readObject();
 		this.index = index;
 	}
 	
+	public static POI read(ObjectInputStream in, Fragment fragment, int index) throws Exception
+	{
+		String type = "surf";
+		int serialVersion = in.readInt();
+		if (serialVersion > 0)
+			type = in.readUTF();
+		if (type.equals("surf"))
+			return new SurfPOI(in, fragment, index, serialVersion);
+		else if (type.equals("user"))
+			return new UserPOI(in, fragment, index, serialVersion);
+		else if (type.equals("lbp"))
+			return new LbpPOI(in, fragment, index, serialVersion);
+		return null;
+	}
+	public static POI copy(POI poi, int index)
+	{
+		if (poi.type().equals("surf"))
+			return new SurfPOI((SurfPOI)poi, index);
+		if (poi.type().equals("user"))
+			return new UserPOI((UserPOI)poi, index);
+		if (poi.type().equals("lbp"))
+			return new LbpPOI((LbpPOI)poi, index);
+		return null;
+	}
+	
+	protected abstract void initFromVector(double [] d);
+	protected abstract void initFromStream(ObjectInputStream in) throws Exception;
+	protected abstract void writeToStream(ObjectOutputStream out) throws Exception;
+	public abstract String type();
+	public abstract double matchThreshold();
+	
 	public void write(ObjectOutputStream out) throws Exception
 	{
 		out.writeInt(serialVersion);
+		out.writeUTF(type());
 		out.writeDouble(x);
 		out.writeDouble(y);
-		out.writeDouble(trace);
-		out.writeDouble(strength);
-		out.writeDouble(scale);
-		out.writeDouble(orientation);
+		writeToStream(out);
 		out.writeObject(descriptor);
 	}
 	
 	public double featureDistance2(POI poi)
 	{
-		return descriptorDistance2(poi)+Stitcher.surfScaleAndOrientationWeight*scaleAndOrientationDistance2(poi);
+		return descriptorDistance2(poi);
 	}
 	public double descriptorDistance2(POI poi)
 	{
@@ -83,10 +87,6 @@ public class POI
 		for (int k=0;k<descriptor.length;k++)
 			dist += (descriptor[k]-poi.descriptor[k])*(descriptor[k]-poi.descriptor[k]);
 		return dist;
-	}
-	public double scaleAndOrientationDistance2(POI poi)
-	{
-		return (scale-poi.scale)*(scale-poi.scale)+(orientation-poi.orientation)*(orientation-poi.orientation);
 	}
 	public double uiDistance2(POI poi)
 	{

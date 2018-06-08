@@ -224,7 +224,7 @@ public class SearchComponent extends JPanel
 		
 		mainPanel.add(new JLabel(Lang.s("searchKeyLabel")), BorderLayout.NORTH);
 		
-		Collection<MetaDataKey> allKeys = handler.win.getDocExploreLink().getAllKeys();
+		Collection<MetaDataKey> allKeys = handler.win.host.getLink().getAllKeys();
 		Set<MetaDataKeyEntry> keys = new TreeSet<MetaDataKeyEntry>(new Comparator<MetaDataKeyEntry>()
 			{Collator collator = Collator.getInstance(Locale.getDefault());
 			public int compare(MetaDataKeyEntry o1, MetaDataKeyEntry o2) {return collator.compare(o1.toString(), o2.toString());}});
@@ -306,7 +306,7 @@ public class SearchComponent extends JPanel
 		
 		mainPanel.add(new JLabel(Lang.s("searchTagLabel")), BorderLayout.NORTH);
 		
-		Collection<MetaData> allTags = handler.win.getDocExploreLink().tagKey.getMetaData(MetaData.textType);
+		Collection<MetaData> allTags = handler.win.host.getLink().tagKey.getMetaData(MetaData.textType);
 		Set<TagHolder> keys = new TreeSet<TagHolder>(new Comparator<TagHolder>()
 			{Collator collator = Collator.getInstance(Locale.getDefault());
 			public int compare(TagHolder o1, TagHolder o2) {return collator.compare(o1.toString(), o2.toString());}});
@@ -353,7 +353,7 @@ public class SearchComponent extends JPanel
 					try
 					{
 						pointer[0] = handler.doSearch(
-							Arrays.asList(new Pair<MetaDataKeyEntry, String>(new MetaDataKeyEntry(handler.win.getDocExploreLink().tagKey), value.toString())),
+							Arrays.asList(new Pair<MetaDataKeyEntry, String>(new MetaDataKeyEntry(handler.win.host.getLink().tagKey), value.toString())),
 							false,
 							Arrays.asList(Book.class, Page.class, Region.class));
 					}

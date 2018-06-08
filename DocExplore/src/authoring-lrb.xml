@@ -3,7 +3,7 @@
 <properties>
 	<comment>English resources</comment>
 	
-	<entry key="frameTitle">DocExplore Presentation Tool</entry>
+	<entry key="atTitle">DocExplore Presentation Tool</entry>
 
 	<entry key="generalMenuFile">File</entry>
 	<entry key="generalMenuQuit">Back to menu</entry>
@@ -36,6 +36,8 @@ Would you like to keep it in the editor?</entry>
 	<entry key="generalCopyPaste">Copy/Paste</entry>
 	<entry key="generalTitle">Title</entry>
 	<entry key="generalDescription">Description</entry>
+	<entry key="generalPreview">Preview</entry>
+	<entry key="generalSetPreview">Set as preview</entry>
 	
 	<entry key="exportReader">Export to Reader</entry>
 	<entry key="exportReaderDesc">This presentation will be added to the local collection of this DocExplore installation.</entry>
@@ -45,12 +47,33 @@ Would you like to keep it in the editor?</entry>
 	<entry key="exportMobileDesc">This presentation will be packaged into a file that can be loaded by the DocExplore mobile app.</entry>
 	
 	<entry key="viewHelpToggle">Show help</entry>
-	<entry key="helpBookMsg">This panel displays the pages of your presentation. To add pages, you can:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Click on the &amp;oplus; sign in the toolbar to browse for images&amp;uarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag books and pages from the right side &amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag images directly from your file explorer into this panel</entry>
-	<entry key="helpPageMsg">This is a slide of your presentation. You can:&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Create and modify regions of interest with the toolbar above&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Add regions and annotations by dragging them from the right&amp;rarr;&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag supported files on a region from your file explorer</entry>
+	<entry key="helpAtBookMsg">The left side panel shows the pages of your presentation. To add pages, you can:
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Click on the &amp;oplus; icon in the toolbar to import images
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag books and pages from the right side panel
+		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Drag image files directly from the file explorer
+		&lt;br/>
+		&lt;br/>The right side panel shows the local collection from the management tool.
+	</entry>
 	<entry key="helpRegionMsg">You have selected a region of interest and the elements it contains are displayed in the right panel &amp;rarr;&lt;br/>You can add, remove, edit and reorder the elements using the toolbars.</entry>
-	<entry key="helpCollectionMsg">This is your digital collection from the management tool.&lt;br/>&amp;larr; Drag items to the left to include them in your presentation.</entry>
+	<entry key="helpAtCollectionMsg">This is your digital collection from the management tool.&lt;br/>&amp;larr; Drag items to the left to include them in your presentation.</entry>
 	<entry key="helpLocalMsg">This is your local storage. Double click on a drive to browse contents.</entry>
 	<entry key="helpFolderMsg">Right click on a file to preview contents.&lt;br/>&amp;larr; Drag files to the left to include them in your presentation.</entry>
+	<entry key="helpPreview">&lt;b>Preview&lt;/b>
+	    &lt;br/>The preview is used to represent this document in the reader tool once exported.
+	    &lt;br/>If no preview is defined, a default image is used.
+	    &lt;br/>You can drag a file or an image on to this frame to set the preview.
+	    &lt;br/>Use a right click on this frame to delete the current preview.
+	</entry>
+	<entry key="helpAtPageMsg">&lt;b>Page&lt;/b>
+	    &lt;br/>The left side panel displays a page of your book.
+	    &lt;br/>You can create and modify regions of interest with the &lt;a href='helpPageToolsMsg'>toolbar&lt;/a> above.
+	    &lt;br/>
+		&lt;br/>The right side panel contains the &lt;a href='management helpAnnotationsMsg'>annotations&lt;/a> associated with this page.
+	</entry>
+	<entry key="helpAtAnnotationsMsg">&lt;b>Annotation panel&lt;/b>
+	    &lt;br/>This panel allows you to view, edit and add metadata associated with the right side document.
+	    &lt;br/>Use the icons to add text, image and media annotations.
+	</entry>
 	
 	<entry key="generalToolbarFilter">Set import filter...</entry>
 	<entry key="generalToolbarParent">Browse parent</entry>
@@ -72,6 +95,12 @@ Would you like to keep it in the editor?</entry>
 	<entry key="imageLocateLabel">Get location code</entry>
 	<entry key="imageToolbarPreviousHistoric">Previous page</entry>
 	<entry key="imageToolbarNextHistoric">Next page</entry>
+	<entry key="imageToolbarFillPoster">Fill poster holes</entry>
+	<entry key="imageToolbarMirrorHor">Horizontal mirror</entry>
+	<entry key="imageToolbarMirrorVer">Vertical mirror</entry>
+	<entry key="imageToolbarRotateLeft">Rotate left</entry>
+	<entry key="imageToolbarRotateRight">Rotate right</entry>
+	<entry key="imageFillPosterMessage">You must fill poster holes before using this operation.</entry>
 	
 	<entry key="collectionAddBookMessage">Please specify a title for the presentation</entry>
 	<entry key="collectionDefaultBookLabel">New presentation</entry>
@@ -139,10 +168,12 @@ might visibly reduce their quality, especially when zooming in.&lt;/div>&lt;/htm
 	<entry key="importAnnotationFilter">&lt;html>Annotations named &lt;b>%name&lt;/b> should be &lt;/html></entry>
 	<entry key="importImported">Imported</entry>
 	<entry key="importDiscarded">Discarded</entry>
+	<entry key="importEmptyPosterMessage">The presentation must be empty to import a poster.</entry>
+	<entry key="importPoster">Poster import</entry>
 	
 	<entry key="coverLabel">Cover</entry>
-	<entry key="coverFront">Front cover</entry>
-	<entry key="coverBack">Back cover</entry>
+	<entry key="coverFront">Front</entry>
+	<entry key="coverBack">Back</entry>
 	<entry key="coverFrontInner">Front inner cover</entry>
 	<entry key="coverBackInner">Back inner cover</entry>
 	<entry key="coverDiscard">Discard</entry>

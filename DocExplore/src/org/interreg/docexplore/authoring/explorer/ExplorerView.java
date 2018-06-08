@@ -16,7 +16,6 @@ package org.interreg.docexplore.authoring.explorer;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;

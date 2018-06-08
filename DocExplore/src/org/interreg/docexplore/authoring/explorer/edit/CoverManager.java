@@ -45,6 +45,7 @@ import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.manuscript.Page;
@@ -224,21 +225,21 @@ public class CoverManager extends JPanel
 		}
 	}
 	
-	static BufferedImage getImage(Book book, String keyName) throws Exception
+	static BufferedImage getImage(Book book, MetaDataKey key) throws Exception {return getImage(book, key, null);}
+	static BufferedImage getImage(Book book, MetaDataKey key, MetaDataKey backup) throws Exception
 	{
-		MetaDataKey key = book.getLink().getOrCreateKey(keyName, "");
 		List<MetaData> mds = book.getMetaDataListForKey(key);
 		if (mds == null || mds.isEmpty())
-			return null;
+			return backup != null ? getImage(book, backup) : null;
 		MetaData md = mds.get(0);
 		return md.getImage();
 	}
-	public static BufferedImage buildPreviewCoverImage(Book book)
+	public static BufferedImage buildPreviewCoverImage(DocExploreDataLink link, Book book)
 	{
 		try
 		{
-			BufferedImage front = getImage(book, "frontCover");
-			BufferedImage back = front == null ? getImage(book, "backCover") : null;
+			BufferedImage front = getImage(book, link.frontCoverTrans, link.frontCover);
+			BufferedImage back = front == null ? getImage(book, link.backCoverTrans, link.backCover) : null;
 			if (front == null && back == null)
 				return null;
 			if (front == null)
@@ -260,12 +261,16 @@ public class CoverManager extends JPanel
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 		return null;
 	}
-	public static BufferedImage buildCoverImage(Book book, boolean trans, boolean inner)
+	public static BufferedImage buildCoverImage(DocExploreDataLink link, Book book, boolean trans, boolean inner)
 	{
 		try
 		{
-			BufferedImage front = inner ? getImage(book, "frontInnerCover") : getImage(book, "frontCover");
-			BufferedImage back = inner ? getImage(book, "backInnerCover") : getImage(book, "backCover");
+			BufferedImage front = inner ? 
+				(trans ? getImage(book, link.frontInnerCoverTrans, link.frontInnerCover) : getImage(book, link.frontInnerCover)) : 
+				(trans ? getImage(book, link.frontCoverTrans, link.frontCover) : getImage(book, link.frontCover));
+			BufferedImage back = inner ? 
+				(trans ? getImage(book, link.backInnerCoverTrans, link.backInnerCover) : getImage(book, link.backInnerCover)) : 
+				(trans ? getImage(book, link.backCoverTrans, link.backCover) : getImage(book, link.backCover));
 			if (front == null && back == null)
 			{
 				BufferedImage image = ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("org/interreg/docexplore/reader/book/default"+(inner ? "Inner" : "")+"Cover"+(trans ? "" : "NoTrans")+".png"));
@@ -307,6 +312,6 @@ public class CoverManager extends JPanel
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 		return null;
 	}
-	public static BufferedImage buildCoverImage(Book book, boolean trans) {return buildCoverImage(book, trans, false);}
-	public static BufferedImage buildInnerCoverImage(Book book, boolean trans) {return buildCoverImage(book, trans, true);}
+	public static BufferedImage buildCoverImage(DocExploreDataLink link, Book book, boolean trans) {return buildCoverImage(link, book, trans, false);}
+	public static BufferedImage buildInnerCoverImage(DocExploreDataLink link, Book book, boolean trans) {return buildCoverImage(link, book, trans, true);}
 }

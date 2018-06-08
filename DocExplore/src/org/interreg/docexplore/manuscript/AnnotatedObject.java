@@ -14,6 +14,8 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.manuscript;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +32,8 @@ import org.interreg.docexplore.util.Pair;
  */
 public abstract class AnnotatedObject extends ManuscriptObject
 {
-	Map<MetaDataKey, Map<Integer, MetaData>> metaDataByKey;
+	Map<MetaDataKey, Map<Integer, MetaData>> metaDataByKey = new HashMap<>();
+	Set<Integer> metaDataIds = new HashSet<>();
 	
 	/**
 	 * Loads an existing AnnotatedObject from a {@link ManuscriptLink} with the given id.
@@ -40,7 +43,6 @@ public abstract class AnnotatedObject extends ManuscriptObject
 	AnnotatedObject(ManuscriptLink link, int objectId)
 	{
 		super(link, objectId);
-		this.metaDataByKey = new TreeMap<MetaDataKey, Map<Integer, MetaData>>();
 	}
 	
 	/**
@@ -50,7 +52,6 @@ public abstract class AnnotatedObject extends ManuscriptObject
 	AnnotatedObject(ManuscriptLink link)
 	{
 		super(link);
-		this.metaDataByKey = new TreeMap<MetaDataKey, Map<Integer, MetaData>>();
 	}
 	
 	/**
@@ -66,12 +67,15 @@ public abstract class AnnotatedObject extends ManuscriptObject
 			Map<Integer, MetaData> keyMap = metaDataByKey.get(key);
 			if (keyMap == null)
 			{
-				keyMap = new TreeMap<Integer, MetaData>();
+				keyMap = new HashMap<Integer, MetaData>();
 				metaDataByKey.put(key, keyMap);
 			}
 			keyMap.put(pair.first, null);
+			metaDataIds.add(pair.first);
 		}
 	}
+	
+	public boolean hasMetaDataId(int id) {return metaDataIds.contains(id);}
 	
 	/**
 	 * Returns the annotations associated with this AnnotatedObject.

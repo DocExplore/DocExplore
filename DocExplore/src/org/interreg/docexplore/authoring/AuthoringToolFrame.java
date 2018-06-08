@@ -47,6 +47,7 @@ import org.interreg.docexplore.authoring.explorer.edit.ImportOptions;
 import org.interreg.docexplore.authoring.explorer.edit.InfoElement;
 import org.interreg.docexplore.authoring.explorer.edit.MetaDataEditor;
 import org.interreg.docexplore.authoring.explorer.edit.SlideEditorView;
+import org.interreg.docexplore.authoring.explorer.edit.StyleDialog;
 import org.interreg.docexplore.authoring.explorer.edit.StyleManager;
 import org.interreg.docexplore.authoring.preview.PreviewPanel;
 import org.interreg.docexplore.datalink.DataLink;
@@ -73,8 +74,8 @@ public class AuthoringToolFrame extends JFrame
 	JPanel explorer;
 	DataLinkExplorer linkExplorer;
 	//FileExplorer fileExplorer;
-	ReaderExporter readerExporter;
-	WebExporter webExporter;
+	ReaderExporterOld readerExporter;
+	WebExporterOld webExporter;
 	public DataLinkExplorer editor;
 	boolean regionMode = false;
 	public MetaDataEditor mdEditor;
@@ -87,8 +88,8 @@ public class AuthoringToolFrame extends JFrame
 	public ImportOptions importOptions;
 	public StyleManager styleManager;
 	public MetaDataClipboard clipboard;
-	ExportDialog exportDialog;
-	NameDialog nameDialog;
+	ExportDialogOld exportDialog;
+	NameDialogOld nameDialog;
 	JPanel rightPanel;
 	
 	public final List<MetaDataPlugin> plugins;
@@ -102,8 +103,8 @@ public class AuthoringToolFrame extends JFrame
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.startup = startup;
 		this.displayHelp = startup.showHelp;
-		this.exportDialog = new ExportDialog(this);
-		this.nameDialog = new NameDialog(this);
+		this.exportDialog = new ExportDialogOld(this);
+		this.nameDialog = new NameDialogOld(this);
 		
 		startup.screen.setText("Initializing history");
 		this.historyManager = new HistoryManager(50, new File(DocExploreTool.getHomeDir(), ".at-cache"));
@@ -127,11 +128,23 @@ public class AuthoringToolFrame extends JFrame
 			}
 		}
 		
+		startup.screen.setText("Initializing styles");
+		this.styleManager = new StyleManager()
+		{
+			public void stylesChanged(StyleDialog dialog)
+			{
+				refreshMenu();
+				try {writeMD();}
+				catch (Exception e) {e.printStackTrace();}
+				if (mdEditor != null)
+					try {mdEditor.reload();}
+					catch (Exception e) {e.printStackTrace();}
+			}
+		};
+		
 		startup.screen.setText("Initializing filters");
 		//filter = new FilterPanel(link);
-		this.importOptions = new ImportOptions(this);
-		startup.screen.setText("Initializing styles");
-		this.styleManager = new StyleManager(this);
+		this.importOptions = new ImportOptions(styleManager);
 		
 		startup.screen.setText("Creating explorer data link");
 		this.linkExplorer = new DataLinkExplorer(this, link, null);
@@ -266,8 +279,8 @@ public class AuthoringToolFrame extends JFrame
 		this.clipboard = new MetaDataClipboard(this, new File(DocExploreTool.getHomeDir(), ".at-clipboard"));
 		
 		startup.screen.setText("Initializing exporter");
-		this.readerExporter = new ReaderExporter(this);
-		this.webExporter = new WebExporter(this);
+		this.readerExporter = new ReaderExporterOld(this);
+		this.webExporter = new WebExporterOld(this);
 		
 		addWindowListener(new WindowAdapter()
 		{

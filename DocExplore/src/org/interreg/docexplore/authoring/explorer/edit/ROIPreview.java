@@ -148,7 +148,7 @@ public class ROIPreview extends JDialog
 		pack();
 	}
 	
-	public void set(BufferedImage page, Point [] region, List<InfoElement> elements, float [] progress)
+	public void set(BufferedImage page, Point [] region, List<?> elements, float [] progress)
 	{
 		progress[0] = 0;
 		
@@ -172,9 +172,9 @@ public class ROIPreview extends JDialog
 		JPanel content = new JPanel(new LooseGridLayout(0, 1, 0, 5, true, false, SwingConstants.CENTER, SwingConstants.TOP, true, false));
 		content.setBackground(back);
 		int cnt = 0;
-		for (InfoElement element : elements) try
+		for (Object element : elements) try
 		{
-			BufferedImage image = element.getPreview(width, back);
+			BufferedImage image = getPreview(element, width, back);
 			JLabel label = new JLabel(new ImageIcon(image));
 			label.setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
 			label.getInsets().set(0, 0, 0, 0);
@@ -198,4 +198,9 @@ public class ROIPreview extends JDialog
 		
 		refresh();
 	}
+	private BufferedImage getPreview(Object object, int width, Color back)
+		{return object instanceof InfoElement ? getPreview((InfoElement)object, width, back) :
+			getPreview((org.interreg.docexplore.authoring.rois.InfoElement)object, width, back);}
+	private BufferedImage getPreview(InfoElement element, int width, Color back) {return element.getPreview(width, back);}
+	private BufferedImage getPreview(org.interreg.docexplore.authoring.rois.InfoElement element, int width, Color back) {return element.getPreview(width, back);}
 }

@@ -2,21 +2,24 @@ package org.interreg.docexplore.authoring.explorer.edit;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.interreg.docexplore.authoring.explorer.CollectionView;
 import org.interreg.docexplore.authoring.explorer.ExplorerView;
+import org.interreg.docexplore.authoring.explorer.ViewItem;
 import org.interreg.docexplore.authoring.explorer.ViewItem.Data;
 import org.interreg.docexplore.authoring.explorer.ViewMouseListener;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.management.image.PosterPartsEditor;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.manuscript.actions.AddMetaDataAction;
 import org.interreg.docexplore.manuscript.actions.AddPosterPartsAction;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost.AppListener;
+import org.interreg.docexplore.manuscript.app.editors.PosterPartsEditor;
 import org.interreg.docexplore.util.history.ReversibleAction;
 
 @SuppressWarnings("serial")
@@ -24,6 +27,7 @@ public class PosterEditor extends PosterPartsEditor implements ViewMouseListener
 {
 	PresentationEditorListener listener;
 	PresentationEditorView view;
+	PosterEditorToolbar toolbar;
 	
 	public PosterEditor(PresentationEditorView view, Book book) throws DataLinkException
 	{
@@ -32,17 +36,29 @@ public class PosterEditor extends PosterPartsEditor implements ViewMouseListener
 		this.listener = (PresentationEditorListener)host;
 		((PresentationEditorListener)host).editor = this;
 		this.view = view;
+		this.toolbar = new PosterEditorToolbar(this);
+		ViewMouseListener.makeFileSystemDropTarget(this);
 	}
+	
+	List<AppListener> listeners = new LinkedList<AppListener>();
+	public void addMainWindowListener(AppListener listener) {listeners.add(listener);}
 
 	@Override public void dropped(ExplorerView source, List<Data> items, Point where)
 	{
 		try
 		{
+			boolean isEmpty = view.curBook.getMetaDataListForKey(view.explorer.link.partKey).isEmpty();
 			List<MetaData> initialParts = new LinkedList<MetaData>();
 			List<MetaData> addedParts = new LinkedList<MetaData>();
 			if (source == null)
 			{
-				
+				List<File> files = new LinkedList<File>();
+				for (ViewItem.Data item : items)
+					if (item.object instanceof File)
+						files.add((File)item.object);
+				listener.onAppendPartsRequest(view.curBook, files);
+				repaint();
+				return;
 			}
 			else if (source instanceof CollectionView)
 			{
@@ -52,7 +68,6 @@ public class PosterEditor extends PosterPartsEditor implements ViewMouseListener
 					{
 						Book book = (Book)data.object;
 						boolean isPoster = PosterUtils.isPoster(book);
-						boolean isEmpty = view.curBook.getMetaDataListForKey(view.explorer.link.partKey).isEmpty();
 						if (isPoster)
 						{
 							//ImportOptions importOptions = view.explorer.tool.importOptions;

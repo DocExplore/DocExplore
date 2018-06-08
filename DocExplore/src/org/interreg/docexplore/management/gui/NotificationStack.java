@@ -62,11 +62,11 @@ public class NotificationStack extends JPanel
 		}
 	}
 	
-	MainWindow win;
+	MMTApp win;
 	int comph = 0;
 	Vector<Notification> notifications = new Vector<Notification>();
 	
-	public NotificationStack(final MainWindow win)
+	public NotificationStack(final MMTApp win)
 	{
 		super(null);
 		
@@ -87,7 +87,7 @@ public class NotificationStack extends JPanel
 		addMouseListener(new MouseAdapter() {public void mouseClicked(MouseEvent e)
 		{
 			if (e.getButton() == MouseEvent.BUTTON1)
-				win.pluginManager.analysisPluginSetup.setVisible(true);
+				win.host.plugins.analysisPluginSetup.setVisible(true);
 		}});
 	}
 	

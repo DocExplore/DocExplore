@@ -14,11 +14,14 @@ The fact that you are presently reading this means that you have had knowledge o
  */
 package org.interreg.docexplore.authoring;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.interreg.docexplore.DocExplore;
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.Startup;
 import org.interreg.docexplore.internationalization.Lang;
@@ -29,7 +32,7 @@ public class AT extends DocExploreTool
 {
 	public static void main(String [] args) throws Exception
 	{
-		Startup startup = new Startup(Lang.s("frameTitle"), "logoAT.png", true, true, true, true);
+		Startup startup = new Startup(Lang.s("atTitle"), "logoAT.png", true, true, true, true);
 		
 		if (startup.autoConnectLink[0] == null)
 			throw new Exception("Missing auto connect link in config.xml!");
@@ -38,9 +41,10 @@ public class AT extends DocExploreTool
 		DocExploreDataLink link = new DocExploreDataLink();
 		link.setLink(startup.autoConnectLink[0]);
 		
-		AuthoringToolFrame win = new AuthoringToolFrame(link, startup);
+		startup.screen.setText("Building interface");
+		//AuthoringToolFrame win = new AuthoringToolFrame(link, startup);
+		ATApp win = new ATApp(link, startup);
 		JOptionPane.setRootFrame(win);
-		win.pack();
 		win.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		win.setSize(800, 600);
@@ -51,6 +55,16 @@ public class AT extends DocExploreTool
 			win.setSize(startup.winSize[0], startup.winSize[1]);
 			GuiUtils.centerOnScreen(win);
 		}
+		win.addWindowListener(new WindowAdapter()
+		{
+			public void windowClosing(WindowEvent e)
+			{
+				if (!win.quit())
+					return;
+				startup.shutdown();
+				DocExplore.main(args);
+			}
+		});
 		win.setVisible(true);
 		
 		//new ResourceMonitor().setVisible(true);

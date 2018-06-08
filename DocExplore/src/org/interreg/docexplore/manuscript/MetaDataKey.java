@@ -66,6 +66,7 @@ public class MetaDataKey extends ManuscriptObject
 		link.keys.put(id, this);
 	}
 	
+	@Override public int hashCode() {return id;}
 	public int getId() {return id;}
 	
 	/**

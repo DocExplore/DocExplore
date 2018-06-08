@@ -323,7 +323,7 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 		
 		add(edit);
 		
-		JMenu view = new JMenu(Lang.s("generalMenuView"));
+		JMenu view = new JMenu(Lang.s("generalMenuSettings"));
 		add(view);
 		
 		JMenuItem styles = new JMenuItem(Lang.s("styleEdit")+"...", ImageUtils.getIcon("pencil-24x24.png"));
@@ -338,13 +338,13 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 		helpToggle.setSelected(tool.startup.showHelp);
 		view.add(helpToggle);
 		
-		JMenu helpMenu = new JMenu(Lang.s("management-lrb", "generalMenuHelp"));
+		JMenu helpMenu = new JMenu(Lang.s("generalMenuHelp"));
 		if (Desktop.isDesktopSupported())
 		{
 			final Desktop desktop = Desktop.getDesktop();
 			if (desktop.isSupported(Desktop.Action.OPEN))
 			{
-				helpMenu.add(new AbstractAction(Lang.s("management-lrb", "generalMenuHelpContents")) {
+				helpMenu.add(new AbstractAction(Lang.s("generalMenuHelpContents")) {
 					public void actionPerformed(ActionEvent e)
 					{
 						try
@@ -354,7 +354,7 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 						}
 						catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex, true);}
 					}});
-				helpMenu.add(new AbstractAction(Lang.s("management-lrb", "generalMenuHelpWebsite")) {
+				helpMenu.add(new AbstractAction(Lang.s("generalMenuHelpWebsite")) {
 					public void actionPerformed(ActionEvent e)
 					{
 						try
@@ -366,7 +366,7 @@ public class AuthoringMenu extends JMenuBar implements HistoryManager.HistoryLis
 					}});
 			}
 		}
-		helpMenu.add(new AbstractAction(Lang.s("management-lrb", "generalMenuHelpAbout")) {
+		helpMenu.add(new AbstractAction(Lang.s("generalMenuHelpAbout")) {
 			public void actionPerformed(ActionEvent e)
 			{
 				final JDialog splash = new JDialog(tool, true);

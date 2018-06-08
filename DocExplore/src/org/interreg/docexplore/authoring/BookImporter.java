@@ -29,7 +29,7 @@ import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.util.Pair;
 
 /**
- * Handles the import of objects from a datalink into a presentation (hence the BookImporter inheritance), 
+ * Handles the import of objects from a datalink into a presentation (hence the BookExporter inheritance), 
  * with extended filtering options (ImportOptions class) and default values for display ranks of annotations inside regions.
  * @author Alexander Burnett
  *

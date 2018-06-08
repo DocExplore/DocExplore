@@ -42,7 +42,7 @@ public class DeleteFS2PosterPartsAction extends DeletePosterPartsAction
 		for (int i=parts.size()-1;i>=0;i--)
 		{
 			Pair<Pair<Integer, Integer>,Boolean> del = deletions.get(i);
-			System.out.println(del.first.first+" "+del.first.second+" "+del.second);
+			//System.out.println(del.first.first+" "+del.first.second+" "+del.second);
 			PosterUtils.addToRow(link, book, parts.get(i), del.first.first, del.first.second, del.second);
 			book.addMetaData(parts.get(i));
 		}

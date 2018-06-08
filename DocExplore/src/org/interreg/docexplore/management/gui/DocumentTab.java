@@ -42,7 +42,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
 @SuppressWarnings("serial")
 public class DocumentTab extends JPanel
 {
-	MainWindow win;
+	MMTApp win;
 	private JLabel label;
 	
 	public void setTitle(String title)
@@ -51,7 +51,7 @@ public class DocumentTab extends JPanel
 		label.repaint();
 	}
 	
-	public DocumentTab(final MainWindow win, String title)
+	public DocumentTab(final MMTApp win, String title)
 	{
 		//unset default FlowLayout' gaps
 		super(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -111,7 +111,7 @@ public class DocumentTab extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				win.removeTab(win.tabbedPane.indexOfTabComponent(DocumentTab.this));
+				win.getPanelForIndex(win.tabbedPane.indexOfTabComponent(DocumentTab.this)).onCloseRequest();
 			}
 		});
 		add(button);

@@ -46,27 +46,29 @@ import org.interreg.docexplore.management.merge.ExportImportComponent;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.DocExploreDataLink;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost;
+import org.interreg.docexplore.manuscript.app.DocumentPanel;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 import org.interreg.docexplore.util.history.HistoryManager;
 
 @SuppressWarnings("serial")
-public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListener, MainWindow.MainWindowListener
+public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListener, ManuscriptAppHost.AppListener
 {
-	MainWindow win;
+	MMTApp win;
 	ConnectionHandler connectionHandler;
 	ConnectionBasedMenu connectMenu, importMenu;
 	JMenuItem disconnect;
 	JMenuItem undoItem, redoItem;
 	
-	public MainMenuBar(final MainWindow win)
+	public MainMenuBar(final MMTApp win)
 	{
 		this.win = win;
 		
 		JMenu fileMenu = new JMenu(Lang.s("generalMenuFile"));
 		this.connectionHandler = new ConnectionHandler();
 		this.connectMenu = new ConnectionBasedMenu(connectionHandler, Lang.s("generalMenuFileConnect")) {
-			public void connectionSelected(DataLinkSource source) throws DataLinkException {MainMenuBar.this.win.setLink(source.getDataLink());}};
+			public void connectionSelected(DataLinkSource source) throws DataLinkException {MainMenuBar.this.win.host.setLink(source.getDataLink());}};
 //		fileMenu.add(connectMenu);
 		this.importMenu = new ConnectionBasedMenu(connectionHandler, Lang.s("generalMenuFileImport")) {
 			public void connectionSelected(DataLinkSource source) throws DataLinkException
@@ -75,16 +77,16 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 //				mergeComp.setVisible(true);
 //				if (mergeComp.wasMerged())
 //					MainMenuBar.this.win.resetComponents();
-				JDialog importDialog = new JDialog((Frame)null, Lang.s("importTitle"), true);
+				JDialog importDialog = new JDialog((Frame)null, Lang.s("importExportTitle"), true);
 				DocExploreDataLink right = new DocExploreDataLink();
 				right.setLink(source.getDataLink());
-				ExportImportComponent ieComp = new ExportImportComponent(win, win.getDocExploreLink(), right);
+				ExportImportComponent ieComp = new ExportImportComponent(win, win.host.getLink(), right);
 				ieComp.addListener(new ExportImportComponent.Listener() {public void bookChanged(Book book)
 				{
-					if (book.getLink().getLink().getSource().equals(win.getDocExploreLink().getLink().getSource()))
+					if (book.getLink().getLink().getSource().equals(win.host.getLink().getLink().getSource()))
 					{
 						win.closeBooks(Collections.singletonList(book));
-						try {win.getDocExploreLink().getBook(book.getId()).reload();}
+						try {win.host.getLink().getBook(book.getId()).reload();}
 						catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 					}
 				}});
@@ -99,7 +101,7 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 		this.disconnect = new JMenuItem(new AbstractAction(Lang.s("generalMenuFileDisconnect"))
 		{
 			public void actionPerformed(ActionEvent e)
-				{try {MainMenuBar.this.win.setLink(null);} catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}}
+				{try {MainMenuBar.this.win.host.setLink(null);} catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}}
 		});
 //		fileMenu.add(disconnect);
 		
@@ -131,21 +133,21 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 		this.undoItem = new JMenuItem();
 		undoItem.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
 		{
-			try {MainMenuBar.this.win.historyManager.undo();}
+			try {MainMenuBar.this.win.host.historyManager.undo();}
 			catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 		}});
 		editMenu.add(undoItem);
 		this.redoItem = new JMenuItem();
 		redoItem.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
 		{
-			try {MainMenuBar.this.win.historyManager.redo();}
+			try {MainMenuBar.this.win.host.historyManager.redo();}
 			catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 		}});
 		editMenu.add(redoItem);
 		JMenuItem viewHistory = new JMenuItem(Lang.s("generalMenuEditViewHistory"));
 		viewHistory.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
 		{
-			win.historyDialog.setVisible(true);
+			win.host.showHistoryDialog();
 		}});
 		editMenu.add(viewHistory);
 		add(editMenu);
@@ -178,12 +180,12 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 //		alignItem.setEnabled(false);
 //		toolsMenu.add(alignItem);
 		
-		if (!win.pluginManager.analysisPlugins.isEmpty())
+		if (!win.host.plugins.analysisPlugins.isEmpty())
 			toolsMenu.add(new AbstractAction(Lang.s("pluginAnalysisLabel"))
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					win.pluginManager.analysisPluginSetup.setVisible(true);
+					win.host.plugins.analysisPluginSetup.setVisible(true);
 				}
 			});
 		toolsMenu.add(new AbstractAction(Lang.s("cleanLinkLabel"))
@@ -234,14 +236,14 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 //			{
 //				File out = new File(DocExploreTool.getHomeDir(), "export_vt");
 //				out.mkdirs();
-//				DocExploreDataLink link = win.getDocExploreLink();
+//				DocExploreDataLink link = win.host.getLink();
 //				MetaDataKey key = link.getKey("Contenu");
 //				int imageCnt = 0;
 //				Map<Page, String> exportedPages = new TreeMap<Page, String>();
 //				Map<String, List<Region>> regionsInClass = new TreeMap<String, List<Region>>();
-//				for (int bookId : win.getDocExploreLink().getLink().getAllBookIds())
+//				for (int bookId : win.host.getLink().getLink().getAllBookIds())
 //				{
-//					Book book = win.getDocExploreLink().getBook(bookId);
+//					Book book = win.host.getLink().getBook(bookId);
 //					int lastPage = book.getLastPageNumber();
 //					for (int i=1;i<=lastPage;i++)
 //					{
@@ -351,10 +353,10 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 			}});
 		add(helpMenu);
 		
-		historyChanged(win.historyManager);
-		win.historyManager.addHistoryListener(this);
-		dataLinkChanged(win.getDocExploreLink());
-		win.addMainWindowListener(this);
+		historyChanged(win.host.historyManager);
+		win.host.historyManager.addHistoryListener(this);
+		dataLinkChanged(win.host.getLink());
+		win.host.addAppListener(this);
 	}
 
 	public void historyChanged(HistoryManager manager)
@@ -373,7 +375,7 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 		redoItem.setEnabled(manager.canRedo());
 	}
 
-	public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document) {}
+	public void onActiveDocumentChanged(DocumentPanel panel, AnnotatedObject document) {}
 
 	public void dataLinkChanged(DocExploreDataLink link)
 	{

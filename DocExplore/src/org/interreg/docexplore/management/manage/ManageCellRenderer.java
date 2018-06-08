@@ -29,20 +29,20 @@ import javax.swing.SwingConstants;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.management.gui.MainWindow;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost;
 import org.interreg.docexplore.util.ImageUtils;
 
-public class ManageCellRenderer implements ListCellRenderer
+public class ManageCellRenderer implements ListCellRenderer<Object>
 {
-	MainWindow win;
+	ManuscriptAppHost host;
 	Color selectionColor;
 	int targetRow;
 	int targetDiff;
 	
-	public ManageCellRenderer(MainWindow win)
+	public ManageCellRenderer(ManuscriptAppHost host)
 	{
-		this.win = win;
+		this.host = host;
 		this.selectionColor = new Color(10, 36, 106);
 		this.targetRow = -1;
 	}
@@ -50,10 +50,10 @@ public class ManageCellRenderer implements ListCellRenderer
 	Icon loading = ImageUtils.getIcon("page_search-24x24.png");
 	Color odd = new Color(1f, .95f, .95f), even = new Color(.95f, .95f, 1f);
 	Color oddDark = new Color(.75f, .45f, .45f), evenDark = new Color(.45f, .45f, .75f);
-	public Component getListCellRendererComponent(JList list, Object value, int index, boolean selected, boolean hasFocus)
+	public Component getListCellRendererComponent(@SuppressWarnings("rawtypes") JList list, Object value, int index, boolean selected, boolean hasFocus)
 	{
 		String display = null;
-		try {display = ((Book)value).getMetaDataString(win.getDocExploreLink().displayKey);}
+		try {display = ((Book)value).getMetaDataString(host.getLink().displayKey);}
 		catch (DataLinkException e) {ErrorHandler.defaultHandler.submit(e, false);}
 		JLabel label = new JLabel(((Book)value).getName(), display != null && display.equals("poster") ? ImageUtils.getIcon("scroll-48x48.png") : ImageUtils.getIcon("book-48x48.png"), SwingConstants.LEFT);
 		

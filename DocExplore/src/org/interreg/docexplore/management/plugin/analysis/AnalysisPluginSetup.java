@@ -30,13 +30,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.interreg.docexplore.internationalization.Lang;
-import org.interreg.docexplore.management.gui.MainWindow;
+import org.interreg.docexplore.management.gui.MMTApp;
 import org.interreg.docexplore.management.plugin.PluginManager;
 
 @SuppressWarnings("serial")
 public class AnalysisPluginSetup extends JFrame
 {
-	public MainWindow win = null;
+	public MMTApp win = null;
 	PluginManager manager;
 	//ImageInputPanel inputPanel;
 	public final AnalysisTaskList taskList;

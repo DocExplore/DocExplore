@@ -28,6 +28,7 @@ import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.MetaDataKey;
 import org.interreg.docexplore.manuscript.PosterUtils;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost;
 import org.interreg.docexplore.util.ImageUtils;
 import org.interreg.docexplore.util.MemoryImageSource;
 import org.interreg.docexplore.util.history.ReversibleAction;
@@ -35,18 +36,18 @@ import org.interreg.docexplore.util.history.ReversibleAction;
 @SuppressWarnings("serial")
 public class NameDialog extends JDialog
 {
-	AuthoringToolFrame win;
+	ManuscriptAppHost host;
 	JTextField title;
 	JTextArea desc;
 	JRadioButton isBookBox, isPosterBox;
 	JLabel displayLocked;
 	boolean okayed = false;
 	
-	public NameDialog(AuthoringToolFrame win)
+	public NameDialog(ManuscriptAppHost host)
 	{
 		super((Frame)null, Lang.s("generalTitle"), true);
 		
-		this.win = win;
+		this.host = host;
 		
 		JPanel top = new JPanel(new LooseGridLayout(0, 1, 5, 5, true, false, SwingConstants.LEFT, SwingConstants.TOP, false, false));
 		setContentPane(top);
@@ -95,7 +96,14 @@ public class NameDialog extends JDialog
 		pack();
 	}
 	
-	public boolean show(final DocExploreDataLink link, final Book book)
+	public boolean showDialog()
+	{
+		try {return showDialog(host.getLink(), host.getLink().getBook(host.getLink().getLink().getAllBookIds().get(0)));}
+		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
+		return false;
+	}
+	
+	public boolean showDialog(final DocExploreDataLink link, final Book book)
 	{
 		okayed = false;
 		title.setText(book.getName());
@@ -138,14 +146,14 @@ public class NameDialog extends JDialog
 				if (isPoster != toPoster) try
 				{
 					if (toPoster)
-						win.historyManager.submit(new ReversibleAction()
+						host.historyManager.submit(new ReversibleAction()
 						{
 							@Override public void doAction() throws Exception {toPoster(link, book);}
 							@Override public void undoAction() throws Exception {toBook(link, book);}
 							@Override public String description() {return Lang.s("collectionToPosterDisplayLabel");}
 						});
 					else 
-						win.historyManager.submit(new ReversibleAction()
+						host.historyManager.submit(new ReversibleAction()
 						{
 							@Override public void doAction() throws Exception {toBook(link, book);}
 							@Override public void undoAction() throws Exception {toPoster(link, book);}
@@ -165,12 +173,14 @@ public class NameDialog extends JDialog
 	{
 		book.setMetaDataString(link.displayKey, "poster");
 		book.appendPage(new MemoryImageSource(new BufferedImage(1, 1, BufferedImage.TYPE_3BYTE_BGR)));
-		win.editor.explore(win.editor.curPath);
+		host.setLink(host.getLink().getLink());
+		host.notifyActiveDocumentChanged();
 	}
 	private void toBook(DocExploreDataLink link, Book book) throws Exception
 	{
 		book.setMetaDataString(link.displayKey, "book");
 		book.removePage(1);
-		win.editor.explore(win.editor.curPath);
+		host.setLink(host.getLink().getLink());
+		host.notifyActiveDocumentChanged();
 	}
 }

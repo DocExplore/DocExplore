@@ -25,15 +25,15 @@ import javax.swing.SwingConstants;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.WrapLayout;
 import org.interreg.docexplore.internationalization.Lang;
-import org.interreg.docexplore.management.gui.DocumentPanel;
-import org.interreg.docexplore.management.gui.ToolbarButton;
-import org.interreg.docexplore.management.gui.ToolbarToggleButton;
-import org.interreg.docexplore.management.image.CropOperation;
-import org.interreg.docexplore.management.image.FreeShapeROIOperation;
-import org.interreg.docexplore.management.image.RectROIOperation;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.Region;
+import org.interreg.docexplore.manuscript.app.DocumentPanel;
+import org.interreg.docexplore.manuscript.app.ToolbarButton;
+import org.interreg.docexplore.manuscript.app.ToolbarToggleButton;
+import org.interreg.docexplore.manuscript.app.editors.CropOperation;
+import org.interreg.docexplore.manuscript.app.editors.FreeShapeROIOperation;
+import org.interreg.docexplore.manuscript.app.editors.RectROIOperation;
 
 @SuppressWarnings("serial")
 public class SlideEditorToolbar extends JPanel
@@ -123,9 +123,9 @@ public class SlideEditorToolbar extends JPanel
 			public void clicked()
 			{
 				if (editor.getDocument() != null && editor.getDocument() instanceof Region)
-					editor.getHost().getActionListener().onDeleteRegionRequest((Region)editor.getDocument());
+					editor.getHost().getAppHost().getActionRequestListener().onDeleteRegionRequest((Region)editor.getDocument());
 			}
-			public void activeDocumentChanged(DocumentPanel panel, AnnotatedObject document)
+			public void onActiveDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
 				setEnabled(document != null && document instanceof Region);
 			}

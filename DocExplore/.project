@@ -14,6 +14,13 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/org/interreg/docexplore/reader/web/js</name>
+			<type>2</type>
+			<locationURI>WORKSPACE_LOC/DocExploreReader/resources/app/js</locationURI>
+		</link>
+	</linkedResources>
 	<filteredResources>
 		<filter>
 			<id>1393335922674</id>

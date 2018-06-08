@@ -28,7 +28,7 @@ import java.util.Vector;
 
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
-import org.interreg.docexplore.management.gui.MainWindow;
+import org.interreg.docexplore.management.gui.MMTApp;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.MetaData;
@@ -73,9 +73,9 @@ public class SearchHandler
 		}
 	}
 	
-	MainWindow win;
+	MMTApp win;
 	
-	public SearchHandler(MainWindow win)
+	public SearchHandler(MMTApp win)
 	{
 		this.win = win;
 	}
@@ -93,28 +93,28 @@ public class SearchHandler
 		{
 			if (types.contains(Book.class))
 			{
-				ResultBuffer<Book> books = Book.search(win.getDocExploreLink(), criteria, disjoint, relevance);
+				ResultBuffer<Book> books = Book.search(win.host.getLink(), criteria, disjoint, relevance);
 				if (books.bufferSize() > 0)
 					results.put(Book.class, books);
 			}
 			
 			if (types.contains(Page.class))
 			{
-				ResultBuffer<Page> pages = Page.search(win.getDocExploreLink(), criteria, disjoint, relevance);
+				ResultBuffer<Page> pages = Page.search(win.host.getLink(), criteria, disjoint, relevance);
 				if (pages.bufferSize() > 0)
 					results.put(Page.class, pages);
 			}
 			
 			if (types.contains(Region.class))
 			{
-				ResultBuffer<Region> regions = Region.search(win.getDocExploreLink(), criteria, disjoint, relevance);
+				ResultBuffer<Region> regions = Region.search(win.host.getLink(), criteria, disjoint, relevance);
 				if (regions.bufferSize() > 0)
 					results.put(Region.class, regions);
 			}
 			
 			if (types.contains(MetaData.class))
 			{
-				ResultBuffer<MetaData> metaDatas = MetaData.search(win.getDocExploreLink(), criteria, disjoint, relevance);
+				ResultBuffer<MetaData> metaDatas = MetaData.search(win.host.getLink(), criteria, disjoint, relevance);
 				if (metaDatas.bufferSize() > 0)
 					results.put(MetaData.class, metaDatas);
 			}
@@ -130,15 +130,15 @@ public class SearchHandler
 		
 		try
 		{
-			ResultBuffer<Book> books = Book.search(win.getDocExploreLink(), term, relevance);
+			ResultBuffer<Book> books = Book.search(win.host.getLink(), term, relevance);
 			if (books.bufferSize() > 0)
 				results.put(Book.class, books);
 			
-			ResultBuffer<Page> pages = Page.search(win.getDocExploreLink(), term, relevance);
+			ResultBuffer<Page> pages = Page.search(win.host.getLink(), term, relevance);
 			if (pages.bufferSize() > 0)
 				results.put(Page.class, pages);
 			
-			ResultBuffer<Region> regions = Region.search(win.getDocExploreLink(), term, relevance);
+			ResultBuffer<Region> regions = Region.search(win.host.getLink(), term, relevance);
 			if (regions.bufferSize() > 0)
 				results.put(Region.class, regions);
 		}
@@ -151,7 +151,7 @@ public class SearchHandler
 	{
 		Vector<Object> keyFields = new Vector<Object>();
 		
-		if (win.getDocExploreLink().isLinked()) try
+		if (win.host.getLink().isLinked()) try
 		{
 			Set<MetaDataKey> keys = new TreeSet<MetaDataKey>(new Comparator<MetaDataKey>()
 				{Collator collator = Collator.getInstance(Locale.getDefault());
@@ -173,7 +173,7 @@ public class SearchHandler
 					return 0;
 				}});
 			
-			for (MetaDataKey key : win.getDocExploreLink().getAllKeys())
+			for (MetaDataKey key : win.host.getLink().getAllKeys())
 				keys.add(key);
 			for (MetaDataKey key : keys)
 				keyFields.add(new MetaDataKeyEntry(key));
@@ -184,7 +184,7 @@ public class SearchHandler
 	
 	public void resultClicked(SearchResult result)
 	{
-		try {win.addTab(result.getStub().getObject());}
+		try {win.addTab(result.getStub().getObject(), null);}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 	}
 	

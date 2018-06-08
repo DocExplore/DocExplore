@@ -2,6 +2,7 @@ package org.interreg.docexplore.stitcher;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,19 +10,25 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.Lang;
+import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 
@@ -34,6 +41,7 @@ public class StitcherMenu extends JMenuBar
 	JMenu file;
 	File curFile = null;
 	JMenuItem newItem, loadItem, saveItem, saveAsItem, importItem, quitItem;
+	JMenuItem saveWipItem, deleteWipItem, close;
 	LinkedList<String> recent;
 	
 	public StitcherMenu(final Stitcher stitcher)
@@ -52,6 +60,8 @@ public class StitcherMenu extends JMenuBar
 		importItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuImport")) {public void actionPerformed(ActionEvent arg0) {importImages();}});
 		quitItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuQuit")) {public void actionPerformed(ActionEvent arg0)
 			{stitcher.quit();}});
+		saveWipItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuSave")) {public void actionPerformed(ActionEvent arg0) {saveWip();}});
+		deleteWipItem = new JMenuItem(new AbstractAction(Lang.s("generalMenuDelete")) {public void actionPerformed(ActionEvent arg0) {deleteWip();}});
 		buildFileMenu();
 		
 		JMenu view = new JMenu("View");
@@ -59,21 +69,37 @@ public class StitcherMenu extends JMenuBar
 		{
 			stitcher.view.fitView(.1);
 		}}));
+		view.add(new JCheckBoxMenuItem("Show detected groups", stitcher.showDetectedGroups) 
+			{{addChangeListener(new ChangeListener() {@Override public void stateChanged(ChangeEvent e) {
+				stitcher.showDetectedGroups = isSelected();
+			}
+		});}});
 		add(view);
 		
 		JMenu tools = new JMenu("Tools");
+		List<JCheckBoxMenuItem> detectors = new ArrayList<>();
+		for (FeatureDetector detector : FeatureDetector.values())
+			detectors.add(new JCheckBoxMenuItem(detector.name()) {{addChangeListener(new ChangeListener() {@Override public void stateChanged(ChangeEvent e)
+			{
+				if (isSelected())
+				{
+					for (JCheckBoxMenuItem item : detectors)
+						if (item != e.getSource())
+						{
+							item.setSelected(false);
+							item.setEnabled(true);
+						}
+					setEnabled(false);
+					stitcher.detector = detector;
+				}
+			}});}});
+		for (JCheckBoxMenuItem detector : detectors)
+			tools.add(detector);
+		tools.addSeparator();
+		detectors.get(0).setSelected(true);
 		tools.add(new JMenuItem(new AbstractAction("Detect layout") {@Override public void actionPerformed(ActionEvent e)
 		{
-			GuiUtils.blockUntilComplete(new GuiUtils.ProgressRunnable()
-			{
-				float [] progress = {0};
-				@Override public void run()
-				{
-					new LayoutDetector(stitcher.fragmentSet).process(progress);
-					stitcher.view.repaint();
-				}
-				@Override public float getProgress() {return progress[0];}
-			}, stitcher.view);
+			StitcherToolkit.detectLayout(stitcher.view);
 		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));}});
 		tools.add(new JMenuItem(new AbstractAction("Consolidate") {@Override public void actionPerformed(ActionEvent e)
 		{
@@ -90,18 +116,8 @@ public class StitcherMenu extends JMenuBar
 		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));}});
 		tools.add(new JMenuItem(new AbstractAction("Render") {@Override public void actionPerformed(ActionEvent e)
 		{
-			GuiUtils.blockUntilComplete(new GuiUtils.ProgressRunnable()
-			{
-				float [] progress = {0};
-				@Override public void run()
-				{
-					File renderDir = curFile != null ? new File(curFile.getParent(), "render") : new File("C:\\Users\\aburn\\Desktop\\tmp");
-					if (!renderDir.exists())
-						renderDir.mkdirs();
-					new Renderer().render(stitcher.fragmentSet, "render", renderDir, progress);
-				}
-				@Override public float getProgress() {return progress[0];}
-			}, stitcher.view);
+			stitcher.renderEditor.init();
+			stitcher.renderEditorWin.setVisible(true);
 		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));}});
 		add(tools);
 	}
@@ -109,22 +125,30 @@ public class StitcherMenu extends JMenuBar
 	private void buildFileMenu()
 	{
 		file.removeAll();
-		file.add(newItem);
-		file.add(loadItem);
-		file.addSeparator();
-		file.add(saveItem);
-		file.add(saveAsItem);
-		file.addSeparator();
-		file.add(importItem);
-		//file.add(webExportItem);
-		file.addSeparator();
-		if (!recent.isEmpty())
+		if (stitcher.host == null)
 		{
-			for (String path : recent)
-				file.add(new RecentItem(this, path));
+			file.add(newItem);
+			file.add(loadItem);
 			file.addSeparator();
+			file.add(saveItem);
+			file.add(saveAsItem);
+			file.addSeparator();
+			file.add(importItem);
+			//file.add(webExportItem);
+			file.addSeparator();
+			if (!recent.isEmpty())
+			{
+				for (String path : recent)
+					file.add(new RecentItem(this, path));
+				file.addSeparator();
+			}
+			file.add(quitItem);
 		}
-		file.add(quitItem);
+		else
+		{
+			file.add(saveWipItem);
+			file.add(deleteWipItem);
+		}
 	}
 	
 	public void importImages()
@@ -132,7 +156,7 @@ public class StitcherMenu extends JMenuBar
 		File [] images = DocExploreTool.getFileDialogs().openFiles(DocExploreTool.getImagesCategory());
 		if (images == null || images.length == 0)
 			return;
-		stitcher.importFragments(images);
+		stitcher.toolkit.importFiles(images);
 	}
 	
 	static class RecentItem extends JMenuItem
@@ -143,6 +167,44 @@ public class StitcherMenu extends JMenuBar
 		}
 	}
 	
+	void saveWip()
+	{
+		GuiUtils.blockUntilComplete(new Runnable()
+		{
+			public void run()
+			{
+				ObjectOutputStream out = null;
+				try
+				{
+					MetaData wip = null;
+					List<MetaData> mds = stitcher.poster.getMetaDataListForKey(stitcher.host.getLink().stitchKey);
+					if (!mds.isEmpty())
+						wip = mds.get(0);
+					else stitcher.poster.addMetaData(wip = new MetaData(stitcher.host.getLink(), stitcher.host.getLink().stitchKey, ""));
+					ByteArrayOutputStream array = new ByteArrayOutputStream();
+					out = new ObjectOutputStream(array);
+					stitcher.write(out);
+					ByteArrayInputStream in = new ByteArrayInputStream(array.toByteArray());
+					wip.setValue(MetaData.textType, in);
+					in.close();
+				}
+				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
+				if (out != null) try {out.close();} catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
+			}
+		}, stitcher.win);
+	}
+	void deleteWip()
+	{
+		try
+		{
+			List<MetaData> mds = stitcher.poster.getMetaDataListForKey(stitcher.host.getLink().stitchKey);
+			if (!mds.isEmpty())
+				stitcher.poster.removeMetaData(mds.get(0));
+			stitcher.quit(false);
+		}
+		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
+	}
+	
 	boolean newFile() {return newFile(false);}
 	boolean newFile(boolean noSave)
 	{
@@ -150,7 +212,7 @@ public class StitcherMenu extends JMenuBar
 			return false;
 		curFile = null;
 		stitcher.clear();
-		stitcher.modified = false;
+		stitcher.view.modified = false;
 		return true;
 	}
 	
@@ -185,7 +247,7 @@ public class StitcherMenu extends JMenuBar
 				if (in != null) try {in.close();} catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 			}
 		}, stitcher.win);
-		stitcher.modified = false;
+		stitcher.view.modified = false;
 		return true;
 	}
 	boolean saveAs()
@@ -220,12 +282,12 @@ public class StitcherMenu extends JMenuBar
 			}
 			public float getProgress() {return (float)progress[0];}
 		}, stitcher.win);
-		stitcher.modified = false;
+		stitcher.view.modified = false;
 		return true;
 	}
 	boolean requestSave()
 	{
-		if (curFile != null || !stitcher.modified)
+		if (curFile != null || !stitcher.view.modified)
 			return true;
 		
 		int res = JOptionPane.showConfirmDialog(stitcher.win, 
