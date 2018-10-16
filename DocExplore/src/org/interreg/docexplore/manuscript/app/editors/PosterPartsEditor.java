@@ -46,19 +46,16 @@ import org.interreg.docexplore.management.manage.SelectPagesPanel;
 import org.interreg.docexplore.manuscript.Book;
 import org.interreg.docexplore.manuscript.DocExploreDataLink;
 import org.interreg.docexplore.manuscript.MetaData;
-import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.manuscript.StitcherUtils;
-import org.interreg.docexplore.manuscript.TileConfiguration;
 import org.interreg.docexplore.manuscript.app.DocumentEditorHost;
 import org.interreg.docexplore.manuscript.app.DocumentEvents;
-import org.interreg.docexplore.util.GuiUtils;
 
 public class PosterPartsEditor extends DragDropPanel implements ConfigurationEditor
 {
 	private static final long serialVersionUID = -3584515946932650576L;
 	
-	protected DocumentEditorHost host;
+	public final DocumentEditorHost host;
 	Book book;
 	JPanel partPanel;
 	
@@ -95,25 +92,8 @@ public class PosterPartsEditor extends DragDropPanel implements ConfigurationEdi
 		previewButtons.add(refreshButton);
 		refreshButton.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e)
 		{
-			GuiUtils.blockUntilComplete(new GuiUtils.ProgressRunnable() {@Override public void run()
-			{
-				try
-				{
-					if (book.getLastPageNumber() > 0)
-					{
-						TileConfiguration config = new TileConfiguration();
-						config.build(host.getAppHost().getLink(), book, progress);
-						
-						Page page = book.getPage(1);
-						page.setMetaDataString(host.getAppHost().getLink().dimKey, config.getFullWidth()+","+config.getFullHeight());
-						//DocExploreDataLink.getImageMini(page);
-						book.setMetaDataString(host.getAppHost().getLink().upToDateKey, "true");
-					}
-				}
-				catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-				posterPreview.refresh(getParent());
-			}
-			float [] progress = {0}; @Override public float getProgress() {return progress[0];}}, PosterPartsEditor.this);
+			PosterUtils.buildConfiguration(book, host.getAppHost().getLink(), PosterPartsEditor.this);
+			posterPreview.refresh(getParent());
 		}});
 		topPanel.add(previewButtons);
 		add(topPanel, BorderLayout.NORTH);
@@ -126,6 +106,8 @@ public class PosterPartsEditor extends DragDropPanel implements ConfigurationEdi
 		
 		refresh();
 	}
+	
+	public Book getBook() {return book;}
 	
 	public List<PosterPartElement> getSelectedPartLabels()
 	{
@@ -243,7 +225,7 @@ public class PosterPartsEditor extends DragDropPanel implements ConfigurationEdi
 		{
 			List<File> files = SelectPagesPanel.show();
 			if (files != null && !files.isEmpty())
-				host.getAppHost().broadcastAction(action, new Object [] {book, files});
+				host.getAppHost().broadcastAction(DocumentEvents.addParts.event, new Object [] {book, files});
 		}
 		else if (action.equals("delete"))
 		{

@@ -24,6 +24,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -39,6 +40,7 @@ import javax.swing.SwingUtilities;
 
 import org.interreg.docexplore.DocExploreTool;
 import org.interreg.docexplore.authoring.BookImporter;
+import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.gui.WrapLayout;
@@ -89,8 +91,8 @@ public class MetaDataEditor extends JPanel
 				final MetaData newMd = new MetaData(document.getLink(), BookImporter.getDisplayKey(document.getLink()), ""); 
 				final int maxRank = BookImporter.getHighestRank(document);
 				final int insertRank = monitoredRank >= 0 && monitoredRank < maxRank ? monitoredRank+1 : maxRank+1;
-				AddMetaDataAction action = pageEditor.view.explorer.getActionProvider().addMetaData(document, newMd);
-				pageEditor.view.explorer.tool.historyManager.submit(new WrappedAction(action)
+				AddMetaDataAction action = pageEditor.getHost().getAppHost().getLink().actionProvider().addMetaData(document, newMd);
+				pageEditor.getHost().getAppHost().historyManager.submit(new WrappedAction(action)
 				{
 					public void doAction() throws Exception {BookImporter.insert(newMd, document, insertRank); monitoredRank = insertRank; reload();}
 					public void undoAction() throws Exception {BookImporter.remove(newMd, document); monitoredRank = insertRank-1; reload();}
@@ -112,11 +114,11 @@ public class MetaDataEditor extends JPanel
 		addImage.setToolTipText(Lang.s("annotationImage"));
 		addButtons.add(addImage);
 		
-		if (pageEditor.view.explorer.tool.metaDataTypeIsPluggedIn("vid"))
+		if (pageEditor.getHost().getAppHost().plugins.hasPluginForMetaDataType("vid"))
 		{
 			JButton addMedia = new JButton(new AbstractAction("", ImageUtils.getIcon("video-32x32.png")) {public void actionPerformed(ActionEvent e)
 			{
-				MetaDataPlugin plugin = pageEditor.view.explorer.tool.getPluginForType("vid");
+				MetaDataPlugin plugin = pageEditor.getHost().getAppHost().plugins.getPluginForMetaDataType("vid");
 				Collection<File> files = plugin.openFiles(true);
 				if (files != null)
 					try {addFiles(files.toArray(new File [0]));}
@@ -160,23 +162,23 @@ public class MetaDataEditor extends JPanel
 				return;
 			try
 			{
-				pageEditor.view.explorer.tool.clipboard.copyMetaData(document);
+				//pageEditor.getHost().getAppHost().clipboard.copyMetaData(document);
 				paste.setEnabled(true);
 			}
 			catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 		}});
 		paste.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e)
 		{
-			if (document == null || !pageEditor.view.explorer.tool.clipboard.canPaste())
-				return;
+//			if (document == null || !pageEditor.getHost().getAppHost().clipboard.canPaste())
+//				return;
 			try
 			{
-				List<MetaData> annotations = pageEditor.view.explorer.tool.clipboard.pasteMetaData(document);
-				if (!annotations.isEmpty())
-				{
-					pageEditor.view.explorer.metaDataImported((Region)document, annotations);
-					reload();
-				}
+//				List<MetaData> annotations = pageEditor.getHost().getAppHost().clipboard.pasteMetaData(document);
+//				if (!annotations.isEmpty())
+//				{
+//					pageEditor.view.explorer.metaDataImported((Region)document, annotations);
+//					reload();
+//				}
 			}
 			catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}
 		}});
@@ -205,13 +207,13 @@ public class MetaDataEditor extends JPanel
 	{
 		if (!annotations.isEmpty())
 		{
-			pageEditor.view.explorer.metaDataImported((Region)document, annotations);
+			metaDataImported((Region)document, annotations);
 			reload();
 		}
 	}
 	void addFiles(File [] files) throws Exception
 	{
-		List<MetaData> annotations = MetaDataUtils.importFiles(pageEditor.view.explorer.tool.plugins, (Region)document, files);
+		List<MetaData> annotations = MetaDataUtils.importFiles(pageEditor.getHost().getAppHost().plugins.metaDataPlugins, (Region)document, files);
 		metaDataImported(annotations);
 	}
 //	void copyAnnotations(Region region) throws Exception
@@ -225,8 +227,8 @@ public class MetaDataEditor extends JPanel
 	public void setDocument(AnnotatedObject document) throws Exception
 	{
 		if (!(document instanceof Region))
-			document = null;System.out.println("!!!");
-		paste.setEnabled(pageEditor.view.explorer.tool.clipboard.canPaste());
+			document = null;
+		//paste.setEnabled(pageEditor.getHost().getAppHost().clipboard.canPaste());
 		
 		if (this.document != document)
 			monitoredRank = -1;
@@ -242,7 +244,7 @@ public class MetaDataEditor extends JPanel
 				for (MetaData md : entry.getValue())
 				{
 					if (md.getType().equals(MetaData.textType) || md.getType().equals(MetaData.imageType) || 
-						pageEditor.view.explorer.tool.metaDataTypeIsPluggedIn(md.getType()))
+						pageEditor.getHost().getAppHost().plugins.hasPluginForMetaDataType(md.getType()))
 							mds.put(BookImporter.getRank(md), md);
 					else System.out.println("discarded "+md.getType());
 				}
@@ -253,7 +255,7 @@ public class MetaDataEditor extends JPanel
 			MetaData md = entry.getValue();
 			final InfoElement element = md.getType().equals(MetaData.textType) ? new TextElement(this, preferredWidth, md) :
 				md.getType().equals(MetaData.imageType) ? new ImageElement(this, preferredWidth, md) : 
-				pageEditor.view.explorer.tool.createInfoElement(this, md, preferredWidth);
+				createInfoElement(this, md, preferredWidth);
 			if (element == null)
 				throw new NullPointerException("Couldn't create info element for "+md.getType()+" "+md.getCanonicalUri());
 			if (entry.getKey() == monitoredRank)
@@ -282,5 +284,39 @@ public class MetaDataEditor extends JPanel
 					((TextElement)element).textPane.requestFocus();
 			}
 		}});
+	}
+	
+	public InfoElement createInfoElement(MetaDataEditor editor, MetaData md, int width) throws DataLinkException
+	{
+		for (MetaDataPlugin plugin : pageEditor.getHost().getAppHost().plugins.metaDataPlugins)
+			if (plugin.getType().equals(md.getType()))
+				return plugin.createInfoElement(editor, md, width);
+		return null;
+	}
+	
+	public void metaDataImported(final Region region, Collection<MetaData> annotations)
+	{
+		try
+		{
+			final AddMetaDataAction action = pageEditor.getHost().getAppHost().getLink().actionProvider().addMetaDatas(region, new LinkedList<MetaData>());
+			pageEditor.getHost().getAppHost().historyManager.submit(new WrappedAction(action)
+			{
+				public void doAction() throws Exception
+				{
+					action.cacheDir = cacheDir;
+					if (action.annotations.isEmpty()) 
+						return; 
+					super.doAction();
+					reload();
+				}
+				public void undoAction() throws Exception
+				{
+					super.undoAction();
+					reload();
+				}
+			});
+			action.annotations.addAll(annotations);
+		}
+		catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 	}
 }

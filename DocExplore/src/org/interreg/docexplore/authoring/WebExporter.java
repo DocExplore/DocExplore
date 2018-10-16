@@ -38,12 +38,9 @@ public class WebExporter extends PresentationExporter
 	}
 
 	boolean copyComplete = false;
-	public void doExport(final DocExploreDataLink link, boolean noHtml) throws Exception
+	public void doExport(final DocExploreDataLink link, boolean noHtml, ExportOptions options) throws Exception
 	{
 		copyComplete = false;
-		ExportOptions options = ExportOptions.getOptions(host.getFrame(), host.plugins.metaDataPlugins, noHtml ? ExportDialogOld.MobileExport : ExportDialogOld.WebExport);
-		if (options == null)
-			return;
 		
 		File exportTo = DocExploreTool.getFileDialogs().saveFile(noHtml ? DocExploreTool.getMobileIBookCategory() : DocExploreTool.getWebIBookCategory());
 		if (exportTo == null)
@@ -55,7 +52,7 @@ public class WebExporter extends PresentationExporter
 		
 		exportDir.mkdirs();
 		Book book = link.getBook(link.getLink().getAllBookIds().get(0));
-		doExport(book, exportDir, options, 0, "JPG", noHtml ? ExportDialogOld.MobileExport : ExportDialogOld.WebExport);
+		doExport(book, exportDir, options, 0, "JPG", noHtml ? ExportDialog.MobileExport : ExportDialog.WebExport);
 		
 		if (!noHtml)
 		{

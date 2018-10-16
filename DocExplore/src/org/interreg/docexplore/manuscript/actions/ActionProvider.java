@@ -45,8 +45,8 @@ public interface ActionProvider
 	public MovePartAction movePart(Book book, MetaData part, int col, int row, boolean insertRow);
 	public CropPageAction cropPage(AnnotatedObject object, int tlx, int tly, int brx, int bry);
 	public FillPosterAction fillPoster(Book book);
-	public RotatePosterLeftAction rotatePosterLeft(Book book);
-	public RotatePosterRightAction rotatePosterRight(Book book);
-	public HorizontalMirrorPosterAction horizontalMirrorPoster(Book book);
-	public VerticalMirrorPosterAction verticalMirrorPoster(Book book);
+	public RotateLeftAction rotateLeft(AnnotatedObject document);
+	public RotateRightAction rotateRight(AnnotatedObject document);
+	public HorizontalMirrorAction horizontalMirror(AnnotatedObject document);
+	public VerticalMirrorAction verticalMirror(AnnotatedObject document);
 }

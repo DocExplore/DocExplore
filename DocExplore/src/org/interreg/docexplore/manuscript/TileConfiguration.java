@@ -1,3 +1,17 @@
+/**
+Copyright LITIS/EDA 2018
+contact@docexplore.eu
+
+This software is a computer program whose purpose is to manage and display interactive digital books.
+
+This software is governed by the CeCILL license under French law and abiding by the rules of distribution of free software.  You can  use, modify and/ or redistribute the software under the terms of the CeCILL license as circulated by CEA, CNRS and INRIA at the following URL "http://www.cecill.info".
+
+As a counterpart to the access to the source code and  rights to copy, modify and redistribute granted by the license, users are provided only with a limited warranty  and the software's author,  the holder of the economic rights,  and the successive licensors  have only  limited liability.
+
+In this respect, the user's attention is drawn to the risks associated with loading,  using,  modifying and/or developing or reproducing the software by the user in light of its specific status of free software, that may mean  that it is complicated to manipulate,  and  that  also therefore means  that it is reserved for developers  and  experienced professionals having in-depth computer knowledge. Users are therefore encouraged to load and test the software's suitability as regards their requirements in conditions enabling the security of their systems and/or data to be ensured and,  more generally, to use and operate it in the same conditions as regards security.
+
+The fact that you are presently reading this means that you have had knowledge of the CeCILL license and that you accept its terms.
+ */
 package org.interreg.docexplore.manuscript;
 
 import java.awt.Graphics2D;
@@ -63,19 +77,19 @@ public class TileConfiguration implements Serializable
 	
 	public int tilei(int layer, int x)
 	{
-		return tilei(layers[layer].metrics.fullWidth*x/layers[0].metrics.fullWidth, layers[layer].metrics);
+		return tilei((int)(layers[layer].metrics.fullWidth*1.*x/layers[0].metrics.fullWidth), layers[layer].metrics);
 	}
 	public int tilej(int layer, int y)
 	{
-		return tilej(layers[layer].metrics.fullHeight*y/layers[0].metrics.fullHeight, layers[layer].metrics);
+		return tilej((int)(layers[layer].metrics.fullHeight*1.*y/layers[0].metrics.fullHeight), layers[layer].metrics);
 	}
 	public int tilex(int layer, int i)
 	{
-		return layers[0].metrics.fullWidth*tilex(i, layers[layer].metrics)/layers[layer].metrics.fullWidth;
+		return (int)(layers[0].metrics.fullWidth*1.*tilex(i, layers[layer].metrics)/layers[layer].metrics.fullWidth);
 	}
 	public int tiley(int layer, int j)
 	{
-		return layers[0].metrics.fullHeight*tiley(j, layers[layer].metrics)/layers[layer].metrics.fullHeight;
+		return (int)(layers[0].metrics.fullHeight*1.*tiley(j, layers[layer].metrics)/layers[layer].metrics.fullHeight);
 	}
 	public int tilew(int layer, int i) {return layers[layer].metrics.widths[i];}
 	public int tileh(int layer, int j) {return layers[layer].metrics.heights[j];}
@@ -90,9 +104,9 @@ public class TileConfiguration implements Serializable
 	
 	private int tilei(int x, LayerMetrics metrics)
 	{
-		int i = 0; 
+		int i = 0;
 		for (;i<metrics.widths.length && x>0;i++) 
-			x -= metrics.widths[i]; 
+			x -= metrics.widths[i];
 		return Math.min(metrics.widths.length-1, Math.max(0, i-1));
 	}
 	private int tilej(int y, LayerMetrics metrics)
@@ -193,7 +207,7 @@ public class TileConfiguration implements Serializable
 					if (parts[ti][tj].type.equals(MetaData.imageType))
 						g.drawImage(parts[ti][tj].getImage(), l-x0, u-y0, r-x0, d-y0, l-cx, u-cy, r-cx, d-cy, null);
 				}
-				image = Scalr.resize(image, Method.QUALITY, image.getWidth()/2, image.getHeight()/2);
+				image = Scalr.resize(image, Method.QUALITY, Math.max(1, image.getWidth()/2), Math.max(1, image.getHeight()/2));
 				newParts[i][j] = new MetaData(link, link.partKey, MetaData.imageType, new MemoryImageSource(image).getFile());//System.out.println(newParts[i][j].getValue());
 				newParts[i][j].setMetaDataString(link.dimKey, image.getWidth()+","+image.getHeight());
 				newTiles[i][j] = newParts[i][j].id;

@@ -1,6 +1,19 @@
+/**
+Copyright LITIS/EDA 2018
+contact@docexplore.eu
+
+This software is a computer program whose purpose is to manage and display interactive digital books.
+
+This software is governed by the CeCILL license under French law and abiding by the rules of distribution of free software.  You can  use, modify and/ or redistribute the software under the terms of the CeCILL license as circulated by CEA, CNRS and INRIA at the following URL "http://www.cecill.info".
+
+As a counterpart to the access to the source code and  rights to copy, modify and redistribute granted by the license, users are provided only with a limited warranty  and the software's author,  the holder of the economic rights,  and the successive licensors  have only  limited liability.
+
+In this respect, the user's attention is drawn to the risks associated with loading,  using,  modifying and/or developing or reproducing the software by the user in light of its specific status of free software, that may mean  that it is complicated to manipulate,  and  that  also therefore means  that it is reserved for developers  and  experienced professionals having in-depth computer knowledge. Users are therefore encouraged to load and test the software's suitability as regards their requirements in conditions enabling the security of their systems and/or data to be ensured and,  more generally, to use and operate it in the same conditions as regards security.
+
+The fact that you are presently reading this means that you have had knowledge of the CeCILL license and that you accept its terms.
+ */
 package org.interreg.docexplore.manuscript.app;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -12,6 +25,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +37,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.app.editors.GuiConstants;
 import org.interreg.docexplore.util.ImageUtils;
@@ -41,10 +57,10 @@ public class HelpPanel extends JDialog
 	
 	JFrame frame;
 	JPanel panel;
-	JButton icon;
-	String message = null;
+	ArrayDeque<String> stack = new ArrayDeque<>();
 	JScrollPane scrollPane;
 	JEditorPane messagePane;
+	JButton back;
 	boolean expanded = false;
 	
 	public HelpPanel(JFrame frame)
@@ -55,15 +71,29 @@ public class HelpPanel extends JDialog
 		setUndecorated(true);
 		setAlwaysOnTop(true);
 		setFocusableWindowState(false);
-		this.panel = new JPanel(new BorderLayout());
+		this.panel = new JPanel(new LooseGridLayout(2, 1, 0, 0, true, false, SwingConstants.CENTER, SwingConstants.CENTER, true, false));
 		panel.setBackground(Color.white);
 		setContentPane(panel);
 		
-		JPanel iconPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+		JPanel iconPanel = new JPanel(new LooseGridLayout(1, 0, 0, 0, true, false, SwingConstants.CENTER, SwingConstants.CENTER, true, false));
 		iconPanel.setOpaque(false);
-		iconPanel.add(this.icon = new JButton("<html>&#9662;</html>", ImageUtils.getIcon("help-24x24.png")));
-		panel.add(iconPanel, BorderLayout.SOUTH);
-		icon.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {toggle();}});
+		JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		backPanel.setOpaque(false);
+		iconPanel.add(backPanel);
+		this.back = new JButton(ImageUtils.getIcon("previous-24x24.png"));
+		backPanel.add(back);
+		backPanel.add(new JLabel(Lang.s("managePreviousLabel")));
+		back.setContentAreaFilled(false);
+		back.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {previous();}});
+		JPanel closePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+		closePanel.setOpaque(false);
+		iconPanel.add(closePanel);
+		JButton close = new JButton(ImageUtils.getIcon("remove-24x24.png"));
+		closePanel.add(new JLabel(Lang.s("dialogCloseLabel")));
+		closePanel.add(close);
+		close.setContentAreaFilled(false);
+		close.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {toggle();}});
+		panel.add(iconPanel);
 		//icon.setEnabled(false);
 		
 		panel.setBorder(BorderFactory.createLineBorder(GuiConstants.borderColor, 1));
@@ -74,9 +104,9 @@ public class HelpPanel extends JDialog
 		{
 			if (e.getEventType() != HyperlinkEvent.EventType.ACTIVATED)
 				return;
-			setContent(Lang.s(e.getDescription()), false);
+			setContent(Lang.s(e.getDescription()), false, true);
 		}});
-		panel.add(this.scrollPane = new JScrollPane(messagePane, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
+		panel.add(this.scrollPane = new JScrollPane(messagePane, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 		
 		frame.addWindowListener(new WindowAdapter()
 		{
@@ -100,20 +130,31 @@ public class HelpPanel extends JDialog
 	public void removeListener(Listener listener) {listeners.add(listener);}
 	
 	private String fontFamily = new JLabel().getFont().getFamily();
-	public void setContent(String message, boolean forceExpand)
+	private void setContent(String message, boolean forceExpand, boolean push)
 	{
-		this.message = message == null ? null : message.replaceAll("%icons%", ClassLoader.getSystemResource("org/interreg/docexplore/gui/icons/").toString());
+		if (!push)
+			stack.clear();
+		stack.push(message == null ? null : message.replaceAll("%icons%", ClassLoader.getSystemResource("org/interreg/docexplore/gui/icons/").toString()));
 		if (!expanded && forceExpand)
 			toggle();
 		else if (expanded)
 			updateContent();
 		for (Listener listener : listeners)
-			listener.onContentSet(message);
+			listener.onContentSet(stack.peek());
+		back.setEnabled(stack.size() > 1);
+	}
+	
+	private void previous()
+	{
+		if (stack.size() < 2)
+			return;
+		stack.pop();
+		setContent(stack.pop(), false, true);
 	}
 	
 	public void toggle()
 	{
-		if (message == null)
+		if (stack.isEmpty() || stack.peek() == null)
 			return;
 		expanded = !expanded;
 		if (expanded)
@@ -124,8 +165,8 @@ public class HelpPanel extends JDialog
 	
 	private void updateContent()
 	{
-		messagePane.setText(message == null ? "" : "<div width='"+frame.getWidth()/3+"' style='font-size: 1.1em; font-family: "+fontFamily+"'>"+
-			message+
+		messagePane.setText(stack.isEmpty() || stack.peek() == null ? "" : "<div width='"+frame.getWidth()/3+"' style='font-size: 1.1em; font-family: "+fontFamily+"'>"+
+			stack.peek()+
 			"</div>");
 		panel.setPreferredSize(new Dimension(frame.getWidth()/3+2*scrollPane.getVerticalScrollBar().getPreferredSize().width, frame.getContentPane().getHeight()));
 		pack();
@@ -150,7 +191,7 @@ public class HelpPanel extends JDialog
 		button.setBorder(null);
 		button.setContentAreaFilled(false);
 		button.setIcon(ImageUtils.getIcon("help-24x24.png"));
-		button.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {setContent(s, true);}});
+		button.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {setContent(s, true, false);}});
 		return button;
 	}
 	

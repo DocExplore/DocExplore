@@ -286,7 +286,7 @@ public class DocumentActionHandler implements ActionRequestListener
 	}
 	public void onHorizontalMirrorPartsRequest(final Book book)
 	{
-		try {if (checkForHoles(book)) win.historyManager.submit(new WrappedAction(link.actionProvider().horizontalMirrorPoster(book))
+		try {if (checkForHoles(book)) win.historyManager.submit(new WrappedAction(link.actionProvider().horizontalMirror(book))
 		{
 			public void doAction() throws Exception {super.doAction(); win.broadcastAction(DocumentEvents.bookChanged.event, book);}
 			public void undoAction() throws Exception {super.undoAction(); win.broadcastAction(DocumentEvents.bookChanged.event, book);}
@@ -296,7 +296,7 @@ public class DocumentActionHandler implements ActionRequestListener
 	}
 	public void onVerticalMirrorPartsRequest(final Book book)
 	{
-		try {if (checkForHoles(book)) win.historyManager.submit(new WrappedAction(link.actionProvider().verticalMirrorPoster(book))
+		try {if (checkForHoles(book)) win.historyManager.submit(new WrappedAction(link.actionProvider().verticalMirror(book))
 		{
 			public void doAction() throws Exception {super.doAction(); win.broadcastAction(DocumentEvents.bookChanged.event, book);}
 			public void undoAction() throws Exception {super.undoAction(); win.broadcastAction(DocumentEvents.bookChanged.event, book);}
@@ -306,7 +306,7 @@ public class DocumentActionHandler implements ActionRequestListener
 	}
 	public void onRotatePartsLeftRequest(final Book book)
 	{
-		try {if (checkForHoles(book)) win.historyManager.submit(new WrappedAction(link.actionProvider().rotatePosterLeft(book))
+		try {if (checkForHoles(book)) win.historyManager.submit(new WrappedAction(link.actionProvider().rotateLeft(book))
 		{
 			public void doAction() throws Exception {super.doAction(); win.broadcastAction(DocumentEvents.bookChanged.event, book);}
 			public void undoAction() throws Exception {super.undoAction(); win.broadcastAction(DocumentEvents.bookChanged.event, book);}
@@ -316,11 +316,91 @@ public class DocumentActionHandler implements ActionRequestListener
 	}
 	public void onRotatePartsRightRequest(final Book book)
 	{
-		try {if (checkForHoles(book)) win.historyManager.submit(new WrappedAction(link.actionProvider().rotatePosterRight(book))
+		try {if (checkForHoles(book)) win.historyManager.submit(new WrappedAction(link.actionProvider().rotateRight(book))
 		{
 			public void doAction() throws Exception {super.doAction(); win.broadcastAction(DocumentEvents.bookChanged.event, book);}
 			public void undoAction() throws Exception {super.undoAction(); win.broadcastAction(DocumentEvents.bookChanged.event, book);}
 			@Override public String description() {return Lang.s("rotateParts");}
+		});}
+		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
+	}
+	public void onRotateMetaDataLeftRequest(MetaData annotation)
+	{
+		try {win.historyManager.submit(new WrappedAction(link.actionProvider().rotateLeft(annotation))
+		{
+			public void doAction() throws Exception {super.doAction(); win.broadcastAction(DocumentEvents.metadataChanged.event, annotation);}
+			public void undoAction() throws Exception {super.undoAction(); win.broadcastAction(DocumentEvents.metadataChanged.event, annotation);}
+			@Override public String description() {return Lang.s("rotateImage");}
+		});}
+		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
+	}
+	public void onRotateMetaDataRightRequest(MetaData annotation)
+	{
+		try {win.historyManager.submit(new WrappedAction(link.actionProvider().rotateRight(annotation))
+		{
+			public void doAction() throws Exception {super.doAction(); win.broadcastAction(DocumentEvents.metadataChanged.event, annotation);}
+			public void undoAction() throws Exception {super.undoAction(); win.broadcastAction(DocumentEvents.metadataChanged.event, annotation);}
+			@Override public String description() {return Lang.s("rotateImage");}
+		});}
+		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
+	}
+	public void onHorizontalMirrorMetaDataRequest(MetaData annotation)
+	{
+		try {win.historyManager.submit(new WrappedAction(link.actionProvider().horizontalMirror(annotation))
+		{
+			public void doAction() throws Exception {super.doAction(); win.broadcastAction(DocumentEvents.metadataChanged.event, annotation);}
+			public void undoAction() throws Exception {super.undoAction(); win.broadcastAction(DocumentEvents.metadataChanged.event, annotation);}
+			@Override public String description() {return Lang.s("mirrorImage");}
+		});}
+		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
+	}
+	public void onVerticalMirrorMetaDataRequest(MetaData annotation)
+	{
+		try {win.historyManager.submit(new WrappedAction(link.actionProvider().verticalMirror(annotation))
+		{
+			public void doAction() throws Exception {super.doAction(); win.broadcastAction(DocumentEvents.metadataChanged.event, annotation);}
+			public void undoAction() throws Exception {super.undoAction(); win.broadcastAction(DocumentEvents.metadataChanged.event, annotation);}
+			@Override public String description() {return Lang.s("mirrorImage");}
+		});}
+		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
+	}
+	public void onHorizontalMirrorPageRequest(Page page)
+	{
+		try {win.historyManager.submit(new WrappedAction(link.actionProvider().horizontalMirror(page))
+		{
+			public void doAction() throws Exception {super.doAction(); win.broadcastAction(DocumentEvents.pageChanged.event, page);}
+			public void undoAction() throws Exception {super.undoAction(); win.broadcastAction(DocumentEvents.pageChanged.event, page);}
+			@Override public String description() {return Lang.s("mirrorImage");}
+		});}
+		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
+	}
+	public void onVerticalMirrorPageRequest(Page page)
+	{
+		try {win.historyManager.submit(new WrappedAction(link.actionProvider().verticalMirror(page))
+		{
+			public void doAction() throws Exception {super.doAction(); win.broadcastAction(DocumentEvents.pageChanged.event, page);}
+			public void undoAction() throws Exception {super.undoAction(); win.broadcastAction(DocumentEvents.pageChanged.event, page);}
+			@Override public String description() {return Lang.s("mirrorImage");}
+		});}
+		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
+	}
+	public void onRotatePageLeftRequest(Page page)
+	{
+		try {win.historyManager.submit(new WrappedAction(link.actionProvider().rotateLeft(page))
+		{
+			public void doAction() throws Exception {super.doAction(); win.broadcastAction(DocumentEvents.pageChanged.event, page);}
+			public void undoAction() throws Exception {super.undoAction(); win.broadcastAction(DocumentEvents.pageChanged.event, page);}
+			@Override public String description() {return Lang.s("rotateImage");}
+		});}
+		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
+	}
+	public void onRotatePageRightRequest(Page page)
+	{
+		try {win.historyManager.submit(new WrappedAction(link.actionProvider().rotateRight(page))
+		{
+			public void doAction() throws Exception {super.doAction(); win.broadcastAction(DocumentEvents.pageChanged.event, page);}
+			public void undoAction() throws Exception {super.undoAction(); win.broadcastAction(DocumentEvents.pageChanged.event, page);}
+			@Override public String description() {return Lang.s("rotateImage");}
 		});}
 		catch (Throwable e) {ErrorHandler.defaultHandler.submit(e);}
 	}

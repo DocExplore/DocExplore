@@ -78,4 +78,11 @@ public class PluginManager implements HostInterface
 				return metaDataPlugins.get(i);
 		return null;
 	}
+	public boolean hasPluginForMetaDataType(String type)
+	{
+		for (int i=0;i<metaDataPlugins.size();i++)
+			if (metaDataPlugins.get(i).getType().equals(type))
+				return true;
+		return false;
+	}
 }

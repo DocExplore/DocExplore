@@ -1,5 +1,5 @@
 /**
-Copyright LITIS/EDA 2014
+Copyright LITIS/EDA 2018
 contact@docexplore.eu
 
 This software is a computer program whose purpose is to manage and display interactive digital books.
@@ -12,33 +12,39 @@ In this respect, the user's attention is drawn to the risks associated with load
 
 The fact that you are presently reading this means that you have had knowledge of the CeCILL license and that you accept its terms.
  */
-package org.interreg.docexplore.authoring.explorer.file;
+package org.interreg.docexplore.manuscript;
 
-import java.io.File;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.List;
 
-import javax.swing.JFileChooser;
+import org.interreg.docexplore.util.ImageUtils;
 
-import org.interreg.docexplore.authoring.AuthoringToolFrame;
-import org.interreg.docexplore.authoring.explorer.Explorer;
-
-@SuppressWarnings("serial")
-public class FileExplorer extends Explorer
+public class MetaDataUtils
 {
-
-	public FileExplorer(AuthoringToolFrame tool) throws Exception
+	public static void refreshImageMetaData(AnnotatedObject object) throws Exception
 	{
-		super(tool);
+		ManuscriptLink link = object.getLink();
+		BufferedImage image = object instanceof Page ? ((Page)object).getImage().getImage() : ((MetaData)object).getImage();
 		
-		addView(new RootView(this));
-		addView(new FolderView(this));
+		MetaDataKey dimKey = link.getOrCreateKey("dimension", "");
+		List<MetaData> dims = object.getMetaDataListForKey(dimKey);
+		String dimString = image.getWidth()+","+image.getHeight();
+		if (dims.size() > 0)
+			dims.get(0).setString(dimString);
+		else object.addMetaData(new MetaData(link, dimKey, dimString));
 		
-		explore(new JFileChooser().getCurrentDirectory().getAbsolutePath());
-	}
-
-	public String getParentPath(String path)
-	{
-		if (path.equals(""))
-			return path;
-		return new File(path).getParent();
+		MetaDataKey miniKey = object.getLink().getKey("mini", "");
+		List<MetaData> minis = object.getMetaDataListForKey(miniKey);
+		BufferedImage miniImage = null;
+		miniImage = ImageUtils.createIconSizeImage(object instanceof Page ? ((Page)object).getImage().getImage() : ((MetaData)object).getImage(), DocExploreDataLink.miniSize);
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		ImageUtils.write(miniImage, "png", os);
+		InputStream is = new ByteArrayInputStream(os.toByteArray());
+		if (minis.size() > 0)
+			minis.get(0).setValue(MetaData.imageType, is);
+		else object.addMetaData(new MetaData(link, miniKey, MetaData.imageType, is));
 	}
 }

@@ -36,6 +36,7 @@ import org.interreg.docexplore.SplashScreen;
 import org.interreg.docexplore.datalink.DataLink.DataLinkSource;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
+import org.interreg.docexplore.gui.FeedbackDialog;
 import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.management.connect.ConnectionBasedMenu;
 import org.interreg.docexplore.management.connect.ConnectionHandler;
@@ -312,16 +313,16 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 			final Desktop desktop = Desktop.getDesktop();
 			if (desktop.isSupported(Desktop.Action.OPEN))
 			{
-				helpMenu.add(new AbstractAction(Lang.s("generalMenuHelpContents")) {
-					public void actionPerformed(ActionEvent e)
-					{
-						try
-						{
-							File doc = new File(DocExploreTool.getExecutableDir(), "MMT documentation.htm");
-							desktop.open(doc);
-						}
-						catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex, true);}
-					}});
+//				helpMenu.add(new AbstractAction(Lang.s("generalMenuHelpContents")) {
+//					public void actionPerformed(ActionEvent e)
+//					{
+//						try
+//						{
+//							File doc = new File(DocExploreTool.getExecutableDir(), "MMT documentation.htm");
+//							desktop.open(doc);
+//						}
+//						catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex, true);}
+//					}});
 				helpMenu.add(new AbstractAction(Lang.s("generalMenuHelpWebsite")) {
 					public void actionPerformed(ActionEvent e)
 					{
@@ -350,6 +351,11 @@ public class MainMenuBar extends JMenuBar implements HistoryManager.HistoryListe
 				splash.setAlwaysOnTop(true);
 				GuiUtils.centerOnScreen(splash);
 				splash.setVisible(true);
+			}});
+		helpMenu.add(new AbstractAction(Lang.s("feedbackTitle")+"...") {
+			public void actionPerformed(ActionEvent e)
+			{
+				FeedbackDialog.get().showDialog();
 			}});
 		add(helpMenu);
 		

@@ -70,7 +70,7 @@ public abstract class InfoElement extends JPanel
 					if (rank == 0)
 						return;
 					editor.monitoredRank = rank-1;
-					editor.pageEditor.view.explorer.tool.historyManager.submit(new ChangeRankAction(editor, md, rank, rank-1));
+					editor.pageEditor.getHost().getAppHost().historyManager.submit(new ChangeRankAction(editor, md, rank, rank-1));
 				}
 				catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}
@@ -85,7 +85,7 @@ public abstract class InfoElement extends JPanel
 					if (rank == 0)
 						return;
 					editor.monitoredRank = 0;
-					editor.pageEditor.view.explorer.tool.historyManager.submit(new ChangeRankAction(editor, md, rank, 0));
+					editor.pageEditor.getHost().getAppHost().historyManager.submit(new ChangeRankAction(editor, md, rank, 0));
 				}
 				catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}
@@ -100,7 +100,7 @@ public abstract class InfoElement extends JPanel
 					if (rank == BookImporter.getHighestRank(editor.document))
 						return;
 					editor.monitoredRank = rank+1;
-					editor.pageEditor.view.explorer.tool.historyManager.submit(new ChangeRankAction(editor, md, rank, rank+1));
+					editor.pageEditor.getHost().getAppHost().historyManager.submit(new ChangeRankAction(editor, md, rank, rank+1));
 				}
 				catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}
@@ -116,7 +116,7 @@ public abstract class InfoElement extends JPanel
 					if (rank == max)
 						return;
 					editor.monitoredRank = max;
-					editor.pageEditor.view.explorer.tool.historyManager.submit(new ChangeRankAction(editor, md, rank, max));
+					editor.pageEditor.getHost().getAppHost().historyManager.submit(new ChangeRankAction(editor, md, rank, max));
 				}
 				catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}
@@ -129,8 +129,8 @@ public abstract class InfoElement extends JPanel
 				{
 					final AnnotatedObject document = editor.document;
 					final int rank = BookImporter.getRank(md);
-					DeleteMetaDataAction action = editor.pageEditor.view.explorer.getActionProvider().deleteMetaData(document, md);
-					editor.pageEditor.view.explorer.tool.historyManager.submit(new WrappedAction(action)
+					DeleteMetaDataAction action = editor.pageEditor.getHost().getAppHost().getLink().actionProvider().deleteMetaData(document, md);
+					editor.pageEditor.getHost().getAppHost().historyManager.submit(new WrappedAction(action)
 					{
 						public void doAction() throws Exception
 						{

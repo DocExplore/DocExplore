@@ -163,6 +163,9 @@ Do you wish to continue?</entry>
 	<entry key="errorGenericMessage">An error has occurred!</entry>
 	<entry key="errorGenericTitle">Error</entry>
 	<entry key="errorLabel">Error</entry>
+	<entry key="errorRemember">Remember password</entry>
+	<entry key="errorScreenshot">Include screenshot</entry>
+	<entry key="errorSend">Send</entry>
 	<entry key="exitLabel">Exit</entry>
 	<entry key="exportAllRoisLabel">All regions on the page</entry>
 	<entry key="exportAllTagsLabel">All of the following tags</entry>
@@ -209,6 +212,7 @@ might visibly reduce their quality, especially when zooming in.&lt;/div>&lt;/htm
 	<entry key="exportTransparencyOption">Transparency</entry>
 	<entry key="exportWeb">Export to web</entry>
 	<entry key="exportWebDesc">This presentation will be packaged into an archive suitable for a website.</entry>
+	<entry key="feedbackTitle">Feedback</entry>
 	<entry key="fileOpen">Open</entry>
 	<entry key="fileSave">Save</entry>
 	<entry key="fillPoster">Fill poster holes</entry>
@@ -228,7 +232,9 @@ might visibly reduce their quality, especially when zooming in.&lt;/div>&lt;/htm
 	<entry key="fixCharsMac">Mac OSX</entry>
 	<entry key="fixCharsMsg">The presentation was created in</entry>
 	<entry key="fixCharsWin">Windows</entry>
+	<entry key="generalAdd">Add</entry>
 	<entry key="generalAddAnnotation">Add</entry>
+	<entry key="generalBack">Back</entry>
 	<entry key="generalBook">book</entry>
 	<entry key="generalBooks">books</entry>
 	<entry key="generalBrowseLabel">Browse</entry>
@@ -285,6 +291,7 @@ might visibly reduce their quality, especially when zooming in.&lt;/div>&lt;/htm
 	<entry key="generalRecoveryLabel">Recovery</entry>
 	<entry key="generalRecoveryMessage">A presentation has been recovered from a previous session.
 Would you like to keep it in the editor?</entry>
+	<entry key="generalRemove">Remove selected</entry>
 	<entry key="generalSaveMessage">Would you like to save the current presentation?</entry>
 	<entry key="generalSetPreview">Set as preview</entry>
 	<entry key="generalTitle">Title</entry>
@@ -297,7 +304,7 @@ Would you like to keep it in the editor?</entry>
 	<entry key="generalToolbarRemovePage">Remove selected pages...</entry>
 	<entry key="generalToolbarView">Toggle list/icon view</entry>
 	<entry key="helpAtAnnotationsMsg">&lt;b>Annotation panel&lt;/b>
-	    &lt;br/>This panel allows you to view, edit and add metadata associated with the right side document.
+	    &lt;br/>This panel allows you to view, edit and add metadata associated with the left side document.
 	    &lt;br/>Use the icons to add text, image and media annotations.</entry>
 	<entry key="helpAtBookMsg">The left side panel shows the pages of your presentation. To add pages, you can:
 		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Click on the &amp;oplus; icon in the toolbar to import images
@@ -323,14 +330,12 @@ Would you like to keep it in the editor?</entry>
 	<entry key="helpCollectionMsg">This is your digital collection from the management tool.&lt;br/>&amp;larr; Drag items to the left to include them in your presentation.</entry>
 	<entry key="helpCover">&lt;b>Cover&lt;/b>
 	    &lt;br/>
-	    &lt;br/>Each frame can hold an image representing a part of the book cover.
-	    Since book covers often have rounded edges, they might require an image with transparent parts.
-	    However, images with transparency can't be efficiently compressed and might not be suitable if exported in certain contexts.
-	    You can therefore define opaque and transparent versions of the cover images.
+	    &lt;br/>The cover editor allows you to precisely define the cover of a book by breaking it down into four components: front, inner front, back and inner back. Each component can be defined by dragging
+	    and dropping an image (from within DocExplore or an external image file) onto the relevant panel. Each component is further subdivided into an opaque and transparent version. This separation exists
+	    because transparent images can't be efficiently compressed and might be unsuitable for certain export targets such as a web page. Providing both version will allow the software to choose the cover images
+	    that are most appropriate in a given context.
 	    &lt;br/>
-	    Any cover part that is undefined will be given a default image if exported.
-	    You can drag files and images on to these frames to define their content.
-	    Use the right click to delete the content of a frame.</entry>
+	    &lt;br/>Use the right click to delete the content of a frame. Any cover part that is undefined will be given a default image if exported.</entry>
 	<entry key="helpFolderMsg">Right click on a file to preview contents.&lt;br/>&amp;larr; Drag files to the left to include them in your presentation.</entry>
 	<entry key="helpLocalMsg">This is your local storage. Double click on a drive to browse contents.</entry>
 	<entry key="helpManualStitchingMsg">&lt;b>Manual stitching&lt;/b>
@@ -356,7 +361,10 @@ Would you like to keep it in the editor?</entry>
 		&lt;br/>Modifications are ignored if the book is locked &lt;img src='%icons%locked-32x32.png'/></entry>
 	<entry key="helpMmtCollectionMsg">&lt;b>Collection&lt;/b>
         &lt;br/>
-	    &lt;br/>This is your local collection. With the toolbar above, you can:
+	    &lt;br/>This is your local collection of documents. From here you can add, delete and modify books or posters. This collection is available in the authoring tool to build a presentation.
+	    Double click on a document to open it in a new tab.
+	    &lt;br/>
+	    &lt;br/>With the toolbar above, you can:
 		&lt;br/>&lt;img src='%icons%import-24x24.png'/>&#160;Import a book poster that was exported from a different collection
 		&lt;br/>&lt;img src='%icons%import-24x24.png'/>&#160;Export the selected book or poster
 		&lt;br/>&lt;img src='%icons%add-file-24x24.png'/>&#160;Create a new document
@@ -397,12 +405,14 @@ Would you like to keep it in the editor?</entry>
 	    that can be used as endpoints for a stitch. Stitches themselves are drawn as pink lines.
 	    &lt;br/>
 	    &lt;br/>&lt;u>Automatic stitching&lt;/u>
-	    &lt;br/>Stitching can be done automatically by using the &lt;img src='%icons%detect-stitches-24x24.png'/>&#160;detect button.
+	    &lt;br/>Stitching can be done automatically by using the &lt;img src='%icons%detect-stitches-24x24.png'/>&#160;detect button if the images are naturally aligned.
+	    If the images are not aligned but you have manually aligned them in the gloabl view, you can use the &lt;img src='%icons%detect-stitches-ui-24x24.png'/>&#160;
+	    UI detect button.
 	    This process will assume that both images do indeed overlap and will try to force a match.
 	    &lt;br/>
 	    &lt;br/>&lt;u>Manual stitching&lt;/u>
 	    &lt;br/>You can manually stitch the images if the detection isn't successful. You can create a point of interest by left clicking on one of the images while
-	    holding &lt;i>Ctrl&lt;/i> key. You can also use one of the automatically detected points of interest. Points can be selected by left clicking on them, showing
+	    holding the &lt;i>Ctrl&lt;/i> key. You can also use one of the automatically detected points of interest. Points can be selected by left clicking on them, showing
 	    a yellow outline. When a point is selected on each image, use the &lt;img src='%icons%toggle-stitch-24x24.png'/>&#160;link button to add a stitch between them, 
 	    or remove a stitch if one already exists.
 	    &lt;br/>
@@ -414,6 +424,7 @@ Would you like to keep it in the editor?</entry>
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%erase-pois-24x24.png'/>&#160;Clear all stitches and points of interest
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%toggle-stitch-24x24.png'/>&#160;Add or remove stitch between selected points
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%detect-stitches-24x24.png'/>&#160;Detect stitches automatically
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%detect-stitches-ui-24x24.png'/>&#160;Detect stitches automatically using the global configuration
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%previous-24x24.png'/>&#160;Leave the editor</entry>
 	<entry key="helpPosterStitchMsg">&lt;b>Poster stitching&lt;/b>
 	    &lt;br/>
@@ -450,8 +461,8 @@ Would you like to keep it in the editor?</entry>
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%save-stitches-24x24.png'/>&#160;Save the current state of the stitches
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%clear-stitches-24x24.png'/>&#160;Clear all stitches
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%detect-stitches-24x24.png'/>&#160;Detect document layout and stitching
-	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%render-stitch-24x24.png'/>&#160;Use current layout for &lt;a href='helpPosterRenderMsg'>rendering&lt;/a>
-	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%previous-24x24.png'/>&#160;Cancel stitching process</entry>
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%render-stitch-24x24.png'/>&#160;Use current layout for &lt;a href='helpPosterStitchRenderMsg'>rendering&lt;/a>
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%remove-24x24.png'/>&#160;Cancel stitching process</entry>
 	<entry key="helpPosterStitchRenderMsg">&lt;b>Poster rendering&lt;/b>
 	    &lt;br/>
 	    This editor allows you to render a stitched poster. 
@@ -510,6 +521,7 @@ Would you like to keep it in the editor?</entry>
 	<entry key="imageToolbarCrop">Crop page</entry>
 	<entry key="imageToolbarDelRoi">Delete a Region Of Interest</entry>
 	<entry key="imageToolbarDetectStitches">Detect stitches</entry>
+	<entry key="imageToolbarDetectUIStitches">Detect stitches with global configuration</entry>
 	<entry key="imageToolbarFillPoster">Fill poster holes</entry>
 	<entry key="imageToolbarFit">Fit in frame</entry>
 	<entry key="imageToolbarMirrorHor">Horizontal mirror</entry>
@@ -617,6 +629,7 @@ Would you like to keep it in the editor?</entry>
 	<entry key="manageSelectFolderMsg">Please select the folder to import the images from.</entry>
 	<entry key="manageSelectNoneLabel">Select none</entry>
 	<entry key="manageSelectRecognizedLabel">Select recognized formats</entry>
+	<entry key="mirrorImage">Mirror image</entry>
 	<entry key="mirrorParts">Mirror poster</entry>
 	<entry key="mmtLabel">Manuscript Management Tool</entry>
 	<entry key="mmtMessage">This tool allows you to edit, annotate and search your digital collection.</entry>
@@ -679,6 +692,7 @@ Would you like to keep it in the editor?</entry>
 	<entry key="restartLabel">Restart</entry>
 	<entry key="restartMessage">You must restart DocExplore for the changes to take effect.</entry>
 	<entry key="resultsLabel">Results</entry>
+	<entry key="rotateImage">Rotate image</entry>
 	<entry key="rotateParts">Rotate poster</entry>
 	<entry key="saveStitchLabel">Save changes?</entry>
 	<entry key="saveStitchMsg">Save the changes made to the part stitches?</entry>
@@ -752,8 +766,8 @@ The home directory is where DocExplore will store all of the data you create.&lt
 	<entry key="uriCopyLabel">Copy URI</entry>
 	<entry key="uriPasteLabel">Paste URI</entry>
 	<entry key="useLayoutLabel">Use current layout?</entry>
-	<entry key="useLayoutMessage">Would you like to limit the detection to empty assocations (the lines in red)? If you select not to, all current association will be removed
-	    and the detection will make no assumptions on the overall layout.</entry>
+	<entry key="useLayoutMessage">Would you like to limit the detection to empty assocations (the lines in red)? 
+	    If you select not to, all current association will be removed and the detection will make no assumptions on the overall layout.</entry>
 	<entry key="viewHelpToggle">Show help</entry>
 	<entry key="waitLabel">Please wait</entry>
 	<entry key="yesLabel">Yes</entry>

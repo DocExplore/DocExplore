@@ -142,7 +142,7 @@ public class MMTAnnotationPanel extends JPanel implements EditorSidePanel
 		annotationList.removeAll();
 		for (Map.Entry<MetaDataKey, List<MetaData>> entry : document.getMetaData().entrySet())
 			for (MetaData annotation : entry.getValue())
-				if (annotation.getKey() != handler.win.getLink().tagKey && filter.matches(annotation))
+				if (!handler.win.getLink().hiddenKeys.contains(annotation.getKey()) && annotation.getKey() != handler.win.getLink().tagKey && filter.matches(annotation))
 					addObject(annotation);
 		annotationList.validate();
 		annotationList.repaint();

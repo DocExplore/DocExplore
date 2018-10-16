@@ -77,10 +77,11 @@ public class AT extends DocExploreTool
 			JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
 		if (!recovering)
 		{
-			if (args.length > 0)
-				win.menu.load(new File(args[0]), true);
-			else if (win.recovery)
-				win.menu.newFile(true);
+			for (int i=0;i<args.length;i++)
+				if (!args[i].startsWith("-"))
+					{win.menu.load(new File(args[i]), true); return;}
+			if (win.recovery)
+				{win.menu.newFile(true); return;}
 		}
 	}
 }

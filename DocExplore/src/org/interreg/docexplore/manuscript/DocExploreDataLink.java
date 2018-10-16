@@ -21,11 +21,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -67,7 +67,7 @@ public final class DocExploreDataLink extends ManuscriptLink
 	public MetaDataKey frontCover, frontInnerCover, backInnerCover, backCover;
 	public MetaDataKey frontCoverTrans, frontInnerCoverTrans, backInnerCoverTrans, backCoverTrans;
 	
-	public Set<MetaDataKey> readOnlyKeys;
+	public Set<MetaDataKey> readOnlyKeys, hiddenKeys;
 	
 	public DocExploreDataLink()
 	{
@@ -112,7 +112,7 @@ public final class DocExploreDataLink extends ManuscriptLink
 				link.setProperty("autoWrite", false);
 			try
 			{
-				this.readOnlyKeys = new TreeSet<MetaDataKey>();
+				this.readOnlyKeys = new HashSet<MetaDataKey>();
 				readOnlyKeys.add(miniKey = getOrCreateKey("mini", ""));
 				readOnlyKeys.add(dimKey = getOrCreateKey("dimension", ""));
 				readOnlyKeys.add(sourceKey = getOrCreateKey("source-file", ""));
@@ -139,6 +139,27 @@ public final class DocExploreDataLink extends ManuscriptLink
 				readOnlyKeys.add(frontInnerCoverTrans = getOrCreateKey("front-inner-cover-trans", "en")); frontInnerCoverTrans.setName("couverture-avant-intérieure-trans", "fr");
 				readOnlyKeys.add(backInnerCoverTrans = getOrCreateKey("back-inner-cover-trans", "en")); backInnerCoverTrans.setName("couverture-arrière-intérieure-trans", "fr");
 				readOnlyKeys.add(backCoverTrans = getOrCreateKey("back-cover-trans", "en")); backCoverTrans.setName("couverture-arrière-trans", "fr");
+				
+				this.hiddenKeys = new HashSet<MetaDataKey>();
+				hiddenKeys.add(partKey);
+				hiddenKeys.add(partPosKey);
+				hiddenKeys.add(stitchKey);
+				hiddenKeys.add(stitchRenderKey);
+				hiddenKeys.add(stitchEditKey);
+				hiddenKeys.add(displayKey);
+				hiddenKeys.add(bookKey);
+				hiddenKeys.add(upToDateKey);
+				hiddenKeys.add(tileConfigKey);
+				hiddenKeys.add(previewKey);
+				
+				hiddenKeys.add(frontCover);
+				hiddenKeys.add(frontInnerCover);
+				hiddenKeys.add(backInnerCover);
+				hiddenKeys.add(backCover);
+				hiddenKeys.add(frontCoverTrans);
+				hiddenKeys.add(frontInnerCoverTrans);
+				hiddenKeys.add(backInnerCoverTrans);
+				hiddenKeys.add(backCoverTrans);
 				
 				if (wasAutoWrite)
 					link.setProperty("autoWrite", true);

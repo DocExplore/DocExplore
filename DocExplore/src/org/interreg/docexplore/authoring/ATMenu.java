@@ -36,6 +36,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.io.FileUtils;
 import org.interreg.docexplore.DocExploreTool;
@@ -43,6 +44,7 @@ import org.interreg.docexplore.SplashScreen;
 import org.interreg.docexplore.datalink.DataLink;
 import org.interreg.docexplore.datalink.fs2.DataLinkFS2Source;
 import org.interreg.docexplore.gui.ErrorHandler;
+import org.interreg.docexplore.gui.FeedbackDialog;
 import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
@@ -145,16 +147,16 @@ public class ATMenu extends JMenuBar implements HistoryManager.HistoryListener
 			final Desktop desktop = Desktop.getDesktop();
 			if (desktop.isSupported(Desktop.Action.OPEN))
 			{
-				helpMenu.add(new AbstractAction(Lang.s("generalMenuHelpContents")) {
-					public void actionPerformed(ActionEvent e)
-					{
-						try
-						{
-							File doc = new File(DocExploreTool.getExecutableDir(), "MMT documentation.htm");
-							desktop.open(doc);
-						}
-						catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex, true);}
-					}});
+//				helpMenu.add(new AbstractAction(Lang.s("generalMenuHelpContents")) {
+//					public void actionPerformed(ActionEvent e)
+//					{
+//						try
+//						{
+//							File doc = new File(DocExploreTool.getExecutableDir(), "MMT documentation.htm");
+//							desktop.open(doc);
+//						}
+//						catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex, true);}
+//					}});
 				helpMenu.add(new AbstractAction(Lang.s("generalMenuHelpWebsite")) {
 					public void actionPerformed(ActionEvent e)
 					{
@@ -183,6 +185,11 @@ public class ATMenu extends JMenuBar implements HistoryManager.HistoryListener
 				splash.setAlwaysOnTop(true);
 				GuiUtils.centerOnScreen(splash);
 				splash.setVisible(true);
+			}});
+		helpMenu.add(new AbstractAction(Lang.s("feedbackTitle")+"...") {
+			public void actionPerformed(ActionEvent e)
+			{
+				FeedbackDialog.get().showDialog();
 			}});
 		add(helpMenu);
 		
@@ -215,16 +222,19 @@ public class ATMenu extends JMenuBar implements HistoryManager.HistoryListener
 	{
 		if (!noSave && !requestSave())
 			return false;
-		curFile = null;
-		try {FileUtils.deleteDirectory(host.app.defaultFile);}
-		catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
-		DataLink link = new DataLinkFS2Source(host.app.defaultFile.getAbsolutePath()).getDataLink();
-		try
+		SwingUtilities.invokeLater(new Runnable() {@Override public void run()
 		{
-			host.setLink(link);
-		}
-		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-		lastLoad = System.currentTimeMillis();
+			curFile = null;
+			try {FileUtils.deleteDirectory(host.app.defaultFile);}
+			catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true);}
+			DataLink link = new DataLinkFS2Source(host.app.defaultFile.getAbsolutePath()).getDataLink();
+			try
+			{
+				host.setLink(link);
+			}
+			catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
+			lastLoad = System.currentTimeMillis();
+		}});
 		return true;
 	}
 	

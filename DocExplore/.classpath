@@ -19,5 +19,6 @@
 	<classpathentry kind="lib" path="jar/gdx.jar"/>
 	<classpathentry kind="lib" path="jar/JFeatureLib.jar"/>
 	<classpathentry kind="lib" path="jar/java-LSH.jar"/>
+	<classpathentry kind="lib" path="jar/jsch-0.1.51.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

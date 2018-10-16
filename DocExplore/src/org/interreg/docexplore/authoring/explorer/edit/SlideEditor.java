@@ -15,8 +15,6 @@ The fact that you are presently reading this means that you have had knowledge o
 package org.interreg.docexplore.authoring.explorer.edit;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
@@ -25,35 +23,24 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 
-import org.interreg.docexplore.authoring.explorer.DataLinkView.DropType;
-import org.interreg.docexplore.authoring.explorer.ExplorerView;
-import org.interreg.docexplore.authoring.explorer.ViewItem;
-import org.interreg.docexplore.authoring.explorer.ViewMouseListener;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.app.ManuscriptAppHost.AppListener;
 import org.interreg.docexplore.manuscript.app.editors.PosterPageEditor;
-import org.interreg.docexplore.manuscript.app.editors.RegionOverlay.RegionObject;
 
 @SuppressWarnings("serial")
-public class SlideEditor extends PosterPageEditor implements ViewMouseListener.DropTarget
+public class SlideEditor extends PosterPageEditor
 {
 	SlideEditorListener listener;
-	SlideEditorToolbar toolBar;
-	SlideEditorView view;
 	
-	public SlideEditor(final SlideEditorView view) throws Exception
+	public SlideEditor() throws Exception
 	{
-		super(new SlideEditorListener(view), (Page)null);
+		super(new SlideEditorListener(), (Page)null);
 		
 		this.listener = (SlideEditorListener)getHost();
 		((SlideEditorListener)getHost()).editor = this;
-		this.toolBar = new SlideEditorToolbar(this);
-		this.view = view;
-		
-		ViewMouseListener.makeFileSystemDropTarget(this);
 		
 		setBorder(BorderFactory.createLineBorder(Color.gray, 1));
 		addComponentListener(new ComponentAdapter()
@@ -67,7 +54,6 @@ public class SlideEditor extends PosterPageEditor implements ViewMouseListener.D
 	@Override public void switchDocument(final AnnotatedObject document) throws Exception
 	{
 		super.switchDocument(document);
-		view.explorer.notifyExploringChanged(document);
 		refresh();
 	}
 	
@@ -85,45 +71,6 @@ public class SlideEditor extends PosterPageEditor implements ViewMouseListener.D
 	List<AppListener> listeners = new LinkedList<AppListener>();
 	public void addMainWindowListener(AppListener listener) {listeners.add(listener);}
 	
-	@Override public void dropped(ExplorerView source, List<ViewItem.Data> items, Point where) {view.dropped(source, items, where); reloadPage();}
-	@Override public void dragged(ExplorerView source, List<ViewItem.Data> items, Point where) {view.dragged(source, items, where); repaint();}
-	@Override public void exited() {view.exited(); repaint();}
-	
-	@Override protected void drawView(Graphics2D g, double pixelSize)
-	{
-		super.drawView(g, pixelSize);
-		
-		if (view.dragging != null)
-		{
-			if (view.dropType == DropType.OnItem)
-			{
-				RegionObject region = getOverlay().regionObjectAt(toViewX(view.dragging.x), toViewY(view.dragging.y));
-				if (region == null)
-					view.dropType = DropType.None;
-				else
-				{
-					g.setColor(Color.red);
-					g.draw(region.polygon);
-				}
-			}
-			g.setTransform(defaultTransform);
-			view.paintDropTarget(g);
-			g.setTransform(viewTransform);
-		}
-		
-		if (view.explorer.tool.displayHelp && !renderedMsg.equals(msg))
-		{
-			help = ExplorerView.helpRenderer.getImage(
-				"<html><div style=\"font-family: Arial; font-size: 24; font-weight: bold; color: rgb(128, 128, 128)\">"+msg+"</div></html>", 
-				getWidth(), ExplorerView.background);
-			renderedMsg = msg;
-		}
-		if (view.explorer.tool.displayHelp && msg.length() > 0)
-		{
-			g.setTransform(defaultTransform);
-			g.drawImage(help, 0, getHeight()-help.getHeight(), null);
-		}
-	}
 	BufferedImage help = null;
 	public String msg = "", renderedMsg = "";
 }

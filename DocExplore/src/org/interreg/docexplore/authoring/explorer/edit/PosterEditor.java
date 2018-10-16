@@ -1,167 +1,40 @@
+/**
+Copyright LITIS/EDA 2018
+contact@docexplore.eu
+
+This software is a computer program whose purpose is to manage and display interactive digital books.
+
+This software is governed by the CeCILL license under French law and abiding by the rules of distribution of free software.  You can  use, modify and/ or redistribute the software under the terms of the CeCILL license as circulated by CEA, CNRS and INRIA at the following URL "http://www.cecill.info".
+
+As a counterpart to the access to the source code and  rights to copy, modify and redistribute granted by the license, users are provided only with a limited warranty  and the software's author,  the holder of the economic rights,  and the successive licensors  have only  limited liability.
+
+In this respect, the user's attention is drawn to the risks associated with loading,  using,  modifying and/or developing or reproducing the software by the user in light of its specific status of free software, that may mean  that it is complicated to manipulate,  and  that  also therefore means  that it is reserved for developers  and  experienced professionals having in-depth computer knowledge. Users are therefore encouraged to load and test the software's suitability as regards their requirements in conditions enabling the security of their systems and/or data to be ensured and,  more generally, to use and operate it in the same conditions as regards security.
+
+The fact that you are presently reading this means that you have had knowledge of the CeCILL license and that you accept its terms.
+ */
 package org.interreg.docexplore.authoring.explorer.edit;
 
-import java.awt.Graphics;
-import java.awt.Point;
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.interreg.docexplore.authoring.explorer.CollectionView;
-import org.interreg.docexplore.authoring.explorer.ExplorerView;
-import org.interreg.docexplore.authoring.explorer.ViewItem;
-import org.interreg.docexplore.authoring.explorer.ViewItem.Data;
-import org.interreg.docexplore.authoring.explorer.ViewMouseListener;
 import org.interreg.docexplore.datalink.DataLinkException;
-import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.manuscript.Book;
-import org.interreg.docexplore.manuscript.MetaData;
-import org.interreg.docexplore.manuscript.PosterUtils;
-import org.interreg.docexplore.manuscript.actions.AddMetaDataAction;
-import org.interreg.docexplore.manuscript.actions.AddPosterPartsAction;
 import org.interreg.docexplore.manuscript.app.ManuscriptAppHost.AppListener;
 import org.interreg.docexplore.manuscript.app.editors.PosterPartsEditor;
-import org.interreg.docexplore.util.history.ReversibleAction;
 
 @SuppressWarnings("serial")
-public class PosterEditor extends PosterPartsEditor implements ViewMouseListener.DropTarget
+public class PosterEditor extends PosterPartsEditor
 {
 	PresentationEditorListener listener;
-	PresentationEditorView view;
-	PosterEditorToolbar toolbar;
 	
-	public PosterEditor(PresentationEditorView view, Book book) throws DataLinkException
+	public PosterEditor(Book book) throws DataLinkException
 	{
-		super(new PresentationEditorListener(view), book);
+		super(new PresentationEditorListener(), book);
 		
 		this.listener = (PresentationEditorListener)host;
 		((PresentationEditorListener)host).editor = this;
-		this.view = view;
-		this.toolbar = new PosterEditorToolbar(this);
-		ViewMouseListener.makeFileSystemDropTarget(this);
 	}
 	
 	List<AppListener> listeners = new LinkedList<AppListener>();
 	public void addMainWindowListener(AppListener listener) {listeners.add(listener);}
-
-	@Override public void dropped(ExplorerView source, List<Data> items, Point where)
-	{
-		try
-		{
-			boolean isEmpty = view.curBook.getMetaDataListForKey(view.explorer.link.partKey).isEmpty();
-			List<MetaData> initialParts = new LinkedList<MetaData>();
-			List<MetaData> addedParts = new LinkedList<MetaData>();
-			if (source == null)
-			{
-				List<File> files = new LinkedList<File>();
-				for (ViewItem.Data item : items)
-					if (item.object instanceof File)
-						files.add((File)item.object);
-				listener.onAppendPartsRequest(view.curBook, files);
-				repaint();
-				return;
-			}
-			else if (source instanceof CollectionView)
-			{
-				for (Data data : items)
-				{
-					if (data.object instanceof Book)
-					{
-						Book book = (Book)data.object;
-						boolean isPoster = PosterUtils.isPoster(book);
-						if (isPoster)
-						{
-							//ImportOptions importOptions = view.explorer.tool.importOptions;
-							List<MetaData> sourceSet = book.getMetaDataListForKey(book.getLink().getOrCreateKey("part", ""));
-							for (MetaData part : sourceSet)
-								(isEmpty ? initialParts : addedParts).add(view.explorer.importer.add(part, view.curBook.getLink(), null));
-						}
-					}
-				}
-			}
-			submitPastAddPartsAction(initialParts, addedParts);
-		}
-		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
-		repaint();
-	}
-
-	@Override public void dragged(ExplorerView source, List<Data> items, Point where)
-	{
-		view.dragged(source, items, where);
-		repaint();
-	}
-
-	@Override public void exited()
-	{
-		view.exited();
-	}
-	
-	@Override protected void paintChildren(Graphics g)
-	{
-		super.paintChildren(g);
-		view.paintDropTarget(g);
-	}
-	
-	/**
-	 * Submits an add poster action to the history manager.
-	 * Assumes that the parts are already added to the book and will skip the first "do" ("undo" works nonetheless).
-	 * @param initialParts These parts keep their original position data (doesn't check if slots are truly empty).
-	 * @param addedParts These parts are appended on an extra row at the bottom.
-	 */
-	void submitPastAddPartsAction(final List<MetaData> initialParts, final List<MetaData> addedParts)
-	{
-		if (initialParts.isEmpty() && addedParts.isEmpty())
-			return;
-		try
-		{
-			for (MetaData part : initialParts)
-				view.curBook.addMetaData(part);
-			if (!addedParts.isEmpty())
-			{
-				MetaData [][] parts = PosterUtils.getBaseTilesArray(view.explorer.link, view.curBook);
-				int x = 0;
-				for (MetaData part : addedParts)
-				{
-					view.curBook.addMetaData(part);
-					PosterUtils.setPartPos(view.explorer.link, part, x++, parts.length == 0 ? 0 : parts[0].length);
-				}
-			}
-			
-			final AddMetaDataAction initial = initialParts.isEmpty() ? null : view.explorer.getActionProvider().addMetaDatas(view.curBook, null);
-			final AddPosterPartsAction added = addedParts.isEmpty() ? null : view.explorer.getActionProvider().addParts(view.curBook, null);
-			view.explorer.getActionProvider().addParts(view.curBook, null);
-			view.explorer.tool.historyManager.submit(new ReversibleAction()
-			{
-				@Override public void doAction() throws Exception
-				{
-					if (initial != null)
-					{
-						initial.cacheDir = cacheDir;
-						if (initial.annotations != null) 
-							initial.doAction(); 
-					}
-					if (added != null)
-					{
-						added.cacheDir = cacheDir;
-						if (!added.parts.isEmpty())
-							added.doAction();
-					}
-					view.explorer.explore("docex://"+view.curBook.getId());
-				}
-				@Override public void undoAction() throws Exception
-				{
-					if (added != null)
-						added.undoAction();
-					if (initial != null)
-						initial.undoAction();
-					view.explorer.explore("docex://"+view.curBook.getId());
-				}
-				@Override public String description() {return "Add parts";}
-			});
-			if (initial != null)
-				initial.annotations = initialParts;
-			if (added != null)
-				added.parts.addAll(addedParts);
-		}
-		catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
-	}
 }

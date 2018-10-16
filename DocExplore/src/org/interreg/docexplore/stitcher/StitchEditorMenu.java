@@ -1,3 +1,17 @@
+/**
+Copyright LITIS/EDA 2018
+contact@docexplore.eu
+
+This software is a computer program whose purpose is to manage and display interactive digital books.
+
+This software is governed by the CeCILL license under French law and abiding by the rules of distribution of free software.  You can  use, modify and/ or redistribute the software under the terms of the CeCILL license as circulated by CEA, CNRS and INRIA at the following URL "http://www.cecill.info".
+
+As a counterpart to the access to the source code and  rights to copy, modify and redistribute granted by the license, users are provided only with a limited warranty  and the software's author,  the holder of the economic rights,  and the successive licensors  have only  limited liability.
+
+In this respect, the user's attention is drawn to the risks associated with loading,  using,  modifying and/or developing or reproducing the software by the user in light of its specific status of free software, that may mean  that it is complicated to manipulate,  and  that  also therefore means  that it is reserved for developers  and  experienced professionals having in-depth computer knowledge. Users are therefore encouraged to load and test the software's suitability as regards their requirements in conditions enabling the security of their systems and/or data to be ensured and,  more generally, to use and operate it in the same conditions as regards security.
+
+The fact that you are presently reading this means that you have had knowledge of the CeCILL license and that you accept its terms.
+ */
 package org.interreg.docexplore.stitcher;
 
 import java.awt.event.ActionEvent;
@@ -66,11 +80,11 @@ public class StitchEditorMenu extends JMenuBar
 		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_DOWN_MASK));}});
 		tools.add(new JMenuItem(new AbstractAction("Detect group") {@Override public void actionPerformed(ActionEvent e)
 		{
-			editor.toolkit.detectGroup(false);
+			editor.toolkit.detectGroup(true, false);
 		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));}});
-		tools.add(new JMenuItem(new AbstractAction("Force detect group") {@Override public void actionPerformed(ActionEvent e)
+		tools.add(new JMenuItem(new AbstractAction("Detect group (UI geometry)") {@Override public void actionPerformed(ActionEvent e)
 		{
-			editor.toolkit.detectGroup(true);
+			editor.toolkit.detectGroup(true, true);
 		}}) {{setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK));}});
 		tools.add(new JMenuItem(new AbstractAction("Associate") {@Override public void actionPerformed(ActionEvent e)
 		{
@@ -87,7 +101,7 @@ public class StitchEditorMenu extends JMenuBar
 				else
 				{
 					a = editor.map.add(editor.left.selected, editor.right.selected);
-					System.out.printf("Feature dist: %.3f, desc: %.3f\n", a.p1.featureDistance2(a.p2), a.p1.descriptorDistance2(a.p2));
+					//System.out.printf("Feature dist: %.3f, desc: %.3f\n", a.p1.featureDistance2(a.p2), a.p1.descriptorDistance2(a.p2));
 				}
 				editor.left.repaint();
 				editor.right.repaint();

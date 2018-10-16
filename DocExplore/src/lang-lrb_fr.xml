@@ -84,7 +84,7 @@
 	<entry key="cfgMissingFileLabel">fichier manquant</entry>
 	<entry key="cfgMysqlLabel">MySQL</entry>
 	<entry key="cfgOkLabel">OK</entry>
-	<entry key="cfgOptionsLabel">Options du feuillteur</entry>
+	<entry key="cfgOptionsLabel">Options du feuilleteur</entry>
 	<entry key="cfgPasswordLabel">Mot de passe</entry>
 	<entry key="cfgPathLabel">Chemin</entry>
 	<entry key="cfgPluginsLabel">Plugins</entry>
@@ -163,6 +163,9 @@ Souhaitez-vous continuer?</entry>
 	<entry key="errorGenericMessage">Une erreur est survenue!</entry>
 	<entry key="errorGenericTitle">Erreur</entry>
 	<entry key="errorLabel">Erreur</entry>
+	<entry key="errorRemember">Se souvenir du mot de passe</entry>
+	<entry key="errorScreenshot">Inclure une capture d'écran</entry>
+	<entry key="errorSend">Envoyer</entry>
 	<entry key="exitLabel">Quitter</entry>
 	<entry key="exportAllRoisLabel">Toutes les régions de la page</entry>
 	<entry key="exportAllTagsLabel">Tous les tags qui suivent</entry>
@@ -194,7 +197,7 @@ Souhaitez-vous continuer?</entry>
 	<entry key="exportMobileDesc">Cette présentation sera placée dans un fichier lisible par l'application mobile DocExplore.</entry>
 	<entry key="exportOptions">Options d'export</entry>
 	<entry key="exportReader">Export vers le feuilleteur</entry>
-	<entry key="exportReaderDesc">Cette présentation sera ajoutée à la collection local de cette installation de DocExplore.</entry>
+	<entry key="exportReaderDesc">Cette présentation sera ajoutée à la collection locale de cette installation de DocExplore.</entry>
 	<entry key="exportSizeLimit">Les dimensions des images ne doivent pas dépasser</entry>
 	<entry key="exportSizeMessage">&lt;html>&lt;div style=&quot;width: 360px;&quot;>La limitation des dimensions d'images sert à réduire les performances matérielles requises par les présentations. 
 Si vous constatez des temps de chargement excessifs ou des plantages lors de la visualisation, il est 
@@ -210,6 +213,7 @@ faute de quoi elles ne s'afficheront pas correctement.
 	<entry key="exportTransparencyOption">Transparence</entry>
 	<entry key="exportWeb">Export vers le web</entry>
 	<entry key="exportWebDesc">Cette présentation sera placée dans une archive qui pourra être intégrée à un site web.</entry>
+	<entry key="feedbackTitle">Feedback</entry>
 	<entry key="fileOpen">Ouvrir</entry>
 	<entry key="fileSave">Enregistrer</entry>
 	<entry key="fillPoster">Remplir les trous du poster</entry>
@@ -229,7 +233,9 @@ faute de quoi elles ne s'afficheront pas correctement.
 	<entry key="fixCharsMac">Mac OSX</entry>
 	<entry key="fixCharsMsg">La présentation a été créée sous</entry>
 	<entry key="fixCharsWin">Windows</entry>
+	<entry key="generalAdd">Ajouter</entry>
 	<entry key="generalAddAnnotation">Ajouter</entry>
+	<entry key="generalBack">Retour</entry>
 	<entry key="generalBook">livre</entry>
 	<entry key="generalBooks">livres</entry>
 	<entry key="generalBrowseLabel">Parcourir</entry>
@@ -286,6 +292,7 @@ faute de quoi elles ne s'afficheront pas correctement.
 	<entry key="generalRecoveryLabel">Récupération</entry>
 	<entry key="generalRecoveryMessage">Une présentation a été récupérée d'une session antérieure.
 Voulez-vous la conserver dans l'éditeur?</entry>
+	<entry key="generalRemove">Supprimer la sélection</entry>
 	<entry key="generalSaveMessage">Voulez-vous enregistrer la présentation actuelle?</entry>
 	<entry key="generalSetPreview">Définir l'aperçu</entry>
 	<entry key="generalTitle">Titre</entry>
@@ -298,7 +305,7 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="generalToolbarRemovePage">Supprimer les pages sélectionnées...</entry>
 	<entry key="generalToolbarView">Basculer la vue liste/icône</entry>
 	<entry key="helpAtAnnotationsMsg">&lt;b>Panneau d'annotations&lt;/b>
-	    &lt;br/>Ce panneau vous permet de voir et de modifier les méta-données associées au document de droite.
+	    &lt;br/>Ce panneau vous permet de voir et de modifier les méta-données associées au document de gauche.
 	    &lt;br/>Utilisez les icônes pour ajouter texte, images et vidéos.</entry>
 	<entry key="helpAtBookMsg">Le panneau de gauche affiche les pages de votre présentation. Pour en ajouter vous pouvez:
 		&lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;Cliquer sur l'icône &amp;oplus; dans la barre d'outils pour importer des images
@@ -324,14 +331,12 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="helpCollectionMsg">Ceci est votre collection numérique.&lt;br/>&amp;larr; Glissez des éléments vers la gauche pour les inclure dans votre présentation.</entry>
 	<entry key="helpCover">&lt;b>Couverture&lt;/b>
 	    &lt;br/>
-	    &lt;br/>Chaque cadre définit une image représentant une partie de la couverture du livre.
-	    &lt;br/>Etant donné qu'une couverture peut avoir des bords arrondis, l'image utilisée aura besoin de zones transparentes.
-	    &lt;br/>Cependant, les images avec transparence ne peuvent être efficacement compressées et risquent de ne pas convenir dans tous les contextes d'export.
-	    &lt;br/>Par conséquent chaque partie propose une version avec et sans transparence.
+	    &lt;br/>L'éditeur de couverture vous permet de définir la couverture d'un livre en le décomposant en quatre parties : avant, avant intérieur, arrière et arrière intérieur. Chaque partie peut être définie 
+	    en glissant une image (depuis DocExplore ou bien un fichier extérieur) sur le cadre concerné. Chaque partie est elle-même subdivisée en versions opaques et transparentes. Cette séparation existe en raison
+	    du faible taux de compression des images transparentes qui peut ne pas convenir à certains contextes d'export, telle qu'une page web. La définition des deux versions permet au logiciel de sélectionner
+	    la plus appropriée dans un contexte donné.
 	    &lt;br/>
-	    &lt;br/>Toute partie non définie aura une image par défaut si elle est exportée.
-	    &lt;br/>Vous pouvez glisser des fichiers ou des images sur les cadres pour définir leur contenu.
-	    &lt;br/>Utilisez le clic droit pour effacer le contenu d'un cadre.</entry>
+	    &lt;br/>Utilisez le clic droit pour effacer le contenu d'un cadre. Toute partie non définie aura une image par défaut si elle est exportée.</entry>
 	<entry key="helpFolderMsg">Faites un clic droit sur un fichier pour prévisualiser son contenu.&lt;br/>&amp;larr; Glissez des fichiers vers la gauche pour les inclure dans votre présentation.</entry>
 	<entry key="helpLocalMsg">Ceci est le stockage local de votre ordinateur. Double-cliquez sur un lecteur pour parcourir son contenu.</entry>
 	<entry key="helpMmtAnnotationsMsg">&lt;b>Panneau d'annotations&lt;/b>
@@ -350,7 +355,10 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 		&lt;br/>Les modifications sont ignorées si le livre est vérouillé &lt;img src='%icons%locked-32x32.png'/></entry>
 	<entry key="helpMmtCollectionMsg">&lt;b>Collection&lt;/b>
         &lt;br/>
-	    &lt;br/>Ceci est votre collection locale. A l'aide de la barre d'outils, vous pouvez :
+	    &lt;br/>Ceci est votre collection locale. Depuis cet écran vous pouvez créer, supprimer ou modifier des livres et des posters. Cette collection est à votre disposition dans l'outil d'édition pour créer une 
+	    présentation. Double cliquez sur un document pour l'ouvrir dans un nouvel onglet.
+	    &lt;br/>
+	    &lt;br/>A l'aide de la barre d'outils, vous pouvez :
 		&lt;br/>&lt;img src='%icons%import-24x24.png'/>&#160;Importer un livre ou un poster d'une autre collection
 		&lt;br/>&lt;img src='%icons%export-24x24.png'/>&#160;Exporter le livre ou le poster sélectionné
 		&lt;br/>&lt;img src='%icons%add-file-24x24.png'/>&#160;Créer un nouveau document
@@ -392,6 +400,8 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	    &lt;br/>
 	    &lt;br/>&lt;u>Raccordage automatique&lt;/u>
 	    &lt;br/>Le raccordage peut être fait automatiquement en utilisant le &lt;img src='%icons%detect-stitches-24x24.png'/>&#160;bouton de détection.
+	    Si les images ne sont pas alignées mais que vous les avez alignées manuellement dans la vue globale, vous pouvez utiliser le 
+	    &lt;img src='%icons%detect-stitches-ui-24x24.png'/>&#160;bouton de détection UI.
 	    Cette fonction suppose que les images ont réellement une zone de superposition et va essayer de forcer la correspondance.
 	    &lt;br/>
 	    &lt;br/>&lt;u>Raccordage manuel&lt;/u>
@@ -409,6 +419,7 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%erase-pois-24x24.png'/>&#160;Enlever tous les raccords et les points d'intérêt
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%toggle-stitch-24x24.png'/>&#160;Ajouter ou enlever un raccord entre deux points
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%detect-stitches-24x24.png'/>&#160;Détecter les raccords automatiquement
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%detect-stitches-ui-24x24.png'/>&#160;Détecter les raccords automatiquement avec la configuration globale
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%previous-24x24.png'/>&#160;Fermer l'éditeur</entry>
 	<entry key="helpPosterStitchMsg">&lt;b>Raccordage de poster&lt;/b>
 	    &lt;br/>
@@ -448,9 +459,9 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%clear-stitches-24x24.png'/>&#160;Enlever tous les raccords
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%detect-stitches-24x24.png'/>&#160;Détecter la dispoition et les raccords
 	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%render-stitch-24x24.png'/>&#160;Utiliser la disposition actuelle pour 
-	    &lt;a href='helpPosterRenderMsg'>générer le poster&lt;/a>
-	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%previous-24x24.png'/>&#160;Cancel stitching process</entry>
-	<entry key="helpPosterStitchRenderMsg">&lt;b>Poster rendering&lt;/b>
+	    &lt;a href='helpPosterStitchRenderMsg'>générer le poster&lt;/a>
+	    &lt;br/>&amp;emsp;&amp;bull;&amp;nbsp;&lt;img src='%icons%remove-24x24.png'/>&#160;Abandonner le raccordement</entry>
+	<entry key="helpPosterStitchRenderMsg">&lt;b>Rendu de poster&lt;/b>
 	    &lt;br/>
 	    Cet éditeur vous permet de générer le poster assemblé.
 	    &lt;br/>
@@ -505,6 +516,7 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="imageToolbarCrop">Retailler la page</entry>
 	<entry key="imageToolbarDelRoi">Effacer une région d'intérêt</entry>
 	<entry key="imageToolbarDetectStitches">Détecter les raccords</entry>
+	<entry key="imageToolbarDetectUIStitches">Détecter les raccords (avec la configuration globale)</entry>
 	<entry key="imageToolbarFillPoster">Remplir les trous du poster</entry>
 	<entry key="imageToolbarFit">Ajuster au cadre</entry>
 	<entry key="imageToolbarMirrorHor">Mirror horizontal</entry>
@@ -612,6 +624,7 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="manageSelectFolderMsg">Veuillez sélectionner le répertoire depuis lequel les images seront importées.</entry>
 	<entry key="manageSelectNoneLabel">Ne rien sélectionner</entry>
 	<entry key="manageSelectRecognizedLabel">Sélectionner les formats reconnus</entry>
+	<entry key="mirrorImage">Mirroir de l'image</entry>
 	<entry key="mirrorParts">Mirroir du poster</entry>
 	<entry key="mmtLabel">Outil de gestion de manuscrits</entry>
 	<entry key="mmtMessage">Cet outil vous permet de modifier, d'annoter et de rechercher dans votre collection numérique.</entry>
@@ -674,6 +687,7 @@ Voulez-vous la conserver dans l'éditeur?</entry>
 	<entry key="restartLabel">Redémarrage</entry>
 	<entry key="restartMessage">Vous devez redémarrer DocExplore pour valider les changements.</entry>
 	<entry key="resultsLabel">Resultats</entry>
+	<entry key="rotateImage">Rotation de l'image</entry>
 	<entry key="rotateParts">Rotation du poster</entry>
 	<entry key="saveStitchLabel">Enregistrer les changements?</entry>
 	<entry key="saveStitchMsg">Enregistrer les changements faits aux raccordements?</entry>
@@ -747,8 +761,8 @@ L'espace de travail est utilisé pour stocker les données que vous créez.&lt;/
 	<entry key="uriCopyLabel"></entry>
 	<entry key="uriPasteLabel"></entry>
 	<entry key="useLayoutLabel">Utiliser la configuration actuelle?</entry>
-	<entry key="useLayoutMessage">Souhaitez-vous limiter la détection aux associations vides (les lignes rouges)? Sinon toutes les associations actuelles seront 
-	    supprimées et aucun a priori ne sera fait sur la configuration des parties du document.</entry>
+	<entry key="useLayoutMessage">Souhaitez-vous limiter la détection aux associations vides (les lignes rouges)? 
+	    Sinon toutes les associations actuelles seront supprimées et aucun a priori ne sera fait sur la configuration des parties du document.</entry>
 	<entry key="viewHelpToggle">Afficher l'aide</entry>
 	<entry key="waitLabel">Veuillez patienter</entry>
 	<entry key="yesLabel">Oui</entry>

@@ -71,6 +71,8 @@ public abstract class PresentationExporter
 			boolean [] transArray = transparency ? transArray(book) : null;
 			
 			boolean poster = PosterUtils.isPoster(book);
+			if (poster && !PosterUtils.isUpToDate(book))
+				PosterUtils.buildConfiguration(book, host.getLink(), host.frame);
 			
 			StringBuffer bookSpec = new StringBuffer("<Book path=\"").append("book").append(bookNum).append("/\" aspectRatio=\"").append(aspectRatio(book)).append("\"");
 			

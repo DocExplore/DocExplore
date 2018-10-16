@@ -1,3 +1,17 @@
+/**
+Copyright LITIS/EDA 2018
+contact@docexplore.eu
+
+This software is a computer program whose purpose is to manage and display interactive digital books.
+
+This software is governed by the CeCILL license under French law and abiding by the rules of distribution of free software.  You can  use, modify and/ or redistribute the software under the terms of the CeCILL license as circulated by CEA, CNRS and INRIA at the following URL "http://www.cecill.info".
+
+As a counterpart to the access to the source code and  rights to copy, modify and redistribute granted by the license, users are provided only with a limited warranty  and the software's author,  the holder of the economic rights,  and the successive licensors  have only  limited liability.
+
+In this respect, the user's attention is drawn to the risks associated with loading,  using,  modifying and/or developing or reproducing the software by the user in light of its specific status of free software, that may mean  that it is complicated to manipulate,  and  that  also therefore means  that it is reserved for developers  and  experienced professionals having in-depth computer knowledge. Users are therefore encouraged to load and test the software's suitability as regards their requirements in conditions enabling the security of their systems and/or data to be ensured and,  more generally, to use and operate it in the same conditions as regards security.
+
+The fact that you are presently reading this means that you have had knowledge of the CeCILL license and that you accept its terms.
+ */
 package org.interreg.docexplore.stitcher;
 
 import java.awt.Color;
@@ -23,6 +37,7 @@ public class FragmentDescriptionView extends NavView
 	StitchEditor editor;
 	FragmentDescription desc = null;
 	POI highlighted = null, selected = null;
+	FragmentDistortion distortion = null;
 	
 	public FragmentDescriptionView(StitchEditor editor)
 	{
@@ -78,8 +93,13 @@ public class FragmentDescriptionView extends NavView
 		this.desc = desc;
 		this.highlighted = null;
 		this.selected = null;
+		this.distortion = null;
 		if (desc != null)
+		{
+			distortion = new FragmentDistortion(editor.view.set, desc.fragment, null);
+			System.out.println(distortion.stitches);
 			fit();
+		}
 		else repaint();
 	}
 	
@@ -170,9 +190,8 @@ public class FragmentDescriptionView extends NavView
 				}
 			}
 			
-			if (desc.fragment.distortion != null)
+			if (distortion != null)
 			{
-				g.setColor(distortionCol);
 				double step = Math.min(desc.fragment.imagew, desc.fragment.imageh)/(getScale()*40);
 				for (double x=toViewX(0);x<toViewX(getWidth());x+=step)
 					for (double y=toViewY(0);y<toViewY(getHeight());y+=step)
@@ -180,7 +199,11 @@ public class FragmentDescriptionView extends NavView
 				{
 					if (!editor.showAlpha)
 					{
-						line.setLine(x, y, x+desc.fragment.distortion.getDist(x, y, 0), y+desc.fragment.distortion.getDist(x, y, 1));
+						g.setColor(distortionCol);
+						line.setLine(x, y, x+distortion.getDist(x, y, 0), y+distortion.getDist(x, y, 1));
+						g.draw(line);
+						g.setColor(associationCol);
+						line.setLine(x, y, x, y);
 						g.draw(line);
 					}
 					else
@@ -188,6 +211,15 @@ public class FragmentDescriptionView extends NavView
 //						double a = desc.distortionAlpha(x, y);
 //						line.setLine(x-a, y-a, x+a, y+a);
 //						g.draw(line);
+					}
+				}
+				if (distortion.stitches != null)
+				{
+					g.setColor(Color.green);
+					for (FragmentDistortion.Stitch s : distortion.stitches)
+					{
+						line.setLine(s.x, s.y, s.x+s.dx, s.y+s.dy);
+						g.draw(line);
 					}
 				}
 			}

@@ -44,6 +44,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
 import org.interreg.docexplore.internationalization.Lang;
@@ -209,9 +210,9 @@ public class GeneralConfigPanel extends JPanel
 			try
 			{
 				JOptionPane.showMessageDialog(GeneralConfigPanel.this, Lang.s("cfgAddPluginMessage").replace("%pdir", DocExploreTool.getPluginDir().getAbsolutePath()));
-				if (System.getProperty("os.name").toLowerCase().contains("win"))
+				if (SystemUtils.IS_OS_WINDOWS)
 					Runtime.getRuntime().exec(new String [] {"explorer", DocExploreTool.getPluginDir().getAbsolutePath()});
-				else if (System.getProperty("os.name").toLowerCase().contains("mac"))
+				else if (SystemUtils.IS_OS_MAC_OSX)
 					Runtime.getRuntime().exec(new String [] {"open", DocExploreTool.getPluginDir().getAbsolutePath()});
 			}
 			catch (Exception ex) {ErrorHandler.defaultHandler.submit(ex);}

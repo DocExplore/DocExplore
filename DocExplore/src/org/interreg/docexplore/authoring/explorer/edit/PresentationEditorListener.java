@@ -1,6 +1,19 @@
+/**
+Copyright LITIS/EDA 2018
+contact@docexplore.eu
+
+This software is a computer program whose purpose is to manage and display interactive digital books.
+
+This software is governed by the CeCILL license under French law and abiding by the rules of distribution of free software.  You can  use, modify and/ or redistribute the software under the terms of the CeCILL license as circulated by CEA, CNRS and INRIA at the following URL "http://www.cecill.info".
+
+As a counterpart to the access to the source code and  rights to copy, modify and redistribute granted by the license, users are provided only with a limited warranty  and the software's author,  the holder of the economic rights,  and the successive licensors  have only  limited liability.
+
+In this respect, the user's attention is drawn to the risks associated with loading,  using,  modifying and/or developing or reproducing the software by the user in light of its specific status of free software, that may mean  that it is complicated to manipulate,  and  that  also therefore means  that it is reserved for developers  and  experienced professionals having in-depth computer knowledge. Users are therefore encouraged to load and test the software's suitability as regards their requirements in conditions enabling the security of their systems and/or data to be ensured and,  more generally, to use and operate it in the same conditions as regards security.
+
+The fact that you are presently reading this means that you have had knowledge of the CeCILL license and that you accept its terms.
+ */
 package org.interreg.docexplore.authoring.explorer.edit;
 
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -21,17 +34,16 @@ import org.interreg.docexplore.manuscript.Region;
 import org.interreg.docexplore.manuscript.actions.AddPosterPartsAction;
 import org.interreg.docexplore.manuscript.actions.WrappedAction;
 import org.interreg.docexplore.manuscript.app.ActionRequestListener;
-import org.interreg.docexplore.manuscript.app.ManuscriptAppHost;
 import org.interreg.docexplore.manuscript.app.DocumentEditorHost;
 import org.interreg.docexplore.manuscript.app.DocumentPanel;
+import org.interreg.docexplore.manuscript.app.ManuscriptAppHost;
 import org.interreg.docexplore.util.GuiUtils;
 import org.interreg.docexplore.util.GuiUtils.ProgressRunnable;
 
 public class PresentationEditorListener implements DocumentEditorHost, ActionRequestListener
 {
 	PosterEditor editor;
-	PresentationEditorView view;
-	PresentationEditorListener(PresentationEditorView view) {this.view = view;}
+	PresentationEditorListener() {}
 	
 	@Override public Book onAddBookRequest(String title, List<File> files, boolean poster) {return null;}
 	@Override public void onDeleteBooksRequest(List<Book> books) {}
@@ -42,49 +54,57 @@ public class PresentationEditorListener implements DocumentEditorHost, ActionReq
 	@Override public MetaData onAddAnnotationRequest(AnnotatedObject object, MetaData annotation) {return null;}
 	@Override public Region onAddRegionRequest(Page page, Point[] outline) {return null;}
 	@Override public void onDeleteRegionRequest(Region region) {}
+	@Override public void onRotateMetaDataLeftRequest(MetaData annotation) {}
+	@Override public void onRotateMetaDataRightRequest(MetaData annotation) {}
+	@Override public void onHorizontalMirrorMetaDataRequest(MetaData annotation) {}
+	@Override public void onVerticalMirrorMetaDataRequest(MetaData annotation) {}
+	@Override public void onHorizontalMirrorPageRequest(Page page) {}
+	@Override public void onVerticalMirrorPageRequest(Page page) {}
+	@Override public void onRotatePageLeftRequest(Page page) {}
+	@Override public void onRotatePageRightRequest(Page page) {}
 	
 	@Override public void onFillPosterHolesRequest(Book book)
 	{
-		try {view.explorer.tool.historyManager.submit(new WrappedAction(view.explorer.getActionProvider().fillPoster(book))
+		try {getAppHost().historyManager.submit(new WrappedAction(getAppHost().getLink().actionProvider().fillPoster(book))
 		{
-			@Override public void doAction() throws Exception {super.doAction(); view.explorer.explore("docex://"+view.curBook.getId());}
-			@Override public void undoAction() throws Exception {super.undoAction(); view.explorer.explore("docex://"+view.curBook.getId());}
+			@Override public void doAction() throws Exception {super.doAction();}
+			@Override public void undoAction() throws Exception {super.undoAction();}
 		});}
 		catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 	}
 	@Override public void onHorizontalMirrorPartsRequest(Book book)
 	{
-		try {if (checkForHoles(book)) view.explorer.tool.historyManager.submit(new WrappedAction(view.explorer.getActionProvider().horizontalMirrorPoster(book))
+		try {if (checkForHoles(book)) getAppHost().historyManager.submit(new WrappedAction(getAppHost().getLink().actionProvider().horizontalMirror(book))
 		{
-			@Override public void doAction() throws Exception {super.doAction(); view.explorer.explore("docex://"+view.curBook.getId());}
-			@Override public void undoAction() throws Exception {super.undoAction(); view.explorer.explore("docex://"+view.curBook.getId());}
+			@Override public void doAction() throws Exception {super.doAction();}
+			@Override public void undoAction() throws Exception {super.undoAction();}
 		});}
 		catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 	}
 	@Override public void onVerticalMirrorPartsRequest(Book book)
 	{
-		try {if (checkForHoles(book)) view.explorer.tool.historyManager.submit(new WrappedAction(view.explorer.getActionProvider().verticalMirrorPoster(book))
+		try {if (checkForHoles(book)) getAppHost().historyManager.submit(new WrappedAction(getAppHost().getLink().actionProvider().verticalMirror(book))
 		{
-			@Override public void doAction() throws Exception {super.doAction(); view.explorer.explore("docex://"+view.curBook.getId());}
-			@Override public void undoAction() throws Exception {super.undoAction(); view.explorer.explore("docex://"+view.curBook.getId());}
+			@Override public void doAction() throws Exception {super.doAction();}
+			@Override public void undoAction() throws Exception {super.undoAction();}
 		});}
 		catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 	}
 	@Override public void onRotatePartsLeftRequest(Book book)
 	{
-		try {if (checkForHoles(book)) view.explorer.tool.historyManager.submit(new WrappedAction(view.explorer.getActionProvider().rotatePosterLeft(book))
+		try {if (checkForHoles(book)) getAppHost().historyManager.submit(new WrappedAction(getAppHost().getLink().actionProvider().rotateLeft(book))
 		{
-			@Override public void doAction() throws Exception {super.doAction(); view.explorer.explore("docex://"+view.curBook.getId());}
-			@Override public void undoAction() throws Exception {super.undoAction(); view.explorer.explore("docex://"+view.curBook.getId());}
+			@Override public void doAction() throws Exception {super.doAction();}
+			@Override public void undoAction() throws Exception {super.undoAction();}
 		});}
 		catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 	}
 	@Override public void onRotatePartsRightRequest(Book book)
 	{
-		try {if (checkForHoles(book)) view.explorer.tool.historyManager.submit(new WrappedAction(view.explorer.getActionProvider().rotatePosterRight(book))
+		try {if (checkForHoles(book)) getAppHost().historyManager.submit(new WrappedAction(getAppHost().getLink().actionProvider().rotateRight(book))
 		{
-			@Override public void doAction() throws Exception {super.doAction(); view.explorer.explore("docex://"+view.curBook.getId());}
-			@Override public void undoAction() throws Exception {super.undoAction(); view.explorer.explore("docex://"+view.curBook.getId());}
+			@Override public void doAction() throws Exception {super.doAction();}
+			@Override public void undoAction() throws Exception {super.undoAction();}
 		});}
 		catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 	}
@@ -98,13 +118,12 @@ public class PresentationEditorListener implements DocumentEditorHost, ActionReq
 		{
 			public void run()
 			{
-				action[0] = view.explorer.getActionProvider().addParts(book, files);
-				try {view.explorer.tool.historyManager.submit(action[0]);}
+				action[0] = getAppHost().getLink().actionProvider().addParts(book, files);
+				try {getAppHost().historyManager.submit(action[0]);}
 				catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}
 			public float getProgress() {return (float)action[0].progress;}
 		}, editor);
-		view.explorer.explore("docex://"+view.curBook.getId());
 		return action[0].parts;
 	}
 
@@ -116,11 +135,10 @@ public class PresentationEditorListener implements DocumentEditorHost, ActionReq
 		{
 			public void run()
 			{
-				try {view.explorer.tool.historyManager.submit(view.explorer.getActionProvider().deleteParts(book, parts));}
+				try {getAppHost().historyManager.submit(getAppHost().getLink().actionProvider().deleteParts(book, parts));}
 				catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}
 		}, editor);
-		view.explorer.explore("docex://"+view.curBook.getId());
 	}
 	
 	@Override public void onMovePartsRequest(final Book book, final MetaData part, final int col, final int row, final boolean insertRow)
@@ -129,11 +147,10 @@ public class PresentationEditorListener implements DocumentEditorHost, ActionReq
 		{
 			public void run()
 			{
-				try {view.explorer.tool.historyManager.submit(view.explorer.getActionProvider().movePart(book, part, col, row, insertRow));}
+				try {getAppHost().historyManager.submit(getAppHost().getLink().actionProvider().movePart(book, part, col, row, insertRow));}
 				catch (Throwable ex) {ErrorHandler.defaultHandler.submit(ex);}
 			}
 		}, editor);
-		view.explorer.explore("docex://"+view.curBook.getId());
 	}
 	
 	@Override public void onAddEmptyPartRequest(final Book book, int col, int row, boolean insertRow)
@@ -143,9 +160,9 @@ public class PresentationEditorListener implements DocumentEditorHost, ActionReq
 	
 	private boolean checkForHoles(Book book) throws DataLinkException
 	{
-		if (PosterUtils.posterHasHoles(view.explorer.link, book))
+		if (PosterUtils.posterHasHoles(editor.host.getAppHost().getLink(), editor.getBook()))
 		{
-			JOptionPane.showMessageDialog(view, Lang.s("imageFillPosterMessage"));
+			JOptionPane.showMessageDialog(editor, Lang.s("imageFillPosterMessage"));
 			return false;
 		}
 		return true;
@@ -161,7 +178,7 @@ public class PresentationEditorListener implements DocumentEditorHost, ActionReq
 	@Override public DocumentPanel onDocumentEditorRequest(AnnotatedObject document)
 	{
 		if (document instanceof Page)
-			view.explorer.explore(document.getCanonicalUri());
+			editor.host.getAppHost().addDocument(document);
 		return null;
 	}
 

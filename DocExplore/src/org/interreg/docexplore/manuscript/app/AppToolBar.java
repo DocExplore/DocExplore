@@ -33,6 +33,7 @@ import org.interreg.docexplore.gui.image.EditorView;
 import org.interreg.docexplore.internationalization.Lang;
 import org.interreg.docexplore.manuscript.AnnotatedObject;
 import org.interreg.docexplore.manuscript.Book;
+import org.interreg.docexplore.manuscript.MetaData;
 import org.interreg.docexplore.manuscript.Page;
 import org.interreg.docexplore.manuscript.PosterUtils;
 import org.interreg.docexplore.manuscript.Region;
@@ -142,14 +143,14 @@ public class AppToolBar extends JPanel implements ToolbarButton.ToolbarButtonLis
 	@SuppressWarnings("serial")
 	protected void addEditBookButtons()
 	{
-		addButton(new ToolbarButton(this, "add", "add-file-24x24.png", Lang.s("manageAppendPagesLabel"))
+		addButton(new ToolbarButton(this, "add", "add-file-24x24.png", Lang.s("generalAdd"))
 		{
 			@Override public void onActiveDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
 				setEnabled(document == null || document instanceof Book);
 			}
 		});
-		addButton(new ToolbarButton(this, "delete", "delete-file-24x24.png", Lang.s("manageDeletePageLabel"))
+		addButton(new ToolbarButton(this, "delete", "delete-file-24x24.png", Lang.s("generalRemove"))
 		{
 			@Override public void onActiveDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
@@ -173,7 +174,7 @@ public class AppToolBar extends JPanel implements ToolbarButton.ToolbarButtonLis
 		{
 			public void onActiveDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
-				try {setEnabled(document != null && document instanceof Book && PosterUtils.isPoster((Book)document) && !PosterUtils.isInStitches((Book)document));}
+				try {setEnabled(isNonStitchedPoster(document));}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true); setEnabled(false);}
 			}
 		});
@@ -181,7 +182,7 @@ public class AppToolBar extends JPanel implements ToolbarButton.ToolbarButtonLis
 		{
 			public void onActiveDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
-				try {setEnabled(document != null && document instanceof Book && PosterUtils.isPoster((Book)document) && !PosterUtils.isInStitches((Book)document));}
+				try {setEnabled(isNonStitchedPoster(document) || isMetaDataImage(document) || isPage(document));}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true); setEnabled(false);}
 			}
 		});
@@ -189,7 +190,7 @@ public class AppToolBar extends JPanel implements ToolbarButton.ToolbarButtonLis
 		{
 			public void onActiveDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
-				try {setEnabled(document != null && document instanceof Book && PosterUtils.isPoster((Book)document) && !PosterUtils.isInStitches((Book)document));}
+				try {setEnabled(isNonStitchedPoster(document) || isMetaDataImage(document) || isPage(document));}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true); setEnabled(false);}
 			}
 		});
@@ -197,7 +198,7 @@ public class AppToolBar extends JPanel implements ToolbarButton.ToolbarButtonLis
 		{
 			public void onActiveDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
-				try {setEnabled(document != null && document instanceof Book && PosterUtils.isPoster((Book)document) && !PosterUtils.isInStitches((Book)document));}
+				try {setEnabled(isNonStitchedPoster(document) || isMetaDataImage(document) || isPage(document));}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true); setEnabled(false);}
 			}
 		});
@@ -205,7 +206,7 @@ public class AppToolBar extends JPanel implements ToolbarButton.ToolbarButtonLis
 		{
 			public void onActiveDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
-				try {setEnabled(document != null && document instanceof Book && PosterUtils.isPoster((Book)document) && !PosterUtils.isInStitches((Book)document));}
+				try {setEnabled(isNonStitchedPoster(document) || isMetaDataImage(document) || isPage(document));}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true); setEnabled(false);}
 			}
 		});
@@ -219,7 +220,7 @@ public class AppToolBar extends JPanel implements ToolbarButton.ToolbarButtonLis
 		{
 			public void onActiveDocumentChanged(DocumentPanel panel, AnnotatedObject document)
 			{
-				try {setEnabled(document != null && document instanceof Book && PosterUtils.isPoster((Book)document) && !PosterUtils.isInStitches((Book)document));}
+				try {setEnabled(isNonStitchedPoster(document));}
 				catch (Exception e) {ErrorHandler.defaultHandler.submit(e, true); setEnabled(false);}
 			}
 		});
@@ -253,6 +254,19 @@ public class AppToolBar extends JPanel implements ToolbarButton.ToolbarButtonLis
 			}
 		};
 		addToggleButton(button);
+	}
+	
+	public boolean isNonStitchedPoster(AnnotatedObject document) throws Exception
+	{
+		return document != null && document instanceof Book && PosterUtils.isPoster((Book)document) && !PosterUtils.isInStitches((Book)document);
+	}
+	public boolean isMetaDataImage(AnnotatedObject document) throws Exception
+	{
+		return document != null && document instanceof MetaData && ((MetaData)document).getType().equals(MetaData.imageType);
+	}
+	public boolean isPage(AnnotatedObject document)
+	{
+		return document != null && document instanceof Page;
 	}
 	
 	public void addToggleButton(ToolbarToggleButton button) {toolPanel.add(button); host.addAppListener(button);}

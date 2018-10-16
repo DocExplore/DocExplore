@@ -38,7 +38,7 @@ public class ReaderExporter extends PresentationExporter
 		super(host, styles);
 	}
 	
-	public void doExport(final DocExploreDataLink link) throws Exception
+	public void doExport(final DocExploreDataLink link, ExportOptions options) throws Exception
 	{
 		File indexFile = new File(exportDir, "index.xml");
 		if (!indexFile.exists())
@@ -46,10 +46,6 @@ public class ReaderExporter extends PresentationExporter
 			ErrorHandler.defaultHandler.submit(new Exception("Invalid server resource directory"));
 			return;
 		}
-		
-		ExportOptions options = ExportOptions.getOptions(host.getFrame(), host.plugins.metaDataPlugins, ExportDialogOld.ReaderExport);
-		if (options == null)
-			return;
 		
 		for (int bookId : link.getLink().getAllBookIds())
 		{
@@ -129,7 +125,7 @@ public class ReaderExporter extends PresentationExporter
 			indexOutput.write(xml.getBytes(Charset.forName("UTF-8")));
 			indexOutput.close();
 			
-			doExport(book, exportDir, options, bookNum, "PNG", ExportDialogOld.ReaderExport);
+			doExport(book, exportDir, options, bookNum, "PNG", ExportDialog.ReaderExport);
 		}
 		catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
 	}

@@ -35,6 +35,7 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.interreg.docexplore.authoring.ATAppHost;
 import org.interreg.docexplore.datalink.DataLinkException;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
@@ -58,7 +59,7 @@ public class TextElement extends InfoElement
 		super(editor, md);
 		inner.setLayout(new LooseGridLayout(0, 1, 0, 0, false, false, SwingConstants.CENTER, SwingConstants.CENTER, true, true));
 		
-		this.styles = editor.pageEditor.view.explorer.tool.styleManager;
+		this.styles = ((ATAppHost)editor.pageEditor.getHost().getAppHost()).styles;
 		readStyle();
 		
 		this.textPane = new JTextPane();

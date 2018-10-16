@@ -1,5 +1,20 @@
+/**
+Copyright LITIS/EDA 2018
+contact@docexplore.eu
+
+This software is a computer program whose purpose is to manage and display interactive digital books.
+
+This software is governed by the CeCILL license under French law and abiding by the rules of distribution of free software.  You can  use, modify and/ or redistribute the software under the terms of the CeCILL license as circulated by CEA, CNRS and INRIA at the following URL "http://www.cecill.info".
+
+As a counterpart to the access to the source code and  rights to copy, modify and redistribute granted by the license, users are provided only with a limited warranty  and the software's author,  the holder of the economic rights,  and the successive licensors  have only  limited liability.
+
+In this respect, the user's attention is drawn to the risks associated with loading,  using,  modifying and/or developing or reproducing the software by the user in light of its specific status of free software, that may mean  that it is complicated to manipulate,  and  that  also therefore means  that it is reserved for developers  and  experienced professionals having in-depth computer knowledge. Users are therefore encouraged to load and test the software's suitability as regards their requirements in conditions enabling the security of their systems and/or data to be ensured and,  more generally, to use and operate it in the same conditions as regards security.
+
+The fact that you are presently reading this means that you have had knowledge of the CeCILL license and that you accept its terms.
+ */
 package org.interreg.docexplore.manuscript;
 
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -10,6 +25,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.interreg.docexplore.datalink.DataLinkException;
+import org.interreg.docexplore.gui.ErrorHandler;
+import org.interreg.docexplore.util.GuiUtils;
 
 public class PosterUtils
 {
@@ -32,6 +49,11 @@ public class PosterUtils
 	{
 		List<MetaData> mds = book.getMetaDataListForKey(book.getLink().getOrCreateKey("stitch-edit", ""));
 		return !mds.isEmpty() && !mds.get(0).getString().equals("");
+	}
+	public static boolean isUpToDate(Book book) throws DataLinkException
+	{
+		List<MetaData> mds = book.getMetaDataListForKey(book.getLink().getOrCreateKey("up-to-date", ""));
+		return !mds.isEmpty() && mds.get(0).getString().equals("true");
 	}
 	
 	public static void assignPartLocations(DocExploreDataLink link, Book book) throws DataLinkException
@@ -188,38 +210,6 @@ public class PosterUtils
 //				if (parts[i][j] != null)
 //					setPartPos(link, parts[i][j], j, i);
 //	}
-	public static void horizontalMirrorPoster(DocExploreDataLink link, Book book) throws DataLinkException
-	{
-		MetaData [][] parts = getBaseTilesArray(link, book);
-		for (int i=0;i<parts.length;i++)
-			for (int j=0;j<parts[i].length;j++)
-				if (parts[i][j] != null)
-					setPartPos(link, parts[i][j], parts.length-1-i, j);
-	}
-	public static void verticalMirrorPoster(DocExploreDataLink link, Book book) throws DataLinkException
-	{
-		MetaData [][] parts = getBaseTilesArray(link, book);
-		for (int i=0;i<parts.length;i++)
-			for (int j=0;j<parts[i].length;j++)
-				if (parts[i][j] != null)
-					setPartPos(link, parts[i][j], i, parts[0].length-1-j);
-	}
-	public static void rotatePosterLeft(DocExploreDataLink link, Book book) throws DataLinkException
-	{
-		MetaData [][] parts = getBaseTilesArray(link, book);
-		for (int i=0;i<parts.length;i++)
-			for (int j=0;j<parts[i].length;j++)
-				if (parts[i][j] != null)
-					setPartPos(link, parts[i][j], j, parts.length-1-i);
-	}
-	public static void rotatePosterRight(DocExploreDataLink link, Book book) throws DataLinkException
-	{
-		MetaData [][] parts = getBaseTilesArray(link, book);
-		for (int i=0;i<parts.length;i++)
-			for (int j=0;j<parts[i].length;j++)
-				if (parts[i][j] != null)
-					setPartPos(link, parts[i][j], parts[0].length-1-j, i);
-	}
 	
 	public static boolean removeFromRow(DocExploreDataLink link, Book book, int col, int row) throws DataLinkException
 	{
@@ -261,6 +251,28 @@ public class PosterUtils
 				if (parts[i][row] != null)
 					PosterUtils.setPartPos(link, parts[i][row], i+1, row);
 		}
+	}
+	
+	public static void buildConfiguration(Book book, DocExploreDataLink link, Component component)
+	{
+		GuiUtils.blockUntilComplete(new GuiUtils.ProgressRunnable() {@Override public void run()
+		{
+			try
+			{
+				if (book.getLastPageNumber() > 0)
+				{
+					TileConfiguration config = new TileConfiguration();
+					config.build(link, book, progress);
+					
+					Page page = book.getPage(1);
+					page.setMetaDataString(link.dimKey, config.getFullWidth()+","+config.getFullHeight());
+					//DocExploreDataLink.getImageMini(page);
+					book.setMetaDataString(link.upToDateKey, "true");
+				}
+			}
+			catch (Exception e) {ErrorHandler.defaultHandler.submit(e);}
+		}
+		float [] progress = {0}; @Override public float getProgress() {return progress[0];}}, component);
 	}
 	
 	static final int maxDim = 2*1024;

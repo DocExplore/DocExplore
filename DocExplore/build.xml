@@ -26,6 +26,8 @@
             <zipfileset excludes="META-INF/*.SF" src="jar/jna-3.4.0.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="jar/platform-3.4.0.jar"/>
         	<zipfileset excludes="META-INF/*.SF" src="jar/commons-compress-1.8.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="jar/jsch-0.1.51.jar"/>
+        	<zipfileset excludes="META-INF/*.SF" src="jar/JFeatureLib.jar"/>
         </jar>
     </target>
 </project>

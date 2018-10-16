@@ -35,6 +35,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.interreg.docexplore.authoring.AT;
 import org.interreg.docexplore.gui.ErrorHandler;
 import org.interreg.docexplore.gui.LooseGridLayout;
@@ -49,6 +50,10 @@ import org.interreg.docexplore.util.StringUtils;
 public class DocExplore extends DocExploreTool
 {
 	static Boolean safeMode = null;
+	private static String mainApp = null;
+	public static String mainApp() {return mainApp;}
+	private static String readerApp = null;
+	public static String readerApp() {return readerApp;}
 	
 	@SuppressWarnings("serial")
 	public static void main(final String [] args)
@@ -85,14 +90,21 @@ public class DocExplore extends DocExploreTool
 		}
 		catch (Exception e) {e.printStackTrace();}
 		
-		if (args.length > 0 && args[0].endsWith(".pres"))
+		for (int i=0;i<args.length;i++)
 		{
-			new Thread() {public void run()
+			if (args[i].endsWith(".pres"))
 			{
-				try {AT.main(args);}
-				catch (Exception e) {ErrorHandler.defaultHandler.submit(e); System.exit(0);}
-			}}.start();
-			return;
+				new Thread() {public void run()
+				{
+					try {AT.main(args);}
+					catch (Exception e) {ErrorHandler.defaultHandler.submit(e); System.exit(0);}
+				}}.start();
+				return;
+			}
+			else if (args[i].startsWith("-readerApp="))
+				readerApp = args[i].substring("-readerApp=".length());
+			else if (args[i].startsWith("-mainApp="))
+				mainApp = args[i].substring("-mainApp=".length());
 		}
 		
 		final JFrame win = new JFrame("DocExplore "+version());
@@ -254,6 +266,23 @@ public class DocExplore extends DocExploreTool
 		content.add(message);
 		content.add(new JButton(new AbstractAction(Lang.s("quitLabel")) {public void actionPerformed(ActionEvent arg0)
 		{
+			
+			try
+			{
+				if (SystemUtils.IS_OS_WINDOWS)
+				{
+					new ProcessBuilder(new File(DocExploreTool.getExecutableDir(), "Launch.bat").getAbsolutePath()).start();
+				}
+				else if (SystemUtils.IS_OS_MAC_OSX)
+				{
+					new ProcessBuilder("open", "-a", "DocExplore").start();
+				}
+				else if (SystemUtils.IS_OS_LINUX)
+				{
+					new ProcessBuilder(new File(DocExploreTool.getExecutableDir(), "launch.sh").getAbsolutePath()).start();
+				}
+			}
+			catch (Exception e) {e.printStackTrace();}
 			System.exit(0);
 		}}));
 		dialog.add(content);
